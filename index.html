@@ -1,20 +1,24 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Main Menu Hub</title>
-  <!-- Google Fonts: Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts: Orbitron for titles, Roboto for body -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #181a20;
-      --card: #23262f;
-      --accent: #00e6e6;
-      --accent2: #00b3b3;
-      --text: #f1f1f1;
-      --subtle: #2c2f36;
+      --panel: #23262f;
+      --accent: #00ffe7;
+      --accent2: #ff00c8;
+      --text: #f5f6fa;
+      --link: #00ffe7;
+      --link-hover: #ff00c8;
+      --transition: 0.2s cubic-bezier(.4,0,.2,1);
       --radius: 14px;
-      --transition: 0.18s cubic-bezier(.4,0,.2,1);
+      --shadow: 0 4px 24px 0 rgba(0,0,0,0.4);
     }
     html, body {
       height: 100%;
@@ -22,302 +26,386 @@
       padding: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Roboto', Arial, sans-serif;
       min-height: 100vh;
     }
     body {
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
-    }
-    .menu-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 32px 12px 24px 12px;
-      max-width: 900px;
-      margin: 0 auto;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #181a20 60%, #23262f 100%);
     }
-    .section-toggle-bar {
+    header {
+      margin-top: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      text-shadow: 0 2px 16px #00ffe7aa;
+      margin: 0 0 0.5rem 0;
+    }
+    .section-toggle {
       display: flex;
-      gap: 16px;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
+      gap: 1rem;
       justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
     }
-    .section-toggle-btn {
-      background: var(--card);
+    .section-btn {
+      background: var(--panel);
       color: var(--accent);
       border: none;
       border-radius: var(--radius);
-      padding: 12px 28px;
+      padding: 0.7em 1.5em;
+      font-family: 'Orbitron', sans-serif;
       font-size: 1.1rem;
-      font-weight: 700;
       cursor: pointer;
-      transition: background var(--transition), color var(--transition), box-shadow var(--transition);
-      box-shadow: 0 2px 8px 0 #0002;
+      box-shadow: var(--shadow);
+      transition: background var(--transition), color var(--transition), box-shadow var(--transition), transform var(--transition);
       outline: none;
+      position: relative;
     }
-    .section-toggle-btn.active, .section-toggle-btn:focus-visible {
-      background: var(--accent);
-      color: var(--bg);
-      box-shadow: 0 4px 16px 0 #00e6e633;
+    .section-btn.active, .section-btn:focus-visible {
+      background: var(--accent2);
+      color: #fff;
+      box-shadow: 0 0 0 3px var(--accent2), var(--shadow);
+      z-index: 1;
     }
-    .sections-area {
+    .section-btn:hover:not(.active) {
+      color: var(--accent2);
+      background: #23262f;
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 2px 16px 0 var(--accent2), var(--shadow);
+    }
+    main {
       width: 100%;
+      max-width: 900px;
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      gap: 32px;
       align-items: stretch;
+      justify-content: flex-start;
     }
-    .section-content {
+    .section-panel {
+      display: none;
+      flex-direction: column;
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem 1.5rem 2.5rem 1.5rem;
+      margin-bottom: 2rem;
+      animation: fadeIn 0.4s;
+    }
+    .section-panel.active {
+      display: flex;
+    }
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      color: var(--accent2);
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.04em;
+      text-shadow: 0 1px 8px #ff00c888;
+    }
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      width: 100%;
+    }
+    .menu-link {
       display: flex;
       flex-direction: column;
-      gap: 32px;
-      animation: fadeIn 0.4s;
+      align-items: flex-start;
+      background: #1a1c23;
+      border-radius: var(--radius);
+      padding: 1.1em 1em;
+      text-decoration: none;
+      color: var(--link);
+      font-size: 1.08rem;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      box-shadow: 0 2px 12px 0 #00ffe733;
+      border: 2px solid transparent;
+      transition: 
+        background var(--transition), 
+        color var(--transition), 
+        border-color var(--transition), 
+        box-shadow var(--transition), 
+        transform var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .menu-link:focus-visible {
+      border-color: var(--accent2);
+      color: #fff;
+      background: #23262f;
+      outline: none;
+      z-index: 2;
+    }
+    .menu-link:hover, .menu-link:active {
+      color: #fff;
+      background: linear-gradient(90deg, #00ffe7 0%, #ff00c8 100%);
+      background-size: 200% 100%;
+      background-position: right center;
+      box-shadow: 0 4px 24px 0 #00ffe7aa, 0 2px 12px 0 #ff00c888;
+      border-color: var(--accent2);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .menu-link .desc {
+      font-size: 0.93rem;
+      color: #b2f7f7;
+      margin-top: 0.3em;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+    @media (max-width: 600px) {
+      .links-grid {
+        grid-template-columns: 1fr;
+      }
+      .section-panel {
+        padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+      }
+      header {
+        margin-top: 1.2rem;
+      }
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(16px);}
       to { opacity: 1; transform: none;}
     }
-    .subsection-group {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 24px 20px 18px 20px;
-      box-shadow: 0 2px 12px 0 #0003;
-      margin-bottom: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .subsection-title {
-      color: var(--accent);
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: 0.01em;
-    }
-    .links-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-    .menu-link {
-      background: var(--subtle);
-      color: var(--text);
-      border-radius: 8px;
-      padding: 10px 20px;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 1rem;
-      transition: background var(--transition), color var(--transition), box-shadow var(--transition);
-      box-shadow: 0 1px 4px 0 #0002;
-      position: relative;
-      outline: none;
-      border: none;
-      display: inline-block;
-    }
-    .menu-link:hover, .menu-link:focus-visible {
-      background: var(--accent2);
-      color: var(--bg);
-      box-shadow: 0 2px 12px 0 #00e6e633;
-      text-decoration: none;
-    }
-    @media (max-width: 700px) {
-      .menu-container {
-        padding: 18px 2vw 12px 2vw;
-      }
-      .subsection-group {
-        padding: 16px 8px 12px 8px;
-      }
-      .links-row {
-        gap: 8px;
-      }
-    }
-    @media (max-width: 500px) {
-      .section-toggle-bar {
-        gap: 8px;
-      }
-      .section-toggle-btn {
-        padding: 10px 12px;
-        font-size: 1rem;
-      }
-      .subsection-title {
-        font-size: 1rem;
-      }
-      .menu-link {
-        padding: 8px 10px;
-        font-size: 0.98rem;
-      }
-    }
   </style>
 </head>
 <body>
-  <div class="menu-container">
-    <div class="section-toggle-bar" id="sectionToggleBar"></div>
-    <div class="sections-area">
-      <div class="section-content" id="sectionContent"></div>
-    </div>
-  </div>
+  <header>
+    <h1>Main Menu Hub</h1>
+    <div class="section-toggle" id="section-toggle" role="tablist" aria-label="Main menu sections"></div>
+  </header>
+  <main id="main-content"></main>
   <script>
-    // ====== MENU DATA STRUCTURE ======
-    // To modify the menu, edit the 'menuData' object below.
-    // Add/remove sections, subsections, or links as needed.
-    const menuData = {
-      "Games": {
-        "Puzzles": [
-          { title: "Sudoku", url: "sudoku.html" },
-          { title: "Nonograms", url: "nonograms.html" }
-        ],
-        "Reflex": [
-          { title: "Reaction Test", url: "reaction.html" },
-          { title: "Aim Trainer", url: "aim.html" }
+    // Menu data structure
+    const menuData = [
+      {
+        id: "games",
+        title: "Games",
+        links: [
+          { label: "2048", url: "2048.html", desc: "Classic tile merging puzzle." },
+          { label: "Snake", url: "snake.html", desc: "Retro snake game." },
+          { label: "Minesweeper", url: "minesweeper.html", desc: "Find the mines!" },
+          { label: "Tetris", url: "tetris.html", desc: "Block stacking fun." }
         ]
       },
-      "Tools": {
-        "Converters": [
-          { title: "Unit Converter", url: "unit-converter.html" },
-          { title: "Color Picker", url: "color-picker.html" }
-        ],
-        "Productivity": [
-          { title: "Pomodoro Timer", url: "pomodoro.html" },
-          { title: "Notes", url: "notes.html" }
+      {
+        id: "tools",
+        title: "Tools",
+        links: [
+          { label: "Calculator", url: "calculator.html", desc: "Simple math calculator." },
+          { label: "Unit Converter", url: "converter.html", desc: "Convert units easily." },
+          { label: "Markdown Editor", url: "markdown.html", desc: "Write and preview markdown." }
         ]
       },
-      "Projects": {
-        "Web Apps": [
-          { title: "Markdown Editor", url: "markdown.html" },
-          { title: "Portfolio", url: "portfolio.html" }
-        ],
-        "Experiments": [
-          { title: "Canvas Doodles", url: "canvas.html" }
+      {
+        id: "experiments",
+        title: "Experiments",
+        links: [
+          { label: "Particle Playground", url: "particles.html", desc: "Interactive particle demo." },
+          { label: "AI Chat", url: "chat.html", desc: "Conversational AI bot." },
+          { label: "Audio Visualizer", url: "visualizer.html", desc: "Music meets visuals." }
+        ]
+      },
+      {
+        id: "about",
+        title: "About",
+        links: [
+          { label: "Project Info", url: "about.html", desc: "Learn more about this hub." },
+          { label: "Contact", url: "contact.html", desc: "Get in touch." }
         ]
       }
-    };
-    // ===== END MENU DATA STRUCTURE =====
+    ];
 
-    // --- Utility: Get section names
-    const sectionNames = Object.keys(menuData);
+    // Utility: get URL param
+    function getParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
 
-    // --- State
+    // DOM refs
+    const sectionToggle = document.getElementById('section-toggle');
+    const mainContent = document.getElementById('main-content');
+
+    // State
     let currentSectionIdx = 0;
 
-    // --- DOM Elements
-    const sectionToggleBar = document.getElementById('sectionToggleBar');
-    const sectionContent = document.getElementById('sectionContent');
-
-    // --- Render Section Toggle Buttons
-    function renderSectionToggles() {
-      sectionToggleBar.innerHTML = '';
-      sectionNames.forEach((name, idx) => {
+    // Build section toggle buttons
+    function buildSectionToggles() {
+      sectionToggle.innerHTML = '';
+      menuData.forEach((section, idx) => {
         const btn = document.createElement('button');
-        btn.className = 'section-toggle-btn' + (idx === currentSectionIdx ? ' active' : '');
-        btn.textContent = name;
-        btn.setAttribute('data-section-idx', idx);
-        btn.tabIndex = 0;
-        btn.addEventListener('click', () => {
-          setSection(idx, true);
-        });
-        sectionToggleBar.appendChild(btn);
+        btn.className = 'section-btn';
+        btn.type = 'button';
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', idx === currentSectionIdx ? 'true' : 'false');
+        btn.setAttribute('tabindex', idx === currentSectionIdx ? '0' : '-1');
+        btn.textContent = section.title;
+        btn.dataset.idx = idx;
+        btn.id = `section-btn-${section.id}`;
+        btn.addEventListener('click', () => showSection(idx, true));
+        sectionToggle.appendChild(btn);
       });
     }
 
-    // --- Render Section Content
-    function renderSectionContent(idx) {
-      const sectionName = sectionNames[idx];
-      const section = menuData[sectionName];
-      sectionContent.innerHTML = '';
-      for (const [subName, links] of Object.entries(section)) {
-        const group = document.createElement('div');
-        group.className = 'subsection-group';
+    // Build section panels
+    function buildSections() {
+      mainContent.innerHTML = '';
+      menuData.forEach((section, idx) => {
+        const panel = document.createElement('section');
+        panel.className = 'section-panel' + (idx === currentSectionIdx ? ' active' : '');
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', `section-btn-${section.id}`);
+        panel.id = `section-panel-${section.id}`;
+        if (idx !== currentSectionIdx) panel.setAttribute('hidden', 'hidden');
 
-        const subTitle = document.createElement('div');
-        subTitle.className = 'subsection-title';
-        subTitle.textContent = subName;
-        group.appendChild(subTitle);
+        const title = document.createElement('div');
+        title.className = 'section-title';
+        title.textContent = section.title;
+        panel.appendChild(title);
 
-        const linksRow = document.createElement('div');
-        linksRow.className = 'links-row';
-        links.forEach(link => {
+        const grid = document.createElement('div');
+        grid.className = 'links-grid';
+
+        section.links.forEach(link => {
           const a = document.createElement('a');
           a.className = 'menu-link';
           a.href = link.url;
-          a.textContent = link.title;
           a.tabIndex = 0;
-          linksRow.appendChild(a);
+          a.innerHTML = `<span>${link.label}</span>` +
+                        (link.desc ? `<span class="desc">${link.desc}</span>` : '');
+          grid.appendChild(a);
         });
-        group.appendChild(linksRow);
-        sectionContent.appendChild(group);
-      }
+
+        panel.appendChild(grid);
+        mainContent.appendChild(panel);
+      });
     }
 
-    // --- Set Section (by index)
-    function setSection(idx, updateURL = false) {
-      if (idx < 0 || idx >= sectionNames.length) return;
+    // Show section by index
+    function showSection(idx, focusBtn = false) {
+      if (idx < 0 || idx >= menuData.length) return;
       currentSectionIdx = idx;
-      renderSectionToggles();
-      renderSectionContent(idx);
-      if (updateURL) {
-        const params = new URLSearchParams(window.location.search);
-        params.set('section', sectionNames[idx]);
-        history.replaceState(null, '', '?' + params.toString());
-      }
-      // Focus first toggle button for accessibility
-      const activeBtn = sectionToggleBar.querySelector('.section-toggle-btn.active');
-      if (activeBtn) activeBtn.focus();
-    }
-
-    // --- Parse section from URL
-    function getSectionFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      const section = params.get('section');
-      if (section && sectionNames.includes(section)) {
-        return sectionNames.indexOf(section);
-      }
-      return 0;
-    }
-
-    // --- Keyboard Navigation (A/D or Arrow keys)
-    function handleKeyNav(e) {
-      if (['ArrowLeft', 'ArrowRight', 'a', 'd', 'A', 'D'].includes(e.key)) {
-        let dir = 0;
-        if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') dir = -1;
-        if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') dir = 1;
-        if (dir !== 0) {
-          let nextIdx = (currentSectionIdx + dir + sectionNames.length) % sectionNames.length;
-          setSection(nextIdx, true);
-          e.preventDefault();
+      // Update buttons
+      Array.from(sectionToggle.children).forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+        btn.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+        btn.setAttribute('tabindex', i === idx ? '0' : '-1');
+        if (i === idx && focusBtn) btn.focus();
+      });
+      // Update panels
+      Array.from(mainContent.children).forEach((panel, i) => {
+        panel.classList.toggle('active', i === idx);
+        if (i === idx) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', 'hidden');
         }
-      }
+      });
     }
-    window.addEventListener('keydown', handleKeyNav);
 
-    // --- Swipe Support (Mobile)
+    // Keyboard navigation for section toggles
+    sectionToggle.addEventListener('keydown', (e) => {
+      const len = menuData.length;
+      let handled = false;
+      if (['ArrowLeft', 'ArrowUp'].includes(e.key)) {
+        showSection((currentSectionIdx - 1 + len) % len, true);
+        handled = true;
+      } else if (['ArrowRight', 'ArrowDown'].includes(e.key)) {
+        showSection((currentSectionIdx + 1) % len, true);
+        handled = true;
+      } else if (e.key === 'Home') {
+        showSection(0, true);
+        handled = true;
+      } else if (e.key === 'End') {
+        showSection(len - 1, true);
+        handled = true;
+      }
+      if (handled) {
+        e.preventDefault();
+      }
+    });
+
+    // Touch swipe navigation for sections
     let touchStartX = null;
-    sectionContent.addEventListener('touchstart', e => {
-      if (e.touches.length === 1) touchStartX = e.touches[0].clientX;
+    let touchStartY = null;
+    mainContent.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
     });
-    sectionContent.addEventListener('touchend', e => {
-      if (touchStartX === null) return;
-      const touchEndX = e.changedTouches[0].clientX;
-      const dx = touchEndX - touchStartX;
-      if (Math.abs(dx) > 60) {
-        if (dx < 0) { // swipe left
-          setSection((currentSectionIdx + 1) % sectionNames.length, true);
-        } else { // swipe right
-          setSection((currentSectionIdx - 1 + sectionNames.length) % sectionNames.length, true);
+    mainContent.addEventListener('touchend', (e) => {
+      if (touchStartX === null || touchStartY === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+        // Horizontal swipe
+        if (dx < 0) {
+          // Swipe left: next section
+          showSection((currentSectionIdx + 1) % menuData.length, true);
+        } else {
+          // Swipe right: prev section
+          showSection((currentSectionIdx - 1 + menuData.length) % menuData.length, true);
         }
       }
-      touchStartX = null;
+      touchStartX = touchStartY = null;
     });
 
-    // --- Initial Render
-    window.addEventListener('DOMContentLoaded', () => {
-      currentSectionIdx = getSectionFromURL();
-      renderSectionToggles();
-      renderSectionContent(currentSectionIdx);
+    // Keyboard navigation for links inside a section
+    mainContent.addEventListener('keydown', (e) => {
+      if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+      const activePanel = mainContent.querySelector('.section-panel.active');
+      if (!activePanel) return;
+      const links = Array.from(activePanel.querySelectorAll('.menu-link'));
+      if (!links.length) return;
+      const focusedIdx = links.findIndex(link => link === document.activeElement);
+      let nextIdx = focusedIdx;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        nextIdx = (focusedIdx + 1) % links.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        nextIdx = (focusedIdx - 1 + links.length) % links.length;
+      }
+      if (nextIdx !== focusedIdx) {
+        links[nextIdx].focus();
+        e.preventDefault();
+      }
+    });
+
+    // Support URL param: ?section=tools
+    function getSectionIdxFromParam() {
+      const param = getParam('section');
+      if (!param) return 0;
+      const idx = menuData.findIndex(sec => sec.id.toLowerCase() === param.toLowerCase());
+      return idx >= 0 ? idx : 0;
+    }
+
+    // Initial render
+    function renderMenu() {
+      currentSectionIdx = getSectionIdxFromParam();
+      buildSectionToggles();
+      buildSections();
+      showSection(currentSectionIdx);
+    }
+
+    renderMenu();
+
+    // Optional: update section if URL hash/param changes
+    window.addEventListener('popstate', () => {
+      const idx = getSectionIdxFromParam();
+      if (idx !== currentSectionIdx) showSection(idx, true);
     });
   </script>
 </body>
