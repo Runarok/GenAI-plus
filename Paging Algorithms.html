@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Page Replacement Simulator</title>
+  <style>
+    body {
+      background: #181a1b;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #23272a;
+      border-radius: 10px;
+      box-shadow: 0 2px 16px #0008;
+      padding: 32px 28px 28px 28px;
+    }
+    h1 {
+      text-align: center;
+      color: #f8f8f8;
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+    }
+    label {
+      display: block;
+      margin-top: 18px;
+      margin-bottom: 6px;
+      color: #b0b0b0;
+      font-size: 1rem;
+    }
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background: #222;
+      color: #e0e0e0;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    button:disabled {
+      background: #444;
+      cursor: not-allowed;
+    }
+    button:hover:not(:disabled) {
+      background: #2563eb;
+    }
+    .steps {
+      margin-top: 32px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 8px 0;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+    th {
+      background: #222;
+      color: #b0b0b0;
+    }
+    .frame-cell {
+      min-width: 40px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .hit {
+      background: #14532d !important;
+      color: #a7f3d0 !important;
+      font-weight: bold;
+      border-color: #22c55e !important;
+      transition: background 0.2s;
+    }
+    .fault {
+      background: #7f1d1d !important;
+      color: #fecaca !important;
+      font-weight: bold;
+      border-color: #ef4444 !important;
+      transition: background 0.2s;
+    }
+    .replace {
+      border-bottom: 3px solid #fbbf24 !important;
+    }
+    .summary {
+      background: #1e293b;
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-top: 18px;
+      font-size: 1.1rem;
+      color: #fbbf24;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 12px 4px; }
+      th, td { font-size: 0.95rem; padding: 5px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Page Replacement Simulator</h1>
+    <form id="simForm" autocomplete="off">
+      <label for="pages">Page Reference String (comma-separated):</label>
+      <input type="text" id="pages" placeholder="e.g. 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2" required>
+      
+      <label for="frames">Number of Page Frames:</label>
+      <input type="number" id="frames" min="1" max="10" value="3" required>
+      
+      <label for="algorithm">Algorithm:</label>
+      <select id="algorithm">
+        <option value="optimal">Optimal</option>
+        <option value="lru">LRU (Least Recently Used)</option>
+        <option value="fifo">FIFO (First-In-First-Out)</option>
+      </select>
+      
+      <button type="submit" id="startBtn">Simulate</button>
+      <button type="button" id="stepBtn" disabled>Next Step</button>
+      <button type="button" id="resetBtn" disabled>Reset</button>
+    </form>
+    <div class="steps" id="steps"></div>
+    <div class="summary" id="summary"></div>
+  </div>
+  <script>
+    // --- State ---
+    let simulation = null;
+    let currentStep = 0;
+
+    // --- DOM Elements ---
+    const simForm = document.getElementById('simForm');
+    const pagesInput = document.getElementById('pages');
+    const framesInput = document.getElementById('frames');
+    const algoSelect = document.getElementById('algorithm');
+    const startBtn = document.getElementById('startBtn');
+    const stepBtn = document.getElementById('stepBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const stepsDiv = document.getElementById('steps');
+    const summaryDiv = document.getElementById('summary');
+
+    // --- Utility Functions ---
+    function parsePages(str) {
+      return str
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0)
+        .map(Number)
+        .filter(n => !isNaN(n));
+    }
+
+    function deepCopy(arr) {
+      return JSON.parse(JSON.stringify(arr));
+    }
+
+    // --- Simulation Algorithms ---
+    function simulateOptimal(pages, frameCount) {
+      let frames = [];
+      let steps = [];
+      let faults = 0;
+
+      for (let i = 0; i < pages.length; i++) {
+        let page = pages[i];
+        let hit = frames.includes(page);
+        let replaced = null;
+
+        if (hit) {
+          // No change in frames
+        } else {
+          faults++;
+          if (frames.length < frameCount) {
+            frames.push(page);
+          } else {
+            // Find the page in frames that is not used for the longest in the future
+            let future = pages.slice(i + 1);
+            let indices = frames.map(f => {
+              let idx = future.indexOf(f);
+              return idx === -1 ? Infinity : idx;
+            });
+            let victimIdx = indices.indexOf(Math.max(...indices));
+            replaced = frames[victimIdx];
+            frames[victimIdx] = page;
+          }
+        }
+        steps.push({
+          page,
+          frames: deepCopy(frames),
+          hit,
+          fault: !hit,
+          replaced
+        });
+      }
+      return { steps, faults };
+    }
+
+    function simulateLRU(pages, frameCount) {
+      let frames = [];
+      let lastUsed = new Map();
+      let steps = [];
+      let faults = 0;
+
+      for (let i = 0; i < pages.length; i++) {
+        let page = pages[i];
+        let hit = frames.includes(page);
+        let replaced = null;
+
+        if (hit) {
+          // Update last used
+          lastUsed.set(page, i);
+        } else {
+          faults++;
+          if (frames.length < frameCount) {
+            frames.push(page);
+          } else {
+            // Find least recently used
+            let lruPage = frames.reduce((a, b) => (lastUsed.get(a) < lastUsed.get(b) ? a : b));
+            let idx = frames.indexOf(lruPage);
+            replaced = frames[idx];
+            frames[idx] = page;
+          }
+          lastUsed.set(page, i);
+        }
+        // Update last used for hit as well
+        if (hit) lastUsed.set(page, i);
+
+        steps.push({
+          page,
+          frames: deepCopy(frames),
+          hit,
+          fault: !hit,
+          replaced
+        });
+      }
+      return { steps, faults };
+    }
+
+    function simulateFIFO(pages, frameCount) {
+      let frames = [];
+      let queue = [];
+      let steps = [];
+      let faults = 0;
+
+      for (let i = 0; i < pages.length; i++) {
+        let page = pages[i];
+        let hit = frames.includes(page);
+        let replaced = null;
+
+        if (hit) {
+          // No change
+        } else {
+          faults++;
+          if (frames.length < frameCount) {
+            frames.push(page);
+            queue.push(page);
+          } else {
+            // Remove the oldest
+            let victim = queue.shift();
+            let idx = frames.indexOf(victim);
+            replaced = frames[idx];
+            frames[idx] = page;
+            queue.push(page);
+          }
+        }
+        steps.push({
+          page,
+          frames: deepCopy(frames),
+          hit,
+          fault: !hit,
+          replaced
+        });
+      }
+      return { steps, faults };
+    }
+
+    function getAlgorithm(name) {
+      switch (name) {
+        case 'optimal': return simulateOptimal;
+        case 'lru': return simulateLRU;
+        case 'fifo': return simulateFIFO;
+        default: return simulateOptimal;
+      }
+    }
+
+    // --- Visualization ---
+    function renderStepTable(steps, frameCount, uptoStep) {
+      let html = '<table><thead><tr><th>Step</th><th>Page</th>';
+      for (let i = 0; i < frameCount; i++) {
+        html += `<th>Frame ${i + 1}</th>`;
+      }
+      html += '<th>Result</th></tr></thead><tbody>';
+
+      for (let i = 0; i <= uptoStep; i++) {
+        let step = steps[i];
+        html += `<tr>`;
+        html += `<td>${i + 1}</td>`;
+        html += `<td>${step.page}</td>`;
+        for (let j = 0; j < frameCount; j++) {
+          let val = step.frames[j] !== undefined ? step.frames[j] : '';
+          let classes = ['frame-cell'];
+          if (step.fault && step.replaced === step.frames[j]) classes.push('replace');
+          html += `<td class="${classes.join(' ')}">${val}</td>`;
+        }
+        let resultClass = step.hit ? 'hit' : 'fault';
+        let resultText = step.hit ? 'Hit' : (step.replaced !== null ? `Fault (Replaced ${step.replaced})` : 'Fault');
+        html += `<td class="${resultClass}">${resultText}</td>`;
+        html += `</tr>`;
+      }
+      html += '</tbody></table>';
+      return html;
+    }
+
+    function renderSummary(faults, total) {
+      return `Total Page Faults: <b>${faults}</b> out of <b>${total}</b> requests`;
+    }
+
+    function resetUI() {
+      stepsDiv.innerHTML = '';
+      summaryDiv.innerHTML = '';
+      stepBtn.disabled = true;
+      resetBtn.disabled = true;
+      startBtn.disabled = false;
+      currentStep = 0;
+      simulation = null;
+    }
+
+    // --- Event Handlers ---
+    simForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      let pages = parsePages(pagesInput.value);
+      let frameCount = parseInt(framesInput.value, 10);
+      let algo = algoSelect.value;
+
+      if (pages.length === 0 || isNaN(frameCount) || frameCount < 1) {
+        alert('Please enter a valid page reference string and frame count.');
+        return;
+      }
+      if (frameCount > 10) {
+        alert('Maximum 10 frames supported for visualization.');
+        return;
+      }
+
+      let simulate = getAlgorithm(algo);
+      simulation = simulate(pages, frameCount);
+      currentStep = 0;
+
+      stepsDiv.innerHTML = renderStepTable(simulation.steps, frameCount, 0);
+      summaryDiv.innerHTML = '';
+      stepBtn.disabled = false;
+      resetBtn.disabled = false;
+      startBtn.disabled = true;
+      stepBtn.textContent = 'Next Step';
+    });
+
+    stepBtn.addEventListener('click', function() {
+      if (!simulation) return;
+      let steps = simulation.steps;
+      let frameCount = parseInt(framesInput.value, 10);
+
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        stepsDiv.innerHTML = renderStepTable(steps, frameCount, currentStep);
+        if (currentStep === steps.length - 1) {
+          stepBtn.textContent = 'Show Summary';
+        }
+      } else {
+        // Show summary
+        summaryDiv.innerHTML = renderSummary(simulation.faults, steps.length);
+        stepBtn.disabled = true;
+      }
+    });
+
+    resetBtn.addEventListener('click', function() {
+      resetUI();
+    });
+
+    // Allow pressing Enter to simulate, but not to step
+    simForm.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && document.activeElement !== startBtn) {
+        e.preventDefault();
+      }
+    });
+
+    // On page load, reset UI
+    resetUI();
+  </script>
+</body>
+</html>
