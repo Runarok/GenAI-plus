@@ -201,45 +201,74 @@ main {
   </header>
   <main id="main-content"></main>
   <script>
+
     // Menu data structure
-    const menuData = [
+const menuData = [
+  {
+    id: "games",
+    title: "Games",
+    links: [
+      { label: "2048", url: "2048.html", desc: "Classic tile merging puzzle." },
+      { label: "Snake", url: "snake.html", desc: "Retro snake game." },
+      { label: "Minesweeper", url: "minesweeper.html", desc: "Find the mines!" },
+      { label: "Tetris", url: "tetris.html", desc: "Block stacking fun." }
+    ]
+  },
+  {
+    id: "college",
+    title: "College",
+    links: [
       {
-        id: "games",
-        title: "Games",
-        links: [
-          { label: "2048", url: "2048.html", desc: "Classic tile merging puzzle." },
-          { label: "Snake", url: "snake.html", desc: "Retro snake game." },
-          { label: "Minesweeper", url: "minesweeper.html", desc: "Find the mines!" },
-          { label: "Tetris", url: "tetris.html", desc: "Block stacking fun." }
-        ]
+        label: "Embedded Systems",
+        url: "College/LABS/Embedded Systems/Embedded Systems.html",
+        desc: "Explore embedded systems projects."
       },
       {
-        id: "tools",
-        title: "Tools",
-        links: [
-          { label: "Calculator", url: "calculator.html", desc: "Simple math calculator." },
-          { label: "Unit Converter", url: "converter.html", desc: "Convert units easily." },
-          { label: "Markdown Editor", url: "markdown.html", desc: "Write and preview markdown." }
-        ]
+        label: "Internet of Things",
+        url: "College/LABS/Internet of Things/Internet of Things.html",
+        desc: "IoT experiments and implementations."
       },
       {
-        id: "experiments",
-        title: "Experiments",
-        links: [
-          { label: "Particle Playground", url: "particles.html", desc: "Interactive particle demo." },
-          { label: "AI Chat", url: "chat.html", desc: "Conversational AI bot." },
-          { label: "Audio Visualizer", url: "visualizer.html", desc: "Music meets visuals." }
-        ]
+        label: "Paging Algorithms",
+        url: "College/Paging Algorithms/Paging Algorithms.html",
+        desc: "Visualize memory paging techniques."
       },
       {
-        id: "about",
-        title: "About",
-        links: [
-          { label: "Project Info", url: "about.html", desc: "Learn more about this hub." },
-          { label: "Contact", url: "contact.html", desc: "Get in touch." }
-        ]
+        label: "Cipher Programs",
+        url: "College/Cipher Programs/Cipher Programs.html",
+        desc: "Basic cryptographic ciphers demo."
       }
-    ];
+    ]
+  },
+  {
+    id: "tools",
+    title: "Tools",
+    links: [
+      { label: "Calculator", url: "calculator.html", desc: "Simple math calculator." },
+      { label: "Unit Converter", url: "converter.html", desc: "Convert units easily." },
+      { label: "Markdown Editor", url: "markdown.html", desc: "Write and preview markdown." }
+    ]
+  },
+  {
+    id: "experiments",
+    title: "Experiments",
+    links: [
+      { label: "Particle Playground", url: "particles.html", desc: "Interactive particle demo." },
+      { label: "AI Chat", url: "chat.html", desc: "Conversational AI bot." },
+      { label: "Audio Visualizer", url: "visualizer.html", desc: "Music meets visuals." },
+      { label: "Sandbox", url: "Misc/Sandbox/Sandbox.html", desc: "Try out ideas in the sandbox." }
+    ]
+  },
+  {
+    id: "about",
+    title: "About",
+    links: [
+      { label: "Project Info", url: "about.html", desc: "Learn more about this hub." },
+      { label: "Contact", url: "contact.html", desc: "Get in touch." }
+    ]
+  }
+];
+
 
     // Utility: get URL param
     function getParam(name) {
