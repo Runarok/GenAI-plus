@@ -142,13 +142,12 @@
         }
 
         function cloneBlocks(blocks) {
-            // Deep clone blocks array of objects
             return blocks.map(b => ({...b}));
         }
 
         function formatBlocks(blocks) {
-            return blocks.map((b, i) => 
-                `Block ${i+1}: ${b.size} ${b.allocated ? '(Allocated)' : ''}`
+            return blocks.map(b => 
+                `${b.size}${b.allocated ? ' (Allocated)' : ''}`
             ).join(' | ');
         }
 
@@ -345,7 +344,6 @@
 
             document.getElementById('results').style.display = 'flex';
 
-            // Run all strategies
             const firstFitSteps = firstFit(blockSizes, processes);
             const bestFitSteps = bestFit(blockSizes, processes);
             const worstFitSteps = worstFit(blockSizes, processes);
