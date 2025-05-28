@@ -160,7 +160,51 @@
       text-align: center;
       min-height: 22px;
     }
+    
+    #mode-select {
+      background: var(--button-bg);
+      color: var(--text);
+      border: none;
+      outline: none;
+      border-radius: calc(var(--radius) / 2);
+      padding: 0.75rem 1.2rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.11);
+      transition: background var(--transition), color var(--transition), transform var(--transition), box-shadow var(--transition);
+      width: 100%;
+      max-width: 220px;
+      margin-bottom: 1.2rem;
+      text-align-last: center; /* centers selected text */
+      appearance: none; /* removes default arrow on some browsers */
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--accent) 50%),
+        linear-gradient(135deg, var(--accent) 50%, transparent 50%),
+        linear-gradient(to right, var(--button-bg), var(--button-bg));
+      background-position:
+        calc(100% - 20px) calc(1.2em),
+        calc(100% - 15px) calc(1.2em),
+        100% 0;
+      background-size: 5px 5px, 5px 5px, 2.5em 2.5em;
+      background-repeat: no-repeat;
+    }
+    
+    #mode-select:hover, #mode-select:focus {
+      background: var(--button-hover);
+      color: var(--accent);
+      transform: translateY(-2px) scale(1.035);
+      box-shadow: 0 6px 28px 0 rgba(255,64,129,0.09);
+    }
+
+
     @media (max-width: 500px) {
+      #mode-select {
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+        max-width: 100%;
+      }
+  
       .container {
         padding: 1.3rem 0.6rem 1.5rem 0.6rem;
       }
@@ -187,6 +231,17 @@
       <b>Instructions:</b> When a challenge appears, respond as fast as you can.<br>
       The faster you react, the higher your score. Respond incorrectly or run out of time, and it's game over!<br>
       <span style="color:var(--accent);font-weight:600;">How fast can you go?</span>
+            <!-- Add this inside .container, above Start Game button -->
+      
+      <label for="mode-select" style="color:var(--text-soft); font-weight:600; margin-bottom:0.6rem; display:block; text-align:center;">
+        Select Difficulty:
+      </label>
+      <select id="mode-select" style="padding:0.5rem 1rem; font-size:1rem; border-radius:0.8rem; margin-bottom:1rem; width:100%; max-width: 200px;">
+        <option value="easy">Easy</option>
+        <option value="normal" selected>Normal</option>
+        <option value="hard">Hard</option>
+      </select>
+
     </div>
     <div class="scoreboard">
       <div>Score: <span id="current-score">0</span></div>
@@ -222,9 +277,44 @@
       { type: 'sequence', prompt: 'Press <b>J</b> then <b>K</b> quickly!', seq: ['j', 'k'] },
       { type: 'sequence', prompt: 'Press <b>L</b> then <b>A</b> quickly!', seq: ['l', 'a'] },
     ];
-    const INITIAL_TIME = 1800; // ms for first challenge
-    const TIME_DECREASE = 65; // ms decrease per round
-    const MIN_TIME = 750; // ms (minimum allowed per challenge)
+    
+    // Replace existing timing constants with variables:
+    let INITIAL_TIME, TIME_DECREASE, MIN_TIME;
+    
+    // Setup timing based on selected mode
+    function setGameMode(mode) {
+      switch (mode) {
+        case 'hard':
+          INITIAL_TIME = 2500;
+          TIME_DECREASE = 45;
+          MIN_TIME = 1200;
+          break;
+        case 'normal':
+          INITIAL_TIME = 5000;
+          TIME_DECREASE = 90;
+          MIN_TIME = 2400;
+          break;
+        case 'easy':
+        default:
+          INITIAL_TIME = 7500;
+          TIME_DECREASE = 135;
+          MIN_TIME = 3600;
+          break;
+      }
+    }
+    
+    // On start game, read mode and setup
+    function startGame() {
+      const modeSelect = document.getElementById('mode-select');
+      setGameMode(modeSelect.value);
+    
+      score = 0;
+      timerAllowed = INITIAL_TIME;
+      scoreEl.textContent = score;
+      resetUI();
+      gameActive = true;
+      showNextChallenge();
+    }
 
     // DOM Elements
     const gameArea = document.getElementById('game-area');
