@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Playfair Cipher - Stepwise Explanation</title>
+<link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Playfair Cipher</h1>
+
+    <label for="keyword">Keyword:</label>
+    <input type="text" id="keyword" placeholder="Enter keyword" autocomplete="off" />
+
+    <label for="message">Message:</label>
+    <textarea id="message" rows="4" placeholder="Enter message to encrypt or decrypt"></textarea>
+
+    <div class="mode-selection">
+      <label><input type="radio" name="mode" value="encrypt" checked /> Encrypt</label>
+      <label><input type="radio" name="mode" value="decrypt" /> Decrypt</label>
+    </div>
+
+    <button id="runBtn" onclick="runPlayfair()">Run</button>
+
+    <div id="output"></div>
+
+    <div id="pagination">
+      <button id="prevBtn" onclick="prevStep()">Prev</button>
+      <span id="stepIndicator"></span>
+      <button id="nextBtn" onclick="nextStep()">Next</button>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>
