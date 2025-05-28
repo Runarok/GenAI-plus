@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Memory Allocation Visualizer</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,12 +10,19 @@
         <h1>Memory Allocation Visualizer</h1>
         <form id="inputForm" autocomplete="off">
             <label for="blocksInput">Memory Blocks (comma-separated, e.g. 100,500,200,300,600):</label>
-            <input type="text" id="blocksInput" placeholder="e.g. 100,500,200,300,600" required>
+            <input type="text" id="blocksInput" placeholder="e.g. 100,500,200,300,600" required />
             <label for="processesInput">Processes (comma-separated, e.g. 212,417,112,426):</label>
-            <input type="text" id="processesInput" placeholder="e.g. 212,417,112,426" required>
+            <input type="text" id="processesInput" placeholder="e.g. 212,417,112,426" required />
             <button type="submit">Allocate Memory</button>
         </form>
-        <div class="results" id="results" style="display:none;">
+
+        <div id="strategyButtons" style="display:none;">
+            <button type="button" class="strategy-btn active" data-strategy="firstFitSection">First-Fit</button>
+            <button type="button" class="strategy-btn" data-strategy="bestFitSection">Best-Fit</button>
+            <button type="button" class="strategy-btn" data-strategy="worstFitSection">Worst-Fit</button>
+        </div>
+
+        <div class="results" id="results">
             <div class="strategy-section" id="firstFitSection">
                 <h2>First-Fit</h2>
                 <div id="firstFitSteps"></div>
@@ -32,6 +37,7 @@
             </div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>

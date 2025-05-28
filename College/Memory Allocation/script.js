@@ -7,11 +7,11 @@ function parseInput(str) {
 }
 
 function cloneBlocks(blocks) {
-    return blocks.map(b => ({...b}));
+    return blocks.map(b => ({ ...b }));
 }
 
 function formatBlocks(blocks) {
-    return blocks.map(b => 
+    return blocks.map(b =>
         `${b.size}${b.allocated ? ' (Allocated)' : ''}`
     ).join(' | ');
 }
@@ -20,9 +20,9 @@ function formatAllocSummary(alloc, processes) {
     let lines = [];
     for (let i = 0; i < processes.length; ++i) {
         if (alloc[i] !== null && alloc[i] !== undefined) {
-            lines.push(`Process ${i+1} (${processes[i]}) → Block ${alloc[i]+1}`);
+            lines.push(`Process ${i + 1} (${processes[i]}) → Block ${alloc[i] + 1}`);
         } else {
-            lines.push(`Process ${i+1} (${processes[i]}) → <span class="not-allocated">Not Allocated</span>`);
+            lines.push(`Process ${i + 1} (${processes[i]}) → <span class="not-allocated">Not Allocated</span>`);
         }
     }
     return lines.join('<br>');
@@ -30,7 +30,7 @@ function formatAllocSummary(alloc, processes) {
 
 function firstFit(blockSizes, processes) {
     let steps = [];
-    let blocks = blockSizes.map((size, i) => ({size, allocated: false, index: i}));
+    let blocks = blockSizes.map((size, i) => ({ size, allocated: false, index: i }));
     let alloc = Array(processes.length).fill(null);
 
     steps.push({
@@ -44,7 +44,7 @@ function firstFit(blockSizes, processes) {
         let reasoning = '';
         for (let b = 0; b < blocks.length; ++b) {
             if (!blocks[b].allocated && blocks[b].size >= processes[p]) {
-                reasoning = `Process ${p+1} (${processes[p]}) fits in Block ${b+1} (${blocks[b].size}). Allocated.`;
+                reasoning = `Process ${p + 1} (${processes[p]}) fits in Block ${b + 1} (${blocks[b].size}). Allocated.`;
                 blocks[b].size -= processes[p];
                 blocks[b].allocated = blocks[b].size === 0;
                 alloc[p] = b;
@@ -53,10 +53,10 @@ function firstFit(blockSizes, processes) {
             }
         }
         if (!allocated) {
-            reasoning = `Process ${p+1} (${processes[p]}) could not be allocated. No suitable block found.`;
+            reasoning = `Process ${p + 1} (${processes[p]}) could not be allocated. No suitable block found.`;
         }
         steps.push({
-            title: `Allocating Process ${p+1} (${processes[p]})`,
+            title: `Allocating Process ${p + 1} (${processes[p]})`,
             blocks: cloneBlocks(blocks),
             reasoning
         });
@@ -73,7 +73,7 @@ function firstFit(blockSizes, processes) {
 
 function bestFit(blockSizes, processes) {
     let steps = [];
-    let blocks = blockSizes.map((size, i) => ({size, allocated: false, index: i}));
+    let blocks = blockSizes.map((size, i) => ({ size, allocated: false, index: i }));
     let alloc = Array(processes.length).fill(null);
 
     steps.push({
@@ -95,15 +95,15 @@ function bestFit(blockSizes, processes) {
         }
         let reasoning = '';
         if (bestIdx !== -1) {
-            reasoning = `Process ${p+1} (${processes[p]}) best fits in Block ${bestIdx+1} (${blocks[bestIdx].size}). Allocated.`;
+            reasoning = `Process ${p + 1} (${processes[p]}) best fits in Block ${bestIdx + 1} (${blocks[bestIdx].size}). Allocated.`;
             blocks[bestIdx].size -= processes[p];
             blocks[bestIdx].allocated = blocks[bestIdx].size === 0;
             alloc[p] = bestIdx;
         } else {
-            reasoning = `Process ${p+1} (${processes[p]}) could not be allocated. No suitable block found.`;
+            reasoning = `Process ${p + 1} (${processes[p]}) could not be allocated. No suitable block found.`;
         }
         steps.push({
-            title: `Allocating Process ${p+1} (${processes[p]})`,
+            title: `Allocating Process ${p + 1} (${processes[p]})`,
             blocks: cloneBlocks(blocks),
             reasoning
         });
@@ -120,7 +120,7 @@ function bestFit(blockSizes, processes) {
 
 function worstFit(blockSizes, processes) {
     let steps = [];
-    let blocks = blockSizes.map((size, i) => ({size, allocated: false, index: i}));
+    let blocks = blockSizes.map((size, i) => ({ size, allocated: false, index: i }));
     let alloc = Array(processes.length).fill(null);
 
     steps.push({
@@ -142,15 +142,15 @@ function worstFit(blockSizes, processes) {
         }
         let reasoning = '';
         if (worstIdx !== -1) {
-            reasoning = `Process ${p+1} (${processes[p]}) worst fits in Block ${worstIdx+1} (${blocks[worstIdx].size}). Allocated.`;
+            reasoning = `Process ${p + 1} (${processes[p]}) worst fits in Block ${worstIdx + 1} (${blocks[worstIdx].size}). Allocated.`;
             blocks[worstIdx].size -= processes[p];
             blocks[worstIdx].allocated = blocks[worstIdx].size === 0;
             alloc[p] = worstIdx;
         } else {
-            reasoning = `Process ${p+1} (${processes[p]}) could not be allocated. No suitable block found.`;
+            reasoning = `Process ${p + 1} (${processes[p]}) could not be allocated. No suitable block found.`;
         }
         steps.push({
-            title: `Allocating Process ${p+1} (${processes[p]})`,
+            title: `Allocating Process ${p + 1} (${processes[p]})`,
             blocks: cloneBlocks(blocks),
             reasoning
         });
@@ -195,7 +195,29 @@ function renderSteps(steps, containerId) {
     });
 }
 
-document.getElementById('inputForm').addEventListener('submit', function(e) {
+const strategyButtons = document.querySelectorAll('.strategy-btn');
+const resultsContainer = document.getElementById('results');
+const strategyButtonsContainer = document.getElementById('strategyButtons');
+
+strategyButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Remove 'active' from all buttons
+        strategyButtons.forEach(btn => btn.classList.remove('active'));
+        // Add 'active' to clicked button
+        button.classList.add('active');
+
+        // Hide all strategy sections
+        document.querySelectorAll('.strategy-section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Show the selected strategy section
+        const targetId = button.getAttribute('data-strategy');
+        document.getElementById(targetId).style.display = 'block';
+    });
+});
+
+document.getElementById('inputForm').addEventListener('submit', function (e) {
     e.preventDefault();
     const blocksInput = document.getElementById('blocksInput').value;
     const processesInput = document.getElementById('processesInput').value;
@@ -207,7 +229,8 @@ document.getElementById('inputForm').addEventListener('submit', function(e) {
         return;
     }
 
-    document.getElementById('results').style.display = 'flex';
+    resultsContainer.style.display = 'flex';
+    strategyButtonsContainer.style.display = 'flex';
 
     const firstFitSteps = firstFit(blockSizes, processes);
     const bestFitSteps = bestFit(blockSizes, processes);
@@ -216,4 +239,12 @@ document.getElementById('inputForm').addEventListener('submit', function(e) {
     renderSteps(firstFitSteps, 'firstFitSteps');
     renderSteps(bestFitSteps, 'bestFitSteps');
     renderSteps(worstFitSteps, 'worstFitSteps');
+
+    // Show firstFitSection by default and set its button active
+    document.getElementById('firstFitSection').style.display = 'block';
+    document.getElementById('bestFitSection').style.display = 'none';
+    document.getElementById('worstFitSection').style.display = 'none';
+
+    strategyButtons.forEach(btn => btn.classList.remove('active'));
+    strategyButtons[0].classList.add('active');
 });

@@ -1,0 +1,126 @@
+body {
+  background: #181a1b;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #23272a;
+  border-radius: 10px;
+  box-shadow: 0 2px 16px #0008;
+  padding: 32px 28px 28px 28px;
+}
+h1 {
+  text-align: center;
+  color: #f8f8f8;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+}
+label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 6px;
+  color: #b0b0b0;
+  font-size: 1rem;
+}
+input[type='text'],
+input[type='number'],
+select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid #444;
+  background: #222;
+  color: #e0e0e0;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+form > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+button {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex: 1;
+  min-width: 120px;
+}
+button:disabled {
+  background: #444;
+  cursor: not-allowed;
+}
+button:hover:not(:disabled) {
+  background: #2563eb;
+}
+.steps {
+  margin-top: 32px;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+}
+th,
+td {
+  border: 1px solid #333;
+  padding: 8px 0;
+  text-align: center;
+  font-size: 1.05rem;
+}
+th {
+  background: #222;
+  color: #b0b0b0;
+}
+.frame-cell {
+  min-width: 40px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.hit {
+  background: #14532d !important;
+  color: #a7f3d0 !important;
+  font-weight: bold;
+  border-color: #22c55e !important;
+}
+.fault {
+  background: #7f1d1d !important;
+  color: #fecaca !important;
+  font-weight: bold;
+  border-color: #ef4444 !important;
+}
+.replace {
+  border-bottom: 3px solid #fbbf24 !important;
+}
+.summary {
+  background: #1e293b;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-top: 18px;
+  font-size: 1.1rem;
+  color: #fbbf24;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 12px 4px;
+  }
+  th,
+  td {
+    font-size: 0.95rem;
+    padding: 5px 0;
+  }
+}
