@@ -947,3 +947,11 @@ Serial.println("Client Disconnected");
 
         // Call the function to generate content after the DOM is loaded
         document.addEventListener("DOMContentLoaded", generateContent);
+
+
+document.addEventListener('keydown', function(event) {
+    if(event.key === 'v' || event.key === 'V') {
+        window.location.href = 'Viva/';
+    }
+});
+
