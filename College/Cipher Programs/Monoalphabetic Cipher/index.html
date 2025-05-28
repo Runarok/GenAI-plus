@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Caesar Cipher</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Caesar Cipher</h1>
+    <label for="shift">Shift Amount:</label>
+    <input type="number" id="shift" value="3" min="1" max="25" />
+
+    <label for="textInput">Text to Encrypt/Decrypt:</label>
+    <input type="text" id="textInput" placeholder="Enter text here" />
+
+    <button id="cipherBtn">Encrypt/Decrypt</button>
+
+    <div class="table-container" id="tableContainer">
+      <h2>Results:</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Index</th>
+            <th>Original Char</th>
+            <th>Original Value (0=A)</th>
+            <th>Encrypted Value (0=A)</th>
+            <th>Encrypted Char</th>
+            <th>Decrypted Value (0=A)</th>
+            <th>Decrypted Char</th>
+          </tr>
+        </thead>
+        <tbody id="resultTable">
+          <tr>
+            <td colspan="7" class="no-result">
+              No results to display yet. Please enter text and shift.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
