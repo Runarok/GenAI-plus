@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/GenAI-plus.svg" type="image/svg">
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
   <title>Page Replacement Simulator</title>
-
 
   <style>
     body {
@@ -48,6 +47,12 @@
       margin-bottom: 10px;
       box-sizing: border-box;
     }
+    form > div {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
     button {
       background: #3b82f6;
       color: #fff;
@@ -56,9 +61,9 @@
       padding: 10px 22px;
       font-size: 1rem;
       cursor: pointer;
-      margin-right: 10px;
-      margin-top: 10px;
       transition: background 0.2s;
+      flex: 1;
+      min-width: 120px;
     }
     button:disabled {
       background: #444;
@@ -96,14 +101,12 @@
       color: #a7f3d0 !important;
       font-weight: bold;
       border-color: #22c55e !important;
-      transition: background 0.2s;
     }
     .fault {
       background: #7f1d1d !important;
       color: #fecaca !important;
       font-weight: bold;
       border-color: #ef4444 !important;
-      transition: background 0.2s;
     }
     .replace {
       border-bottom: 3px solid #fbbf24 !important;
@@ -116,7 +119,6 @@
       font-size: 1.1rem;
       color: #fbbf24;
       text-align: center;
-      letter-spacing: 0.5px;
     }
     @media (max-width: 600px) {
       .container { padding: 12px 4px; }
@@ -130,155 +132,103 @@
     <form id="simForm" autocomplete="off">
       <label for="pages">Page Reference String (comma-separated):</label>
       <input type="text" id="pages" placeholder="e.g. 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2" required>
-      
+
       <label for="frames">Number of Page Frames:</label>
       <input type="number" id="frames" min="1" max="10" value="3" required>
-      
+
       <label for="algorithm">Algorithm:</label>
       <select id="algorithm">
         <option value="optimal">Optimal</option>
         <option value="lru">LRU (Least Recently Used)</option>
         <option value="fifo">FIFO (First-In-First-Out)</option>
       </select>
-      
-      <button type="submit" id="startBtn">Simulate</button>
-      <button type="button" id="stepBtn" disabled>Next Step</button>
-      <button type="button" id="resetBtn" disabled>Reset</button>
+
+      <div>
+        <button type="submit" id="startBtn">Start Simulation</button>
+        <button type="button" id="stepBtn" disabled>Step-wise</button>
+        <button type="button" id="runAllBtn" disabled>Run All</button>
+        <button type="button" id="resetBtn" disabled>Reset</button>
+      </div>
     </form>
     <div class="steps" id="steps"></div>
     <div class="summary" id="summary"></div>
   </div>
+
   <script>
-    // --- State ---
     let simulation = null;
     let currentStep = 0;
 
-    // --- DOM Elements ---
     const simForm = document.getElementById('simForm');
     const pagesInput = document.getElementById('pages');
     const framesInput = document.getElementById('frames');
     const algoSelect = document.getElementById('algorithm');
     const startBtn = document.getElementById('startBtn');
     const stepBtn = document.getElementById('stepBtn');
+    const runAllBtn = document.getElementById('runAllBtn');
     const resetBtn = document.getElementById('resetBtn');
     const stepsDiv = document.getElementById('steps');
     const summaryDiv = document.getElementById('summary');
 
-    // --- Utility Functions ---
     function parsePages(str) {
-      return str
-        .split(',')
-        .map(s => s.trim())
-        .filter(s => s.length > 0)
-        .map(Number)
-        .filter(n => !isNaN(n));
+      return str.split(',').map(s => s.trim()).filter(s => s).map(Number).filter(n => !isNaN(n));
     }
 
     function deepCopy(arr) {
       return JSON.parse(JSON.stringify(arr));
     }
 
-    // --- Simulation Algorithms ---
     function simulateOptimal(pages, frameCount) {
-      let frames = [];
-      let steps = [];
-      let faults = 0;
-
+      let frames = [], steps = [], faults = 0;
       for (let i = 0; i < pages.length; i++) {
-        let page = pages[i];
-        let hit = frames.includes(page);
-        let replaced = null;
-
-        if (hit) {
-          // No change in frames
-        } else {
+        let page = pages[i], hit = frames.includes(page), replaced = null;
+        if (!hit) {
           faults++;
           if (frames.length < frameCount) {
             frames.push(page);
           } else {
-            // Find the page in frames that is not used for the longest in the future
             let future = pages.slice(i + 1);
-            let indices = frames.map(f => {
-              let idx = future.indexOf(f);
-              return idx === -1 ? Infinity : idx;
-            });
+            let indices = frames.map(f => future.indexOf(f) === -1 ? Infinity : future.indexOf(f));
             let victimIdx = indices.indexOf(Math.max(...indices));
             replaced = frames[victimIdx];
             frames[victimIdx] = page;
           }
         }
-        steps.push({
-          page,
-          frames: deepCopy(frames),
-          hit,
-          fault: !hit,
-          replaced
-        });
+        steps.push({ page, frames: deepCopy(frames), hit, fault: !hit, replaced });
       }
       return { steps, faults };
     }
 
     function simulateLRU(pages, frameCount) {
-      let frames = [];
-      let lastUsed = new Map();
-      let steps = [];
-      let faults = 0;
-
+      let frames = [], lastUsed = new Map(), steps = [], faults = 0;
       for (let i = 0; i < pages.length; i++) {
-        let page = pages[i];
-        let hit = frames.includes(page);
-        let replaced = null;
-
-        if (hit) {
-          // Update last used
-          lastUsed.set(page, i);
-        } else {
+        let page = pages[i], hit = frames.includes(page), replaced = null;
+        if (!hit) {
           faults++;
           if (frames.length < frameCount) {
             frames.push(page);
           } else {
-            // Find least recently used
-            let lruPage = frames.reduce((a, b) => (lastUsed.get(a) < lastUsed.get(b) ? a : b));
+            let lruPage = frames.reduce((a, b) => lastUsed.get(a) < lastUsed.get(b) ? a : b);
             let idx = frames.indexOf(lruPage);
             replaced = frames[idx];
             frames[idx] = page;
           }
-          lastUsed.set(page, i);
         }
-        // Update last used for hit as well
-        if (hit) lastUsed.set(page, i);
-
-        steps.push({
-          page,
-          frames: deepCopy(frames),
-          hit,
-          fault: !hit,
-          replaced
-        });
+        lastUsed.set(page, i);
+        steps.push({ page, frames: deepCopy(frames), hit, fault: !hit, replaced });
       }
       return { steps, faults };
     }
 
     function simulateFIFO(pages, frameCount) {
-      let frames = [];
-      let queue = [];
-      let steps = [];
-      let faults = 0;
-
+      let frames = [], queue = [], steps = [], faults = 0;
       for (let i = 0; i < pages.length; i++) {
-        let page = pages[i];
-        let hit = frames.includes(page);
-        let replaced = null;
-
-        if (hit) {
-          // No change
-        } else {
+        let page = pages[i], hit = frames.includes(page), replaced = null;
+        if (!hit) {
           faults++;
           if (frames.length < frameCount) {
             frames.push(page);
             queue.push(page);
           } else {
-            // Remove the oldest
             let victim = queue.shift();
             let idx = frames.indexOf(victim);
             replaced = frames[idx];
@@ -286,13 +236,7 @@
             queue.push(page);
           }
         }
-        steps.push({
-          page,
-          frames: deepCopy(frames),
-          hit,
-          fault: !hit,
-          replaced
-        });
+        steps.push({ page, frames: deepCopy(frames), hit, fault: !hit, replaced });
       }
       return { steps, faults };
     }
@@ -306,29 +250,19 @@
       }
     }
 
-    // --- Visualization ---
     function renderStepTable(steps, frameCount, uptoStep) {
       let html = '<table><thead><tr><th>Step</th><th>Page</th>';
-      for (let i = 0; i < frameCount; i++) {
-        html += `<th>Frame ${i + 1}</th>`;
-      }
+      for (let i = 0; i < frameCount; i++) html += `<th>Frame ${i + 1}</th>`;
       html += '<th>Result</th></tr></thead><tbody>';
-
       for (let i = 0; i <= uptoStep; i++) {
-        let step = steps[i];
-        html += `<tr>`;
-        html += `<td>${i + 1}</td>`;
-        html += `<td>${step.page}</td>`;
+        let s = steps[i], row = `<tr><td>${i + 1}</td><td>${s.page}</td>`;
         for (let j = 0; j < frameCount; j++) {
-          let val = step.frames[j] !== undefined ? step.frames[j] : '';
-          let classes = ['frame-cell'];
-          if (step.fault && step.replaced === step.frames[j]) classes.push('replace');
-          html += `<td class="${classes.join(' ')}">${val}</td>`;
+          let val = s.frames[j] ?? '', classes = ['frame-cell'];
+          if (s.fault && s.replaced === s.frames[j]) classes.push('replace');
+          row += `<td class="${classes.join(' ')}">${val}</td>`;
         }
-        let resultClass = step.hit ? 'hit' : 'fault';
-        let resultText = step.hit ? 'Hit' : (step.replaced !== null ? `Fault (Replaced ${step.replaced})` : 'Fault');
-        html += `<td class="${resultClass}">${resultText}</td>`;
-        html += `</tr>`;
+        row += `<td class="${s.hit ? 'hit' : 'fault'}">${s.hit ? 'Hit' : (s.replaced ? `Fault (Replaced ${s.replaced})` : 'Fault')}</td></tr>`;
+        html += row;
       }
       html += '</tbody></table>';
       return html;
@@ -342,45 +276,38 @@
       stepsDiv.innerHTML = '';
       summaryDiv.innerHTML = '';
       stepBtn.disabled = true;
+      runAllBtn.disabled = true;
       resetBtn.disabled = true;
       startBtn.disabled = false;
       currentStep = 0;
       simulation = null;
     }
 
-    // --- Event Handlers ---
-    simForm.addEventListener('submit', function(e) {
+    simForm.addEventListener('submit', function (e) {
       e.preventDefault();
       let pages = parsePages(pagesInput.value);
-      let frameCount = parseInt(framesInput.value, 10);
+      let frameCount = parseInt(framesInput.value);
       let algo = algoSelect.value;
-
-      if (pages.length === 0 || isNaN(frameCount) || frameCount < 1) {
-        alert('Please enter a valid page reference string and frame count.');
-        return;
-      }
-      if (frameCount > 10) {
-        alert('Maximum 10 frames supported for visualization.');
+      if (pages.length === 0 || isNaN(frameCount) || frameCount < 1 || frameCount > 10) {
+        alert('Please enter valid input and frame count (1-10).');
         return;
       }
 
-      let simulate = getAlgorithm(algo);
-      simulation = simulate(pages, frameCount);
+      simulation = getAlgorithm(algo)(pages, frameCount);
       currentStep = 0;
-
       stepsDiv.innerHTML = renderStepTable(simulation.steps, frameCount, 0);
       summaryDiv.innerHTML = '';
       stepBtn.disabled = false;
+      runAllBtn.disabled = false;
       resetBtn.disabled = false;
       startBtn.disabled = true;
-      stepBtn.textContent = 'Next Step';
+      stepBtn.textContent = 'Step-wise';
     });
 
-    stepBtn.addEventListener('click', function() {
+    stepBtn.addEventListener('click', function () {
       if (!simulation) return;
       let steps = simulation.steps;
-      let frameCount = parseInt(framesInput.value, 10);
-
+      let frameCount = parseInt(framesInput.value);
       if (currentStep < steps.length - 1) {
         currentStep++;
         stepsDiv.innerHTML = renderStepTable(steps, frameCount, currentStep);
@@ -388,24 +315,28 @@
           stepBtn.textContent = 'Show Summary';
         }
       } else {
-        // Show summary
         summaryDiv.innerHTML = renderSummary(simulation.faults, steps.length);
         stepBtn.disabled = true;
+        runAllBtn.disabled = true;
       }
     });
 
-    resetBtn.addEventListener('click', function() {
-      resetUI();
+    runAllBtn.addEventListener('click', function () {
+      if (!simulation) return;
+      let frameCount = parseInt(framesInput.value);
+      currentStep = simulation.steps.length - 1;
+      stepsDiv.innerHTML = renderStepTable(simulation.steps, frameCount, currentStep);
+      summaryDiv.innerHTML = renderSummary(simulation.faults, simulation.steps.length);
+      stepBtn.disabled = true;
+      runAllBtn.disabled = true;
     });
 
-    // Allow pressing Enter to simulate, but not to step
-    simForm.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && document.activeElement !== startBtn) {
-        e.preventDefault();
-      }
+    resetBtn.addEventListener('click', resetUI);
+
+    simForm.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && document.activeElement !== startBtn) e.preventDefault();
     });
 
-    // On page load, reset UI
     resetUI();
   </script>
 </body>
