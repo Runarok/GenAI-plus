@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Simon Says Memory Game</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+  <div class="container">
+    <div class="game-title">Simon Says</div>
+    <div class="scoreboard">
+      <span>Score: <span id="score">0</span></span>
+      <span>High: <span id="high-score">0</span></span>
+    </div>
+    <div class="simon-board" id="simon-board">
+      <button class="simon-btn red" data-color="red" aria-label="Red"></button>
+      <button class="simon-btn green" data-color="green" aria-label="Green"></button>
+      <button class="simon-btn blue" data-color="blue" aria-label="Blue"></button>
+      <button class="simon-btn yellow" data-color="yellow" aria-label="Yellow"></button>
+    </div>
+    <div class="game-controls" id="game-controls">
+      <button class="start-btn" id="start-btn">Start</button>
+    </div>
+    <div class="game-over" id="game-over" style="display:none;">
+      <div class="game-over-title">Game Over</div>
+      <div class="game-over-score" id="game-over-score"></div>
+      <button class="start-btn" id="restart-btn">Restart</button>
+    </div>
+  </div>
+
+  <audio id="audio-red" src="https://cdn.jsdelivr.net/gh/robinsonkwame/simon-sounds/red.mp3" preload="auto"></audio>
+  <audio id="audio-green" src="https://cdn.jsdelivr.net/gh/robinsonkwame/simon-sounds/green.mp3" preload="auto"></audio>
+  <audio id="audio-blue" src="https://cdn.jsdelivr.net/gh/robinsonkwame/simon-sounds/blue.mp3" preload="auto"></audio>
+  <audio id="audio-yellow" src="https://cdn.jsdelivr.net/gh/robinsonkwame/simon-sounds/yellow.mp3" preload="auto"></audio>
+  <audio id="audio-wrong" src="https://cdn.jsdelivr.net/gh/robinsonkwame/simon-sounds/wrong.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
