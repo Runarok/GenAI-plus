@@ -1,0 +1,213 @@
+:root {
+  --bg: #1c1c1c;
+  --surface: #232323;
+  --accent: #ff4081;
+  --text: #fafafa;
+  --text-soft: #cccccc;
+  --button-bg: #232b2b;
+  --button-hover: #303a3a;
+  --button-active: #ff4081;
+  --success: #7cffb2;
+  --danger: #ff6161;
+  --font: 'Roboto', 'Segoe UI', 'Montserrat', Arial, sans-serif;
+  --radius: 1.2rem;
+  --transition: 0.2s cubic-bezier(.4,0,.2,1);
+  --shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.container {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.2rem 2.2rem 2.5rem 2.2rem;
+  max-width: 370px;
+  width: 94vw;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow var(--transition);
+}
+.container:hover {
+  box-shadow: 0 8px 48px 0 rgba(0,0,0,0.27);
+}
+h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: var(--accent);
+  text-shadow: 0 2px 8px #000c;
+}
+.instructions {
+  color: var(--text-soft);
+  font-size: 1.02rem;
+  margin-bottom: 1.4rem;
+  text-align: center;
+  line-height: 1.55;
+}
+.scoreboard {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+  width: 100%;
+  font-size: 1.08rem;
+}
+.scoreboard span {
+  color: var(--accent);
+  font-weight: 700;
+}
+.game-area {
+  width: 100%;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+  background: rgba(255,255,255,0.02);
+  border-radius: calc(var(--radius) - 0.4rem);
+  transition: background 0.2s;
+}
+.challenge {
+  font-size: 1.25rem;
+  margin: 0.7rem 0;
+  letter-spacing: 0.01em;
+  text-align: center;
+  min-height: 40px;
+}
+.timer-bar {
+  height: 7px;
+  width: 100%;
+  background: #262626;
+  border-radius: 4px;
+  margin-top: 0.6rem;
+  overflow: hidden;
+  position: relative;
+}
+.timer-bar-fill {
+  background: linear-gradient(90deg, var(--accent), #e040fb, var(--danger));
+  height: 100%;
+  width: 100%;
+  border-radius: 4px;
+  transition: width 0.12s linear;
+}
+.btn {
+  background: var(--button-bg);
+  color: var(--text);
+  border: none;
+  outline: none;
+  border-radius: calc(var(--radius) / 2);
+  padding: 0.75rem 1.7rem;
+  font-size: 1.11rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin: 1.2rem 0 0 0;
+  cursor: pointer;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.11);
+  transition: background var(--transition), color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+.btn:hover, .btn:focus {
+  background: var(--button-hover);
+  color: var(--accent);
+  transform: translateY(-2px) scale(1.035);
+  box-shadow: 0 6px 28px 0 rgba(255,64,129,0.09);
+}
+.btn:active {
+  background: var(--button-active);
+  color: #fff;
+  transform: scale(0.97);
+}
+.result {
+  font-size: 1.27rem;
+  font-weight: 700;
+  margin: 1rem 0 0.2rem 0;
+  color: var(--success);
+  text-align: center;
+  min-height: 30px;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 10px #1c1c1c77;
+}
+.error {
+  color: var(--danger);
+  font-weight: 700;
+  margin-top: 0.6rem;
+  text-align: center;
+  min-height: 22px;
+}
+
+#mode-select {
+  background: var(--button-bg);
+  color: var(--text);
+  border: none;
+  outline: none;
+  border-radius: calc(var(--radius) / 2);
+  padding: 0.75rem 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.11);
+  transition: background var(--transition), color var(--transition), transform var(--transition), box-shadow var(--transition);
+  width: 100%;
+  max-width: 220px;
+  margin-bottom: 1.2rem;
+  text-align-last: center; /* centers selected text */
+  appearance: none; /* removes default arrow on some browsers */
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--accent) 50%),
+    linear-gradient(135deg, var(--accent) 50%, transparent 50%),
+    linear-gradient(to right, var(--button-bg), var(--button-bg));
+  background-position:
+    calc(100% - 20px) calc(1.2em),
+    calc(100% - 15px) calc(1.2em),
+    100% 0;
+  background-size: 5px 5px, 5px 5px, 2.5em 2.5em;
+  background-repeat: no-repeat;
+}
+
+#mode-select:hover, #mode-select:focus {
+  background: var(--button-hover);
+  color: var(--accent);
+  transform: translateY(-2px) scale(1.035);
+  box-shadow: 0 6px 28px 0 rgba(255,64,129,0.09);
+}
+
+@media (max-width: 500px) {
+  #mode-select {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+    max-width: 100%;
+  }
+
+  .container {
+    padding: 1.3rem 0.6rem 1.5rem 0.6rem;
+  }
+  h1 {
+    font-size: 1.45rem;
+  }
+  .instructions {
+    font-size: 0.98rem;
+  }
+  .scoreboard {
+    font-size: 0.98rem;
+  }
+  .challenge {
+    font-size: 1.07rem;
+  }
+}
