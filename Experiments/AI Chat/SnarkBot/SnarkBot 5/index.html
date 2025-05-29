@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dark Chat App - Playful AI (Gemini Only)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="chat-container">
+    <div id="chat-window" class="chat-window"></div>
+    <form id="chat-form" class="input-area" autocomplete="off">
+      <input
+        type="text"
+        id="chat-input"
+        class="chat-input"
+        placeholder="Type something wild..."
+        autocomplete="off"
+        required
+      />
+      <button type="submit" class="send-btn">Send</button>
+    </form>
+  </div>
+  <!-- Modal for Gemini API key -->
+  <div id="gemini-modal-bg" class="modal-bg" style="display:none;">
+    <div class="modal">
+      <h2>Enter Gemini API Key</h2>
+      <label for="gemini-key-input">Paste your Gemini API key below:</label>
+      <input
+        type="text"
+        id="gemini-key-input"
+        placeholder="AIzaSy..."
+        autocomplete="off"
+      />
+      <div id="modal-err" class="modal-err"></div>
+      <button class="modal-btn" id="gemini-save-btn">Save Key</button>
+      <div class="modal-small">
+        Your key is stored only in your browser (localStorage).<br />
+        <a
+          href="https://aistudio.google.com/app/apikey"
+          target="_blank"
+          style="color:#ffe066;text-decoration:underline;"
+          >How to get a Gemini API key?</a
+        >
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
