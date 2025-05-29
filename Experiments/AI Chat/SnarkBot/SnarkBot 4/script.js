@@ -295,3 +295,12 @@ chatForm.addEventListener('submit', (e) => {
     addMessage(reply, 'bot');
   }, 500);
 });
+
+window.onload = () => {
+  setTimeout(() => {
+    addMessage(
+      "Hey there! I'm a bot made just with Javascript and no AI. Type something wild to start the fun!",
+      'ai'
+    );
+  }, 500); // delay of 500ms (adjust as needed)
+};

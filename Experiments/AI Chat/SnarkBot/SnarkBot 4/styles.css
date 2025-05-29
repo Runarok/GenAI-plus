@@ -1,9 +1,9 @@
 :root {
   --bg: #181a20;
-  --bubble-user: #19c37d;
-  --bubble-ai: #ffe066;
+  --bubble-user: #19c37d;      /* user bubble green */
+  --bubble-ai: #3a86ff;        /* changed AI bubble to blue */
   --text-user: #fff;
-  --text-ai: #222;
+  --text-ai: #e0eaff;          /* lighter blue text for AI */
   --input-bg: #23262f;
   --input-border: #333;
   --send-bg: #19c37d;
@@ -12,6 +12,7 @@
   --scrollbar-thumb: #444;
   --font-main: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
 }
+
 html, body {
   height: 100%;
   margin: 0;
