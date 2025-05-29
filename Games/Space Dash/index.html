@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Dash</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+    
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen">
+      <h1>SPACE DASH</h1>
+      <div class="instructions">
+        <p>Navigate your spaceship through the asteroid field and collect stars!</p>
+        <div class="controls-info">
+          <div class="control-group">
+            <h3>Desktop Controls:</h3>
+            <p>Arrow Keys or WASD to move</p>
+          </div>
+          <div class="control-group">
+            <h3>Mobile Controls:</h3>
+            <p>Touch and drag to move</p>
+          </div>
+        </div>
+      </div>
+      <button id="start-button" class="game-button">START GAME</button>
+    </div>
+    
+    <!-- Game UI -->
+    <div id="game-ui">
+      <div id="score-container">
+        <span>SCORE: </span>
+        <span id="score">0</span>
+      </div>
+    </div>
+    
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="screen">
+      <h2>GAME OVER</h2>
+      <div id="final-score-container">
+        <p>Your Score: <span id="final-score">0</span></p>
+        <p>High Score: <span id="high-score">0</span></p>
+      </div>
+      <button id="restart-button" class="game-button">PLAY AGAIN</button>
+    </div>
+
+    <!-- Mobile Controls Overlay -->
+    <div id="mobile-controls" class="hidden"></div>
+
+    <!-- Sound Control -->
+    <button id="sound-toggle" class="icon-button">
+      <span id="sound-icon">🔊</span>
+    </button>
+  </div>
+
+  <script type="module">
+    import { setupAudio } from './js/audio.js';
+    import { setupInputHandlers } from './js/input.js';
+    import { Game } from './js/game.js';
+    import { Player } from './js/player.js';
+    import { ObstacleManager } from './js/obstacles.js';
+    import { CollectibleManager } from './js/collectibles.js';
+    import { showScreen, hideAllScreens, updateScore, updateFinalScore, showMessage } from './js/ui.js';
+    import { isColliding } from './js/utils.js';
+
+    // Initialize game when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('game-canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Set canvas dimensions
+      function resizeCanvas() {
+        const container = document.getElementById('game-container');
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        if (window.game) {
+          window.game.updateDimensions(canvas.width, canvas.height);
+        }
+      }
+
+      // Initial resize and event listener
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      // Create game instance
+      window.game = new Game(canvas, ctx);
+
+      // Setup audio
+      const audio = setupAudio();
+      window.game.setAudio(audio);
+
+      // Setup input handlers
+      setupInputHandlers(window.game);
+
+      // Show start screen
+      showScreen('start-screen');
+
+      // Setup UI event listeners
+      document.getElementById('start-button').addEventListener('click', () => {
+        hideAllScreens();
+        window.game.start();
+        audio.playSound('start');
+      });
+
+      document.getElementById('restart-button').addEventListener('click', () => {
+        hideAllScreens();
+        window.game.reset();
+        window.game.start();
+        audio.playSound('start');
+      });
+
+      const soundToggle = document.getElementById('sound-toggle');
+      const soundIcon = document.getElementById('sound-icon');
+      
+      soundToggle.addEventListener('click', () => {
+        const isMuted = audio.toggleMute();
+        soundIcon.textContent = isMuted ? '🔇' : '🔊';
+      });
+    });
+  </script>
+</body>
+</html>
