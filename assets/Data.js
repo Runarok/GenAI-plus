@@ -43,7 +43,7 @@ const menuData = [
     id: "tools",
     title: "Tools",
     links: [
-      { label: "Calculator", url: "calculator.html", desc: "Simple math calculator." },
+      { label: "Calculator", url: "Tools/Calculator/index.html", desc: "Simple math calculator." },
       { label: "Unit Converter", url: "converter.html", desc: "Convert units easily." },
       { label: "Markdown Editor", url: "markdown.html", desc: "Write and preview markdown." }
     ]
