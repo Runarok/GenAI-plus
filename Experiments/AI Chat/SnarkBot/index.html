@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SnarkBot Stable Editions</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png" />
+  <title>SnarkBots Main Menu</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Custom scrollbar for dark theme */
@@ -32,18 +33,18 @@
     </p>
   </header>
 
-  <main class="flex-grow flex justify-center px-4 sm:px-0">
-    <section id="carousel" class="flex space-x-6 overflow-hidden max-w-4xl snap-x snap-mandatory py-8">
+  <main class="flex-grow px-6 sm:px-12">
+    <section id="cards-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
       <!-- Cards inserted by JS -->
     </section>
   </main>
 
-<footer class="text-center text-gray-500 py-6 select-none text-sm">
-  &copy; 2025 SnarkBot Project &mdash; Sarcasm engineered and maintained by&nbsp;
-  <a href="https://github.com/Runarok" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
-    Runarok
-  </a>.
-</footer>
+  <footer class="text-center text-gray-500 py-6 select-none text-sm">
+    &copy; 2025 SnarkBot Project &mdash; Sarcasm engineered and maintained by&nbsp;
+    <a href="https://github.com/Runarok" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+      Runarok
+    </a>.
+  </footer>
 
   <script>
     const bots = [
@@ -74,14 +75,14 @@
       },
     ];
 
-    const carousel = document.getElementById('carousel');
-    let currentIndex = 0;
+    const grid = document.getElementById('cards-grid');
 
-    // Create cards and append
-    bots.forEach((bot, i) => {
+    // Append first 3 cards directly
+    for (let i = 0; i < 3; i++) {
+      const bot = bots[i];
       const card = document.createElement('article');
-      card.className = "snap-start bg-gray-800 rounded-xl shadow-lg w-80 flex-shrink-0 flex flex-col p-6 hover:scale-[1.03] transition-transform duration-300 cursor-pointer select-none";
-      card.tabIndex = i === 0 ? 0 : -1;
+      card.className = "bg-gray-800 rounded-xl shadow-lg flex flex-col p-6 hover:scale-[1.03] transition-transform duration-300 cursor-pointer select-none";
+      card.tabIndex = 0;
       card.setAttribute('aria-label', `${bot.title}: ${bot.desc}`);
       card.innerHTML = `
         <h2 class="text-xl font-semibold text-blue-400 mb-3">${bot.title}</h2>
@@ -90,72 +91,42 @@
           Open
         </a>
       `;
-
-      // Open link on Enter or Space when card focused
       card.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           card.querySelector('a').click();
         }
       });
-
-      carousel.appendChild(card);
-    });
-
-    const cards = carousel.children;
-
-    // Focus management
-    function updateFocus() {
-      for (let i = 0; i < cards.length; i++) {
-        cards[i].tabIndex = i === currentIndex ? 0 : -1;
-      }
-      cards[currentIndex].focus();
+      grid.appendChild(card);
     }
 
-    // Scroll to card at currentIndex
-    function scrollToCurrent() {
-      const cardWidth = cards[0].offsetWidth + 24; // card width + margin (6*2 + 6*2 padding approx)
-      carousel.scrollTo({
-        left: cardWidth * currentIndex,
-        behavior: 'smooth',
+    // Create a wrapper div for bottom two cards, span full width in grid
+    const bottomWrapper = document.createElement('div');
+    bottomWrapper.className = 'sm:col-span-3 flex flex-col sm:flex-row justify-center gap-6';
+
+    for (let i = 3; i < bots.length; i++) {
+      const bot = bots[i];
+      const card = document.createElement('article');
+      card.className = "bg-gray-800 rounded-xl shadow-lg flex flex-col p-6 hover:scale-[1.03] transition-transform duration-300 cursor-pointer select-none w-80";
+      card.tabIndex = 0;
+      card.setAttribute('aria-label', `${bot.title}: ${bot.desc}`);
+      card.innerHTML = `
+        <h2 class="text-xl font-semibold text-blue-400 mb-3">${bot.title}</h2>
+        <p class="text-gray-300 flex-grow">${bot.desc}</p>
+        <a href="${bot.href}" class="mt-6 inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-lg text-center transition-colors duration-200" tabindex="-1" aria-label="Open ${bot.title}">
+          Open
+        </a>
+      `;
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.querySelector('a').click();
+        }
       });
+      bottomWrapper.appendChild(card);
     }
 
-    // Move carousel by index delta
-    function moveCarousel(delta) {
-      const newIndex = currentIndex + delta;
-      if (newIndex < 0 || newIndex >= cards.length) return;
-      currentIndex = newIndex;
-      updateFocus();
-      scrollToCurrent();
-    }
-
-    // Initialize focus and scroll
-    updateFocus();
-    scrollToCurrent();
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (document.activeElement.tagName === 'A') return; // don't interfere when on links
-
-      const keysLeft = ['ArrowLeft', 'a', 'A', 'ArrowUp', 'w', 'W'];
-      const keysRight = ['ArrowRight', 'd', 'D', 'ArrowDown', 's', 'S'];
-
-      if (keysLeft.includes(e.key)) {
-        e.preventDefault();
-        moveCarousel(-1);
-      } else if (keysRight.includes(e.key)) {
-        e.preventDefault();
-        moveCarousel(1);
-      }
-
-      // Enter or Space opens current card link
-      if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === cards[currentIndex]) {
-        e.preventDefault();
-        cards[currentIndex].querySelector('a').click();
-      }
-    });
-
+    grid.appendChild(bottomWrapper);
   </script>
 </body>
 </html>
