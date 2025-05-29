@@ -1,7 +1,9 @@
-// Utility: get URL param
-function getParam(name) {
-  const url = new URL(window.location.href);
-  return url.searchParams.get(name);
+// Utility: get URL hash param
+function getSectionIdxFromHash() {
+  const hash = window.location.hash.slice(1); // remove '#'
+  if (!hash) return 0;
+  const idx = menuData.findIndex(sec => sec.id.toLowerCase() === hash.toLowerCase());
+  return idx >= 0 ? idx : 0;
 }
 
 // DOM refs
@@ -63,10 +65,11 @@ function buildSections() {
   });
 }
 
-// Show section by index
+// Show section by index and update URL hash
 function showSection(idx, focusBtn = false) {
   if (idx < 0 || idx >= menuData.length) return;
   currentSectionIdx = idx;
+
   // Update buttons
   Array.from(sectionToggle.children).forEach((btn, i) => {
     btn.classList.toggle('active', i === idx);
@@ -74,6 +77,7 @@ function showSection(idx, focusBtn = false) {
     btn.setAttribute('tabindex', i === idx ? '0' : '-1');
     if (i === idx && focusBtn) btn.focus();
   });
+
   // Update panels
   Array.from(mainContent.children).forEach((panel, i) => {
     panel.classList.toggle('active', i === idx);
@@ -83,6 +87,9 @@ function showSection(idx, focusBtn = false) {
       panel.setAttribute('hidden', 'hidden');
     }
   });
+
+  // Update the URL hash without scrolling
+  history.replaceState(null, '', `#${menuData[idx].id}`);
 }
 
 // Keyboard navigation for section toggles
@@ -153,17 +160,9 @@ mainContent.addEventListener('keydown', (e) => {
   }
 });
 
-// Support URL param: ?section=tools
-function getSectionIdxFromParam() {
-  const param = getParam('section');
-  if (!param) return 0;
-  const idx = menuData.findIndex(sec => sec.id.toLowerCase() === param.toLowerCase());
-  return idx >= 0 ? idx : 0;
-}
-
 // Initial render
 function renderMenu() {
-  currentSectionIdx = getSectionIdxFromParam();
+  currentSectionIdx = getSectionIdxFromHash();
   buildSectionToggles();
   buildSections();
   showSection(currentSectionIdx);
@@ -171,8 +170,8 @@ function renderMenu() {
 
 renderMenu();
 
-// Optional: update section if URL hash changes (not mandatory)
+// Update section when URL hash changes
 window.addEventListener('hashchange', () => {
-  const idx = getSectionIdxFromParam();
+  const idx = getSectionIdxFromHash();
   showSection(idx, true);
 });
