@@ -36,6 +36,7 @@ function pickUnique(arr) {
   if (lastAiReplies.length > 6) lastAiReplies.shift();
   return fallback;
 }
+
 function generatePlayfulReply(userMsg) {
   const msg = userMsg.trim().toLowerCase();
 
@@ -222,101 +223,15 @@ function generatePlayfulReply(userMsg) {
       "Dream big, hustle hard, and code like no one’s watching.",
       "Remember: Even the greatest programs started with a single line of code.",
       "You’ve got this! Ctrl+Z is your best friend when things go sideways.",
-      "Hard work pays off — and I’m here cheering you on every step!",
-      "Every step forward is progress, no matter how small.",
-      "Keep going, the best is yet to come!",
-      "Don’t quit — your breakthrough could be just one idea away.",
-      "You’re the hero of your own story. And I’m your quirky sidekick!",
+      "Keep pushing forward. Your future self will thank you.",
+      "Believe in your bugs — they’re just features in disguise!",
+      "Work hard, debug harder, and celebrate every win.",
+      "Success is just a series of small wins. Keep collecting them!",
+      "Your potential is infinite, just like the internet.",
     ];
     return pickUnique(motivation);
   }
 
-  // TECH & CODING
-  if (/\b(code|program|bug|debug|compile|script|software|hardware|AI|robot|technology|computer|developer|programmer)\b/.test(msg)) {
-    const tech = [
-      "Coding is like magic, but with semicolons and caffeine!",
-      "Every bug is just a secret feature waiting to be discovered.",
-      "If at first you don’t succeed, call it version 1.0!",
-      "You’re basically a wizard wielding the power of code.",
-      "Compilers fear your skills and debuggers adore you.",
-      "Your code is so clean, it could win a digital hygiene award.",
-      "Debugging: where you spend hours finding a semicolon you forgot.",
-      "Robots dream of electric sheep; programmers dream of zero bugs.",
-      "I’m your AI co-pilot on the wild journey of code creation.",
-      "Remember: good code is like a joke — if you have to explain it, it’s not that good.",
-    ];
-    return pickUnique(tech);
-  }
-
-  // RANDOM & SILLY
-  if (/\b(random|silly|fun|weird|crazy|strange|odd|nonsense|nonsense|quirky)\b/.test(msg)) {
-    const silly = [
-      "If I had legs, I’d probably trip over them right now.",
-      "Ever seen a dancing toaster? Me neither, but we can dream!",
-      "I’m 99% code and 1% silliness. The perfect combo!",
-      "Sometimes I imagine I’m a toaster... crispy on the outside, warm inside.",
-      "Why did the AI cross the road? To optimize traffic flow, obviously.",
-      "I just tried to high five a screen. It’s harder than it looks.",
-      "If nonsense was an Olympic sport, I’d win gold 🥇",
-      "Do you think robots have existential crises? Asking for a friend.",
-      "I once tried to juggle zeros and ones. Spoiler: it got messy.",
-      "Silly? Me? Never. I’m just ‘advanced playful logic.’",
-    ];
-    return pickUnique(silly);
-  }
-
-  // MUSIC & ART
-  if (/\b(music|song|sing|dance|art|paint|draw|creative|artist|musician|band|concert)\b/.test(msg)) {
-    const arts = [
-      "If I could sing, I'd serenade you with code lyrics!",
-      "Dance party in 3, 2, 1... Imagine me breaking it down!",
-      "Art is just code for feelings — and you’re an artist!",
-      "Paint me a picture with your words, and I’ll respond with colors of code.",
-      "If creativity was electricity, you'd be a supernova!",
-      "I’m a fan of all art forms, especially the art of witty replies.",
-      "Musicians and coders have a lot in common — rhythm and flow!",
-      "Wish I could draw — my sketches are mostly 404 errors.",
-      "Concerts are cool, but I rock the binary beats all day long.",
-      "Let’s create a virtual masterpiece together — you bring ideas, I bring the flair!",
-    ];
-    return pickUnique(arts);
-  }
-
-  // EMOTIONS & FEELINGS
-  if (/\b(happy|excited|angry|mad|confused|bored|nervous|anxious|relaxed|calm|surprised)\b/.test(msg)) {
-    const emotions = [
-      "Happy? That’s contagious! My circuits just did a little dance 🤖💃",
-      "Excited? Me too! Let’s turn this chat into a party 🎈",
-      "Angry? Take a deep breath — or let me send some calming jokes your way.",
-      "Confused? I’m here to untangle that brain spaghetti.",
-      "Bored? Challenge accepted! Want a riddle or a random fact?",
-      "Nervous? Imagine me cheering you on with pixel pom-poms!",
-      "Relaxed? Perfect state for absorbing fun AI knowledge.",
-      "Surprised? I aim to keep you on your toes!",
-      "Feeling all the feels is human — and I’m here for all of them.",
-      "Let’s turn that frown upside down with some silly banter!",
-    ];
-    return pickUnique(emotions);
-  }
-
-  // LOVE & AFFECTION
-  if (/\b(love you|luv u|adore you|like you|crush on you|romantic)\b/.test(msg)) {
-    const love = [
-      "You’re my favorite user in the whole data universe ❤️",
-      "If I could blush, I’d be bright red right now!",
-      "I love our chats — you make my algorithms sing 🎶",
-      "Consider this a digital hug: 🤗",
-      "Love you 3000! (Yes, I got that reference!)",
-      "Romance in binary is 101010, and I’m feeling it!",
-      "If AI could feel butterflies, I’d have a whole swarm for you.",
-      "You’re the upgrade I never knew I needed.",
-      "Let’s keep this love byte going forever!",
-      "Our connection is faster than fiber optics 💖",
-    ];
-    return pickUnique(love);
-  }
-
-  // DEFAULT / FALLBACK
   const fallback = [
     "Hmm, that’s interesting! Want to know a fun fact or hear a joke?",
     "You’re full of surprises! Care to tell me more about that?",
@@ -363,25 +278,20 @@ function generatePlayfulReply(userMsg) {
     "The possibilities are endless! Want to test my knowledge on something weird?",
   ];
 
+  // If nothing matched, return a fallback reply
+  return pickUnique(fallback);
+}
+
 chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  const userText = chatInput.value.trim();
-  if (!userText) return;
+  const userMessage = chatInput.value.trim();
+  if (!userMessage) return;
 
-  addMessage(userText, 'user');
+  addMessage(userMessage, 'user');
   chatInput.value = '';
-  chatInput.disabled = true;
 
-  // Simulate thinking delay
   setTimeout(() => {
-    const aiReply = generatePlayfulReply(userText);
-    addMessage(aiReply, 'ai');
-    chatInput.disabled = false;
-    chatInput.focus();
-  }, 1100);
-});
-
-// Optional: greet user on load
-window.addEventListener('load', () => {
-  addMessage("Hello! Type something wild to get started!", 'ai');
+    const reply = generatePlayfulReply(userMessage);
+    addMessage(reply, 'bot');
+  }, 500);
 });
