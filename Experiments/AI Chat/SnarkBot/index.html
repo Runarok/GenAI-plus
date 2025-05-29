@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SnarkBot Stable Editions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom scrollbar for dark theme */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1f2937; /* Tailwind slate-800 */
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #3b82f6; /* Tailwind blue-500 */
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-200 min-h-screen flex flex-col">
+  <header class="text-center py-12 px-6">
+    <h1 class="text-4xl font-extrabold text-blue-400 tracking-wide mb-4 select-none">SnarkBot Stable Editions</h1>
+    <p class="max-w-xl mx-auto text-gray-400 leading-relaxed text-lg">
+      Five polished SnarkBot versions—crafted with care and packed with personality.<br />
+      The first three are classic stable editions with consistent, reliable sass.<br />
+      The fourth is a large, original JS & AI blend that runs through all the quirks.<br />
+      The fifth taps into the Gemini API—my latest, smartest, and snarkiest.<br />
+      Each is refined with my personal touch for maximum sarcasm and stability.
+    </p>
+  </header>
+
+  <main class="flex-grow flex justify-center px-4 sm:px-0">
+    <section id="carousel" class="flex space-x-6 overflow-hidden max-w-4xl snap-x snap-mandatory py-8">
+      <!-- Cards inserted by JS -->
+    </section>
+  </main>
+
+<footer class="text-center text-gray-500 py-6 select-none text-sm">
+  &copy; 2025 SnarkBot Project &mdash; Sarcasm engineered and maintained by&nbsp;
+  <a href="https://github.com/Runarok" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+    Runarok
+  </a>.
+</footer>
+
+  <script>
+    const bots = [
+      {
+        title: 'SnarkBot 1',
+        desc: 'Classic stable edition — reliable, consistent sarcasm that started it all.',
+        href: 'SnarkBot 1/index.html',
+      },
+      {
+        title: 'SnarkBot 2',
+        desc: 'Another solid build with the same dependable snark and subtle improvements.',
+        href: 'SnarkBot 2/index.html',
+      },
+      {
+        title: 'SnarkBot 3',
+        desc: 'The last of the classic trio, polished and fine-tuned for smooth sass.',
+        href: 'SnarkBot 3/index.html',
+      },
+      {
+        title: 'SnarkBot 4',
+        desc: 'A powerful, original JS and AI mashup that thoroughly processes all inputs—big and complex.',
+        href: 'SnarkBot 4/index.html',
+      },
+      {
+        title: 'SnarkBot 5',
+        desc: 'The newest and sharpest, leveraging the Gemini API for next-level wit and personality.',
+        href: 'SnarkBot 5/index.html',
+      },
+    ];
+
+    const carousel = document.getElementById('carousel');
+    let currentIndex = 0;
+
+    // Create cards and append
+    bots.forEach((bot, i) => {
+      const card = document.createElement('article');
+      card.className = "snap-start bg-gray-800 rounded-xl shadow-lg w-80 flex-shrink-0 flex flex-col p-6 hover:scale-[1.03] transition-transform duration-300 cursor-pointer select-none";
+      card.tabIndex = i === 0 ? 0 : -1;
+      card.setAttribute('aria-label', `${bot.title}: ${bot.desc}`);
+      card.innerHTML = `
+        <h2 class="text-xl font-semibold text-blue-400 mb-3">${bot.title}</h2>
+        <p class="text-gray-300 flex-grow">${bot.desc}</p>
+        <a href="${bot.href}" class="mt-6 inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-lg text-center transition-colors duration-200" tabindex="-1" aria-label="Open ${bot.title}">
+          Open
+        </a>
+      `;
+
+      // Open link on Enter or Space when card focused
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.querySelector('a').click();
+        }
+      });
+
+      carousel.appendChild(card);
+    });
+
+    const cards = carousel.children;
+
+    // Focus management
+    function updateFocus() {
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].tabIndex = i === currentIndex ? 0 : -1;
+      }
+      cards[currentIndex].focus();
+    }
+
+    // Scroll to card at currentIndex
+    function scrollToCurrent() {
+      const cardWidth = cards[0].offsetWidth + 24; // card width + margin (6*2 + 6*2 padding approx)
+      carousel.scrollTo({
+        left: cardWidth * currentIndex,
+        behavior: 'smooth',
+      });
+    }
+
+    // Move carousel by index delta
+    function moveCarousel(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex < 0 || newIndex >= cards.length) return;
+      currentIndex = newIndex;
+      updateFocus();
+      scrollToCurrent();
+    }
+
+    // Initialize focus and scroll
+    updateFocus();
+    scrollToCurrent();
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (document.activeElement.tagName === 'A') return; // don't interfere when on links
+
+      const keysLeft = ['ArrowLeft', 'a', 'A', 'ArrowUp', 'w', 'W'];
+      const keysRight = ['ArrowRight', 'd', 'D', 'ArrowDown', 's', 'S'];
+
+      if (keysLeft.includes(e.key)) {
+        e.preventDefault();
+        moveCarousel(-1);
+      } else if (keysRight.includes(e.key)) {
+        e.preventDefault();
+        moveCarousel(1);
+      }
+
+      // Enter or Space opens current card link
+      if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === cards[currentIndex]) {
+        e.preventDefault();
+        cards[currentIndex].querySelector('a').click();
+      }
+    });
+
+  </script>
+</body>
+</html>
