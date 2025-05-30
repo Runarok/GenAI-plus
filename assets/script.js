@@ -92,23 +92,30 @@ function showSection(idx, focusBtn = false) {
   history.replaceState(null, '', `#${menuData[idx].id}`);
 }
 
-// Keyboard navigation for section toggles
+// Keyboard navigation for section toggles including WASD keys
 sectionToggle.addEventListener('keydown', (e) => {
   const len = menuData.length;
   let handled = false;
-  if (['ArrowLeft', 'ArrowUp'].includes(e.key)) {
+
+  // Normalize key to lower case for easier matching
+  const key = e.key.toLowerCase();
+
+  if (key === 'arrowleft' || key === 'arrowup' || key === 'a' || key === 'w') {
+    // Previous section
     showSection((currentSectionIdx - 1 + len) % len, true);
     handled = true;
-  } else if (['ArrowRight', 'ArrowDown'].includes(e.key)) {
+  } else if (key === 'arrowright' || key === 'arrowdown' || key === 'd' || key === 's') {
+    // Next section
     showSection((currentSectionIdx + 1) % len, true);
     handled = true;
-  } else if (e.key === 'Home') {
+  } else if (key === 'home') {
     showSection(0, true);
     handled = true;
-  } else if (e.key === 'End') {
+  } else if (key === 'end') {
     showSection(len - 1, true);
     handled = true;
   }
+
   if (handled) {
     e.preventDefault();
   }
