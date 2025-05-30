@@ -6,6 +6,7 @@ const menuData = [
       { label: "Mind Flex", url: "Games/Mind Flex/index.html", desc: "Mind game." },
       { label: "Reflex Rush", url: "Games/Reflex Rush/index.html", desc: "Rapid Response Test." },
       { label: "Simon Says", url: "Games/Simon Says/index.html", desc: "Memory pattern light game." },
+      { label: "Simon Says", url: "Games/Shadow Runner/index.html", desc: "Avoid Falling Tiles." },
       { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." }
     ]
   },
