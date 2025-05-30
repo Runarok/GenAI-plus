@@ -3,12 +3,15 @@ import { useGame } from '../../hooks/useGame';
 import PatternModule from '../modules/PatternModule';
 import MazeModule from '../modules/MazeModule';
 import WordModule from '../modules/WordModule';
+import SequenceModule from '../modules/SequenceModule';
+import CalculationModule from '../modules/CalculationModule';
+import MemoryModule from '../modules/MemoryModule';
 import BoostBar from '../ui/BoostBar';
-import { Clock } from 'lucide-react';
+import { Clock, Star } from 'lucide-react';
 
 const GameScreen: React.FC = () => {
   const { gameState, endGame } = useGame();
-  const { activeModule, isPaused, timeRemaining } = gameState;
+  const { activeModule, isPaused, timeRemaining, streak, multiplier } = gameState;
   
   const [moduleTimer, setModuleTimer] = useState<number>(15);
   
@@ -24,7 +27,6 @@ const GameScreen: React.FC = () => {
     const timer = setInterval(() => {
       setModuleTimer(prev => {
         if (prev <= 0) {
-          // Time's up for this module, reset for next module
           return 15;
         }
         return prev - 1;
@@ -43,6 +45,12 @@ const GameScreen: React.FC = () => {
         return <MazeModule timeRemaining={moduleTimer} />;
       case 'word':
         return <WordModule timeRemaining={moduleTimer} />;
+      case 'sequence':
+        return <SequenceModule timeRemaining={moduleTimer} />;
+      case 'calculation':
+        return <CalculationModule timeRemaining={moduleTimer} />;
+      case 'memory':
+        return <MemoryModule timeRemaining={moduleTimer} />;
       default:
         return <div>Loading next challenge...</div>;
     }
@@ -60,8 +68,14 @@ const GameScreen: React.FC = () => {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="flex justify-between items-center mb-4">
-        <div className="text-xl font-semibold">
+        <div className="text-xl font-semibold flex items-center gap-4">
           {activeModule && activeModule.charAt(0).toUpperCase() + activeModule.slice(1)} Challenge
+          {streak > 0 && (
+            <div className="flex items-center gap-1 px-2 py-1 bg-yellow-500/20 rounded-full text-sm">
+              <Star className="h-4 w-4 text-yellow-400" />
+              <span className="font-mono">x{multiplier}</span>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-2 px-3 py-1 bg-slate-700 rounded-full">
           <Clock className="h-4 w-4 text-yellow-400" />

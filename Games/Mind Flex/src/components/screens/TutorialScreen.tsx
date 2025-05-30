@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGame } from '../../hooks/useGame';
-import { Grid3X3, Haze as Maze, Type, TimerReset, Lightbulb, ArrowRight } from 'lucide-react';
+import { Grid3X3, Map, Type, TimerReset, Lightbulb, ArrowRight } from 'lucide-react';
 
 const TutorialScreen: React.FC = () => {
   const { setScreen } = useGame();
@@ -25,7 +25,7 @@ const TutorialScreen: React.FC = () => {
         
         <div className="bg-slate-700/80 p-4 rounded-lg">
           <h3 className="flex items-center gap-2 text-lg font-medium mb-2 text-blue-400">
-            <Maze className="h-5 w-5" />
+            <Map className="h-5 w-5" />
             Spatial Reasoning
           </h3>
           <p className="mb-2">

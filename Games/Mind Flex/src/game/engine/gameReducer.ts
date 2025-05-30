@@ -13,6 +13,16 @@ type GameAction =
   | { type: 'UPDATE_SCORE'; payload: number }
   | { type: 'USE_BOOST'; payload: BoostType };
 
+// Module weights for selection probability
+const MODULE_WEIGHTS = {
+  pattern: 1,
+  maze: 1,
+  word: 1,
+  sequence: 1,
+  calculation: 1,
+  memory: 1
+};
+
 export const gameReducer = (state: GameState, action: GameAction): GameState => {
   switch (action.type) {
     case 'INITIALIZE_GAME':
@@ -21,22 +31,33 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
         screen: 'menu',
         score: 0,
         lives: 3,
-        timeRemaining: 60,
-        boosts: { timeFreeze: 2, hint: 1, skip: 1 },
+        timeRemaining: 90, // Increased total game time
+        boosts: { timeFreeze: 2, hint: 2, skip: 1, multiplier: 1, extraLife: 1 },
         isGameActive: false,
         isPaused: false,
+        streak: 0,
+        multiplier: 1,
         modules: {
-          pattern: { level: 1, completed: 0, accuracy: 0 },
-          maze: { level: 1, completed: 0, accuracy: 0 },
-          word: { level: 1, completed: 0, accuracy: 0 }
+          pattern: { level: 1, completed: 0, accuracy: 0, highScore: 0, bestTime: 0 },
+          maze: { level: 1, completed: 0, accuracy: 0, highScore: 0, bestTime: 0 },
+          word: { level: 1, completed: 0, accuracy: 0, highScore: 0, bestTime: 0 },
+          sequence: { level: 1, completed: 0, accuracy: 0, highScore: 0, bestTime: 0 },
+          calculation: { level: 1, completed: 0, accuracy: 0, highScore: 0, bestTime: 0 },
+          memory: { level: 1, completed: 0, accuracy: 0, highScore: 0, bestTime: 0 }
         },
         analytics: {
           patternAccuracy: 0,
           mazeSpeed: 0,
           wordAccuracy: 0,
+          sequenceSpeed: 0,
+          calculationAccuracy: 0,
+          memoryScore: 0,
           averageResponseTime: 0,
-          mistakeTypes: []
-        }
+          mistakeTypes: [],
+          streakCount: 0,
+          perfectRounds: 0
+        },
+        achievements: []
       };
 
     case 'START_GAME':
@@ -90,18 +111,28 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
       const { module, success, timeSpent } = action.payload;
       const moduleState = state.modules[module];
       
+      // Update streak and multiplier
+      const newStreak = success ? state.streak + 1 : 0;
+      const newMultiplier = Math.min(4, 1 + Math.floor(newStreak / 3));
+
       const updatedModule = {
         ...moduleState,
         completed: moduleState.completed + 1,
         level: success ? moduleState.level + 1 : Math.max(1, moduleState.level - 1),
-        accuracy: calculateAccuracy(moduleState.accuracy, moduleState.completed, success)
+        accuracy: calculateAccuracy(moduleState.accuracy, moduleState.completed, success),
+        highScore: Math.max(moduleState.highScore, state.score),
+        bestTime: moduleState.bestTime === 0 ? timeSpent : Math.min(moduleState.bestTime, timeSpent)
       };
 
       // Update analytics based on completed module
-      const updatedAnalytics = updateAnalytics(state.analytics, module, success, timeSpent);
+      const updatedAnalytics = updateAnalytics(state.analytics, module, success, timeSpent, newStreak);
 
-      // Choose the next module
+      // Choose the next module with weighted randomization
       const nextModule = chooseNextModule(state);
+      
+      // Calculate score with streak multiplier
+      const baseScore = calculateScore(state.difficulty, moduleState.level);
+      const multipliedScore = baseScore * newMultiplier;
       
       return {
         ...state,
@@ -111,9 +142,10 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
           [module]: updatedModule
         },
         analytics: updatedAnalytics,
-        score: success ? state.score + calculateScore(state.difficulty, moduleState.level) : state.score,
+        score: success ? state.score + multipliedScore : state.score,
+        streak: newStreak,
+        multiplier: newMultiplier,
         lives: success ? state.lives : state.lives - 1,
-        // End game if no lives left
         screen: state.lives <= 1 && !success ? 'results' : state.screen,
         isGameActive: state.lives <= 1 && !success ? false : state.isGameActive
       };
@@ -149,15 +181,36 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
 
 // Helper functions
 const chooseNextModule = (state: GameState): GameModule => {
-  // Simple rotation through modules for now
-  const modules: GameModule[] = ['pattern', 'maze', 'word'];
+  const modules = Object.keys(MODULE_WEIGHTS) as GameModule[];
   
-  if (!state.activeModule) {
-    return modules[0];
+  // Calculate weights based on completion rate and success
+  const adjustedWeights = modules.map(module => {
+    const moduleState = state.modules[module];
+    const completionRate = moduleState.completed > 0 ? moduleState.accuracy / 100 : 0.5;
+    
+    // Increase weight for less played modules
+    const playFrequencyAdjustment = 1 + (1 - moduleState.completed / 10);
+    
+    // Adjust weight based on success rate
+    const successAdjustment = 1 + (1 - completionRate);
+    
+    return MODULE_WEIGHTS[module] * playFrequencyAdjustment * successAdjustment;
+  });
+  
+  // Calculate total weight
+  const totalWeight = adjustedWeights.reduce((sum, weight) => sum + weight, 0);
+  
+  // Random selection based on weights
+  let random = Math.random() * totalWeight;
+  
+  for (let i = 0; i < modules.length; i++) {
+    random -= adjustedWeights[i];
+    if (random <= 0) {
+      return modules[i];
+    }
   }
   
-  const currentIndex = modules.indexOf(state.activeModule);
-  return modules[(currentIndex + 1) % modules.length];
+  return modules[0];
 };
 
 const calculateAccuracy = (currentAccuracy: number, completedCount: number, success: boolean): number => {
@@ -170,33 +223,56 @@ const calculateScore = (difficulty: Difficulty, level: number): number => {
   const difficultyMultiplier = {
     easy: 1,
     medium: 1.5,
-    hard: 2
+    hard: 2,
+    expert: 3
   };
   
-  return Math.round(10 * level * difficultyMultiplier[difficulty]);
+  return Math.round(15 * level * difficultyMultiplier[difficulty]);
 };
 
-const updateAnalytics = (analytics: GameState['analytics'], module: GameModule, success: boolean, timeSpent: number) => {
-  // Update analytics based on the completed module
+const updateAnalytics = (
+  analytics: GameState['analytics'],
+  module: GameModule,
+  success: boolean,
+  timeSpent: number,
+  streak: number
+) => {
   const updatedAnalytics = { ...analytics };
   
-  if (module === 'pattern') {
-    updatedAnalytics.patternAccuracy = (updatedAnalytics.patternAccuracy + (success ? 100 : 0)) / 2;
-  } else if (module === 'maze') {
-    const speedScore = calculateSpeedScore(timeSpent);
-    updatedAnalytics.mazeSpeed = (updatedAnalytics.mazeSpeed + speedScore) / 2;
-  } else if (module === 'word') {
-    updatedAnalytics.wordAccuracy = (updatedAnalytics.wordAccuracy + (success ? 100 : 0)) / 2;
+  // Update module-specific metrics
+  switch (module) {
+    case 'pattern':
+      updatedAnalytics.patternAccuracy = (updatedAnalytics.patternAccuracy + (success ? 100 : 0)) / 2;
+      break;
+    case 'maze':
+      const speedScore = calculateSpeedScore(timeSpent);
+      updatedAnalytics.mazeSpeed = (updatedAnalytics.mazeSpeed + speedScore) / 2;
+      break;
+    case 'word':
+      updatedAnalytics.wordAccuracy = (updatedAnalytics.wordAccuracy + (success ? 100 : 0)) / 2;
+      break;
+    case 'sequence':
+      updatedAnalytics.sequenceSpeed = (updatedAnalytics.sequenceSpeed + calculateSpeedScore(timeSpent)) / 2;
+      break;
+    case 'calculation':
+      updatedAnalytics.calculationAccuracy = (updatedAnalytics.calculationAccuracy + (success ? 100 : 0)) / 2;
+      break;
+    case 'memory':
+      updatedAnalytics.memoryScore = (updatedAnalytics.memoryScore + (success ? timeSpent * 10 : 0)) / 2;
+      break;
   }
   
-  // Update average response time
-  updatedAnalytics.averageResponseTime = 
-    (updatedAnalytics.averageResponseTime + timeSpent) / 2;
+  // Update general analytics
+  updatedAnalytics.averageResponseTime = (updatedAnalytics.averageResponseTime + timeSpent) / 2;
+  updatedAnalytics.streakCount = Math.max(updatedAnalytics.streakCount, streak);
+  
+  if (success && timeSpent < 5) {
+    updatedAnalytics.perfectRounds++;
+  }
   
   // Track mistake types if failed
   if (!success) {
     updatedAnalytics.mistakeTypes.push(module);
-    // Keep only the last 10 mistakes
     if (updatedAnalytics.mistakeTypes.length > 10) {
       updatedAnalytics.mistakeTypes = updatedAnalytics.mistakeTypes.slice(-10);
     }

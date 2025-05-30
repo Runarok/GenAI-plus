@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useGame } from '../../hooks/useGame';
-import { Haze as Maze, ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from 'lucide-react';
+import { Grid, ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from 'lucide-react';
 
 interface MazeModuleProps {
   timeRemaining: number;
@@ -218,7 +218,7 @@ const MazeModule: React.FC<MazeModuleProps> = ({ timeRemaining }) => {
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <div className="flex items-center gap-2 mb-4">
-        <Maze className="h-5 w-5 text-green-400" />
+        <Grid className="h-5 w-5 text-green-400" />
         <h3 className="text-xl font-medium">Maze Challenge</h3>
       </div>
       
