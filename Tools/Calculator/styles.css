@@ -1,0 +1,209 @@
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+/* Calculator container */
+.calculator-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.calculator {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(107, 114, 128, 0.5);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+/* Display */
+.display-container {
+  margin-bottom: 1rem;
+}
+
+.calculator-display {
+  background: rgba(31, 41, 55, 0.8);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.display-content {
+  text-align: right;
+}
+
+.secondary-display {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  height: 1rem;
+  margin-bottom: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.memory-indicator {
+  color: #5eead4;
+  font-weight: bold;
+}
+
+.primary-display {
+  color: white;
+  font-size: 1.875rem;
+  font-family: "Courier New", monospace;
+  letter-spacing: 0.05em;
+  word-wrap: break-word;
+  overflow: hidden;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Button rows */
+.button-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Base button styles */
+.btn {
+  height: 3.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+/* Button variants */
+.btn-number {
+  background: #374151;
+  color: white;
+  font-size: 1.125rem;
+}
+
+.btn-number:hover {
+  background: #4b5563;
+}
+
+.btn-operation {
+  background: rgba(146, 64, 14, 0.7);
+  color: #fef3c7;
+}
+
+.btn-operation:hover {
+  background: rgba(180, 83, 9, 0.8);
+}
+
+.btn-function {
+  background: rgba(49, 46, 129, 0.6);
+  color: #e0e7ff;
+  font-size: 0.875rem;
+}
+
+.btn-function:hover {
+  background: rgba(55, 48, 163, 0.7);
+}
+
+.btn-memory {
+  background: rgba(19, 78, 74, 0.6);
+  color: #ccfbf1;
+  font-size: 0.875rem;
+}
+
+.btn-memory:hover {
+  background: rgba(17, 94, 89, 0.7);
+}
+
+.btn-equals {
+  background: #2563eb;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.btn-equals:hover {
+  background: #3b82f6;
+}
+
+/* Active mode for RAD/DEG */
+.active-mode {
+  background: rgba(79, 70, 229, 0.8) !important;
+  border: 1px solid rgba(99, 102, 241, 0.5) !important;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+}
+
+/* Footer */
+.calculator-footer {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .calculator {
+    max-width: 100%;
+    margin: 0.5rem;
+  }
+
+  .btn {
+    height: 3rem;
+    font-size: 0.9rem;
+  }
+
+  .primary-display {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator-container {
+    padding: 0.5rem;
+  }
+
+  .calculator {
+    padding: 1rem;
+  }
+
+  .btn {
+    height: 2.75rem;
+    font-size: 0.85rem;
+  }
+
+  .primary-display {
+    font-size: 1.25rem;
+  }
+}

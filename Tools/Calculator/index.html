@@ -1,27 +1,372 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Advanced Calculator</title>
-    <meta name="description" content="Advanced Calculator with Scientific Functions" />
-    <meta name="author" content="Lovable" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scientific Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Load React -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <!-- Load Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    function Calculator() {
+      const [display, setDisplay] = React.useState("0");
+      const [previousValue, setPreviousValue] = React.useState("");
+      const [operation, setOperation] = React.useState("");
+      const [waitingForOperand, setWaitingForOperand] = React.useState(false);
+      const [angleMode, setAngleMode] = React.useState("DEG");
+      const [memory, setMemory] = React.useState(0);
 
-    <meta property="og:title" content="Advanced Calculator" />
-    <meta property="og:description" content="Advanced Calculator with Scientific Functions" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+      // Convert degrees to radians if needed
+      const toRadians = (value) => {
+        return angleMode === "DEG" ? (value * Math.PI) / 180 : value;
+      };
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+      const inputNumber = (num) => {
+        if (waitingForOperand) {
+          setDisplay(String(num));
+          setWaitingForOperand(false);
+        } else {
+          setDisplay(display === "0" ? String(num) : display + num);
+        }
+      };
 
-  <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+      const inputDecimal = () => {
+        if (waitingForOperand) {
+          setDisplay("0.");
+          setWaitingForOperand(false);
+        } else if (display.indexOf(".") === -1) {
+          setDisplay(display + ".");
+        }
+      };
+
+      const inputOperation = (nextOperation) => {
+        const inputValue = Number.parseFloat(display);
+
+        if (previousValue === "") {
+          setPreviousValue(String(inputValue));
+        } else if (operation) {
+          const currentValue = Number.parseFloat(previousValue);
+          const newValue = calculate(currentValue, inputValue, operation);
+
+          setDisplay(String(newValue));
+          setPreviousValue(String(newValue));
+        }
+
+        setWaitingForOperand(true);
+        setOperation(nextOperation);
+      };
+
+      const calculate = (firstValue, secondValue, operation) => {
+        switch (operation) {
+          case "+":
+            return firstValue + secondValue;
+          case "-":
+            return firstValue - secondValue;
+          case "×":
+            return firstValue * secondValue;
+          case "÷":
+            return secondValue !== 0 ? firstValue / secondValue : "Error";
+          case "=":
+            return secondValue;
+          default:
+            return secondValue;
+        }
+      };
+
+      const performCalculation = () => {
+        const inputValue = Number.parseFloat(display);
+
+        if (previousValue !== "" && operation) {
+          const currentValue = Number.parseFloat(previousValue);
+          const newValue = calculate(currentValue, inputValue, operation);
+
+          setDisplay(String(newValue));
+          setPreviousValue("");
+          setOperation("");
+          setWaitingForOperand(true);
+        }
+      };
+
+      const clear = () => {
+        setDisplay("0");
+        setPreviousValue("");
+        setOperation("");
+        setWaitingForOperand(false);
+      };
+
+      const toggleAngleMode = () => {
+        setAngleMode(angleMode === "DEG" ? "RAD" : "DEG");
+      };
+
+      const performScientificOperation = (op) => {
+        const value = Number.parseFloat(display);
+        let result;
+
+        try {
+          switch (op) {
+            case "sin":
+              result = Math.sin(toRadians(value));
+              break;
+            case "cos":
+              result = Math.cos(toRadians(value));
+              break;
+            case "tan":
+              result = Math.tan(toRadians(value));
+              break;
+            case "ln":
+              result = Math.log(value);
+              break;
+            case "log":
+              result = Math.log10(value);
+              break;
+            case "sqrt":
+              result = Math.sqrt(value);
+              break;
+            case "square":
+              result = value * value;
+              break;
+            case "cube":
+              result = value * value * value;
+              break;
+            case "1/x":
+              result = 1 / value;
+              break;
+            case "pi":
+              result = Math.PI;
+              break;
+            case "e":
+              result = Math.E;
+              break;
+            case "%":
+              result = value / 100;
+              break;
+            default:
+              result = value;
+          }
+
+          if (typeof result === "number") {
+            if (Math.abs(result) < 1e-10) {
+              result = 0;
+            }
+            result = Number.parseFloat(result.toPrecision(10));
+          }
+
+          setDisplay(String(result));
+          setWaitingForOperand(true);
+        } catch (error) {
+          setDisplay("Error");
+          setWaitingForOperand(true);
+        }
+      };
+
+      const backspace = () => {
+        if (display.length > 1) {
+          setDisplay(display.slice(0, -1));
+        } else {
+          setDisplay("0");
+        }
+      };
+
+      // Memory functions
+      const memoryAdd = () => {
+        setMemory(memory + Number.parseFloat(display));
+      };
+
+      const memorySubtract = () => {
+        setMemory(memory - Number.parseFloat(display));
+      };
+
+      const memoryRecall = () => {
+        setDisplay(String(memory));
+        setWaitingForOperand(true);
+      };
+
+      const memoryClear = () => {
+        setMemory(0);
+      };
+
+      return (
+        <div className="calculator-container">
+          <div className="calculator">
+            {/* Display */}
+            <div className="display-container">
+              <div className="calculator-display">
+                <div className="display-content">
+                  <div className="secondary-display">
+                    <span className="memory-indicator">{memory !== 0 && "M"}</span>
+                    <span>{previousValue && operation && `${previousValue} ${operation}`}</span>
+                  </div>
+                  <div className="primary-display">{display}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mode and Clear Row */}
+            <div className="button-row">
+              <button 
+                className={`btn btn-function ${angleMode === "RAD" ? "active-mode" : ""}`} 
+                onClick={toggleAngleMode}
+              >
+                RAD
+              </button>
+              <button 
+                className={`btn btn-function ${angleMode === "DEG" ? "active-mode" : ""}`} 
+                onClick={toggleAngleMode}
+              >
+                DEG
+              </button>
+              <button className="btn btn-operation" onClick={clear}>
+                AC
+              </button>
+              <button className="btn btn-operation" onClick={backspace}>
+                ⌫
+              </button>
+            </div>
+
+            {/* Memory Row */}
+            <div className="button-row">
+              <button className="btn btn-memory" onClick={memoryClear}>
+                MC
+              </button>
+              <button className="btn btn-memory" onClick={memoryRecall}>
+                MR
+              </button>
+              <button className="btn btn-memory" onClick={memoryAdd}>
+                M+
+              </button>
+              <button className="btn btn-memory" onClick={memorySubtract}>
+                M-
+              </button>
+            </div>
+
+            {/* Scientific Functions Row 1 */}
+            <div className="button-row">
+              <button className="btn btn-function" onClick={() => performScientificOperation("square")}>
+                x²
+              </button>
+              <button className="btn btn-function" onClick={() => performScientificOperation("cube")}>
+                x³
+              </button>
+              <button className="btn btn-function" onClick={() => performScientificOperation("1/x")}>
+                1/x
+              </button>
+              <button className="btn btn-function" onClick={() => performScientificOperation("sqrt")}>
+                √
+              </button>
+            </div>
+
+            {/* Scientific Functions Row 2 */}
+            <div className="button-row">
+              <button className="btn btn-function" onClick={() => performScientificOperation("sin")}>
+                sin
+              </button>
+              <button className="btn btn-function" onClick={() => performScientificOperation("cos")}>
+                cos
+              </button>
+              <button className="btn btn-function" onClick={() => performScientificOperation("tan")}>
+                tan
+              </button>
+              <button className="btn btn-function" onClick={() => performScientificOperation("%")}>
+                %
+              </button>
+            </div>
+
+            {/* Scientific Functions Row 3 */}
+            <div className="button-row">
+              <button className="btn btn-function" onClick={() => performScientificOperation("ln")}>
+                ln
+              </button>
+              <button className="btn btn-function" onClick={() => performScientificOperation("log")}>
+                log
+              </button>
+              <button className="btn btn-function" onClick={() => performScientificOperation("pi")}>
+                π
+              </button>
+              <button className="btn btn-function" onClick={() => performScientificOperation("e")}>
+                e
+              </button>
+            </div>
+
+            {/* Main Calculator Grid */}
+            <div className="button-row">
+              <button className="btn btn-number" onClick={() => inputNumber("7")}>
+                7
+              </button>
+              <button className="btn btn-number" onClick={() => inputNumber("8")}>
+                8
+              </button>
+              <button className="btn btn-number" onClick={() => inputNumber("9")}>
+                9
+              </button>
+              <button className="btn btn-operation" onClick={() => inputOperation("÷")}>
+                ÷
+              </button>
+            </div>
+
+            <div className="button-row">
+              <button className="btn btn-number" onClick={() => inputNumber("4")}>
+                4
+              </button>
+              <button className="btn btn-number" onClick={() => inputNumber("5")}>
+                5
+              </button>
+              <button className="btn btn-number" onClick={() => inputNumber("6")}>
+                6
+              </button>
+              <button className="btn btn-operation" onClick={() => inputOperation("×")}>
+                ×
+              </button>
+            </div>
+
+            <div className="button-row">
+              <button className="btn btn-number" onClick={() => inputNumber("1")}>
+                1
+              </button>
+              <button className="btn btn-number" onClick={() => inputNumber("2")}>
+                2
+              </button>
+              <button className="btn btn-number" onClick={() => inputNumber("3")}>
+                3
+              </button>
+              <button className="btn btn-operation" onClick={() => inputOperation("-")}>
+                −
+              </button>
+            </div>
+
+            <div className="button-row">
+              <button className="btn btn-number" onClick={() => inputNumber("0")}>
+                0
+              </button>
+              <button className="btn btn-number" onClick={inputDecimal}>
+                .
+              </button>
+              <button className="btn btn-operation" onClick={() => inputOperation("+")}>
+                +
+              </button>
+              <button className="btn btn-equals" onClick={performCalculation}>
+                =
+              </button>
+            </div>
+
+            {/* Footer */}
+            <div className="calculator-footer">
+              <p>Scientific Calculator v3.0</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Render the Calculator component to the DOM
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<Calculator />);
+  </script>
+</body>
 </html>
