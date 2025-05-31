@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simon Says Memory Game</title>
+    <meta name="description" content="Classic Simon Says Memory Game with Dark Theme" />
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              // Improved colors for better visibility in both themes
+              'simon-red': {
+                light: '#dc2626',    // darker red for light theme
+                dark: '#ef4444'      // brighter red for dark theme
+              },
+              'simon-green': {
+                light: '#16a34a',    // darker green for light theme
+                dark: '#22c55e'      // brighter green for dark theme
+              },
+              'simon-blue': {
+                light: '#2563eb',    // darker blue for light theme
+                dark: '#3b82f6'      // brighter blue for dark theme
+              },
+              'simon-yellow': {
+                light: '#ca8a04',    // darker yellow for light theme
+                dark: '#eab308'      // brighter yellow for dark theme
+              }
+            },
+            animation: {
+              'pulse-glow': 'pulse 0.3s ease-in-out',
+              'scale-bounce': 'scale 0.15s ease-in-out',
+              'fade-in': 'fadeIn 0.5s ease-in-out'
+            },
+            keyframes: {
+              scale: {
+                '0%, 100%': { transform: 'scale(1)' },
+                '50%': { transform: 'scale(1.05)' }
+              },
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- React and ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+      
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      
+      .simon-button {
+        transition: all 0.15s ease-in-out;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+      
+      .simon-button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+      
+      .simon-button.active {
+        transform: scale(1.05);
+        filter: brightness(1.5);
+        box-shadow: 0 0 30px currentColor;
+      }
+      
+      .glass-effect {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      
+      .light .glass-effect {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Enhanced light mode styles */
+      .light body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .light .simon-button {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .light .simon-button:hover:not(:disabled) {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      }
+
+      /* Mobile optimizations */
+      @media (max-width: 640px) {
+        .simon-button {
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .simon-button:hover:not(:disabled) {
+          transform: none;
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .simon-button:active {
+          transform: scale(0.98);
+        }
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen transition-colors duration-300">
+    <div id="root"></div>
+    
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    
+    <script type="text/babel">
+      const { useState, useEffect, useCallback, useRef } = React;
+
+      // Audio context for generating tones
+      const AudioManager = {
+        context: null,
+        
+        init() {
+          if (!this.context) {
+            this.context = new (window.AudioContext || window.webkitAudioContext)();
+          }
+        },
+        
+        playTone(frequency, duration = 300) {
+          if (!this.context) this.init();
+          
+          const oscillator = this.context.createOscillator();
+          const gainNode = this.context.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(this.context.destination);
+          
+          oscillator.frequency.setValueAtTime(frequency, this.context.currentTime);
+          oscillator.type = 'sine';
+          
+          gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + duration / 1000);
+          
+          oscillator.start();
+          oscillator.stop(this.context.currentTime + duration / 1000);
+        },
+        
+        playError() {
+          this.playTone(150, 500);
+        },
+        
+        playSuccess() {
+          this.playTone(800, 200);
+          setTimeout(() => this.playTone(1000, 200), 100);
+        }
+      };
+
+      const COLORS = {
+        0: { name: 'red', frequency: 330 },
+        1: { name: 'green', frequency: 415 },
+        2: { name: 'blue', frequency: 490 },
+        3: { name: 'yellow', frequency: 590 }
+      };
+
+      const GAME_STATES = {
+        IDLE: 'idle',
+        SHOWING: 'showing',
+        WAITING: 'waiting',
+        WRONG: 'wrong',
+        SUCCESS: 'success'
+      };
+
+      function SimonButton({ color, index, isActive, onClick, disabled, isDark }) {
+        const colorData = COLORS[index];
+        
+        const getButtonClasses = () => {
+          const baseClasses = "simon-button w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-2xl focus:outline-none focus:ring-4 focus:ring-white/50 transition-all duration-150 ease-in-out";
+          
+          let colorClasses = "";
+          if (isDark) {
+            switch(colorData.name) {
+              case 'red': colorClasses = "bg-red-500 hover:bg-red-400"; break;
+              case 'green': colorClasses = "bg-green-500 hover:bg-green-400"; break;
+              case 'blue': colorClasses = "bg-blue-500 hover:bg-blue-400"; break;
+              case 'yellow': colorClasses = "bg-yellow-500 hover:bg-yellow-400"; break;
+            }
+          } else {
+            switch(colorData.name) {
+              case 'red': colorClasses = "bg-red-600 hover:bg-red-500 text-white"; break;
+              case 'green': colorClasses = "bg-green-600 hover:bg-green-500 text-white"; break;
+              case 'blue': colorClasses = "bg-blue-600 hover:bg-blue-500 text-white"; break;
+              case 'yellow': colorClasses = "bg-yellow-500 hover:bg-yellow-400 text-white"; break;
+            }
+          }
+          
+          const stateClasses = `
+            ${isActive ? 'active' : ''}
+            ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer touch-manipulation'}
+          `;
+          
+          return `${baseClasses} ${colorClasses} ${stateClasses}`;
+        };
+        
+        return (
+          <button
+            className={getButtonClasses()}
+            onClick={() => !disabled && onClick(index)}
+            disabled={disabled}
+            aria-label={`Simon button ${colorData.name}`}
+            tabIndex={disabled ? -1 : 0}
+            onKeyDown={(e) => {
+              if ((e.key === 'Enter' || e.key === ' ') && !disabled) {
+                e.preventDefault();
+                onClick(index);
+              }
+            }}
+          />
+        );
+      }
+
+      function ScoreBoard({ level, score, highScore, gameState, isStrictMode, soundEnabled, isDark }) {
+        const getStatusMessage = () => {
+          switch (gameState) {
+            case GAME_STATES.SHOWING:
+              return 'Watch the sequence...';
+            case GAME_STATES.WAITING:
+              return 'Your turn!';
+            case GAME_STATES.WRONG:
+              return isStrictMode ? 'Game Over!' : 'Try again!';
+            case GAME_STATES.SUCCESS:
+              return 'Great job!';
+            default:
+              return 'Press Start to begin';
+          }
+        };
+
+        return (
+          <div className="glass-effect rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 animate-fade-in max-w-md mx-auto">
+            <div className="grid grid-cols-3 gap-4 sm:gap-6 text-center mb-4">
+              <div>
+                <div className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{level}</div>
+                <div className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Level</div>
+              </div>
+              <div>
+                <div className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{score}</div>
+                <div className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Score</div>
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-bold text-yellow-500">{highScore}</div>
+                <div className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Best</div>
+              </div>
+            </div>
+            
+            <div className="flex justify-center space-x-4 mb-4">
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${isStrictMode ? 'bg-red-500' : 'bg-gray-400'}`}></div>
+                <span className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Strict</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${soundEnabled ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                <span className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Sound</span>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <div className={`text-base sm:text-lg font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>{getStatusMessage()}</div>
+            </div>
+          </div>
+        );
+      }
+
+      function Controls({ onStart, onToggleStrict, onToggleSound, onToggleTheme, isStrictMode, soundEnabled, isDark, gameState }) {
+        return (
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-6 sm:mt-8 px-4">
+            <button
+              onClick={onStart}
+              disabled={gameState === GAME_STATES.SHOWING}
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base touch-manipulation"
+            >
+              {gameState === GAME_STATES.IDLE ? 'Start Game' : 'Restart'}
+            </button>
+            
+            <button
+              onClick={onToggleStrict}
+              className={`px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 text-sm sm:text-base touch-manipulation ${
+                isStrictMode 
+                  ? 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500' 
+                  : 'bg-gray-500 hover:bg-gray-600 text-white focus:ring-gray-500'
+              }`}
+            >
+              Strict: {isStrictMode ? 'ON' : 'OFF'}
+            </button>
+            
+            <button
+              onClick={onToggleSound}
+              className={`px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 text-sm sm:text-base touch-manipulation ${
+                soundEnabled 
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500' 
+                  : 'bg-gray-500 hover:bg-gray-600 text-white focus:ring-gray-500'
+              }`}
+            >
+              Sound: {soundEnabled ? 'ON' : 'OFF'}
+            </button>
+            
+            <button
+              onClick={onToggleTheme}
+              className="px-3 sm:px-4 py-2 sm:py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base touch-manipulation"
+            >
+              {isDark ? '☀️' : '🌙'}
+            </button>
+          </div>
+        );
+      }
+
+      function SimonGame() {
+        const [sequence, setSequence] = useState([]);
+        const [playerSequence, setPlayerSequence] = useState([]);
+        const [level, setLevel] = useState(1);
+        const [score, setScore] = useState(0);
+        const [highScore, setHighScore] = useState(() => {
+          return parseInt(localStorage.getItem('simonHighScore') || '0');
+        });
+        const [gameState, setGameState] = useState(GAME_STATES.IDLE);
+        const [activeButton, setActiveButton] = useState(-1);
+        const [isStrictMode, setIsStrictMode] = useState(false);
+        const [soundEnabled, setSoundEnabled] = useState(true);
+        const [isDark, setIsDark] = useState(true);
+        
+        const timeoutRef = useRef(null);
+
+        // Initialize audio on first user interaction
+        useEffect(() => {
+          const initAudio = () => {
+            AudioManager.init();
+            document.removeEventListener('click', initAudio);
+            document.removeEventListener('keydown', initAudio);
+          };
+          
+          document.addEventListener('click', initAudio);
+          document.addEventListener('keydown', initAudio);
+          
+          return () => {
+            document.removeEventListener('click', initAudio);
+            document.removeEventListener('keydown', initAudio);
+          };
+        }, []);
+
+        // Update theme
+        useEffect(() => {
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            document.body.className = 'dark:bg-gray-900 bg-gray-100 min-h-screen transition-colors duration-300';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            document.body.className = 'dark:bg-gray-900 bg-gray-100 min-h-screen transition-colors duration-300';
+          }
+        }, [isDark]);
+
+        // Save high score
+        useEffect(() => {
+          localStorage.setItem('simonHighScore', highScore.toString());
+        }, [highScore]);
+
+        const generateRandomColor = () => Math.floor(Math.random() * 4);
+
+        const playButtonSound = (colorIndex) => {
+          if (soundEnabled) {
+            AudioManager.playTone(COLORS[colorIndex].frequency);
+          }
+        };
+
+        const showSequence = useCallback(async () => {
+          setGameState(GAME_STATES.SHOWING);
+          setPlayerSequence([]);
+          
+          const speed = Math.max(600 - (level - 1) * 50, 300);
+          
+          for (let i = 0; i < sequence.length; i++) {
+            await new Promise(resolve => {
+              timeoutRef.current = setTimeout(() => {
+                setActiveButton(sequence[i]);
+                playButtonSound(sequence[i]);
+                
+                timeoutRef.current = setTimeout(() => {
+                  setActiveButton(-1);
+                  
+                  timeoutRef.current = setTimeout(() => {
+                    resolve();
+                  }, 100);
+                }, speed * 0.6);
+              }, 300);
+            });
+          }
+          
+          setGameState(GAME_STATES.WAITING);
+        }, [sequence, level, soundEnabled]);
+
+        const startGame = () => {
+          const newSequence = [generateRandomColor()];
+          setSequence(newSequence);
+          setPlayerSequence([]);
+          setLevel(1);
+          setScore(0);
+          setGameState(GAME_STATES.SHOWING);
+        };
+
+        const handleButtonClick = (colorIndex) => {
+          if (gameState !== GAME_STATES.WAITING) return;
+          
+          setActiveButton(colorIndex);
+          playButtonSound(colorIndex);
+          
+          setTimeout(() => setActiveButton(-1), 150);
+          
+          const newPlayerSequence = [...playerSequence, colorIndex];
+          setPlayerSequence(newPlayerSequence);
+          
+          const currentIndex = newPlayerSequence.length - 1;
+          
+          // Check if the current button press is correct
+          if (newPlayerSequence[currentIndex] !== sequence[currentIndex]) {
+            // Wrong answer
+            setGameState(GAME_STATES.WRONG);
+            if (soundEnabled) AudioManager.playError();
+            
+            setTimeout(() => {
+              if (isStrictMode) {
+                // Game over in strict mode
+                setGameState(GAME_STATES.IDLE);
+                setSequence([]);
+                setPlayerSequence([]);
+                setLevel(1);
+                setScore(0);
+              } else {
+                // Show sequence again in normal mode
+                setPlayerSequence([]);
+                setGameState(GAME_STATES.SHOWING);
+              }
+            }, 1500);
+            return;
+          }
+          
+          // Check if the entire sequence is completed
+          if (newPlayerSequence.length === sequence.length) {
+            // Sequence completed successfully
+            setGameState(GAME_STATES.SUCCESS);
+            const newScore = score + level * 10;
+            setScore(newScore);
+            
+            if (newScore > highScore) {
+              setHighScore(newScore);
+            }
+            
+            if (soundEnabled) AudioManager.playSuccess();
+            
+            // Move to next level after a delay
+            setTimeout(() => {
+              const newLevel = level + 1;
+              setLevel(newLevel);
+              const newSequence = [...sequence, generateRandomColor()];
+              setSequence(newSequence);
+              setPlayerSequence([]);
+              setGameState(GAME_STATES.SHOWING);
+            }, 1200);
+          }
+        };
+
+        // Show sequence when it updates and game is in showing state
+        useEffect(() => {
+          if (sequence.length > 0 && gameState === GAME_STATES.SHOWING) {
+            const timer = setTimeout(() => {
+              showSequence();
+            }, 500);
+            
+            return () => clearTimeout(timer);
+          }
+        }, [sequence, gameState, showSequence]);
+
+        // Cleanup timeouts
+        useEffect(() => {
+          return () => {
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+            }
+          };
+        }, []);
+
+        return (
+          <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'dark:bg-gray-900' : 'bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400'}`}>
+            <div className="container mx-auto px-4 py-6 sm:py-8">
+              <div className="max-w-lg mx-auto">
+                {/* Title */}
+                <div className="text-center mb-6 sm:mb-8">
+                  <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-2 animate-fade-in ${isDark ? 'text-white' : 'text-white drop-shadow-lg'}`}>
+                    Simon Says
+                  </h1>
+                  <p className={`animate-fade-in text-sm sm:text-base ${isDark ? 'text-gray-400' : 'text-white/90'}`}>
+                    Test your memory with the classic electronic game
+                  </p>
+                </div>
+                
+                {/* Score Board */}
+                <ScoreBoard 
+                  level={level}
+                  score={score}
+                  highScore={highScore}
+                  gameState={gameState}
+                  isStrictMode={isStrictMode}
+                  soundEnabled={soundEnabled}
+                  isDark={isDark}
+                />
+                
+                {/* Game Board */}
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 justify-items-center max-w-72 sm:max-w-80 mx-auto mb-6 sm:mb-8">
+                  {[0, 1, 2, 3].map((index) => (
+                    <SimonButton
+                      key={index}
+                      color={COLORS[index]}
+                      index={index}
+                      isActive={activeButton === index}
+                      onClick={handleButtonClick}
+                      disabled={gameState === GAME_STATES.SHOWING || gameState === GAME_STATES.IDLE}
+                      isDark={isDark}
+                    />
+                  ))}
+                </div>
+                
+                {/* Controls */}
+                <Controls
+                  onStart={startGame}
+                  onToggleStrict={() => setIsStrictMode(!isStrictMode)}
+                  onToggleSound={() => setSoundEnabled(!soundEnabled)}
+                  onToggleTheme={() => setIsDark(!isDark)}
+                  isStrictMode={isStrictMode}
+                  soundEnabled={soundEnabled}
+                  isDark={isDark}
+                  gameState={gameState}
+                />
+                
+                {/* Instructions */}
+                <div className="mt-8 sm:mt-12 glass-effect rounded-2xl p-4 sm:p-6 text-left mx-4 sm:mx-0">
+                  <h3 className={`text-lg sm:text-xl font-semibold mb-3 sm:mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>How to Play</h3>
+                  <ul className={`space-y-2 text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <li>• Watch the sequence of colored buttons</li>
+                    <li>• Repeat the sequence by clicking the buttons</li>
+                    <li>• Each round adds one more button to the sequence</li>
+                    <li>• In Strict Mode, any mistake ends the game</li>
+                    <li>• Use keyboard (Tab + Enter/Space) for accessibility</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // Use createRoot instead of ReactDOM.render for React 18
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(<SimonGame />);
+    </script>
+  </body>
+</html>
