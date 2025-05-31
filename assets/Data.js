@@ -5,7 +5,6 @@ const menuData = [
     links: [
       { label: "Reflex Rush", url: "Games/Reflex Rush/index.html", desc: "Rapid Response Test." },
       { label: "Simon Says", url: "Games/Simon Says/index.html", desc: "Memory pattern light game." },
-      { label: "Shadow Runner", url: "Games/Shadow Runner/index.html", desc: "Avoid Falling Tiles." },
       { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." }
     ]
   },
