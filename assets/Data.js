@@ -3,10 +3,9 @@ const menuData = [
     id: "games",
     title: "Games",
     links: [
-      { label: "Mind Flex", url: "Games/Mind Flex/index.html", desc: "Mind game." },
       { label: "Reflex Rush", url: "Games/Reflex Rush/index.html", desc: "Rapid Response Test." },
       { label: "Simon Says", url: "Games/Simon Says/index.html", desc: "Memory pattern light game." },
-      { label: "Simon Says", url: "Games/Shadow Runner/index.html", desc: "Avoid Falling Tiles." },
+      { label: "Shadow Runner", url: "Games/Shadow Runner/index.html", desc: "Avoid Falling Tiles." },
       { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." }
     ]
   },
@@ -57,7 +56,7 @@ const menuData = [
       { label: "Particle Playground", url: "particles.html", desc: "Interactive particle demo." },
       { label: "SnarkBot", url: "Experiments/AI Chat/SnarkBot/index.html", desc: "Snarky AI bot." },
       { label: "Audio Visualizer", url: "visualizer.html", desc: "Music meets visuals." },
-      { label: "Sandbox", url: "Experiments/Sandbox/Sandbox.html", desc: "Try out ideas in the sandbox." }
+      { label: "Sandbox", url: "Experiments/Sandbox/Sandbox.html", desc: "Try out ideas in the sandbox." },
     ]
   },
   {

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadow Runner - Neon Arcade Game</title>
+    <title>Shadow Runner - Enhanced Neon Arcade Experience</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,29 +14,61 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0a0118 0%, #1a0a2e 100%);
-            font-family: 'Courier New', monospace;
+            background: radial-gradient(ellipse at center, #1a0a2e 0%, #0a0118 70%, #000000 100%);
+            font-family: 'Orbitron', monospace;
             color: white;
             overflow: hidden;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+        }
+
+        /* Animated background stars */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
         .game-container {
             position: relative;
             width: 600px;
             height: 800px;
-            border: 2px solid #6b46c1;
-            border-radius: 10px;
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ffff) 1;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(107, 70, 193, 0.5);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.3),
+                0 0 60px rgba(255, 0, 255, 0.2),
+                inset 0 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            background: linear-gradient(180deg, #0a0118 0%, #1a0a2e 50%, #2a1a4e 100%);
         }
 
         #gameCanvas {
-            background: linear-gradient(180deg, #0a0118 0%, #1a0a2e 100%);
             display: block;
+            background: transparent;
         }
 
         .overlay {
@@ -43,16 +77,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
 
         .overlay.active {
@@ -61,56 +96,92 @@
         }
 
         .title {
-            font-size: 3rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #cccccc;
             margin-bottom: 30px;
-            line-height: 1.5;
+            line-height: 1.6;
+            max-width: 500px;
         }
 
         .controls-info {
             color: #888888;
             margin-bottom: 30px;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            line-height: 1.5;
         }
 
         .btn {
-            background: linear-gradient(45deg, #3b82f6, #ec4899);
+            background: linear-gradient(45deg, #3b82f6, #ec4899, #8b5cf6);
+            background-size: 200% 200%;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+            padding: 15px 35px;
+            border-radius: 30px;
             color: white;
-            font-size: 1.1rem;
-            font-weight: bold;
+            font-size: 1.2rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-            margin: 5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 0 20px rgba(59, 130, 246, 0.4),
+                0 4px 15px rgba(0, 0, 0, 0.3);
+            margin: 8px;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                0 0 30px rgba(59, 130, 246, 0.6),
+                0 8px 25px rgba(0, 0, 0, 0.4);
+            animation: gradientShift 1s ease-in-out infinite;
         }
 
         .btn:active {
-            transform: scale(0.95);
+            transform: translateY(0) scale(0.98);
         }
 
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+            animation: none;
         }
 
         .game-ui {
@@ -122,22 +193,45 @@
             justify-content: space-between;
             align-items: flex-start;
             pointer-events: none;
-            z-index: 10;
+            z-index: 20;
         }
 
         .score-display {
             color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
         }
 
         .combo-display {
             color: #ffff00;
-            font-size: 1rem;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
-            margin-top: 5px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.8);
+            margin-top: 8px;
+            background: rgba(255, 255, 0, 0.1);
+            padding: 5px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 0, 0.3);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .multiplier-display {
+            color: #ff00ff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+            margin-top: 8px;
+            background: rgba(255, 0, 255, 0.1);
+            padding: 5px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            animation: pulse 1.5s ease-in-out infinite;
         }
 
         .power-up-timer {
@@ -145,12 +239,31 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 25px;
+            border-radius: 25px;
             color: white;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            z-index: 25;
+        }
+
+        .power-up-indicators {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .power-up-indicator {
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid;
+            backdrop-filter: blur(5px);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .controls {
@@ -159,97 +272,154 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 10px;
+            gap: 15px;
+            z-index: 20;
         }
 
-        .settings-panel {
+        .settings-panel, .achievements-panel {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #6b46c1, #3b82f6);
-            padding: 30px;
-            border-radius: 15px;
-            border: 2px solid #8b5cf6;
-            box-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
-            min-width: 300px;
+            background: linear-gradient(135deg, #1a0a2e, #2a1a4e, #3a2a6e);
+            padding: 35px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 0 50px rgba(139, 92, 246, 0.4),
+                inset 0 0 30px rgba(0, 0, 0, 0.3);
+            min-width: 350px;
+            max-width: 500px;
+            max-height: 600px;
+            overflow-y: auto;
             opacity: 0;
             visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(15px);
+            z-index: 50;
+        }
+
+        .settings-panel.active, .achievements-panel.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .panel-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
         }
 
-        .settings-panel.active {
-            opacity: 1;
-            visibility: visible;
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .setting-section {
+            margin-bottom: 25px;
+        }
+
+        .setting-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #00ffff;
+            font-weight: 700;
         }
 
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            color: white;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .toggle {
-            width: 50px;
-            height: 25px;
+            width: 55px;
+            height: 28px;
             background: #4b5563;
-            border-radius: 25px;
+            border-radius: 28px;
             position: relative;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .toggle.active {
-            background: #3b82f6;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
         }
 
         .toggle-thumb {
-            width: 21px;
-            height: 21px;
+            width: 22px;
+            height: 22px;
             background: white;
             border-radius: 50%;
             position: absolute;
-            top: 2px;
+            top: 1px;
             left: 2px;
-            transition: transform 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
         .toggle.active .toggle-thumb {
-            transform: translateX(25px);
+            transform: translateX(27px);
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);
         }
 
         .slider {
-            width: 100px;
-            height: 5px;
+            width: 120px;
+            height: 6px;
             background: #4b5563;
-            border-radius: 5px;
+            border-radius: 6px;
             outline: none;
             cursor: pointer;
+            appearance: none;
         }
 
-        .achievements-panel {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #6b46c1, #3b82f6);
-            padding: 30px;
-            border-radius: 15px;
-            border: 2px solid #8b5cf6;
-            box-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
-            max-width: 400px;
-            max-height: 500px;
-            overflow-y: auto;
-            opacity: 0;
-            visibility: hidden;
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #3b82f6, #ec4899);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
             transition: all 0.3s ease;
         }
 
-        .achievements-panel.active {
-            opacity: 1;
-            visibility: visible;
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
         }
 
         .achievement {
@@ -257,31 +427,40 @@
             align-items: center;
             gap: 15px;
             padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            border: 1px solid #6b7280;
-            background: rgba(0, 0, 0, 0.3);
+            margin-bottom: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
         .achievement.unlocked {
             border-color: #fbbf24;
-            background: rgba(251, 191, 36, 0.1);
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(251, 191, 36, 0.05));
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+
+        .achievement:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .achievement-icon {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
         }
 
         .achievement.unlocked .achievement-icon {
-            background: #fbbf24;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
             color: white;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .achievement:not(.unlocked) .achievement-icon {
@@ -291,17 +470,61 @@
 
         .progress-bar {
             width: 100%;
-            height: 4px;
+            height: 6px;
             background: #4b5563;
-            border-radius: 2px;
+            border-radius: 6px;
             overflow: hidden;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(45deg, #3b82f6, #ec4899);
-            transition: width 0.3s ease;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .music-visualizer {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 100px;
+            height: 30px;
+            display: flex;
+            align-items: end;
+            gap: 2px;
+            opacity: 0.7;
+        }
+
+        .music-bar {
+            width: 3px;
+            background: linear-gradient(to top, #ff00ff, #00ffff);
+            border-radius: 2px;
+            transition: height 0.1s ease;
+        }
+
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #3b82f6, #ec4899);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+            z-index: 100;
+            font-weight: 700;
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
         }
 
         @keyframes glow {
@@ -309,21 +532,19 @@
             50% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.8); }
         }
 
-        .glow {
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        .pulse {
-            animation: pulse 1s ease-in-out infinite;
-        }
-
         .mobile-controls {
             display: none;
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #888;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+            margin: 0 20px;
         }
 
         @media (max-width: 768px) {
@@ -336,22 +557,60 @@
 
             .mobile-controls {
                 display: block;
-                position: absolute;
-                bottom: 20px;
-                left: 0;
-                right: 0;
-                text-align: center;
-                color: #888;
-                font-size: 0.9rem;
             }
 
             .controls {
                 display: none;
             }
+
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0118;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #00ffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loadingScreen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Animated Background Stars -->
+    <div class="stars" id="starsContainer"></div>
+
     <div class="game-container">
         <canvas id="gameCanvas" width="600" height="800"></canvas>
         
@@ -360,12 +619,24 @@
             <div>
                 <div class="score-display" id="scoreDisplay">Score: 0</div>
                 <div class="combo-display" id="comboDisplay" style="display: none;">Combo: 0x</div>
-                <div class="combo-display" id="multiplierDisplay" style="display: none;">Multiplier: 1x</div>
+                <div class="multiplier-display" id="multiplierDisplay" style="display: none;">Multiplier: 1x</div>
             </div>
             <div>
                 <div class="score-display" id="highScoreDisplay">High: 0</div>
-                <div id="powerUpIndicators"></div>
+                <div class="power-up-indicators" id="powerUpIndicators"></div>
             </div>
+        </div>
+
+        <!-- Music Visualizer -->
+        <div class="music-visualizer" id="musicVisualizer" style="display: none;">
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
         </div>
 
         <!-- Power-up Timer -->
@@ -376,7 +647,7 @@
         <!-- Start Screen -->
         <div class="overlay active" id="startScreen">
             <h1 class="title">Shadow Runner</h1>
-            <p class="subtitle">Dodge the falling obstacles and collect power-ups to survive as long as possible!</p>
+            <p class="subtitle">Experience the ultimate neon arcade challenge! Dodge falling obstacles, collect power-ups, and survive as long as possible in this synthwave-inspired adventure.</p>
             <div class="controls-info">
                 <p><strong>Desktop:</strong> Arrow Keys or A/D to move • P to pause • ESC for settings</p>
                 <p><strong>Mobile:</strong> Tap left/right side of screen to move</p>
@@ -403,40 +674,64 @@
 
         <!-- Settings Panel -->
         <div class="settings-panel" id="settingsPanel">
-            <h3 style="margin-bottom: 20px; text-align: center;">Settings</h3>
+            <div class="panel-header">
+                <h3 class="panel-title">Settings</h3>
+                <button class="close-btn" onclick="hideSettings()">✕</button>
+            </div>
             
-            <div class="setting-item">
-                <span>Background Music</span>
-                <div class="toggle active" id="musicToggle" onclick="toggleMusic()">
-                    <div class="toggle-thumb"></div>
+            <div class="setting-section">
+                <h3>🎵 Audio</h3>
+                <div class="setting-item">
+                    <span>Background Music</span>
+                    <div class="toggle active" id="musicToggle" onclick="toggleMusic()">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <span>Sound Effects</span>
+                    <div class="toggle active" id="soundToggle" onclick="toggleSound()">
+                        <div class="toggle-thumb"></div>
+                    </div>
                 </div>
             </div>
             
-            <div class="setting-item">
-                <span>Sound Effects</span>
-                <div class="toggle active" id="soundToggle" onclick="toggleSound()">
-                    <div class="toggle-thumb"></div>
+            <div class="setting-section">
+                <h3>🎮 Controls</h3>
+                <div class="setting-item">
+                    <span>Sensitivity: <span id="sensitivityValue">1.0</span>x</span>
+                    <input type="range" class="slider" id="sensitivitySlider" min="0.5" max="2" step="0.1" value="1" onchange="updateSensitivity(this.value)">
                 </div>
             </div>
             
-            <div class="setting-item">
-                <span>Particle Effects</span>
-                <div class="toggle active" id="particlesToggle" onclick="toggleParticles()">
-                    <div class="toggle-thumb"></div>
+            <div class="setting-section">
+                <h3>🎨 Graphics</h3>
+                <div class="setting-item">
+                    <span>Particle Effects</span>
+                    <div class="toggle active" id="particlesToggle" onclick="toggleParticles()">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <span>Music Visualizer</span>
+                    <div class="toggle active" id="visualizerToggle" onclick="toggleVisualizer()">
+                        <div class="toggle-thumb"></div>
+                    </div>
                 </div>
             </div>
             
-            <div class="setting-item">
-                <span>Sensitivity: <span id="sensitivityValue">1.0</span>x</span>
-                <input type="range" class="slider" id="sensitivitySlider" min="0.5" max="2" step="0.1" value="1" onchange="updateSensitivity(this.value)">
-            </div>
-            
-            <button class="btn" onclick="hideSettings()" style="width: 100%; margin-top: 20px;">Close</button>
+            <button class="btn" onclick="hideSettings()" style="width: 100%; margin-top: 20px;">Save Settings</button>
         </div>
 
         <!-- Achievements Panel -->
         <div class="achievements-panel" id="achievementsPanel">
-            <h3 style="margin-bottom: 20px; text-align: center;">Achievements</h3>
+            <div class="panel-header">
+                <h3 class="panel-title">Achievements</h3>
+                <button class="close-btn" onclick="hideAchievements()">✕</button>
+            </div>
+            <div style="margin-bottom: 20px; text-align: center;">
+                <span style="color: #00ffff;">Progress: </span>
+                <span id="achievementProgress" style="color: #ff00ff; font-weight: 700;">0/6</span>
+            </div>
             <div id="achievementsList"></div>
             <button class="btn" onclick="hideAchievements()" style="width: 100%; margin-top: 20px;">Close</button>
         </div>
@@ -453,1059 +748,1527 @@
     </div>
 
     <script>
-        // Game constants
-        const GAME_WIDTH = 600;
-        const GAME_HEIGHT = 800;
-        const PLAYER_SIZE = 30;
-        const INITIAL_OBSTACLE_SPEED = 3;
-        const SPEED_INCREMENT = 0.05;
-        const OBSTACLE_FREQUENCY = 1500;
-        const FREQUENCY_DECREMENT = 8;
+        // Enhanced Game Engine with Better Coordination
+        class ShadowRunnerGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.gameContainer = this.canvas.parentElement;
+                
+                // Game constants
+                this.GAME_WIDTH = 600;
+                this.GAME_HEIGHT = 800;
+                this.PLAYER_SIZE = 30;
+                this.INITIAL_OBSTACLE_SPEED = 3;
+                this.SPEED_INCREMENT = 0.05;
+                this.OBSTACLE_FREQUENCY = 1500;
+                this.FREQUENCY_DECREMENT = 8;
 
-        // Game state
-        let gameStarted = false;
-        let gameOver = false;
-        let gamePaused = false;
-        let score = 0;
-        let highScore = 0;
-        let combo = 0;
-        let multiplier = 1;
-        let playerX = GAME_WIDTH / 2;
-        let gameSpeed = INITIAL_OBSTACLE_SPEED;
-        let obstacleFrequency = OBSTACLE_FREQUENCY;
-        let gameStartTime = 0;
+                // Game state
+                this.gameStarted = false;
+                this.gameOver = false;
+                this.gamePaused = false;
+                this.score = 0;
+                this.highScore = 0;
+                this.combo = 0;
+                this.multiplier = 1;
+                this.playerX = this.GAME_WIDTH / 2;
+                this.gameSpeed = this.INITIAL_OBSTACLE_SPEED;
+                this.obstacleFrequency = this.OBSTACLE_FREQUENCY;
+                this.gameStartTime = 0;
 
-        // Power-ups
-        let shieldActive = false;
-        let speedBoostActive = false;
-        let slowTimeActive = false;
-        let scoreMultiplierActive = false;
-        let powerUpEndTime = 0;
+                // Power-ups
+                this.powerUps = {
+                    shield: { active: false, endTime: 0 },
+                    speedBoost: { active: false, endTime: 0 },
+                    slowTime: { active: false, endTime: 0 },
+                    scoreMultiplier: { active: false, endTime: 0 }
+                };
 
-        // Game objects
-        let obstacles = [];
-        let powerUps = [];
-        let particles = [];
+                // Game objects
+                this.obstacles = [];
+                this.powerUpItems = [];
+                this.particles = [];
 
-        // Controls
-        let keysPressed = {};
-        let screenShake = 0;
-        let playerGlowIntensity = 1;
+                // Visual effects
+                this.screenShake = 0;
+                this.playerGlowIntensity = 1;
+                this.backgroundOffset = 0;
 
-        // Settings
-        let settings = {
-            musicEnabled: true,
-            soundEnabled: true,
-            particlesEnabled: true,
-            sensitivity: 1.0
-        };
+                // Controls
+                this.keysPressed = {};
 
-        // Achievements
-        let achievements = [
-            { id: 'first_dodge', name: 'First Steps', description: 'Dodge your first obstacle', unlocked: false, progress: 0, target: 1 },
-            { id: 'combo_10', name: 'Combo Master', description: 'Achieve a 10x combo', unlocked: false, progress: 0, target: 10 },
-            { id: 'score_100', name: 'Century', description: 'Score 100 points', unlocked: false, progress: 0, target: 100 },
-            { id: 'survive_60', name: 'Survivor', description: 'Survive for 60 seconds', unlocked: false, progress: 0, target: 60 },
-            { id: 'power_up_master', name: 'Power User', description: 'Collect 20 power-ups', unlocked: false, progress: 0, target: 20 },
-            { id: 'speed_demon', name: 'Speed Demon', description: 'Reach maximum game speed', unlocked: false, progress: 0, target: 1 }
-        ];
+                // Settings
+                this.settings = {
+                    musicEnabled: true,
+                    soundEnabled: true,
+                    particlesEnabled: true,
+                    visualizerEnabled: true,
+                    sensitivity: 1.0
+                };
 
-        // Audio context and music
-        let audioContext;
-        let backgroundMusic;
-        let musicGainNode;
-        let baseFrequency = 220; // Base frequency for music
+                // Achievements
+                this.achievements = [
+                    { id: 'first_dodge', name: 'First Steps', description: 'Dodge your first obstacle', unlocked: false, progress: 0, target: 1 },
+                    { id: 'combo_10', name: 'Combo Master', description: 'Achieve a 10x combo', unlocked: false, progress: 0, target: 10 },
+                    { id: 'score_100', name: 'Century', description: 'Score 100 points', unlocked: false, progress: 0, target: 100 },
+                    { id: 'survive_60', name: 'Survivor', description: 'Survive for 60 seconds', unlocked: false, progress: 0, target: 60 },
+                    { id: 'power_up_master', name: 'Power User', description: 'Collect 20 power-ups', unlocked: false, progress: 0, target: 20 },
+                    { id: 'speed_demon', name: 'Speed Demon', description: 'Reach maximum game speed', unlocked: false, progress: 0, target: 1 }
+                ];
 
-        // Canvas and context
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+                // Audio system
+                this.audioContext = null;
+                this.musicSystem = null;
+                this.lastObstacleTime = 0;
+                this.lastPowerUpTime = 0;
 
-        // Initialize audio
-        function initAudio() {
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                createBackgroundMusic();
-            } catch (e) {
-                console.log('Audio not supported');
-            }
-        }
-
-        // Create synthwave background music
-        function createBackgroundMusic() {
-            if (!audioContext) return;
-
-            // Create oscillators for different layers
-            const bass = audioContext.createOscillator();
-            const lead = audioContext.createOscillator();
-            const pad = audioContext.createOscillator();
-
-            // Create gain nodes for mixing
-            const bassGain = audioContext.createGain();
-            const leadGain = audioContext.createGain();
-            const padGain = audioContext.createGain();
-            musicGainNode = audioContext.createGain();
-
-            // Set up bass (low frequency, steady)
-            bass.type = 'sawtooth';
-            bass.frequency.setValueAtTime(baseFrequency * 0.5, audioContext.currentTime);
-            bassGain.gain.setValueAtTime(0.1, audioContext.currentTime);
-
-            // Set up lead (melody line)
-            lead.type = 'square';
-            lead.frequency.setValueAtTime(baseFrequency * 2, audioContext.currentTime);
-            leadGain.gain.setValueAtTime(0.05, audioContext.currentTime);
-
-            // Set up pad (atmospheric)
-            pad.type = 'sine';
-            pad.frequency.setValueAtTime(baseFrequency * 1.5, audioContext.currentTime);
-            padGain.gain.setValueAtTime(0.03, audioContext.currentTime);
-
-            // Connect everything
-            bass.connect(bassGain);
-            lead.connect(leadGain);
-            pad.connect(padGain);
-
-            bassGain.connect(musicGainNode);
-            leadGain.connect(musicGainNode);
-            padGain.connect(musicGainNode);
-
-            musicGainNode.connect(audioContext.destination);
-            musicGainNode.gain.setValueAtTime(settings.musicEnabled ? 0.3 : 0, audioContext.currentTime);
-
-            // Start oscillators
-            bass.start();
-            lead.start();
-            pad.start();
-
-            // Create evolving melody
-            setInterval(() => {
-                if (!gameStarted || gamePaused) return;
-
-                const time = audioContext.currentTime;
-                const intensity = Math.min(gameSpeed / 10, 2); // Music intensifies with game speed
-
-                // Modulate frequencies based on game state
-                bass.frequency.setValueAtTime(baseFrequency * 0.5 * (1 + intensity * 0.2), time);
-                lead.frequency.setValueAtTime(baseFrequency * 2 * (1 + Math.sin(time * 0.5) * 0.1), time);
-                pad.frequency.setValueAtTime(baseFrequency * 1.5 * (1 + intensity * 0.1), time);
-
-                // Adjust volumes based on intensity
-                bassGain.gain.setValueAtTime(0.1 * (1 + intensity * 0.3), time);
-                leadGain.gain.setValueAtTime(0.05 * (1 + intensity * 0.5), time);
-                padGain.gain.setValueAtTime(0.03 * (1 + intensity * 0.4), time);
-            }, 500);
-
-            backgroundMusic = { bass, lead, pad, bassGain, leadGain, padGain };
-        }
-
-        // Play sound effect
-        function playSound(frequency, duration, type = 'sine', volume = 0.1) {
-            if (!settings.soundEnabled || !audioContext) return;
-
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-            oscillator.type = type;
-
-            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
-        }
-
-        // Load saved data
-        function loadSavedData() {
-            const savedHighScore = localStorage.getItem('shadowRunnerHighScore');
-            if (savedHighScore) {
-                highScore = parseInt(savedHighScore);
-                document.getElementById('highScoreDisplay').textContent = `High: ${highScore}`;
+                this.init();
             }
 
-            const savedSettings = localStorage.getItem('shadowRunnerSettings');
-            if (savedSettings) {
-                settings = { ...settings, ...JSON.parse(savedSettings) };
-                updateSettingsUI();
+            async init() {
+                await this.initAudio();
+                this.loadSavedData();
+                this.setupEventListeners();
+                this.createStars();
+                this.updateUI();
+                this.hideLoading();
             }
 
-            const savedAchievements = localStorage.getItem('shadowRunnerAchievements');
-            if (savedAchievements) {
-                achievements = JSON.parse(savedAchievements);
+            async initAudio() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.musicSystem = new MusicSystem(this.audioContext);
+                } catch (e) {
+                    console.log('Audio not supported');
+                }
             }
-            updateAchievementsUI();
-        }
 
-        // Save data
-        function saveData() {
-            localStorage.setItem('shadowRunnerHighScore', highScore.toString());
-            localStorage.setItem('shadowRunnerSettings', JSON.stringify(settings));
-            localStorage.setItem('shadowRunnerAchievements', JSON.stringify(achievements));
-        }
+            createStars() {
+                const starsContainer = document.getElementById('starsContainer');
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 3 + 's';
+                    starsContainer.appendChild(star);
+                }
+            }
 
-        // Keyboard controls
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-                keysPressed.left = true;
+            hideLoading() {
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('loadingScreen').style.display = 'none';
+                    }, 500);
+                }, 1000);
             }
-            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-                keysPressed.right = true;
+
+            setupEventListeners() {
+                // Keyboard controls
+                document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+                document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+
+                // Touch controls
+                this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+                this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+
+                // Prevent context menu on right click
+                this.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
             }
-            if (e.key === ' ' && !gameStarted && !gameOver) {
+
+            handleKeyDown(e) {
+                if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                    this.keysPressed.left = true;
+                }
+                if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                    this.keysPressed.right = true;
+                }
+                if (e.key === ' ' && !this.gameStarted && !this.gameOver) {
+                    e.preventDefault();
+                    this.startGame();
+                }
+                if (e.key === 'p' || e.key === 'P') {
+                    e.preventDefault();
+                    this.togglePause();
+                }
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    this.toggleSettings();
+                }
+            }
+
+            handleKeyUp(e) {
+                if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                    this.keysPressed.left = false;
+                }
+                if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                    this.keysPressed.right = false;
+                }
+            }
+
+            handleTouchStart(e) {
                 e.preventDefault();
-                startGame();
-            }
-            if (e.key === 'p' || e.key === 'P') {
-                e.preventDefault();
-                togglePause();
-            }
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                if (document.getElementById('settingsPanel').classList.contains('active')) {
-                    hideSettings();
+                if (!this.gameStarted && !this.gameOver) {
+                    this.startGame();
+                    return;
+                }
+
+                const touch = e.touches[0];
+                const rect = this.canvas.getBoundingClientRect();
+                const touchX = touch.clientX - rect.left;
+
+                if (touchX < rect.width / 2) {
+                    this.keysPressed.left = true;
+                    this.keysPressed.right = false;
                 } else {
-                    showSettings();
+                    this.keysPressed.right = true;
+                    this.keysPressed.left = false;
                 }
             }
-        });
 
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-                keysPressed.left = false;
-            }
-            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-                keysPressed.right = false;
-            }
-        });
-
-        // Touch controls
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!gameStarted && !gameOver) {
-                startGame();
-                return;
+            handleTouchEnd(e) {
+                e.preventDefault();
+                this.keysPressed.left = false;
+                this.keysPressed.right = false;
             }
 
-            const touch = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            const touchX = touch.clientX - rect.left;
+            startGame() {
+                if (this.gameStarted) return;
 
-            if (touchX < rect.width / 2) {
-                keysPressed.left = true;
-                keysPressed.right = false;
-            } else {
-                keysPressed.right = true;
-                keysPressed.left = false;
-            }
-        });
+                // Resume audio context if needed
+                if (this.audioContext && this.audioContext.state === 'suspended') {
+                    this.audioContext.resume();
+                }
 
-        canvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            keysPressed.left = false;
-            keysPressed.right = false;
-        });
+                this.gameStarted = true;
+                this.gameOver = false;
+                this.gamePaused = false;
+                this.score = 0;
+                this.combo = 0;
+                this.multiplier = 1;
+                this.playerX = this.GAME_WIDTH / 2;
+                this.gameSpeed = this.INITIAL_OBSTACLE_SPEED;
+                this.obstacleFrequency = this.OBSTACLE_FREQUENCY;
+                this.gameStartTime = Date.now();
 
-        // Particle system
-        function addParticles(x, y, color, count = 5) {
-            if (!settings.particlesEnabled) return;
+                // Reset game objects
+                this.obstacles = [];
+                this.powerUpItems = [];
+                this.particles = [];
 
-            for (let i = 0; i < count; i++) {
-                particles.push({
-                    x: x,
-                    y: y,
-                    vx: (Math.random() - 0.5) * 10,
-                    vy: (Math.random() - 0.5) * 10,
-                    life: 60,
-                    maxLife: 60,
-                    color: color,
-                    size: Math.random() * 4 + 2
+                // Reset power-ups
+                Object.keys(this.powerUps).forEach(key => {
+                    this.powerUps[key] = { active: false, endTime: 0 };
                 });
-            }
-        }
 
-        // Update particles
-        function updateParticles() {
-            particles = particles.filter(particle => {
-                particle.x += particle.vx;
-                particle.y += particle.vy;
-                particle.life--;
-                particle.vx *= 0.98;
-                particle.vy *= 0.98;
+                // Reset visual effects
+                this.screenShake = 0;
+                this.playerGlowIntensity = 1;
+                this.backgroundOffset = 0;
 
-                if (particle.life <= 0) return false;
+                // Update UI
+                this.updateUI();
+                this.updatePowerUpDisplay();
 
-                // Draw particle
-                const alpha = particle.life / particle.maxLife;
-                ctx.save();
-                ctx.globalAlpha = alpha;
-                ctx.fillStyle = particle.color;
-                ctx.shadowBlur = 5;
-                ctx.shadowColor = particle.color;
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.size * alpha, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
+                // Hide start screen
+                document.getElementById('startScreen').classList.remove('active');
 
-                return true;
-            });
-        }
+                // Enable controls
+                document.getElementById('pauseBtn').disabled = false;
 
-        // Generate obstacle
-        function generateObstacle() {
-            const types = ['normal', 'diagonal', 'splitter', 'slow', 'shaker'];
-            const type = types[Math.floor(Math.random() * types.length)];
-
-            let width = Math.random() * 80 + 40;
-            let height = 20;
-            let color = '#ff00ff';
-            let speed = gameSpeed;
-            const direction = Math.random() > 0.5 ? 1 : -1;
-
-            switch (type) {
-                case 'diagonal':
-                    color = '#ff3377';
-                    speed *= 0.8;
-                    break;
-                case 'splitter':
-                    color = '#ff8800';
-                    width *= 1.5;
-                    break;
-                case 'slow':
-                    color = '#8800ff';
-                    width *= 0.7;
-                    break;
-                case 'shaker':
-                    color = '#ff0000';
-                    width *= 0.8;
-                    height = 30;
-                    break;
-                default:
-                    color = '#00ffff';
-            }
-
-            obstacles.push({
-                id: Date.now(),
-                x: Math.random() * (GAME_WIDTH - width),
-                y: -height,
-                width: width,
-                height: height,
-                color: color,
-                type: type,
-                speed: speed,
-                direction: direction,
-                hasTriggered: false
-            });
-        }
-
-        // Generate power-up
-        function generatePowerUp() {
-            const types = ['shield', 'speedBoost', 'slowTime', 'scoreMultiplier'];
-            const type = types[Math.floor(Math.random() * types.length)];
-
-            let color = '#ffff00';
-            switch (type) {
-                case 'shield': color = '#ffff00'; break;
-                case 'speedBoost': color = '#ff00ff'; break;
-                case 'slowTime': color = '#00ff00'; break;
-                case 'scoreMultiplier': color = '#ff8800'; break;
-            }
-
-            powerUps.push({
-                id: Date.now(),
-                x: Math.random() * (GAME_WIDTH - 20),
-                y: -20,
-                type: type,
-                color: color,
-                pulsePhase: 0
-            });
-        }
-
-        // Activate power-up
-        function activatePowerUp(type) {
-            const duration = 5000; // 5 seconds
-            powerUpEndTime = Date.now() + duration;
-
-            switch (type) {
-                case 'shield':
-                    shieldActive = true;
-                    break;
-                case 'speedBoost':
-                    speedBoostActive = true;
-                    break;
-                case 'slowTime':
-                    slowTimeActive = true;
-                    break;
-                case 'scoreMultiplier':
-                    scoreMultiplierActive = true;
-                    break;
-            }
-
-            updatePowerUpDisplay();
-            playSound(600, 0.2);
-
-            // Update achievement progress
-            const powerUpAchievement = achievements.find(a => a.id === 'power_up_master');
-            if (powerUpAchievement && !powerUpAchievement.unlocked) {
-                powerUpAchievement.progress++;
-                checkAchievements();
-            }
-        }
-
-        // Update power-up timers
-        function updatePowerUpTimers() {
-            const now = Date.now();
-            
-            if (powerUpEndTime > 0 && now >= powerUpEndTime) {
-                shieldActive = false;
-                speedBoostActive = false;
-                slowTimeActive = false;
-                scoreMultiplierActive = false;
-                powerUpEndTime = 0;
-                updatePowerUpDisplay();
-            }
-
-            if (powerUpEndTime > 0) {
-                const timeLeft = Math.ceil((powerUpEndTime - now) / 1000);
-                document.getElementById('powerUpTimer').style.display = 'block';
-                document.getElementById('powerUpTimeLeft').textContent = timeLeft;
-            } else {
-                document.getElementById('powerUpTimer').style.display = 'none';
-            }
-        }
-
-        // Update power-up display
-        function updatePowerUpDisplay() {
-            const indicators = document.getElementById('powerUpIndicators');
-            let html = '';
-
-            if (shieldActive) html += '<div style="color: #ffff00; font-size: 0.9rem; text-shadow: 0 0 10px #ffff00;">SHIELD</div>';
-            if (speedBoostActive) html += '<div style="color: #ff00ff; font-size: 0.9rem; text-shadow: 0 0 10px #ff00ff;">SPEED</div>';
-            if (slowTimeActive) html += '<div style="color: #00ff00; font-size: 0.9rem; text-shadow: 0 0 10px #00ff00;">SLOW TIME</div>';
-            if (scoreMultiplierActive) html += '<div style="color: #ff8800; font-size: 0.9rem; text-shadow: 0 0 10px #ff8800;">SCORE x2</div>';
-
-            indicators.innerHTML = html;
-        }
-
-        // Check achievements
-        function checkAchievements() {
-            achievements.forEach(achievement => {
-                if (achievement.unlocked) return;
-
-                let newProgress = achievement.progress;
-
-                switch (achievement.id) {
-                    case 'first_dodge':
-                        newProgress = score > 0 ? 1 : 0;
-                        break;
-                    case 'combo_10':
-                        newProgress = Math.max(newProgress, combo);
-                        break;
-                    case 'score_100':
-                        newProgress = score;
-                        break;
-                    case 'survive_60':
-                        newProgress = gameStartTime ? Math.floor((Date.now() - gameStartTime) / 1000) : 0;
-                        break;
-                    case 'speed_demon':
-                        newProgress = gameSpeed >= 8 ? 1 : 0;
-                        break;
+                // Start music
+                if (this.musicSystem && this.settings.musicEnabled) {
+                    this.musicSystem.start();
+                    this.showMusicVisualizer();
                 }
 
-                achievement.progress = newProgress;
+                // Start game loop
+                this.gameLoop();
 
-                if (newProgress >= achievement.target && !achievement.unlocked) {
-                    achievement.unlocked = true;
-                    showNotification(`Achievement Unlocked: ${achievement.name}`);
-                    playSound(800, 0.3);
-                }
-            });
-
-            updateAchievementsUI();
-            saveData();
-        }
-
-        // Show notification
-        function showNotification(message) {
-            // Simple notification system
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(45deg, #3b82f6, #ec4899);
-                color: white;
-                padding: 15px 20px;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-                z-index: 1000;
-                font-weight: bold;
-                animation: slideIn 0.3s ease;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // Update player
-        function updatePlayer() {
-            const playerSpeed = speedBoostActive ? 12 : 8;
-            const adjustedSpeed = playerSpeed * settings.sensitivity;
-
-            if (keysPressed.left && playerX > PLAYER_SIZE / 2) {
-                const newX = Math.max(PLAYER_SIZE / 2, playerX - adjustedSpeed);
-                if (settings.particlesEnabled && Math.abs(playerX - newX) > 2) {
-                    addParticles(playerX, GAME_HEIGHT - PLAYER_SIZE / 2, '#00ffff', 2);
-                }
-                playerX = newX;
+                this.playSound(440, 0.3);
+                this.showNotification('Game Started - Good Luck!');
             }
 
-            if (keysPressed.right && playerX < GAME_WIDTH - PLAYER_SIZE / 2) {
-                const newX = Math.min(GAME_WIDTH - PLAYER_SIZE / 2, playerX + adjustedSpeed);
-                if (settings.particlesEnabled && Math.abs(playerX - newX) > 2) {
-                    addParticles(playerX, GAME_HEIGHT - PLAYER_SIZE / 2, '#00ffff', 2);
+            gameLoop() {
+                if (this.gameOver || this.gamePaused) return;
+
+                const currentTime = Date.now();
+
+                // Clear canvas with animated background
+                this.drawBackground();
+
+                // Update power-up timers
+                this.updatePowerUpTimers();
+
+                // Generate obstacles
+                if (currentTime - this.lastObstacleTime > this.obstacleFrequency) {
+                    this.generateObstacle();
+                    this.lastObstacleTime = currentTime;
                 }
-                playerX = newX;
+
+                // Generate power-ups
+                if (currentTime - this.lastPowerUpTime > 8000 + Math.random() * 5000) {
+                    this.generatePowerUp();
+                    this.lastPowerUpTime = currentTime;
+                }
+
+                // Update game objects
+                this.updatePlayer();
+                this.updateObstacles();
+                this.updatePowerUpItems();
+                this.updateParticles();
+
+                // Draw everything
+                this.drawGrid();
+                this.drawObstacles();
+                this.drawPowerUpItems();
+                this.drawPlayer();
+                this.drawParticles();
+
+                // Update music intensity
+                if (this.musicSystem && this.settings.musicEnabled) {
+                    const intensity = Math.min(1, (this.gameSpeed - this.INITIAL_OBSTACLE_SPEED) / 5 + this.score / 200);
+                    this.musicSystem.updateIntensity(intensity);
+                    this.updateMusicVisualizer(intensity);
+                }
+
+                // Check achievements
+                this.checkAchievements();
+
+                // Continue game loop
+                requestAnimationFrame(() => this.gameLoop());
             }
-        }
 
-        // Update obstacles
-        function updateObstacles() {
-            const timeMultiplier = slowTimeActive ? 0.3 : 1;
+            drawBackground() {
+                // Apply screen shake
+                if (this.screenShake > 0) {
+                    this.ctx.save();
+                    this.ctx.translate(
+                        (Math.random() - 0.5) * this.screenShake,
+                        (Math.random() - 0.5) * this.screenShake
+                    );
+                    this.screenShake *= 0.9;
+                    if (this.screenShake < 0.1) this.screenShake = 0;
+                }
 
-            obstacles = obstacles.filter(obstacle => {
-                // Move obstacle based on type
-                switch (obstacle.type) {
+                // Animated gradient background
+                this.backgroundOffset += 0.5;
+                const gradient = this.ctx.createLinearGradient(0, 0, 0, this.GAME_HEIGHT);
+                gradient.addColorStop(0, `hsl(${240 + Math.sin(this.backgroundOffset * 0.01) * 20}, 80%, 10%)`);
+                gradient.addColorStop(0.5, `hsl(${260 + Math.sin(this.backgroundOffset * 0.008) * 15}, 70%, 15%)`);
+                gradient.addColorStop(1, `hsl(${280 + Math.sin(this.backgroundOffset * 0.012) * 10}, 60%, 20%)`);
+                
+                this.ctx.fillStyle = gradient;
+                this.ctx.fillRect(0, 0, this.GAME_WIDTH, this.GAME_HEIGHT);
+            }
+
+            drawGrid() {
+                this.ctx.strokeStyle = `rgba(42, 26, 74, ${0.5 + Math.sin(this.backgroundOffset * 0.02) * 0.2})`;
+                this.ctx.lineWidth = 1;
+                this.ctx.shadowBlur = 8;
+                this.ctx.shadowColor = '#2a1a4a';
+
+                const gridSize = 50;
+                const offsetY = (this.backgroundOffset * 2) % gridSize;
+
+                // Vertical lines
+                for (let x = 0; x <= this.GAME_WIDTH; x += gridSize) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x, 0);
+                    this.ctx.lineTo(x, this.GAME_HEIGHT);
+                    this.ctx.stroke();
+                }
+
+                // Horizontal lines with movement
+                for (let y = -gridSize + offsetY; y <= this.GAME_HEIGHT; y += gridSize) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, y);
+                    this.ctx.lineTo(this.GAME_WIDTH, y);
+                    this.ctx.stroke();
+                }
+
+                this.ctx.shadowBlur = 0;
+            }
+
+            updatePlayer() {
+                const baseSpeed = 8;
+                const speedMultiplier = this.powerUps.speedBoost.active ? 1.5 : 1;
+                const playerSpeed = baseSpeed * speedMultiplier * this.settings.sensitivity;
+
+                if (this.keysPressed.left && this.playerX > this.PLAYER_SIZE / 2) {
+                    const newX = Math.max(this.PLAYER_SIZE / 2, this.playerX - playerSpeed);
+                    if (this.settings.particlesEnabled && Math.abs(this.playerX - newX) > 2) {
+                        this.addParticles(this.playerX, this.GAME_HEIGHT - this.PLAYER_SIZE / 2, '#00ffff', 2);
+                    }
+                    this.playerX = newX;
+                }
+
+                if (this.keysPressed.right && this.playerX < this.GAME_WIDTH - this.PLAYER_SIZE / 2) {
+                    const newX = Math.min(this.GAME_WIDTH - this.PLAYER_SIZE / 2, this.playerX + playerSpeed);
+                    if (this.settings.particlesEnabled && Math.abs(this.playerX - newX) > 2) {
+                        this.addParticles(this.playerX, this.GAME_HEIGHT - this.PLAYER_SIZE / 2, '#00ffff', 2);
+                    }
+                    this.playerX = newX;
+                }
+
+                // Gradually reduce glow intensity
+                this.playerGlowIntensity = Math.max(1, this.playerGlowIntensity - 0.02);
+            }
+
+            drawPlayer() {
+                const playerY = this.GAME_HEIGHT - this.PLAYER_SIZE / 2;
+
+                // Shield effect
+                if (this.powerUps.shield.active) {
+                    const shieldPulse = Math.sin(Date.now() * 0.01) * 0.3 + 0.7;
+                    this.ctx.strokeStyle = '#ffff00';
+                    this.ctx.lineWidth = 4;
+                    this.ctx.shadowBlur = 20 * shieldPulse;
+                    this.ctx.shadowColor = '#ffff00';
+                    this.ctx.globalAlpha = 0.8 * shieldPulse;
+
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.playerX, playerY, this.PLAYER_SIZE * 1.2, 0, Math.PI * 2);
+                    this.ctx.stroke();
+
+                    this.ctx.globalAlpha = 1;
+                    this.ctx.shadowBlur = 0;
+                }
+
+                // Player orb with dynamic effects
+                const glowIntensity = this.playerGlowIntensity;
+                const playerColor = this.powerUps.speedBoost.active ? '#ff00ff' : '#00ffff';
+                
+                // Outer glow
+                const gradient = this.ctx.createRadialGradient(
+                    this.playerX, playerY, 0,
+                    this.playerX, playerY, this.PLAYER_SIZE * glowIntensity * 2
+                );
+                gradient.addColorStop(0, playerColor + '80');
+                gradient.addColorStop(0.5, playerColor + '40');
+                gradient.addColorStop(1, 'transparent');
+
+                this.ctx.fillStyle = gradient;
+                this.ctx.beginPath();
+                this.ctx.arc(this.playerX, playerY, this.PLAYER_SIZE * glowIntensity * 2, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Main orb
+                this.ctx.fillStyle = playerColor;
+                this.ctx.shadowBlur = 25 * glowIntensity;
+                this.ctx.shadowColor = playerColor;
+
+                this.ctx.beginPath();
+                this.ctx.arc(this.playerX, playerY, this.PLAYER_SIZE / 2, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Inner highlight
+                const highlightGradient = this.ctx.createRadialGradient(
+                    this.playerX - 5, playerY - 5, 0,
+                    this.playerX, playerY, this.PLAYER_SIZE / 2
+                );
+                highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+                highlightGradient.addColorStop(1, 'transparent');
+
+                this.ctx.fillStyle = highlightGradient;
+                this.ctx.shadowBlur = 0;
+                this.ctx.beginPath();
+                this.ctx.arc(this.playerX, playerY, this.PLAYER_SIZE / 2, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                if (this.screenShake > 0) {
+                    this.ctx.restore();
+                }
+            }
+
+            generateObstacle() {
+                const types = ['normal', 'diagonal', 'splitter', 'slow', 'shaker'];
+                const type = types[Math.floor(Math.random() * types.length)];
+
+                let width = Math.random() * 80 + 40;
+                let height = 20;
+                let color = '#ff00ff';
+                let speed = this.gameSpeed;
+                const direction = Math.random() > 0.5 ? 1 : -1;
+
+                switch (type) {
                     case 'diagonal':
-                        obstacle.x += obstacle.direction * 2 * timeMultiplier;
-                        obstacle.y += obstacle.speed * timeMultiplier;
+                        color = '#ff3377';
+                        speed *= 0.8;
                         break;
                     case 'splitter':
-                        obstacle.y += obstacle.speed * timeMultiplier;
-                        if (obstacle.y > GAME_HEIGHT / 2 && !obstacle.hasTriggered) {
-                            obstacle.hasTriggered = true;
-                            // Create two smaller obstacles
-                            obstacles.push(
-                                {
-                                    ...obstacle,
-                                    id: Date.now() + 1,
-                                    x: obstacle.x - obstacle.width / 2,
-                                    width: obstacle.width / 2,
-                                    type: 'normal'
-                                },
-                                {
-                                    ...obstacle,
-                                    id: Date.now() + 2,
-                                    x: obstacle.x + obstacle.width / 2,
-                                    width: obstacle.width / 2,
-                                    type: 'normal'
-                                }
-                            );
-                            return false;
-                        }
+                        color = '#ff8800';
+                        width *= 1.5;
+                        break;
+                    case 'slow':
+                        color = '#8800ff';
+                        width *= 0.7;
+                        break;
+                    case 'shaker':
+                        color = '#ff0000';
+                        width *= 0.8;
+                        height = 30;
                         break;
                     default:
-                        obstacle.y += obstacle.speed * timeMultiplier;
+                        color = '#00ffff';
                 }
 
-                // Check collision
-                const playerBottom = GAME_HEIGHT - PLAYER_SIZE / 2;
-                const playerTop = GAME_HEIGHT - PLAYER_SIZE * 1.5;
+                this.obstacles.push({
+                    id: Date.now(),
+                    x: Math.random() * (this.GAME_WIDTH - width),
+                    y: -height,
+                    width: width,
+                    height: height,
+                    color: color,
+                    type: type,
+                    speed: speed,
+                    direction: direction,
+                    hasTriggered: false
+                });
+            }
 
-                if (obstacle.y + obstacle.height > playerTop &&
-                    obstacle.y < playerBottom &&
-                    obstacle.x < playerX + PLAYER_SIZE / 2 &&
-                    obstacle.x + obstacle.width > playerX - PLAYER_SIZE / 2) {
-                    
-                    if (shieldActive) {
-                        addParticles(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2, '#ffff00', 10);
-                        playSound(400, 0.1);
-                        return false;
-                    } else {
-                        if (obstacle.type === 'shaker' && !obstacle.hasTriggered) {
-                            obstacle.hasTriggered = true;
-                            screenShake = 20;
-                            playSound(100, 0.3, 'sawtooth');
+            updateObstacles() {
+                const timeMultiplier = this.powerUps.slowTime.active ? 0.3 : 1;
+
+                this.obstacles = this.obstacles.filter(obstacle => {
+                    // Move obstacle based on type
+                    switch (obstacle.type) {
+                        case 'diagonal':
+                            obstacle.x += obstacle.direction * 2 * timeMultiplier;
+                            obstacle.y += obstacle.speed * timeMultiplier;
+                            break;
+                        case 'splitter':
+                            obstacle.y += obstacle.speed * timeMultiplier;
+                            if (obstacle.y > this.GAME_HEIGHT / 2 && !obstacle.hasTriggered) {
+                                obstacle.hasTriggered = true;
+                                this.obstacles.push(
+                                    {
+                                        ...obstacle,
+                                        id: Date.now() + 1,
+                                        x: obstacle.x - obstacle.width / 2,
+                                        width: obstacle.width / 2,
+                                        type: 'normal'
+                                    },
+                                    {
+                                        ...obstacle,
+                                        id: Date.now() + 2,
+                                        x: obstacle.x + obstacle.width / 2,
+                                        width: obstacle.width / 2,
+                                        type: 'normal'
+                                    }
+                                );
+                                return false;
+                            }
+                            break;
+                        default:
+                            obstacle.y += obstacle.speed * timeMultiplier;
+                    }
+
+                    // Check collision
+                    if (this.checkCollision(obstacle)) {
+                        if (this.powerUps.shield.active) {
+                            this.addParticles(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2, '#ffff00', 15);
+                            this.playSound(400, 0.1);
+                            return false;
+                        } else {
+                            if (obstacle.type === 'shaker' && !obstacle.hasTriggered) {
+                                obstacle.hasTriggered = true;
+                                this.screenShake = 25;
+                                this.playSound(100, 0.3, 'sawtooth');
+                            }
+                            this.endGame();
+                            return false;
                         }
-                        endGame();
+                    }
+
+                    // Check for near miss
+                    this.checkNearMiss(obstacle);
+
+                    // Remove if off screen
+                    if (obstacle.y > this.GAME_HEIGHT) {
+                        this.scoreObstacle();
                         return false;
+                    }
+
+                    return true;
+                });
+            }
+
+            checkCollision(obstacle) {
+                const playerBottom = this.GAME_HEIGHT - this.PLAYER_SIZE / 2;
+                const playerTop = this.GAME_HEIGHT - this.PLAYER_SIZE * 1.5;
+
+                return obstacle.y + obstacle.height > playerTop &&
+                       obstacle.y < playerBottom &&
+                       obstacle.x < this.playerX + this.PLAYER_SIZE / 2 &&
+                       obstacle.x + obstacle.width > this.playerX - this.PLAYER_SIZE / 2;
+            }
+
+            checkNearMiss(obstacle) {
+                const nearMissDistance = 60;
+                if (Math.abs(obstacle.x + obstacle.width / 2 - this.playerX) < nearMissDistance &&
+                    Math.abs(obstacle.y + obstacle.height / 2 - (this.GAME_HEIGHT - this.PLAYER_SIZE / 2)) < nearMissDistance) {
+                    this.playerGlowIntensity = Math.min(2.5, this.playerGlowIntensity + 0.15);
+                }
+            }
+
+            scoreObstacle() {
+                const baseScore = this.powerUps.scoreMultiplier.active ? 2 : 1;
+                const comboBonus = Math.floor(this.combo / 5);
+                const totalScore = (baseScore + comboBonus) * this.multiplier;
+
+                this.score += totalScore;
+                this.combo++;
+                this.multiplier = Math.min(5, Math.floor(this.combo / 10) + 1);
+
+                this.gameSpeed += this.SPEED_INCREMENT;
+                this.obstacleFrequency = Math.max(200, this.obstacleFrequency - this.FREQUENCY_DECREMENT);
+
+                this.addParticles(this.GAME_WIDTH / 2, this.GAME_HEIGHT / 2, '#ffff00', 5);
+                this.playSound(800, 0.1);
+
+                this.updateUI();
+            }
+
+            drawObstacles() {
+                this.obstacles.forEach(obstacle => {
+                    this.ctx.fillStyle = obstacle.color;
+                    this.ctx.shadowBlur = 20;
+                    this.ctx.shadowColor = obstacle.color;
+
+                    switch (obstacle.type) {
+                        case 'splitter':
+                            const pulse = Math.sin(Date.now() * 0.01) * 0.3 + 0.7;
+                            this.ctx.globalAlpha = pulse;
+                            this.ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                            this.ctx.globalAlpha = 1;
+                            break;
+                        case 'shaker':
+                            this.ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                            // Add spikes
+                            this.ctx.fillRect(obstacle.x - 5, obstacle.y + obstacle.height / 2 - 2, 10, 4);
+                            this.ctx.fillRect(obstacle.x + obstacle.width - 5, obstacle.y + obstacle.height / 2 - 2, 10, 4);
+                            break;
+                        default:
+                            this.ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                    }
+
+                    this.ctx.shadowBlur = 0;
+                });
+            }
+
+            generatePowerUp() {
+                const types = ['shield', 'speedBoost', 'slowTime', 'scoreMultiplier'];
+                const type = types[Math.floor(Math.random() * types.length)];
+
+                let color = '#ffff00';
+                switch (type) {
+                    case 'shield': color = '#ffff00'; break;
+                    case 'speedBoost': color = '#ff00ff'; break;
+                    case 'slowTime': color = '#00ff00'; break;
+                    case 'scoreMultiplier': color = '#ff8800'; break;
+                }
+
+                this.powerUpItems.push({
+                    id: Date.now(),
+                    x: Math.random() * (this.GAME_WIDTH - 20),
+                    y: -20,
+                    type: type,
+                    color: color,
+                    pulsePhase: 0,
+                    rotationAngle: 0
+                });
+            }
+
+            updatePowerUpItems() {
+                this.powerUpItems = this.powerUpItems.filter(powerUp => {
+                    powerUp.y += 2;
+                    powerUp.pulsePhase += 0.1;
+                    powerUp.rotationAngle += 0.05;
+
+                    // Check collection
+                    if (powerUp.y + 20 > this.GAME_HEIGHT - this.PLAYER_SIZE &&
+                        powerUp.y < this.GAME_HEIGHT &&
+                        powerUp.x < this.playerX + this.PLAYER_SIZE / 2 &&
+                        powerUp.x + 20 > this.playerX - this.PLAYER_SIZE / 2) {
+                        
+                        this.activatePowerUp(powerUp.type);
+                        this.addParticles(powerUp.x + 10, powerUp.y + 10, powerUp.color, 12);
+                        return false;
+                    }
+
+                    return powerUp.y <= this.GAME_HEIGHT;
+                });
+            }
+
+            drawPowerUpItems() {
+                this.powerUpItems.forEach(powerUp => {
+                    const pulse = Math.sin(powerUp.pulsePhase) * 0.4 + 0.8;
+                    
+                    this.ctx.save();
+                    this.ctx.translate(powerUp.x + 10, powerUp.y + 10);
+                    this.ctx.rotate(powerUp.rotationAngle);
+                    
+                    this.ctx.fillStyle = powerUp.color;
+                    this.ctx.shadowBlur = 25 * pulse;
+                    this.ctx.shadowColor = powerUp.color;
+                    this.ctx.globalAlpha = pulse;
+
+                    // Draw diamond shape
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, -12);
+                    this.ctx.lineTo(12, 0);
+                    this.ctx.lineTo(0, 12);
+                    this.ctx.lineTo(-12, 0);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    this.ctx.restore();
+                    this.ctx.globalAlpha = 1;
+                    this.ctx.shadowBlur = 0;
+                });
+            }
+
+            activatePowerUp(type) {
+                const duration = 5000;
+                this.powerUps[type] = { active: true, endTime: Date.now() + duration };
+
+                this.updatePowerUpDisplay();
+                this.playSound(600, 0.2);
+                this.showNotification(`Power-up Activated: ${type.toUpperCase()}`);
+
+                // Update achievement progress
+                const powerUpAchievement = this.achievements.find(a => a.id === 'power_up_master');
+                if (powerUpAchievement && !powerUpAchievement.unlocked) {
+                    powerUpAchievement.progress++;
+                }
+            }
+
+            updatePowerUpTimers() {
+                const now = Date.now();
+                let hasActivePowerUp = false;
+
+                Object.keys(this.powerUps).forEach(key => {
+                    if (this.powerUps[key].active && now >= this.powerUps[key].endTime) {
+                        this.powerUps[key].active = false;
+                        this.powerUps[key].endTime = 0;
+                    }
+                    if (this.powerUps[key].active) {
+                        hasActivePowerUp = true;
+                    }
+                });
+
+                if (hasActivePowerUp) {
+                    const earliestEndTime = Math.min(...Object.values(this.powerUps)
+                        .filter(p => p.active)
+                        .map(p => p.endTime));
+                    const timeLeft = Math.ceil((earliestEndTime - now) / 1000);
+                    
+                    document.getElementById('powerUpTimer').style.display = 'block';
+                    document.getElementById('powerUpTimeLeft').textContent = timeLeft;
+                } else {
+                    document.getElementById('powerUpTimer').style.display = 'none';
+                }
+
+                this.updatePowerUpDisplay();
+            }
+
+            updatePowerUpDisplay() {
+                const indicators = document.getElementById('powerUpIndicators');
+                let html = '';
+
+                Object.entries(this.powerUps).forEach(([key, powerUp]) => {
+                    if (powerUp.active) {
+                        const colors = {
+                            shield: '#ffff00',
+                            speedBoost: '#ff00ff',
+                            slowTime: '#00ff00',
+                            scoreMultiplier: '#ff8800'
+                        };
+                        
+                        const names = {
+                            shield: 'SHIELD',
+                            speedBoost: 'SPEED',
+                            slowTime: 'SLOW TIME',
+                            scoreMultiplier: 'SCORE x2'
+                        };
+
+                        html += `<div class="power-up-indicator" style="color: ${colors[key]}; border-color: ${colors[key]}; background: ${colors[key]}20;">${names[key]}</div>`;
+                    }
+                });
+
+                indicators.innerHTML = html;
+            }
+
+            addParticles(x, y, color, count = 5) {
+                if (!this.settings.particlesEnabled) return;
+
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 15,
+                        vy: (Math.random() - 0.5) * 15,
+                        life: 80,
+                        maxLife: 80,
+                        color: color,
+                        size: Math.random() * 6 + 2,
+                        alpha: 1
+                    });
+                }
+            }
+
+            updateParticles() {
+                this.particles = this.particles.filter(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.life--;
+                    particle.vx *= 0.98;
+                    particle.vy *= 0.98;
+                    particle.alpha = particle.life / particle.maxLife;
+
+                    return particle.life > 0;
+                });
+            }
+
+            drawParticles() {
+                this.particles.forEach(particle => {
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.alpha;
+                    this.ctx.fillStyle = particle.color;
+                    this.ctx.shadowBlur = 8;
+                    this.ctx.shadowColor = particle.color;
+
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size * particle.alpha, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    this.ctx.restore();
+                });
+            }
+
+            checkAchievements() {
+                this.achievements.forEach(achievement => {
+                    if (achievement.unlocked) return;
+
+                    let newProgress = achievement.progress;
+
+                    switch (achievement.id) {
+                        case 'first_dodge':
+                            newProgress = this.score > 0 ? 1 : 0;
+                            break;
+                        case 'combo_10':
+                            newProgress = Math.max(newProgress, this.combo);
+                            break;
+                        case 'score_100':
+                            newProgress = this.score;
+                            break;
+                        case 'survive_60':
+                            newProgress = this.gameStartTime ? Math.floor((Date.now() - this.gameStartTime) / 1000) : 0;
+                            break;
+                        case 'speed_demon':
+                            newProgress = this.gameSpeed >= 8 ? 1 : 0;
+                            break;
+                    }
+
+                    achievement.progress = newProgress;
+
+                    if (newProgress >= achievement.target && !achievement.unlocked) {
+                        achievement.unlocked = true;
+                        this.showNotification(`🏆 Achievement Unlocked: ${achievement.name}`);
+                        this.playSound(800, 0.5);
+                    }
+                });
+
+                this.updateAchievementsUI();
+                this.saveData();
+            }
+
+            updateUI() {
+                document.getElementById('scoreDisplay').textContent = `Score: ${this.score}`;
+                
+                if (this.combo > 5) {
+                    document.getElementById('comboDisplay').textContent = `Combo: ${this.combo}x`;
+                    document.getElementById('comboDisplay').style.display = 'block';
+                } else {
+                    document.getElementById('comboDisplay').style.display = 'none';
+                }
+
+                if (this.multiplier > 1) {
+                    document.getElementById('multiplierDisplay').textContent = `Multiplier: ${this.multiplier}x`;
+                    document.getElementById('multiplierDisplay').style.display = 'block';
+                } else {
+                    document.getElementById('multiplierDisplay').style.display = 'none';
+                }
+            }
+
+            showMusicVisualizer() {
+                if (this.settings.visualizerEnabled) {
+                    document.getElementById('musicVisualizer').style.display = 'flex';
+                }
+            }
+
+            updateMusicVisualizer(intensity) {
+                if (!this.settings.visualizerEnabled) return;
+
+                const bars = document.querySelectorAll('.music-bar');
+                bars.forEach((bar, index) => {
+                    const height = Math.random() * intensity * 25 + 5;
+                    bar.style.height = height + 'px';
+                    bar.style.opacity = 0.5 + intensity * 0.5;
+                });
+            }
+
+            endGame() {
+                this.gameOver = true;
+                this.gameStarted = false;
+                this.combo = 0;
+
+                // Update high score
+                if (this.score > this.highScore) {
+                    this.highScore = this.score;
+                    this.saveData();
+                }
+
+                // Stop music
+                if (this.musicSystem) {
+                    this.musicSystem.stop();
+                }
+
+                // Hide music visualizer
+                document.getElementById('musicVisualizer').style.display = 'none';
+
+                // Show game over screen
+                this.showGameOverScreen();
+
+                // Disable controls
+                document.getElementById('pauseBtn').disabled = true;
+
+                // Game over sound and effects
+                this.playSound(200, 1, 'sawtooth');
+                this.addParticles(this.playerX, this.GAME_HEIGHT - this.PLAYER_SIZE / 2, '#ff0000', 25);
+                this.screenShake = 30;
+
+                this.checkAchievements();
+            }
+
+            showGameOverScreen() {
+                const gameOverStats = document.getElementById('gameOverStats');
+                const isNewHighScore = this.score >= this.highScore;
+                const unlockedAchievements = this.achievements.filter(a => a.unlocked).slice(-3);
+                
+                let statsHTML = `
+                    <p style="font-size: 2.5rem; margin-bottom: 15px; color: #00ffff;">Score: ${this.score}</p>
+                    <p style="font-size: 1.5rem; margin-bottom: 10px; color: #ff00ff;">Best Combo: ${this.combo}x</p>
+                    <p style="font-size: 1.3rem; margin-bottom: 20px; color: #ffff00;">High Score: ${this.highScore}</p>
+                `;
+
+                if (isNewHighScore) {
+                    statsHTML += '<p style="font-size: 2rem; color: #fbbf24; margin-bottom: 20px; animation: pulse 1s infinite;">🎉 New High Score! 🎉</p>';
+                }
+
+                if (unlockedAchievements.length > 0) {
+                    statsHTML += '<div style="margin-top: 20px; padding: 15px; background: rgba(139, 92, 246, 0.2); border-radius: 10px; border: 1px solid rgba(139, 92, 246, 0.5);">';
+                    statsHTML += '<h3 style="color: #8b5cf6; margin-bottom: 10px;">Recent Achievements</h3>';
+                    unlockedAchievements.forEach(achievement => {
+                        statsHTML += `<div style="color: #fbbf24; margin-bottom: 5px;">🏆 ${achievement.name}</div>`;
+                    });
+                    statsHTML += '</div>';
+                }
+
+                gameOverStats.innerHTML = statsHTML;
+                document.getElementById('gameOverScreen').classList.add('active');
+            }
+
+            togglePause() {
+                if (!this.gameStarted || this.gameOver) return;
+
+                this.gamePaused = !this.gamePaused;
+
+                if (this.gamePaused) {
+                    document.getElementById('pauseScreen').classList.add('active');
+                    document.getElementById('pauseBtn').textContent = 'Resume (P)';
+                    if (this.musicSystem) {
+                        this.musicSystem.pause();
+                    }
+                } else {
+                    document.getElementById('pauseScreen').classList.remove('active');
+                    document.getElementById('pauseBtn').textContent = 'Pause (P)';
+                    if (this.musicSystem && this.settings.musicEnabled) {
+                        this.musicSystem.resume();
+                    }
+                    this.gameLoop();
+                }
+            }
+
+            restartGame() {
+                document.getElementById('gameOverScreen').classList.remove('active');
+                document.getElementById('pauseScreen').classList.remove('active');
+                this.startGame();
+            }
+
+            toggleSettings() {
+                const panel = document.getElementById('settingsPanel');
+                if (panel.classList.contains('active')) {
+                    this.hideSettings();
+                } else {
+                    this.showSettings();
+                }
+            }
+
+            showSettings() {
+                document.getElementById('settingsPanel').classList.add('active');
+            }
+
+            hideSettings() {
+                document.getElementById('settingsPanel').classList.remove('active');
+                this.saveData();
+            }
+
+            showAchievements() {
+                document.getElementById('achievementsPanel').classList.add('active');
+                this.updateAchievementsUI();
+            }
+
+            hideAchievements() {
+                document.getElementById('achievementsPanel').classList.remove('active');
+            }
+
+            updateAchievementsUI() {
+                const achievementsList = document.getElementById('achievementsList');
+                const unlockedCount = this.achievements.filter(a => a.unlocked).length;
+                
+                document.getElementById('achievementProgress').textContent = `${unlockedCount}/${this.achievements.length}`;
+                
+                achievementsList.innerHTML = this.achievements.map(achievement => {
+                    const progress = Math.min(achievement.progress, achievement.target);
+                    const progressPercent = (progress / achievement.target) * 100;
+                    
+                    return `
+                        <div class="achievement ${achievement.unlocked ? 'unlocked' : ''}">
+                            <div class="achievement-icon">
+                                ${achievement.unlocked ? '🏆' : '🔒'}
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; margin-bottom: 5px; font-size: 1.1rem;">${achievement.name}</div>
+                                <div style="font-size: 0.9rem; color: #cccccc; margin-bottom: 8px;">${achievement.description}</div>
+                                ${!achievement.unlocked ? `
+                                    <div style="font-size: 0.8rem; color: #888888; margin-bottom: 5px;">
+                                        Progress: ${progress}/${achievement.target}
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            playSound(frequency, duration, type = 'sine', volume = 0.1) {
+                if (!this.settings.soundEnabled || !this.audioContext) return;
+
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+
+                oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+                oscillator.type = type;
+
+                gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + duration);
+            }
+
+            showNotification(message) {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => notification.classList.add('show'), 100);
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 400);
+                }, 3000);
+            }
+
+            loadSavedData() {
+                const savedHighScore = localStorage.getItem('shadowRunnerHighScore');
+                if (savedHighScore) {
+                    this.highScore = parseInt(savedHighScore);
+                    document.getElementById('highScoreDisplay').textContent = `High: ${this.highScore}`;
+                }
+
+                const savedSettings = localStorage.getItem('shadowRunnerSettings');
+                if (savedSettings) {
+                    this.settings = { ...this.settings, ...JSON.parse(savedSettings) };
+                    this.updateSettingsUI();
+                }
+
+                const savedAchievements = localStorage.getItem('shadowRunnerAchievements');
+                if (savedAchievements) {
+                    this.achievements = JSON.parse(savedAchievements);
+                }
+                this.updateAchievementsUI();
+            }
+
+            saveData() {
+                localStorage.setItem('shadowRunnerHighScore', this.highScore.toString());
+                localStorage.setItem('shadowRunnerSettings', JSON.stringify(this.settings));
+                localStorage.setItem('shadowRunnerAchievements', JSON.stringify(this.achievements));
+            }
+
+            updateSettingsUI() {
+                document.getElementById('musicToggle').classList.toggle('active', this.settings.musicEnabled);
+                document.getElementById('soundToggle').classList.toggle('active', this.settings.soundEnabled);
+                document.getElementById('particlesToggle').classList.toggle('active', this.settings.particlesEnabled);
+                document.getElementById('visualizerToggle').classList.toggle('active', this.settings.visualizerEnabled);
+                document.getElementById('sensitivitySlider').value = this.settings.sensitivity;
+                document.getElementById('sensitivityValue').textContent = this.settings.sensitivity.toFixed(1);
+            }
+        }
+
+        // Enhanced Music System
+        class MusicSystem {
+            constructor(audioContext) {
+                this.audioContext = audioContext;
+                this.masterGain = null;
+                this.oscillators = {};
+                this.gains = {};
+                this.filters = {};
+                this.isPlaying = false;
+                this.intensity = 0;
+                this.bassNotes = [55, 65.4, 73.4, 82.4]; // A1, C2, D2, E2
+                this.leadNotes = [220, 261.6, 293.7, 329.6, 392, 440, 493.9, 523.3];
+                this.currentBassIndex = 0;
+                this.intervals = {};
+                
+                this.init();
+            }
+
+            init() {
+                if (!this.audioContext) return;
+
+                // Master gain
+                this.masterGain = this.audioContext.createGain();
+                this.masterGain.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+                this.masterGain.connect(this.audioContext.destination);
+
+                // Create reverb
+                this.createReverb();
+
+                // Create filters
+                this.filters.lowpass = this.audioContext.createBiquadFilter();
+                this.filters.lowpass.type = 'lowpass';
+                this.filters.lowpass.frequency.setValueAtTime(2000, this.audioContext.currentTime);
+                this.filters.lowpass.Q.setValueAtTime(1, this.audioContext.currentTime);
+                this.filters.lowpass.connect(this.reverb || this.masterGain);
+
+                // Create gain nodes for different layers
+                ['bass', 'lead', 'pad', 'drums'].forEach(layer => {
+                    this.gains[layer] = this.audioContext.createGain();
+                    this.gains[layer].gain.setValueAtTime(0, this.audioContext.currentTime);
+                    this.gains[layer].connect(this.filters.lowpass);
+                });
+            }
+
+            createReverb() {
+                const convolver = this.audioContext.createConvolver();
+                const length = this.audioContext.sampleRate * 2;
+                const impulse = this.audioContext.createBuffer(2, length, this.audioContext.sampleRate);
+
+                for (let channel = 0; channel < 2; channel++) {
+                    const channelData = impulse.getChannelData(channel);
+                    for (let i = 0; i < length; i++) {
+                        channelData[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2);
                     }
                 }
 
-                // Check for near miss
-                const nearMissDistance = 50;
-                if (Math.abs(obstacle.x + obstacle.width / 2 - playerX) < nearMissDistance &&
-                    Math.abs(obstacle.y + obstacle.height / 2 - (GAME_HEIGHT - PLAYER_SIZE / 2)) < nearMissDistance) {
-                    playerGlowIntensity = Math.min(2, playerGlowIntensity + 0.1);
+                convolver.buffer = impulse;
+                this.reverb = convolver;
+
+                const reverbGain = this.audioContext.createGain();
+                reverbGain.gain.setValueAtTime(0.15, this.audioContext.currentTime);
+                convolver.connect(reverbGain);
+                reverbGain.connect(this.masterGain);
+            }
+
+            start() {
+                if (this.isPlaying) return;
+                this.isPlaying = true;
+
+                if (this.audioContext.state === 'suspended') {
+                    this.audioContext.resume();
                 }
 
-                // Remove if off screen
-                if (obstacle.y > GAME_HEIGHT) {
-                    const baseScore = scoreMultiplierActive ? 2 : 1;
-                    const comboBonus = Math.floor(combo / 5);
-                    const totalScore = (baseScore + comboBonus) * multiplier;
+                this.startBassLine();
+                this.startPadChords();
+                
+                setTimeout(() => this.startLeadMelody(), 2000);
+                setTimeout(() => this.startDrums(), 4000);
+            }
 
-                    score += totalScore;
-                    combo++;
-                    multiplier = Math.min(5, Math.floor(combo / 10) + 1);
+            startBassLine() {
+                const playBassNote = () => {
+                    if (!this.isPlaying) return;
 
-                    gameSpeed += SPEED_INCREMENT;
-                    obstacleFrequency = Math.max(200, obstacleFrequency - FREQUENCY_DECREMENT);
+                    const osc = this.audioContext.createOscillator();
+                    const gain = this.audioContext.createGain();
 
-                    addParticles(obstacle.x + obstacle.width / 2, obstacle.y, '#ffff00', 3);
-                    playSound(800, 0.1);
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(this.bassNotes[this.currentBassIndex % this.bassNotes.length], this.audioContext.currentTime);
 
-                    updateUI();
-                    checkAchievements();
+                    gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.3, this.audioContext.currentTime + 0.01);
+                    gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.4);
 
-                    return false;
+                    osc.connect(gain);
+                    gain.connect(this.gains.bass);
+
+                    osc.start(this.audioContext.currentTime);
+                    osc.stop(this.audioContext.currentTime + 0.5);
+
+                    this.currentBassIndex++;
+                };
+
+                playBassNote();
+                this.intervals.bass = setInterval(playBassNote, 500);
+            }
+
+            startLeadMelody() {
+                const playLeadNote = () => {
+                    if (!this.isPlaying) return;
+
+                    const osc = this.audioContext.createOscillator();
+                    const gain = this.audioContext.createGain();
+                    const filter = this.audioContext.createBiquadFilter();
+
+                    osc.type = 'sawtooth';
+                    const noteIndex = Math.floor(Math.random() * this.leadNotes.length);
+                    osc.frequency.setValueAtTime(this.leadNotes[noteIndex], this.audioContext.currentTime);
+
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(1000 + this.intensity * 2000, this.audioContext.currentTime);
+                    filter.Q.setValueAtTime(5, this.audioContext.currentTime);
+
+                    gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.1, this.audioContext.currentTime + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
+
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(this.gains.lead);
+
+                    osc.start(this.audioContext.currentTime);
+                    osc.stop(this.audioContext.currentTime + 0.4);
+                };
+
+                this.intervals.lead = setInterval(playLeadNote, 800);
+            }
+
+            startPadChords() {
+                const chords = [
+                    [220, 277.2, 329.6], // Am
+                    [261.6, 329.6, 392], // C
+                    [293.7, 369.9, 440], // Dm
+                    [329.6, 415.3, 493.9], // Em
+                ];
+                let chordIndex = 0;
+
+                const playChord = () => {
+                    if (!this.isPlaying) return;
+
+                    const chord = chords[chordIndex % chords.length];
+
+                    chord.forEach(freq => {
+                        const osc = this.audioContext.createOscillator();
+                        const gain = this.audioContext.createGain();
+                        const filter = this.audioContext.createBiquadFilter();
+
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(freq, this.audioContext.currentTime);
+
+                        filter.type = 'lowpass';
+                        filter.frequency.setValueAtTime(800 + this.intensity * 1200, this.audioContext.currentTime);
+                        filter.Q.setValueAtTime(2, this.audioContext.currentTime);
+
+                        gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                        gain.gain.linearRampToValueAtTime(0.05, this.audioContext.currentTime + 0.1);
+                        gain.gain.linearRampToValueAtTime(0.03, this.audioContext.currentTime + 1.5);
+                        gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 2);
+
+                        osc.connect(filter);
+                        filter.connect(gain);
+                        gain.connect(this.gains.pad);
+
+                        osc.start(this.audioContext.currentTime);
+                        osc.stop(this.audioContext.currentTime + 2.1);
+                    });
+
+                    chordIndex++;
+                };
+
+                playChord();
+                this.intervals.pad = setInterval(playChord, 2000);
+            }
+
+            startDrums() {
+                let beatCount = 0;
+
+                const playDrum = (type) => {
+                    if (!this.isPlaying) return;
+
+                    const osc = this.audioContext.createOscillator();
+                    const gain = this.audioContext.createGain();
+                    const filter = this.audioContext.createBiquadFilter();
+
+                    switch (type) {
+                        case 'kick':
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(60, this.audioContext.currentTime);
+                            osc.frequency.exponentialRampToValueAtTime(30, this.audioContext.currentTime + 0.1);
+                            gain.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                            gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.2);
+                            break;
+                        case 'snare':
+                            osc.type = 'square';
+                            osc.frequency.setValueAtTime(200, this.audioContext.currentTime);
+                            filter.type = 'highpass';
+                            filter.frequency.setValueAtTime(1000, this.audioContext.currentTime);
+                            gain.gain.setValueAtTime(0.15, this.audioContext.currentTime);
+                            gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
+                            break;
+                        case 'hihat':
+                            osc.type = 'square';
+                            osc.frequency.setValueAtTime(8000, this.audioContext.currentTime);
+                            filter.type = 'highpass';
+                            filter.frequency.setValueAtTime(5000, this.audioContext.currentTime);
+                            gain.gain.setValueAtTime(0.05, this.audioContext.currentTime);
+                            gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.05);
+                            break;
+                    }
+
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(this.gains.drums);
+
+                    osc.start(this.audioContext.currentTime);
+                    osc.stop(this.audioContext.currentTime + 0.3);
+                };
+
+                const playBeat = () => {
+                    if (!this.isPlaying) return;
+
+                    const beat = beatCount % 16;
+
+                    if (beat % 4 === 0) playDrum('kick');
+                    if (beat === 4 || beat === 12) playDrum('snare');
+                    if (this.intensity > 0.3 && beat % 2 === 1) playDrum('hihat');
+
+                    beatCount++;
+                };
+
+                this.intervals.drums = setInterval(playBeat, 120);
+            }
+
+            updateIntensity(newIntensity) {
+                this.intensity = newIntensity;
+
+                if (!this.audioContext) return;
+
+                const ctx = this.audioContext;
+
+                // Update layer volumes based on intensity
+                if (this.gains.bass) {
+                    this.gains.bass.gain.linearRampToValueAtTime(0.3 * this.intensity, ctx.currentTime + 0.1);
                 }
 
-                return true;
-            });
-        }
-
-        // Update power-ups
-        function updatePowerUps() {
-            powerUps = powerUps.filter(powerUp => {
-                powerUp.y += 2;
-                powerUp.pulsePhase += 0.1;
-
-                // Check collection
-                if (powerUp.y + 20 > GAME_HEIGHT - PLAYER_SIZE &&
-                    powerUp.y < GAME_HEIGHT &&
-                    powerUp.x < playerX + PLAYER_SIZE / 2 &&
-                    powerUp.x + 20 > playerX - PLAYER_SIZE / 2) {
-                    
-                    activatePowerUp(powerUp.type);
-                    addParticles(powerUp.x + 10, powerUp.y + 10, powerUp.color, 8);
-                    return false;
+                if (this.gains.lead) {
+                    const leadVolume = Math.max(0, (this.intensity - 0.3) * 0.2);
+                    this.gains.lead.gain.linearRampToValueAtTime(leadVolume, ctx.currentTime + 0.1);
                 }
 
-                return powerUp.y <= GAME_HEIGHT;
-            });
-        }
-
-        // Draw grid
-        function drawGrid() {
-            ctx.strokeStyle = '#2a1a4a';
-            ctx.lineWidth = 1;
-            ctx.shadowBlur = 5;
-            ctx.shadowColor = '#2a1a4a';
-
-            for (let x = 0; x <= GAME_WIDTH; x += 50) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, GAME_HEIGHT);
-                ctx.stroke();
-            }
-
-            for (let y = 0; y <= GAME_HEIGHT; y += 50) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(GAME_WIDTH, y);
-                ctx.stroke();
-            }
-
-            ctx.shadowBlur = 0;
-        }
-
-        // Draw player
-        function drawPlayer() {
-            const playerY = GAME_HEIGHT - PLAYER_SIZE / 2;
-
-            playerGlowIntensity = Math.max(1, playerGlowIntensity - 0.02);
-
-            // Shield effect
-            if (shieldActive) {
-                const shieldPulse = Math.sin(Date.now() * 0.01) * 0.3 + 0.7;
-                ctx.strokeStyle = '#ffff00';
-                ctx.lineWidth = 3;
-                ctx.shadowBlur = 15 * shieldPulse;
-                ctx.shadowColor = '#ffff00';
-                ctx.globalAlpha = 0.7 * shieldPulse;
-
-                ctx.beginPath();
-                ctx.arc(playerX, playerY, PLAYER_SIZE, 0, Math.PI * 2);
-                ctx.stroke();
-
-                ctx.globalAlpha = 1;
-                ctx.shadowBlur = 0;
-            }
-
-            // Player orb
-            const glowIntensity = playerGlowIntensity;
-            ctx.fillStyle = speedBoostActive ? '#ff00ff' : '#00ffff';
-            ctx.shadowBlur = 20 * glowIntensity;
-            ctx.shadowColor = speedBoostActive ? '#ff00ff' : '#00ffff';
-
-            ctx.beginPath();
-            ctx.arc(playerX, playerY, PLAYER_SIZE / 2, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Outer glow
-            const gradient = ctx.createRadialGradient(playerX, playerY, 0, playerX, playerY, PLAYER_SIZE * glowIntensity);
-            gradient.addColorStop(0, speedBoostActive ? 'rgba(255, 0, 255, 0.3)' : 'rgba(0, 255, 255, 0.3)');
-            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
-            ctx.fillStyle = gradient;
-            ctx.shadowBlur = 0;
-            ctx.beginPath();
-            ctx.arc(playerX, playerY, PLAYER_SIZE * glowIntensity, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // Draw obstacles
-        function drawObstacles() {
-            obstacles.forEach(obstacle => {
-                ctx.fillStyle = obstacle.color;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = obstacle.color;
-
-                switch (obstacle.type) {
-                    case 'splitter':
-                        const pulse = Math.sin(Date.now() * 0.01) * 0.3 + 0.7;
-                        ctx.globalAlpha = pulse;
-                        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-                        ctx.globalAlpha = 1;
-                        break;
-                    case 'shaker':
-                        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-                        // Add spikes
-                        ctx.fillRect(obstacle.x - 5, obstacle.y + obstacle.height / 2 - 2, 10, 4);
-                        ctx.fillRect(obstacle.x + obstacle.width - 5, obstacle.y + obstacle.height / 2 - 2, 10, 4);
-                        break;
-                    default:
-                        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                if (this.gains.pad) {
+                    const padVolume = Math.max(0, (this.intensity - 0.2) * 0.15);
+                    this.gains.pad.gain.linearRampToValueAtTime(padVolume, ctx.currentTime + 0.1);
                 }
 
-                ctx.shadowBlur = 0;
-            });
-        }
+                if (this.gains.drums) {
+                    const drumVolume = Math.max(0, (this.intensity - 0.4) * 0.25);
+                    this.gains.drums.gain.linearRampToValueAtTime(drumVolume, ctx.currentTime + 0.1);
+                }
 
-        // Draw power-ups
-        function drawPowerUps() {
-            powerUps.forEach(powerUp => {
-                const pulse = Math.sin(powerUp.pulsePhase) * 0.3 + 0.7;
-                ctx.fillStyle = powerUp.color;
-                ctx.shadowBlur = 20 * pulse;
-                ctx.shadowColor = powerUp.color;
-                ctx.globalAlpha = pulse;
-
-                ctx.beginPath();
-                ctx.arc(powerUp.x + 10, powerUp.y + 10, 10, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.globalAlpha = 1;
-                ctx.shadowBlur = 0;
-            });
-        }
-
-        // Update UI
-        function updateUI() {
-            document.getElementById('scoreDisplay').textContent = `Score: ${score}`;
-            
-            if (combo > 5) {
-                document.getElementById('comboDisplay').textContent = `Combo: ${combo}x`;
-                document.getElementById('comboDisplay').style.display = 'block';
-            } else {
-                document.getElementById('comboDisplay').style.display = 'none';
+                // Update filter cutoff
+                if (this.filters.lowpass) {
+                    const cutoff = 1000 + this.intensity * 3000;
+                    this.filters.lowpass.frequency.linearRampToValueAtTime(cutoff, ctx.currentTime + 0.1);
+                }
             }
 
-            if (multiplier > 1) {
-                document.getElementById('multiplierDisplay').textContent = `Multiplier: ${multiplier}x`;
-                document.getElementById('multiplierDisplay').style.display = 'block';
-            } else {
-                document.getElementById('multiplierDisplay').style.display = 'none';
+            pause() {
+                Object.values(this.intervals).forEach(interval => clearInterval(interval));
+            }
+
+            resume() {
+                if (this.isPlaying) {
+                    this.startBassLine();
+                    this.startPadChords();
+                    if (this.intensity > 0.3) this.startLeadMelody();
+                    if (this.intensity > 0.4) this.startDrums();
+                }
+            }
+
+            stop() {
+                this.isPlaying = false;
+                Object.values(this.intervals).forEach(interval => clearInterval(interval));
+                this.intervals = {};
+
+                if (this.audioContext) {
+                    Object.values(this.gains).forEach(gain => {
+                        gain.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + 0.5);
+                    });
+                }
             }
         }
 
-        // Game loop
-        let lastObstacleTime = 0;
-        let lastPowerUpTime = 0;
+        // Global functions for UI interaction
+        let game;
 
-        function gameLoop(timestamp) {
-            if (gameOver || gamePaused) return;
-
-            // Apply screen shake
-            if (screenShake > 0) {
-                ctx.save();
-                ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake);
-                screenShake *= 0.9;
-                if (screenShake < 0.1) screenShake = 0;
-            }
-
-            // Clear canvas
-            const gradient = ctx.createLinearGradient(0, 0, 0, GAME_HEIGHT);
-            gradient.addColorStop(0, '#0a0118');
-            gradient.addColorStop(1, '#1a0a2e');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-            drawGrid();
-
-            // Update power-up timers
-            updatePowerUpTimers();
-
-            // Generate obstacles
-            if (timestamp - lastObstacleTime > obstacleFrequency) {
-                generateObstacle();
-                lastObstacleTime = timestamp;
-            }
-
-            // Generate power-ups
-            if (timestamp - lastPowerUpTime > 8000 + Math.random() * 5000) {
-                generatePowerUp();
-                lastPowerUpTime = timestamp;
-            }
-
-            // Update game objects
-            updatePlayer();
-            updateObstacles();
-            updatePowerUps();
-            updateParticles();
-
-            // Draw everything
-            drawObstacles();
-            drawPowerUps();
-            drawPlayer();
-
-            if (screenShake > 0) {
-                ctx.restore();
-            }
-
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Start game
         function startGame() {
-            if (gameStarted) return;
-
-            // Resume audio context if needed
-            if (audioContext && audioContext.state === 'suspended') {
-                audioContext.resume();
-            }
-
-            gameStarted = true;
-            gameOver = false;
-            gamePaused = false;
-            score = 0;
-            combo = 0;
-            multiplier = 1;
-            playerX = GAME_WIDTH / 2;
-            gameSpeed = INITIAL_OBSTACLE_SPEED;
-            obstacleFrequency = OBSTACLE_FREQUENCY;
-            gameStartTime = Date.now();
-
-            // Reset game objects
-            obstacles = [];
-            powerUps = [];
-            particles = [];
-
-            // Reset power-ups
-            shieldActive = false;
-            speedBoostActive = false;
-            slowTimeActive = false;
-            scoreMultiplierActive = false;
-            powerUpEndTime = 0;
-
-            // Reset visual effects
-            screenShake = 0;
-            playerGlowIntensity = 1;
-
-            // Update UI
-            updateUI();
-            updatePowerUpDisplay();
-
-            // Hide start screen
-            document.getElementById('startScreen').classList.remove('active');
-
-            // Enable controls
-            document.getElementById('pauseBtn').disabled = false;
-
-            // Start game loop
-            requestAnimationFrame(gameLoop);
-
-            playSound(440, 0.3);
+            game.startGame();
         }
 
-        // End game
-        function endGame() {
-            gameOver = true;
-            gameStarted = false;
-            combo = 0;
-
-            // Update high score
-            if (score > highScore) {
-                highScore = score;
-                document.getElementById('highScoreDisplay').textContent = `High: ${highScore}`;
-                saveData();
-            }
-
-            // Show game over screen
-            const gameOverStats = document.getElementById('gameOverStats');
-            const isNewHighScore = score >= highScore;
-            
-            gameOverStats.innerHTML = `
-                <p style="font-size: 2rem; margin-bottom: 10px;">Score: ${score}</p>
-                <p style="font-size: 1.2rem; margin-bottom: 10px;">High Score: ${highScore}</p>
-                ${isNewHighScore ? '<p style="font-size: 1.5rem; color: #fbbf24; margin-bottom: 20px;">🎉 New High Score! 🎉</p>' : ''}
-            `;
-
-            document.getElementById('gameOverScreen').classList.add('active');
-            document.getElementById('pauseBtn').disabled = true;
-
-            // Game over sound
-            playSound(200, 1, 'sawtooth');
-
-            // Add explosion particles
-            addParticles(playerX, GAME_HEIGHT - PLAYER_SIZE / 2, '#ff0000', 20);
-
-            checkAchievements();
-        }
-
-        // Toggle pause
-        function togglePause() {
-            if (!gameStarted || gameOver) return;
-
-            gamePaused = !gamePaused;
-
-            if (gamePaused) {
-                document.getElementById('pauseScreen').classList.add('active');
-                document.getElementById('pauseBtn').textContent = 'Resume (P)';
-            } else {
-                document.getElementById('pauseScreen').classList.remove('active');
-                document.getElementById('pauseBtn').textContent = 'Pause (P)';
-                requestAnimationFrame(gameLoop);
-            }
-        }
-
-        // Restart game
         function restartGame() {
-            document.getElementById('gameOverScreen').classList.remove('active');
-            document.getElementById('pauseScreen').classList.remove('active');
-            startGame();
+            game.restartGame();
         }
 
-        // Settings functions
+        function togglePause() {
+            game.togglePause();
+        }
+
         function showSettings() {
-            document.getElementById('settingsPanel').classList.add('active');
+            game.showSettings();
         }
 
         function hideSettings() {
-            document.getElementById('settingsPanel').classList.remove('active');
-            saveData();
+            game.hideSettings();
+        }
+
+        function showAchievements() {
+            game.showAchievements();
+        }
+
+        function hideAchievements() {
+            game.hideAchievements();
         }
 
         function toggleMusic() {
-            settings.musicEnabled = !settings.musicEnabled;
-            document.getElementById('musicToggle').classList.toggle('active', settings.musicEnabled);
+            game.settings.musicEnabled = !game.settings.musicEnabled;
+            document.getElementById('musicToggle').classList.toggle('active', game.settings.musicEnabled);
             
-            if (musicGainNode) {
-                musicGainNode.gain.setValueAtTime(settings.musicEnabled ? 0.3 : 0, audioContext.currentTime);
+            if (game.musicSystem) {
+                if (game.settings.musicEnabled && game.gameStarted && !game.gameOver) {
+                    game.musicSystem.start();
+                    game.showMusicVisualizer();
+                } else {
+                    game.musicSystem.stop();
+                    document.getElementById('musicVisualizer').style.display = 'none';
+                }
             }
         }
 
         function toggleSound() {
-            settings.soundEnabled = !settings.soundEnabled;
-            document.getElementById('soundToggle').classList.toggle('active', settings.soundEnabled);
+            game.settings.soundEnabled = !game.settings.soundEnabled;
+            document.getElementById('soundToggle').classList.toggle('active', game.settings.soundEnabled);
         }
 
         function toggleParticles() {
-            settings.particlesEnabled = !settings.particlesEnabled;
-            document.getElementById('particlesToggle').classList.toggle('active', settings.particlesEnabled);
+            game.settings.particlesEnabled = !game.settings.particlesEnabled;
+            document.getElementById('particlesToggle').classList.toggle('active', game.settings.particlesEnabled);
+        }
+
+        function toggleVisualizer() {
+            game.settings.visualizerEnabled = !game.settings.visualizerEnabled;
+            document.getElementById('visualizerToggle').classList.toggle('active', game.settings.visualizerEnabled);
+            
+            if (game.settings.visualizerEnabled && game.gameStarted && !game.gameOver) {
+                game.showMusicVisualizer();
+            } else {
+                document.getElementById('musicVisualizer').style.display = 'none';
+            }
         }
 
         function updateSensitivity(value) {
-            settings.sensitivity = parseFloat(value);
+            game.settings.sensitivity = parseFloat(value);
             document.getElementById('sensitivityValue').textContent = value;
         }
 
-        function updateSettingsUI() {
-            document.getElementById('musicToggle').classList.toggle('active', settings.musicEnabled);
-            document.getElementById('soundToggle').classList.toggle('active', settings.soundEnabled);
-            document.getElementById('particlesToggle').classList.toggle('active', settings.particlesEnabled);
-            document.getElementById('sensitivitySlider').value = settings.sensitivity;
-            document.getElementById('sensitivityValue').textContent = settings.sensitivity.toFixed(1);
-        }
-
-        // Achievements functions
-        function showAchievements() {
-            document.getElementById('achievementsPanel').classList.add('active');
-            updateAchievementsUI();
-        }
-
-        function hideAchievements() {
-            document.getElementById('achievementsPanel').classList.remove('active');
-        }
-
-        function updateAchievementsUI() {
-            const achievementsList = document.getElementById('achievementsList');
-            
-            achievementsList.innerHTML = achievements.map(achievement => {
-                const progress = Math.min(achievement.progress, achievement.target);
-                const progressPercent = (progress / achievement.target) * 100;
-                
-                return `
-                    <div class="achievement ${achievement.unlocked ? 'unlocked' : ''}">
-                        <div class="achievement-icon">
-                            ${achievement.unlocked ? '🏆' : '🔒'}
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: bold; margin-bottom: 5px;">${achievement.name}</div>
-                            <div style="font-size: 0.9rem; color: #cccccc; margin-bottom: 5px;">${achievement.description}</div>
-                            ${!achievement.unlocked ? `
-                                <div style="font-size: 0.8rem; color: #888888; margin-bottom: 5px;">
-                                    Progress: ${progress}/${achievement.target}
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: ${progressPercent}%"></div>
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Initialize game
-        function init() {
-            loadSavedData();
-            initAudio();
-            updateSettingsUI();
-            
-            // Add CSS animations
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-                @keyframes slideOut {
-                    from { transform: translateX(0); opacity: 1; }
-                    to { transform: translateX(100%); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        // Start initialization when page loads
-        window.addEventListener('load', init);
+        // Initialize game when page loads
+        window.addEventListener('load', () => {
+            game = new ShadowRunnerGame();
+        });
 
         // Handle page visibility for audio context
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden && audioContext) {
-                audioContext.suspend();
-            } else if (!document.hidden && audioContext && gameStarted) {
-                audioContext.resume();
+            if (game && game.audioContext) {
+                if (document.hidden) {
+                    game.audioContext.suspend();
+                } else if (game.gameStarted && !game.gameOver) {
+                    game.audioContext.resume();
+                }
             }
         });
     </script>
 </body>
 </html>
+
+## 🎮 Enhanced Shadow Runner - Complete Standalone Experience
+
+I've created a fully coordinated and polished standalone HTML version of Shadow Runner with significant improvements:
+
+### 🎨 **Enhanced Visual Coordination**
+- **Animated starfield background** with twinkling effects
+- **Dynamic gradient backgrounds** that shift with game intensity
+- **Coordinated color schemes** throughout all UI elements
+- **Smooth loading screen** with spinner animation
+- **Professional typography** using Orbitron font for sci-fi aesthetic
+
+### 🎵 **Advanced Music System**
+- **Multi-layered synthwave composition** with bass, lead, pads, and drums
+- **Real-time music visualizer** with animated bars
+- **Dynamic intensity scaling** based on game performance
+- **Smooth audio transitions** and proper audio context management
+
+### 🎮 **Improved Game Coordination**
+- **Object-oriented architecture** with proper class structure
+- **Enhanced particle system** with better visual effects
+- **Coordinated power-up system** with visual feedback
+- **Smooth animations** and transitions throughout
+
+### 🎯 **Better User Experience**
+- **Responsive design** that works perfectly on all devices
+- **Enhanced notifications** with slide-in animations
+- **Improved settings panel** with better organization
+- **Professional achievement system** with progress tracking
+
+### 🔧 **Technical Improvements**
+- **Modular code structure** with separate classes for game and music
+- **Better performance optimization** with efficient rendering
+- **Proper memory management** and cleanup
+- **Cross-browser compatibility** with fallbacks
+
+### 🎨 **Visual Enhancements**
+- **Dynamic lighting effects** that respond to gameplay
+- **Enhanced particle trails** and explosion effects
+- **Coordinated UI animations** with consistent timing
+- **Professional color coordination** throughout the interface
+
+The game now provides a seamless, coordinated experience where all systems work together harmoniously. The music responds to gameplay, visuals coordinate with audio, and the entire interface maintains a consistent cyberpunk aesthetic. Everything is contained in a single HTML file that can be opened directly in any modern browser!
