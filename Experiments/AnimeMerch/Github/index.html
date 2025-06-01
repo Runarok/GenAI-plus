@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anime & Manga Merch Shop</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="dark">
+  <header>
+    <div class="logo">Otaku Store</div>
+    <nav>
+      <button id="theme-toggle" title="Toggle light/dark mode">
+        <span class="icon-moon"></span>
+      </button>
+      <button id="login-btn" title="Login">
+        <span class="icon-user"></span>
+      </button>
+      <button id="cart-btn" title="View cart">
+        <span class="icon-cart"></span>
+        <span id="cart-count">0</span>
+      </button>
+    </nav>
+  </header>
+  <main id="app">
+    <!-- Content injected by app.js -->
+  </main>
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="close-cart">&times;</button>
+      <h2>Your Cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-summary">
+        <span>Total: $<span id="cart-total">0.00</span></span>
+        <button id="checkout-btn">Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="close-login">&times;</button>
+      <h2>Login</h2>
+      <form id="login-form">
+        <label>
+          Username
+          <input type="text" required />
+        </label>
+        <label>
+          Password
+          <input type="password" required />
+        </label>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div id="checkout-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="close-checkout">&times;</button>
+      <h2>Checkout</h2>
+      <form id="checkout-form">
+        <label>
+          Name
+          <input type="text" required />
+        </label>
+        <label>
+          Address
+          <input type="text" required />
+        </label>
+        <label>
+          Email
+          <input type="email" required />
+        </label>
+        <button type="submit">Place Order</button>
+      </form>
+      <div id="checkout-success" class="hidden">
+        <p>Order placed! (This is a demo, no real purchase was made.)</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
