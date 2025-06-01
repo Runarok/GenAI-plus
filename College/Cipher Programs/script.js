@@ -2,22 +2,22 @@ const ciphers = [
   {
     name: "Atbash Cipher",
     description: "A substitution cipher where letters are mapped to their reverse alphabet equivalents.",
-    link: "AtbashCipher/index.html"
+    link: "Atbash Cipher/index.html"
   },
   {
     name: "Caesar Cipher",
     description: "Each letter is shifted by a fixed number of positions in the alphabet.",
-    link: "CaesarCipher/index.html"
+    link: "Caesar Cipher/index.html"
   },
   {
     name: "Playfair Cipher",
     description: "A digraph substitution cipher using a 5x5 key matrix.",
-    link: "PlayfairCipher/index.html"
+    link: "Playfair Cipher/index.html"
   },
   {
     name: "Vigenère Cipher",
     description: "Polyalphabetic substitution cipher using a keyword.",
-    link: "VigenereCipher/index.html"
+    link: "Vigenere Cipher/index.html"
   }
 ];
 
