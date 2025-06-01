@@ -32,6 +32,11 @@ const menuData = [
         label: "Memory Allocation",
         url: "College/Memory Allocation/Memory Allocation.html",
         desc: "Visualize Memory Allocation techniques."
+      },      
+      {
+        label: "CPU Scheduler",
+        url: "College/CPU Scheduler/index.html",
+        desc: "Visualize CPU Scheduler techniques."
       },
       {
         label: "Cipher Programs",
