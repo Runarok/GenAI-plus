@@ -58,7 +58,7 @@ const menuData = [
     id: "experiments",
     title: "Experiments",
     links: [
-      { label: "SnarkBot", url: "Experiments/Quotes/index.html", desc: "Fav Quotes/Words." },
+      { label: "Quotes", url: "Experiments/Quotes/index.html", desc: "Fav Quotes/Words." },
       { label: "SnarkBot", url: "Experiments/AI Chat/SnarkBot/index.html", desc: "Snarky AI bot." },
       { label: "Sandbox", url: "Experiments/Sandbox/Sandbox.html", desc: "Try out ideas in the sandbox." },
       { label: "Anime Merch", url: "Experiments/AnimeMerch/index.html", desc: "Just front end." },
