@@ -103,7 +103,7 @@ export default class GameEngine {
     this.lastTimestamp = performance.now();
     this.startGameLoop();
   }
-
+  
   private placeCollectibles(): void {
     this.collectibles = [];
     const emptyPositions = this.mazeGenerator.getEmptyPositions();
@@ -145,10 +145,6 @@ export default class GameEngine {
     
     this.echoesRemaining--;
     this.onEchoUsed(this.echoesRemaining);
-    
-    if (this.echoesRemaining <= 0 && !this.levelComplete) {
-      this.checkForGameOver();
-    }
   }
   
   private checkForGameOver(): void {
@@ -164,10 +160,6 @@ export default class GameEngine {
       this.levelComplete = true;
       this.onLevelComplete();
       return;
-    }
-    
-    if (this.echoesRemaining <= 0 && !this.levelComplete) {
-      this.onGameOver();
     }
   }
   
@@ -187,6 +179,12 @@ export default class GameEngine {
       this.updateEchoPulses(deltaTime);
       this.checkCollectibles();
       this.checkExit();
+      
+      // Draw collectibles after maze but before player
+      for (const collectible of this.collectibles) {
+        collectible.draw(this.ctx);
+      }
+      
       this.player.draw(this.ctx);
       
       this.animationFrameId = requestAnimationFrame(loop);
@@ -233,10 +231,6 @@ export default class GameEngine {
         }
       }
     }
-    
-    for (const collectible of this.collectibles) {
-      collectible.draw(this.ctx);
-    }
   }
   
   private updateEchoPulses(deltaTime: number): void {
@@ -278,15 +272,6 @@ export default class GameEngine {
           
           if (this.maze[y][x].visible < visibility) {
             this.maze[y][x].visible = visibility;
-          }
-          
-          for (const collectible of this.collectibles) {
-            const collectibleCellX = Math.floor(collectible.x / cellSize);
-            const collectibleCellY = Math.floor(collectible.y / cellSize);
-            
-            if (collectibleCellX === x && collectibleCellY === y) {
-              collectible.setVisibility(visibility);
-            }
           }
         }
       }
