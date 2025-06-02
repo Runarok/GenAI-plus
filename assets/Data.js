@@ -4,7 +4,6 @@ const menuData = [
     title: "Games",
     links: [
       { label: "Checkers", url: "Games/Checkers/index.html", desc: "Classic strategic boardgame." },      
-      { label: "Echo Maze", url: "Games/Echo Maze/index.html", desc: "Maze game with Echo." },
       { label: "Reflex Rush", url: "Games/Reflex Rush/index.html", desc: "Rapid Response Test." },
       { label: "Simon Says", url: "Games/Simon Says/index.html", desc: "Memory pattern light game." },
       { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." }
