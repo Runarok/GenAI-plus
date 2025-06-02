@@ -1,0 +1,205 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --text-color: #fff;
+    --background-color: #1a1a1a;
+    --card-background: #2d2d2d;
+    --transition: all 0.3s ease;
+}
+
+.light-theme {
+    --text-color: #333;
+    --background-color: #fff;
+    --card-background: #f8f9fa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.search-container {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--card-background);
+    border-radius: 5px;
+    margin-bottom: 2rem;
+    transition: var(--transition);
+}
+
+.search-container.hidden {
+    display: none;
+}
+
+#searchInput {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: transparent;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+#clearSearch {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+#clearSearch:hover {
+    background-color: var(--card-hover);
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+button:hover {
+    background-color: var(--card-background);
+}
+
+.quotes-list {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.quote-card {
+    background-color: var(--card-background);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.quote {
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.author {
+    text-align: right;
+    color: var(--primary-color);
+}
+
+/* Toast styles */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem;
+    border-radius: 5px;
+    background-color: var(--card-background);
+    color: var(--text-color);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateX(-50%) translateY(100%);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.toast a:hover {
+    text-decoration: underline;
+}
+
+.info-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    transition: var(--transition);
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.info-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.quote-card {
+    position: relative;
+    padding-right: 3rem;
+}
+
+.quote-content {
+    margin-right: 3rem;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+}
