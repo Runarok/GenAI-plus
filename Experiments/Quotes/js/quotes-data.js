@@ -1,10 +1,10 @@
 // Quotes data
 export const quotes = [
     {
-        quote: "The only way to do great work is to love what you do.",
-        author: "Steve Jobs",
-        source: "Apple Inc.",
-        url: "https://www.apple.com/steve-jobs-quotes/"
+        quote: "Nostalgia whispers sweet lies, but the present calls for your full presence. Don’t trade today’s light for yesterday’s shadows—let memories guide you, not bind you.",
+        author: "Runarok Hrafn",
+        source: "Youtube",
+        url: "https://www.youtube.com/shorts/I3ZKegVC9R4"
     },
     {
         quote: "Innovation distinguishes between a leader and a follower.",
