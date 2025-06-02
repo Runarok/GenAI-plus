@@ -5,16 +5,37 @@ export default class Player {
   public y: number;
   private radius: number;
   private theme: 'dark' | 'light';
-  private moveSpeed: number = 4; // Adjusted movement speed
+  private isMoving: boolean = false;
+  private targetX: number;
+  private targetY: number;
+  private moveSpeed: number = 8;
   
   constructor(x: number, y: number, radius: number, theme: 'dark' | 'light') {
     this.x = x;
     this.y = y;
+    this.targetX = x;
+    this.targetY = y;
     this.radius = radius;
     this.theme = theme;
   }
   
   public draw(ctx: CanvasRenderingContext2D): void {
+    // Update position if moving
+    if (this.isMoving) {
+      const dx = this.targetX - this.x;
+      const dy = this.targetY - this.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance > this.moveSpeed) {
+        this.x += (dx / distance) * this.moveSpeed;
+        this.y += (dy / distance) * this.moveSpeed;
+      } else {
+        this.x = this.targetX;
+        this.y = this.targetY;
+        this.isMoving = false;
+      }
+    }
+    
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     
@@ -34,44 +55,29 @@ export default class Player {
   }
   
   public move(dx: number, dy: number, maze: Cell[][], cellSize: number): boolean {
-    const newX = this.x + dx * this.moveSpeed;
-    const newY = this.y + dy * this.moveSpeed;
+    if (this.isMoving) return false;
     
-    // Check if the new position would be inside a wall
-    if (this.checkCollision(newX, newY, maze, cellSize)) {
-      return false;
-    }
+    const currentCellX = Math.floor(this.x / cellSize);
+    const currentCellY = Math.floor(this.y / cellSize);
+    const newCellX = currentCellX + dx;
+    const newCellY = currentCellY + dy;
     
-    this.x = newX;
-    this.y = newY;
-    return true;
-  }
-  
-  private checkCollision(x: number, y: number, maze: Cell[][], cellSize: number): boolean {
-    // Check collision at multiple points around the player's circle
-    const points = 8; // Number of points to check
-    const buffer = 2; // Small buffer to prevent getting too close to walls
-    
-    for (let i = 0; i < points; i++) {
-      const angle = (i / points) * Math.PI * 2;
-      const checkX = x + Math.cos(angle) * (this.radius - buffer);
-      const checkY = y + Math.sin(angle) * (this.radius - buffer);
+    // Check if the new cell is within bounds and not a wall
+    if (newCellX >= 0 && newCellX < maze[0].length &&
+        newCellY >= 0 && newCellY < maze.length &&
+        maze[newCellY][newCellX].type !== CellType.WALL) {
       
-      const cellX = Math.floor(checkX / cellSize);
-      const cellY = Math.floor(checkY / cellSize);
-      
-      // Check bounds
-      if (cellX < 0 || cellX >= maze[0].length || cellY < 0 || cellY >= maze.length) {
-        return true;
-      }
-      
-      // Check if point is in a wall
-      if (maze[cellY][cellX].type === CellType.WALL) {
-        return true;
-      }
+      this.targetX = newCellX * cellSize + cellSize / 2;
+      this.targetY = newCellY * cellSize + cellSize / 2;
+      this.isMoving = true;
+      return true;
     }
     
     return false;
+  }
+  
+  public isCurrentlyMoving(): boolean {
+    return this.isMoving;
   }
   
   public updateTheme(theme: 'dark' | 'light'): void {

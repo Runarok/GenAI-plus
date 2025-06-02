@@ -24,7 +24,6 @@ export default class GameEngine {
   public totalCollectibles: number = 3;
   private levelComplete: boolean = false;
   
-  // Callback functions
   public onEchoUsed: (remaining: number) => void = () => {};
   public onCollectibleFound: (found: number, total: number) => void = () => {};
   public onGameOver: () => void = () => {};
@@ -61,16 +60,18 @@ export default class GameEngine {
   
   private setupControls(): void {
     window.addEventListener('keydown', (e) => {
-      if (this.isPaused) return;
+      if (this.isPaused || this.player.isCurrentlyMoving()) return;
+      
+      let moved = false;
       
       if (['ArrowUp', 'w', 'W'].includes(e.key)) {
-        this.player.move(0, -1, this.maze, this.mazeGenerator.getCellSize());
+        moved = this.player.move(0, -1, this.maze, this.mazeGenerator.getCellSize());
       } else if (['ArrowDown', 's', 'S'].includes(e.key)) {
-        this.player.move(0, 1, this.maze, this.mazeGenerator.getCellSize());
+        moved = this.player.move(0, 1, this.maze, this.mazeGenerator.getCellSize());
       } else if (['ArrowLeft', 'a', 'A'].includes(e.key)) {
-        this.player.move(-1, 0, this.maze, this.mazeGenerator.getCellSize());
+        moved = this.player.move(-1, 0, this.maze, this.mazeGenerator.getCellSize());
       } else if (['ArrowRight', 'd', 'D'].includes(e.key)) {
-        this.player.move(1, 0, this.maze, this.mazeGenerator.getCellSize());
+        moved = this.player.move(1, 0, this.maze, this.mazeGenerator.getCellSize());
       }
       
       if (e.key === ' ') {
@@ -79,6 +80,11 @@ export default class GameEngine {
         } else if (!this.levelComplete) {
           this.onGameOver();
         }
+      }
+      
+      if (moved) {
+        this.checkCollectibles();
+        this.checkExit();
       }
     });
   }
