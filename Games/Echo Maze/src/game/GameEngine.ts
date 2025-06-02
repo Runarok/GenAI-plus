@@ -2,7 +2,7 @@ import MazeGenerator from './MazeGenerator';
 import Player from './Player';
 import EchoPulse from './EchoPulse';
 import Collectible from './Collectible';
-import { Cell, CellType, Position } from '../types/game';
+import { Cell, CellType, Position, GameMode } from '../types/game';
 
 export default class GameEngine {
   private canvas: HTMLCanvasElement;
@@ -279,22 +279,31 @@ export default class GameEngine {
   }
   
   private checkCollectibles(): void {
-    const playerCell = {
-      x: Math.floor(this.player.x / this.mazeGenerator.getCellSize()),
-      y: Math.floor(this.player.y / this.mazeGenerator.getCellSize())
-    };
+    const playerCell = this.player.getCurrentCell(this.mazeGenerator.getCellSize());
+    const cellSize = this.mazeGenerator.getCellSize();
     
     for (let i = this.collectibles.length - 1; i >= 0; i--) {
       const collectible = this.collectibles[i];
       const collectibleCell = {
-        x: Math.floor(collectible.x / this.mazeGenerator.getCellSize()),
-        y: Math.floor(collectible.y / this.mazeGenerator.getCellSize())
+        x: Math.floor(collectible.x / cellSize),
+        y: Math.floor(collectible.y / cellSize)
       };
       
-      if (playerCell.x === collectibleCell.x && playerCell.y === collectibleCell.y) {
+      // Check if player is on the same cell or adjacent cells
+      const isAdjacent = (
+        (Math.abs(playerCell.x - collectibleCell.x) <= 1 && playerCell.y === collectibleCell.y) ||
+        (Math.abs(playerCell.y - collectibleCell.y) <= 1 && playerCell.x === collectibleCell.x)
+      );
+      
+      if (isAdjacent) {
+        // Remove collectible
         this.collectibles.splice(i, 1);
         this.collectiblesFound++;
+        
+        // Update UI
         this.onCollectibleFound(this.collectiblesFound, this.totalCollectibles);
+        
+        // Give player an extra echo as reward
         this.echoesRemaining++;
         this.onEchoUsed(this.echoesRemaining);
       }

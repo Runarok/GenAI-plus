@@ -80,6 +80,13 @@ export default class Player {
     return this.isMoving;
   }
   
+  public getCurrentCell(cellSize: number): { x: number, y: number } {
+    return {
+      x: Math.floor(this.x / cellSize),
+      y: Math.floor(this.y / cellSize)
+    };
+  }
+  
   public updateTheme(theme: 'dark' | 'light'): void {
     this.theme = theme;
   }
