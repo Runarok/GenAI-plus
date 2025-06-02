@@ -1,7 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useGameStore } from '../store/gameStore';
 import GameEngine from '../game/GameEngine';
 import GameUI from './GameUI';
+import GameMenu from './GameMenu';
 import ThemeToggle from './ThemeToggle';
 import { Moon, Sun } from 'lucide-react';
 
@@ -15,6 +17,34 @@ const Game: React.FC = () => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [isLevelComplete, setIsLevelComplete] = useState(false);
   const { theme } = useTheme();
+  const { isMenuOpen, setMenuOpen, setPaused, setCurrentScore } = useGameStore();
+
+  const handleStartGame = useCallback(() => {
+    if (gameEngine) {
+      setMenuOpen(false);
+      setPaused(false);
+      gameEngine.resume();
+    }
+  }, [gameEngine, setMenuOpen, setPaused]);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMenuOpen(!isMenuOpen);
+        setPaused(!isMenuOpen);
+        if (gameEngine) {
+          if (isMenuOpen) {
+            gameEngine.resume();
+          } else {
+            gameEngine.pause();
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isMenuOpen, setMenuOpen, setPaused, gameEngine]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -29,10 +59,12 @@ const Game: React.FC = () => {
     engine.onCollectibleFound = (found: number, total: number) => {
       setCollected(found);
       setTotalCollectibles(total);
+      setCurrentScore(found * 100 + level * 500);
     };
     
     engine.onGameOver = () => {
       setIsGameOver(true);
+      setMenuOpen(true);
     };
     
     engine.onLevelComplete = () => {
@@ -60,7 +92,7 @@ const Game: React.FC = () => {
       engine.destroy();
       window.removeEventListener('resize', handleResize);
     };
-  }, [theme]);
+  }, [theme, setCurrentScore]);
 
   useEffect(() => {
     if (gameEngine) {
@@ -76,6 +108,9 @@ const Game: React.FC = () => {
       setEchoes(gameEngine.maxEchoes);
       setCollected(0);
       setTotalCollectibles(gameEngine.totalCollectibles);
+      setCurrentScore(0);
+      setMenuOpen(false);
+      setPaused(false);
     }
   };
 
@@ -92,7 +127,9 @@ const Game: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full transition-colors duration-500">
-      <h1 className="text-4xl font-bold mb-4 transition-colors duration-500 dark:text-purple-400 text-blue-600">Echo Maze</h1>
+      <h1 className="text-4xl font-bold mb-4 transition-colors duration-500 dark:text-purple-400 text-blue-600">
+        Echo Maze
+      </h1>
       
       <div className="relative">
         <canvas 
@@ -108,7 +145,14 @@ const Game: React.FC = () => {
           />
         </div>
         
-        {isGameOver && (
+        <GameMenu
+          onStartGame={handleStartGame}
+          onRestart={startNewGame}
+          echoes={echoes}
+          level={level}
+        />
+        
+        {isGameOver && !isMenuOpen && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 rounded-lg">
             <div className="bg-gray-800 p-6 rounded-lg text-center">
               <h2 className="text-2xl font-bold text-red-400 mb-4">Game Over</h2>
@@ -123,7 +167,7 @@ const Game: React.FC = () => {
           </div>
         )}
         
-        {isLevelComplete && (
+        {isLevelComplete && !isMenuOpen && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 rounded-lg">
             <div className="bg-gray-800 p-6 rounded-lg text-center">
               <h2 className="text-2xl font-bold text-green-400 mb-4">Level Complete!</h2>
@@ -145,11 +189,6 @@ const Game: React.FC = () => {
         collected={collected}
         totalCollectibles={totalCollectibles}
       />
-      
-      <div className="mt-4 text-center text-sm transition-colors duration-500 dark:text-gray-400 text-gray-600">
-        <p>Use <span className="font-bold">WASD</span> or <span className="font-bold">Arrow Keys</span> to move</p>
-        <p>Press <span className="font-bold">Spacebar</span> to send an echo pulse</p>
-      </div>
     </div>
   );
 };

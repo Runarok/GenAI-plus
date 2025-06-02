@@ -16,6 +16,7 @@ export default class GameEngine {
   private animationFrameId: number | null = null;
   private lastTimestamp: number = 0;
   private theme: 'dark' | 'light';
+  private isPaused: boolean = true;
   
   public maxEchoes: number = 5;
   private echoesRemaining: number = this.maxEchoes;
@@ -34,7 +35,6 @@ export default class GameEngine {
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     this.theme = theme;
     
-    // Initialize maze generator with appropriate size
     const cellSize = 30;
     const mazeWidth = Math.floor(canvas.width / cellSize);
     const mazeHeight = Math.floor(canvas.height / cellSize);
@@ -42,7 +42,6 @@ export default class GameEngine {
     this.mazeGenerator = new MazeGenerator(mazeWidth, mazeHeight, cellSize);
     this.maze = this.mazeGenerator.generate();
     
-    // Place player at start position
     const startPosition = this.mazeGenerator.getStartPosition();
     this.player = new Player(
       startPosition.x * cellSize + cellSize / 2,
@@ -51,39 +50,67 @@ export default class GameEngine {
       this.theme
     );
     
-    // Set exit position
     this.exitPosition = this.mazeGenerator.getExitPosition();
-    
-    // Initialize echo pulses array
     this.echoPulses = [];
-    
-    // Create collectibles
     this.collectibles = [];
     this.placeCollectibles();
     
-    // Set up keyboard controls
     this.setupControls();
-    
-    // Start game loop
     this.startGameLoop();
   }
   
+  private setupControls(): void {
+    window.addEventListener('keydown', (e) => {
+      if (this.isPaused) return;
+      
+      if (['ArrowUp', 'w', 'W'].includes(e.key)) {
+        this.player.move(0, -1, this.maze, this.mazeGenerator.getCellSize());
+      } else if (['ArrowDown', 's', 'S'].includes(e.key)) {
+        this.player.move(0, 1, this.maze, this.mazeGenerator.getCellSize());
+      } else if (['ArrowLeft', 'a', 'A'].includes(e.key)) {
+        this.player.move(-1, 0, this.maze, this.mazeGenerator.getCellSize());
+      } else if (['ArrowRight', 'd', 'D'].includes(e.key)) {
+        this.player.move(1, 0, this.maze, this.mazeGenerator.getCellSize());
+      }
+      
+      if (e.key === ' ') {
+        if (this.echoesRemaining > 0) {
+          this.sendEchoPulse();
+        } else if (!this.levelComplete) {
+          this.onGameOver();
+        }
+      }
+    });
+  }
+
+  public pause(): void {
+    this.isPaused = true;
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+  }
+
+  public resume(): void {
+    if (!this.isPaused) return;
+    this.isPaused = false;
+    this.lastTimestamp = performance.now();
+    this.startGameLoop();
+  }
+
   private placeCollectibles(): void {
     this.collectibles = [];
     const emptyPositions = this.mazeGenerator.getEmptyPositions();
     
-    // Filter out positions near start and exit
     const startPos = this.mazeGenerator.getStartPosition();
     const exitPos = this.mazeGenerator.getExitPosition();
     
     const filteredPositions = emptyPositions.filter(pos => {
-      // Don't place collectibles too close to start or exit
       const distanceToStart = Math.abs(pos.x - startPos.x) + Math.abs(pos.y - startPos.y);
       const distanceToExit = Math.abs(pos.x - exitPos.x) + Math.abs(pos.y - exitPos.y);
       return distanceToStart > 3 && distanceToExit > 3;
     });
     
-    // Shuffle and pick positions
     for (let i = 0; i < this.totalCollectibles; i++) {
       if (filteredPositions.length > 0) {
         const randomIndex = Math.floor(Math.random() * filteredPositions.length);
@@ -102,47 +129,23 @@ export default class GameEngine {
     this.collectiblesFound = 0;
   }
   
-  private setupControls(): void {
-    window.addEventListener('keydown', (e) => {
-      // Movement (WASD or Arrow keys)
-      if (['ArrowUp', 'w', 'W'].includes(e.key)) {
-        this.player.move(0, -1, this.maze, this.mazeGenerator.getCellSize());
-      } else if (['ArrowDown', 's', 'S'].includes(e.key)) {
-        this.player.move(0, 1, this.maze, this.mazeGenerator.getCellSize());
-      } else if (['ArrowLeft', 'a', 'A'].includes(e.key)) {
-        this.player.move(-1, 0, this.maze, this.mazeGenerator.getCellSize());
-      } else if (['ArrowRight', 'd', 'D'].includes(e.key)) {
-        this.player.move(1, 0, this.maze, this.mazeGenerator.getCellSize());
-      }
-      
-      // Echo pulse (Spacebar)
-      if (e.key === ' ' && this.echoesRemaining > 0) {
-        this.sendEchoPulse();
-      }
-    });
-  }
-  
   private sendEchoPulse(): void {
-    // Create new echo pulse at player position
     this.echoPulses.push(new EchoPulse(
       this.player.x,
       this.player.y,
-      0, // Initial radius
+      0,
       this.theme
     ));
     
-    // Reduce echo count
     this.echoesRemaining--;
     this.onEchoUsed(this.echoesRemaining);
     
-    // Check if out of echoes
     if (this.echoesRemaining <= 0 && !this.levelComplete) {
       this.checkForGameOver();
     }
   }
   
   private checkForGameOver(): void {
-    // Check if player can still reach exit with current visibility
     const playerCell = {
       x: Math.floor(this.player.x / this.mazeGenerator.getCellSize()),
       y: Math.floor(this.player.y / this.mazeGenerator.getCellSize())
@@ -150,7 +153,6 @@ export default class GameEngine {
     
     const exitCell = this.exitPosition;
     
-    // If player is at exit and has all collectibles, they win
     if (playerCell.x === exitCell.x && playerCell.y === exitCell.y && 
         this.collectiblesFound === this.totalCollectibles) {
       this.levelComplete = true;
@@ -158,7 +160,6 @@ export default class GameEngine {
       return;
     }
     
-    // If out of echoes and not at exit, game over
     if (this.echoesRemaining <= 0 && !this.levelComplete) {
       this.onGameOver();
     }
@@ -166,50 +167,36 @@ export default class GameEngine {
   
   private startGameLoop(): void {
     const loop = (timestamp: number) => {
-      // Calculate delta time
+      if (this.isPaused) return;
+
       const deltaTime = timestamp - this.lastTimestamp;
       this.lastTimestamp = timestamp;
       
-      // Clear canvas
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       
-      // Draw background
       this.ctx.fillStyle = this.theme === 'dark' ? '#121212' : '#f8f9fa';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       
-      // Draw maze (only visible cells)
       this.drawMaze();
-      
-      // Update and draw echo pulses
       this.updateEchoPulses(deltaTime);
-      
-      // Check collectibles
       this.checkCollectibles();
-      
-      // Check exit
       this.checkExit();
-      
-      // Draw player
       this.player.draw(this.ctx);
       
-      // Request next frame
       this.animationFrameId = requestAnimationFrame(loop);
     };
     
-    // Start the loop
     this.animationFrameId = requestAnimationFrame(loop);
   }
   
   private drawMaze(): void {
     const cellSize = this.mazeGenerator.getCellSize();
     
-    // Draw exit
     const exitX = this.exitPosition.x * cellSize;
     const exitY = this.exitPosition.y * cellSize;
     this.ctx.fillStyle = this.theme === 'dark' ? 'rgba(0, 255, 0, 0.3)' : 'rgba(0, 200, 0, 0.2)';
     this.ctx.fillRect(exitX, exitY, cellSize, cellSize);
     
-    // Draw walls that are visible due to echo pulses
     for (let y = 0; y < this.maze.length; y++) {
       for (let x = 0; x < this.maze[y].length; x++) {
         const cell = this.maze[y][x];
@@ -217,7 +204,6 @@ export default class GameEngine {
         const cellY = y * cellSize;
         
         if (cell.type === CellType.WALL && cell.visible > 0) {
-          // Calculate opacity based on visibility value
           const opacity = Math.min(cell.visible, 1);
           
           this.ctx.fillStyle = this.theme === 'dark' 
@@ -226,7 +212,6 @@ export default class GameEngine {
           
           this.ctx.fillRect(cellX, cellY, cellSize, cellSize);
           
-          // Add a glow effect in dark mode
           if (this.theme === 'dark' && opacity > 0.5) {
             this.ctx.shadowColor = 'rgba(120, 87, 255, 0.8)';
             this.ctx.shadowBlur = 10;
@@ -236,7 +221,6 @@ export default class GameEngine {
           }
         }
         
-        // Reduce visibility over time
         if (cell.visible > 0) {
           cell.visible -= 0.01;
           if (cell.visible < 0) cell.visible = 0;
@@ -244,7 +228,6 @@ export default class GameEngine {
       }
     }
     
-    // Draw collectibles
     for (const collectible of this.collectibles) {
       collectible.draw(this.ctx);
     }
@@ -253,17 +236,10 @@ export default class GameEngine {
   private updateEchoPulses(deltaTime: number): void {
     for (let i = this.echoPulses.length - 1; i >= 0; i--) {
       const pulse = this.echoPulses[i];
-      
-      // Update pulse radius
       pulse.update(deltaTime);
-      
-      // Check which cells the pulse is revealing
       this.revealCellsByPulse(pulse);
-      
-      // Draw the pulse
       pulse.draw(this.ctx);
       
-      // Remove pulse if it has exceeded max radius
       if (pulse.radius > pulse.maxRadius) {
         this.echoPulses.splice(i, 1);
       }
@@ -274,20 +250,16 @@ export default class GameEngine {
     const cellSize = this.mazeGenerator.getCellSize();
     const pulseRadius = pulse.radius;
     
-    // Calculate the range of cells to check
     const centerX = Math.floor(pulse.x / cellSize);
     const centerY = Math.floor(pulse.y / cellSize);
     const range = Math.ceil(pulseRadius / cellSize);
     
-    // Check cells in a square around the pulse
     for (let y = centerY - range; y <= centerY + range; y++) {
       for (let x = centerX - range; x <= centerX + range; x++) {
-        // Skip out of bounds cells
         if (y < 0 || y >= this.maze.length || x < 0 || x >= this.maze[0].length) {
           continue;
         }
         
-        // Calculate distance from pulse center to cell center
         const cellCenterX = x * cellSize + cellSize / 2;
         const cellCenterY = y * cellSize + cellSize / 2;
         const distance = Math.sqrt(
@@ -295,17 +267,13 @@ export default class GameEngine {
           Math.pow(cellCenterY - pulse.y, 2)
         );
         
-        // Check if cell is within pulse radius
         if (distance <= pulseRadius) {
-          // Calculate visibility based on distance from pulse edge
           const visibility = 1 - (distance / pulseRadius);
           
-          // Reveal cell with calculated visibility
           if (this.maze[y][x].visible < visibility) {
             this.maze[y][x].visible = visibility;
           }
           
-          // Also reveal collectibles near the pulse
           for (const collectible of this.collectibles) {
             const collectibleCellX = Math.floor(collectible.x / cellSize);
             const collectibleCellY = Math.floor(collectible.y / cellSize);
@@ -332,16 +300,10 @@ export default class GameEngine {
         y: Math.floor(collectible.y / this.mazeGenerator.getCellSize())
       };
       
-      // Check if player is on the same cell as collectible
       if (playerCell.x === collectibleCell.x && playerCell.y === collectibleCell.y) {
-        // Remove collectible
         this.collectibles.splice(i, 1);
         this.collectiblesFound++;
-        
-        // Update UI
         this.onCollectibleFound(this.collectiblesFound, this.totalCollectibles);
-        
-        // Give player an extra echo as reward
         this.echoesRemaining++;
         this.onEchoUsed(this.echoesRemaining);
       }
@@ -354,65 +316,46 @@ export default class GameEngine {
       y: Math.floor(this.player.y / this.mazeGenerator.getCellSize())
     };
     
-    // Check if player is at exit and has all collectibles
     if (playerCell.x === this.exitPosition.x && 
         playerCell.y === this.exitPosition.y && 
         this.collectiblesFound === this.totalCollectibles && 
         !this.levelComplete) {
-      // Level complete
       this.levelComplete = true;
       this.onLevelComplete();
     }
   }
   
   public startNewGame(): void {
-    // Generate new maze
     this.maze = this.mazeGenerator.generate();
     
-    // Reset player position
     const startPosition = this.mazeGenerator.getStartPosition();
     const cellSize = this.mazeGenerator.getCellSize();
     this.player.x = startPosition.x * cellSize + cellSize / 2;
     this.player.y = startPosition.y * cellSize + cellSize / 2;
     
-    // Reset exit position
     this.exitPosition = this.mazeGenerator.getExitPosition();
-    
-    // Reset echoes
     this.echoesRemaining = this.maxEchoes;
-    
-    // Reset collectibles
     this.placeCollectibles();
-    
-    // Reset level state
     this.levelComplete = false;
+    this.isPaused = false;
   }
   
   public nextLevel(): void {
-    // Increase difficulty
     this.maxEchoes = Math.max(3, this.maxEchoes - 1);
     this.totalCollectibles++;
     
-    // Generate new maze
     this.maze = this.mazeGenerator.generate();
     
-    // Reset player position
     const startPosition = this.mazeGenerator.getStartPosition();
     const cellSize = this.mazeGenerator.getCellSize();
     this.player.x = startPosition.x * cellSize + cellSize / 2;
     this.player.y = startPosition.y * cellSize + cellSize / 2;
     
-    // Reset exit position
     this.exitPosition = this.mazeGenerator.getExitPosition();
-    
-    // Reset echoes
     this.echoesRemaining = this.maxEchoes;
-    
-    // Reset collectibles
     this.placeCollectibles();
-    
-    // Reset level state
     this.levelComplete = false;
+    this.isPaused = false;
   }
   
   public updateTheme(theme: 'dark' | 'light'): void {
@@ -429,7 +372,6 @@ export default class GameEngine {
   }
   
   public resize(width: number, height: number): void {
-    // Update maze size
     const cellSize = this.mazeGenerator.getCellSize();
     const mazeWidth = Math.floor(width / cellSize);
     const mazeHeight = Math.floor(height / cellSize);
