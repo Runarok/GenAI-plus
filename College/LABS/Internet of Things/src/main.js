@@ -1,3 +1,4 @@
+// Remove the import statement since we're using global variables
 function generateContent() {
   const tocList = document.getElementById('toc-list');
   const programsContainer = document.getElementById('programs-container');
@@ -32,7 +33,7 @@ function generateContent() {
       case 'question':
         return code.match(/<QUES>.*?<\/QUES>/s)?.[0] || 'No question found.';
       case 'steps':
-        return code.match(/Steps:.*?(?=Program:|$)/s)?.[0] || 'No steps found.';
+        return code.match(/<STEPS>.*?<\/STEPS>/s)?.[0] || 'No steps found.';
       case 'comments':
         return code.match(/<COMMENTS>.*?<\/COMMENTS>/gs)?.join('\n') || 'No comments found.';
       default:
