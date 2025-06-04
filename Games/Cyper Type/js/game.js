@@ -16,6 +16,10 @@ const gameModes = {
     expert: { baseSpeed: 4, baseSpawnRate: 1000, speedIncrease: 0.003, spawnRateDecrease: 20 }
 };
 
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 function getHighScore(mode) {
     const highScores = JSON.parse(localStorage.getItem('highScores') || '[]');
     const modeScores = highScores.filter(score => score.mode === mode);
@@ -23,12 +27,50 @@ function getHighScore(mode) {
 }
 
 function changeMode(mode) {
+    if (isMobileDevice()) {
+        showMobileWarning();
+        return;
+    }
     currentMode = mode;
     document.getElementById('mode').textContent = mode.charAt(0).toUpperCase() + mode.slice(1) + ' Mode';
     startGame();
 }
 
+function showMobileWarning() {
+    hideAllScreens();
+    document.getElementById('game-screen').classList.add('active');
+    document.getElementById('game-container').innerHTML = '';
+    document.getElementById('score').style.display = 'none';
+    document.getElementById('high-score').style.display = 'none';
+    document.getElementById('mode').style.display = 'none';
+    document.getElementById('instructions').style.display = 'none';
+    document.getElementById('game-over').style.display = 'none';
+    
+    const warningDiv = document.createElement('div');
+    warningDiv.style.position = 'fixed';
+    warningDiv.style.top = '50%';
+    warningDiv.style.left = '50%';
+    warningDiv.style.transform = 'translate(-50%, -50%)';
+    warningDiv.style.textAlign = 'center';
+    warningDiv.style.color = 'var(--accent-color)';
+    warningDiv.style.padding = '20px';
+    warningDiv.style.fontSize = '1.5rem';
+    warningDiv.style.maxWidth = '80%';
+    warningDiv.style.background = 'var(--primary-bg)';
+    warningDiv.style.border = '2px solid var(--accent-color)';
+    warningDiv.style.borderRadius = '10px';
+    warningDiv.style.boxShadow = '0 0 20px var(--accent-glow)';
+    warningDiv.textContent = 'Cannot play on mobile because a keyboard is required. Please use a PC to play.';
+    
+    document.getElementById('game-container').appendChild(warningDiv);
+}
+
 function startGame() {
+    if (isMobileDevice()) {
+        showMobileWarning();
+        return;
+    }
+    
     const selectedMode = document.getElementById('menu-mode-select').value;
     currentMode = selectedMode;
     
@@ -45,6 +87,10 @@ function startGame() {
     isGameOver = false;
     
     document.getElementById('game-container').innerHTML = '';
+    document.getElementById('score').style.display = '';
+    document.getElementById('high-score').style.display = '';
+    document.getElementById('mode').style.display = '';
+    document.getElementById('instructions').style.display = '';
     document.getElementById('score').textContent = `Score: ${score}`;
     document.getElementById('high-score').textContent = `High Score: ${getHighScore(currentMode)}`;
     document.getElementById('mode').textContent = currentMode.charAt(0).toUpperCase() + currentMode.slice(1) + ' Mode';
