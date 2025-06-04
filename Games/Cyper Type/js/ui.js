@@ -16,19 +16,42 @@ function showHighScores() {
     const allHighScores = JSON.parse(localStorage.getItem('highScores') || '[]');
     const container = document.getElementById('highscores-container');
     
-    const modeHighScores = {
-        normal: allHighScores.filter(score => score.mode === 'normal'),
-        hard: allHighScores.filter(score => score.mode === 'hard'),
-        expert: allHighScores.filter(score => score.mode === 'expert')
-    };
+    // Create mode selection buttons
+    container.innerHTML = `
+        <div class="mode-buttons">
+            <button class="mode-btn active" data-mode="normal">Normal Mode</button>
+            <button class="mode-btn" data-mode="hard">Hard Mode</button>
+            <button class="mode-btn" data-mode="expert">Expert Mode</button>
+        </div>
+        <div class="scores-container"></div>
+    `;
 
-    container.innerHTML = Object.entries(modeHighScores).map(([mode, scores]) => `
+    // Add click handlers to buttons
+    const buttons = container.querySelectorAll('.mode-btn');
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            showModeScores(button.dataset.mode);
+        });
+    });
+
+    // Show initial scores (Normal mode)
+    showModeScores('normal');
+}
+
+function showModeScores(mode) {
+    const allHighScores = JSON.parse(localStorage.getItem('highScores') || '[]');
+    const modeScores = allHighScores.filter(score => score.mode === mode);
+    const scoresContainer = document.querySelector('.scores-container');
+
+    scoresContainer.innerHTML = `
         <div class="mode-scores">
             <h3>${mode.charAt(0).toUpperCase() + mode.slice(1)} Mode</h3>
-            ${scores.length ? 
-                scores
+            ${modeScores.length ? 
+                modeScores
                     .sort((a, b) => b.score - a.score)
-                    .slice(0, 5)
+                    .slice(0, 10)
                     .map(score => `
                         <div class="achievement">
                             <div class="achievement-icon">🏆</div>
@@ -39,7 +62,7 @@ function showHighScores() {
                 '<p>No scores yet!</p>'
             }
         </div>
-    `).join('');
+    `;
 }
 
 function updateHighScores(score) {
