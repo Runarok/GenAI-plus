@@ -12,7 +12,7 @@
 
 .letter {
     position: absolute;
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: bold;
     color: var(--accent-color);
     text-shadow: 0 0 15px var(--accent-glow);
@@ -25,7 +25,7 @@
 
 #score, #mode, #instructions, #high-score {
     position: fixed;
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.2rem;
     background: var(--primary-bg);
     border-radius: 15px;
     z-index: 100;
@@ -37,15 +37,15 @@
 #instructions {
     top: 100px;
     left: 20px;
-    font-size: 1rem;
+    font-size: clamp(0.8rem, 3vw, 1rem);
     color: var(--text-color);
-    max-width: 300px;
+    max-width: min(300px, 80vw);
 }
 
 #score {
     top: 20px;
     left: 20px;
-    font-size: 2rem;
+    font-size: clamp(1.2rem, 4vw, 2rem);
     color: var(--accent-color);
     font-weight: bold;
     transition: transform 0.2s ease;
@@ -58,8 +58,8 @@
 
 #high-score {
     top: 20px;
-    left: 250px;
-    font-size: 2rem;
+    left: clamp(200px, 40vw, 250px);
+    font-size: clamp(1.2rem, 4vw, 2rem);
     color: var(--accent-color);
     font-weight: bold;
 }
@@ -68,7 +68,7 @@
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 3vw, 1.5rem);
     color: var(--accent-color);
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -101,19 +101,19 @@ select {
     left: 50%;
     transform: translate(-50%, -50%);
     background: var(--primary-bg);
-    padding: 3rem;
+    padding: clamp(1.5rem, 5vw, 3rem);
     border-radius: 20px;
     text-align: center;
     z-index: 1000;
     border: 2px solid var(--accent-color);
     box-shadow: 0 0 40px var(--accent-glow);
     backdrop-filter: blur(10px);
-    min-width: 300px;
+    width: min(90%, 300px);
 }
 
 #game-over h2 {
     color: var(--accent-color);
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
     margin: 0 0 1.5rem 0;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -121,7 +121,7 @@ select {
 
 #game-over p {
     color: var(--text-color);
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
     margin: 1rem 0;
 }
 
@@ -131,7 +131,7 @@ select {
     border: none;
     padding: 1rem 2rem;
     margin: 1rem;
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 3vw, 1.2rem);
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -150,7 +150,7 @@ select {
     left: 50%;
     transform: translateX(-50%);
     color: var(--accent-color);
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
     font-weight: bold;
     text-shadow: 0 0 15px var(--accent-glow);
     opacity: 0;
@@ -171,4 +171,25 @@ select {
     font-size: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 2px;
+}
+
+@media (max-width: 768px) {
+    #instructions {
+        display: none;
+    }
+
+    #high-score {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+
+    #score {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+
+    #mode {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
 }

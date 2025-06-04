@@ -1,8 +1,9 @@
 /* Achievements Screen Styles */
 #achievements-screen, #highscores-screen {
-    padding: 2rem;
+    padding: 1rem;
     text-align: center;
     max-height: 100vh;
+    overflow-y: auto;
 }
 
 #achievements-container, #highscores-container {
@@ -13,7 +14,7 @@
 
 #achievements-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
 }
 
@@ -37,17 +38,17 @@
 .achievement h3 {
     color: var(--accent-color);
     margin: 0 0 1rem 0;
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 3vw, 1.2rem);
 }
 
 .achievement p {
     color: var(--text-color);
     margin: 0;
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
 }
 
 .achievement-icon {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 5vw, 2rem);
     margin-bottom: 1rem;
     opacity: 0.5;
     transition: all 0.3s ease;
@@ -80,16 +81,18 @@
     gap: 1rem;
     justify-content: center;
     margin-bottom: 2rem;
+    flex-wrap: wrap;
+    padding: 0 1rem;
 }
 
 .mode-btn {
     background: var(--primary-bg);
     color: var(--accent-color);
     border: 2px solid var(--accent-glow);
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.5rem;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -123,7 +126,7 @@
 .mode-scores h3 {
     color: var(--accent-color);
     margin: 0 0 1.5rem 0;
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
     text-transform: uppercase;
     letter-spacing: 3px;
     text-shadow: 0 0 20px var(--accent-glow);
@@ -131,7 +134,7 @@
 
 .scores-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
 }
 
@@ -154,5 +157,29 @@
     to {
         transform: translateX(-50%) translateY(-100%);
         opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    #achievements-screen, #highscores-screen {
+        padding: 0.5rem;
+    }
+
+    .mode-buttons {
+        gap: 0.5rem;
+    }
+
+    .mode-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .mode-scores {
+        padding: 1rem;
+    }
+
+    .scores-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
     }
 }

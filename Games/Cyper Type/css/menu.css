@@ -64,33 +64,38 @@ body {
 }
 
 #menu h1 {
-    font-size: 4rem;
+    font-size: clamp(2rem, 8vw, 4rem);
     color: var(--accent-color);
     text-shadow: 0 0 20px var(--accent-glow);
     margin-bottom: 2rem;
     letter-spacing: 4px;
     text-transform: uppercase;
+    text-align: center;
+    padding: 0 1rem;
 }
 
 .menu-options {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    width: 90%;
+    max-width: 300px;
+    padding: 0 1rem;
 }
 
 .menu-btn {
     background: linear-gradient(45deg, var(--accent-color), var(--accent-glow));
     color: var(--primary-bg);
     border: none;
-    padding: 1.2rem 3rem;
-    font-size: 1.5rem;
+    padding: 1.2rem;
+    font-size: clamp(1rem, 4vw, 1.5rem);
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: bold;
-    min-width: 300px;
+    width: 100%;
     box-shadow: 0 0 20px var(--accent-glow);
 }
 
@@ -109,4 +114,16 @@ body {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .menu-options {
+        width: 100%;
+        padding: 0 2rem;
+    }
+    
+    .back-btn {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
 }
