@@ -1,16 +1,15 @@
-import { programs } from './data/IOT.js';
-
 function generateContent() {
   const tocList = document.getElementById('toc-list');
   const programsContainer = document.getElementById('programs-container');
   const searchInput = document.getElementById('search');
 
   function highlightCode(code) {
-    // Add syntax highlighting for specific keywords
-    return code.replace(
-      /(#include|#define|void|if|else|while|for|return|int|float|char|String|bool)\b/g,
-      '<span class="highlight">$1</span>'
+    // First highlight the <QUES> tags
+    code = code.replace(
+      /(<QUES>.*?<\/QUES>)/g,
+      '<span class="highlight-question">$1</span>'
     );
+    return code;
   }
 
   function createPinConfigTable(pinConfig) {

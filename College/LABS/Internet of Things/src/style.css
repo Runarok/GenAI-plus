@@ -6,6 +6,7 @@
   --accent: #646cff;
   --border: #333333;
   --code-highlight: #4b4b7c;
+  --question-highlight: #ff6b6b;
 }
 
 * {
@@ -146,8 +147,9 @@ pre {
   margin: 1rem 0;
 }
 
-pre .highlight {
-  color: var(--code-highlight);
+.highlight-question {
+  color: var(--question-highlight);
+  font-weight: bold;
 }
 
 .copy-btn {

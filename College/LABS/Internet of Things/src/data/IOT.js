@@ -1,5 +1,4 @@
-// Define an array of program objects with titles and code
-export const programs = [
+const programs = [
   {
     title: "LED on",
     code: `<QUES>1(i).  To interface LED/Buzzer with Arduino/Raspberry Pi and write a program to 'turn ON' LED for 1 sec after every 2 seconds.</QUES>
