@@ -32,12 +32,81 @@ function generateContent() {
       case 'question':
         return code.match(/<QUES>.*?<\/QUES>/s)?.[0] || 'No question found.';
       case 'steps':
-        return code.match(/<STEPS>.*?<\/STEPS>/s)?.[0] || 'No steps found.';
+        return code.match(/Steps:.*?(?=Program:|$)/s)?.[0] || 'No steps found.';
       case 'comments':
-        return code.match(/<COMMENTS>.*?<\/COMMENTS>/s)?.[0] || 'No comments found.';
+        return code.match(/<COMMENTS>.*?<\/COMMENTS>/gs)?.join('\n') || 'No comments found.';
       default:
         return code;
     }
+  }
+
+  function showAllPrograms(selectedPart) {
+    programsContainer.innerHTML = '';
+    
+    programs.forEach(program => {
+      const section = document.createElement('section');
+      
+      const title = document.createElement('h2');
+      title.textContent = program.title;
+      section.appendChild(title);
+
+      const copyBtn = document.createElement('button');
+      copyBtn.textContent = 'Copy Code';
+      copyBtn.className = 'copy-btn';
+      
+      const pre = document.createElement('pre');
+      const codeToShow = extractCodePart(program.code, selectedPart);
+      pre.innerHTML = highlightCode(codeToShow);
+
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(codeToShow);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy Code';
+        }, 1500);
+      });
+
+      if (program.pinConfig && selectedPart === 'pinconfig') {
+        section.appendChild(createPinConfigTable(program.pinConfig));
+      }
+      
+      section.appendChild(copyBtn);
+      section.appendChild(pre);
+      programsContainer.appendChild(section);
+    });
+  }
+
+  function showSingleProgram(program) {
+    programsContainer.innerHTML = '';
+    
+    const section = document.createElement('section');
+    
+    const title = document.createElement('h2');
+    title.textContent = program.title;
+    
+    const copyBtn = document.createElement('button');
+    copyBtn.textContent = 'Copy Code';
+    copyBtn.className = 'copy-btn';
+    
+    const pre = document.createElement('pre');
+    pre.innerHTML = highlightCode(program.code);
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(program.code);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy Code';
+      }, 1500);
+    });
+
+    section.appendChild(title);
+    if (program.pinConfig) {
+      section.appendChild(createPinConfigTable(program.pinConfig));
+    }
+    section.appendChild(copyBtn);
+    section.appendChild(pre);
+    
+    programsContainer.appendChild(section);
   }
 
   function createPinConfigTable(pinConfig) {
@@ -67,40 +136,6 @@ function generateContent() {
     return table;
   }
 
-  function showProgram(program, selectedPart = 'all') {
-    programsContainer.innerHTML = '';
-    
-    const section = document.createElement('section');
-    
-    const title = document.createElement('h2');
-    title.textContent = program.title;
-    
-    const copyBtn = document.createElement('button');
-    copyBtn.textContent = 'Copy Code';
-    copyBtn.className = 'copy-btn';
-    
-    const pre = document.createElement('pre');
-    const codeToShow = selectedPart === 'all' ? program.code : extractCodePart(program.code, selectedPart);
-    pre.innerHTML = highlightCode(codeToShow);
-
-    copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(codeToShow);
-      copyBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copyBtn.textContent = 'Copy Code';
-      }, 1500);
-    });
-
-    section.appendChild(title);
-    if (program.pinConfig && (selectedPart === 'all' || selectedPart === 'pinconfig')) {
-      section.appendChild(createPinConfigTable(program.pinConfig));
-    }
-    section.appendChild(copyBtn);
-    section.appendChild(pre);
-    
-    programsContainer.appendChild(section);
-  }
-
   // Generate Table of Contents
   programs.forEach((program, index) => {
     const li = document.createElement('li');
@@ -109,29 +144,40 @@ function generateContent() {
     a.textContent = program.title;
     a.addEventListener('click', (e) => {
       e.preventDefault();
-      showProgram(program, partsSelector.value);
+      showSingleProgram(program);
       // Update active state
       document.querySelectorAll('#toc-list a').forEach(link => link.classList.remove('active'));
       a.classList.add('active');
+      // Show/hide comments option based on view
+      document.querySelector('option[value="comments"]').style.display = 'block';
     });
     li.appendChild(a);
     tocList.appendChild(li);
   });
 
   // Parts selector functionality
-  partsSelector.addEventListener('change', () => {
-    const activeProgram = programs.find(program => 
-      program.title === document.querySelector('#toc-list a.active')?.textContent
-    );
-    if (activeProgram) {
-      showProgram(activeProgram, partsSelector.value);
+  partsSelector.addEventListener('change', (e) => {
+    const selectedPart = e.target.value;
+    const activeLink = document.querySelector('#toc-list a.active');
+    
+    if (selectedPart === 'all') {
+      const activeProgram = programs.find(p => p.title === activeLink?.textContent);
+      if (activeProgram) {
+        showSingleProgram(activeProgram);
+      }
+      document.querySelector('option[value="comments"]').style.display = 'none';
+    } else {
+      showAllPrograms(selectedPart);
+      document.querySelector('option[value="comments"]').style.display = 'block';
     }
   });
 
   // Show first program by default
   if (programs.length > 0) {
-    showProgram(programs[0]);
+    showSingleProgram(programs[0]);
     tocList.querySelector('a').classList.add('active');
+    // Hide comments option initially
+    document.querySelector('option[value="comments"]').style.display = 'none';
   }
 
   // Search functionality
@@ -143,7 +189,7 @@ function generateContent() {
     );
     
     if (filteredPrograms.length > 0) {
-      showProgram(filteredPrograms[0], partsSelector.value);
+      showSingleProgram(filteredPrograms[0]);
     } else {
       programsContainer.innerHTML = '<p class="no-results">No matching programs found</p>';
     }
