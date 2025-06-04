@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +9,16 @@
     <link rel="stylesheet" href="css/achievements.css">
 </head>
 <body>
+    <button id="theme-toggle" onclick="toggleTheme()">🌓</button>
+    
     <div id="menu" class="screen active">
         <h1>Cyber Type Master</h1>
         <div class="menu-options">
+            <select id="menu-mode-select" class="mode-select">
+                <option value="normal">Normal Mode</option>
+                <option value="hard">Hard Mode</option>
+                <option value="expert">Expert Mode</option>
+            </select>
             <button onclick="startGame()" class="menu-btn">Play Game</button>
             <button onclick="showAchievements()" class="menu-btn">Achievements</button>
             <button onclick="showHighScores()" class="menu-btn">High Scores</button>
@@ -19,14 +26,7 @@
     </div>
 
     <div id="game-screen" class="screen">
-        <div id="mode-select">
-            <select onchange="changeMode(this.value)">
-                <option value="normal">Normal Mode</option>
-                <option value="hard">Hard Mode</option>
-                <option value="expert">Expert Mode</option>
-            </select>
-        </div>
-        <div id="mode">Normal Mode</div>
+        <div id="mode"></div>
         <div id="instructions">Type the falling letters before they reach the bottom!</div>
         <div id="score">Score: 0</div>
         <div id="game-container"></div>

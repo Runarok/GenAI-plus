@@ -8,6 +8,7 @@ let isGameOver = false;
 let currentMode = 'normal';
 let combo = 0;
 let lastHitTime = 0;
+let perfectStreak = 0;
 
 const gameModes = {
     normal: { baseSpeed: 2, baseSpawnRate: 1500, speedIncrease: 0.001, spawnRateDecrease: 10 },
@@ -22,12 +23,16 @@ function changeMode(mode) {
 }
 
 function startGame() {
+    const selectedMode = document.getElementById('menu-mode-select').value;
+    currentMode = selectedMode;
+    
     hideAllScreens();
     document.getElementById('game-screen').classList.add('active');
     
     score = 0;
     combo = 0;
     letters = [];
+    perfectStreak = 0;
     const mode = gameModes[currentMode];
     speed = mode.baseSpeed;
     spawnRate = mode.baseSpawnRate;
@@ -35,6 +40,7 @@ function startGame() {
     
     document.getElementById('game-container').innerHTML = '';
     document.getElementById('score').textContent = 'Score: 0';
+    document.getElementById('mode').textContent = currentMode.charAt(0).toUpperCase() + currentMode.slice(1) + ' Mode';
     document.getElementById('game-over').style.display = 'none';
     document.getElementById('combo-text').style.opacity = '0';
     
@@ -74,6 +80,7 @@ function update(timestamp) {
         letter.element.style.top = letter.y + 'px';
 
         if (letter.y > window.innerHeight - 30) {
+            perfectStreak = 0;
             gameOver();
             return;
         }
@@ -100,6 +107,7 @@ function removeLetter(index) {
         letters.splice(index, 1);
     }, 300);
     
+    perfectStreak++;
     updateScore();
 }
 
@@ -118,5 +126,7 @@ document.addEventListener('keydown', (event) => {
     if (letterIndex !== -1) {
         updateCombo();
         removeLetter(letterIndex);
+    } else {
+        perfectStreak = 0;
     }
 });
