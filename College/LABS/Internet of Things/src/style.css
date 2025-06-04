@@ -5,6 +5,7 @@
   --text-secondary: #a0a0a0;
   --accent: #646cff;
   --border: #333333;
+  --code-highlight: #4b4b7c;
 }
 
 * {
@@ -29,6 +30,19 @@ body {
 header {
   margin-bottom: 2rem;
   text-align: center;
+  position: relative;
+}
+
+.old-version {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--accent);
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
 }
 
 h1 {
@@ -76,6 +90,7 @@ nav {
   background-color: var(--bg-secondary);
   border-radius: 4px;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 #toc-list a:hover,
@@ -125,9 +140,14 @@ pre {
   background-color: var(--bg-primary);
   padding: 1rem;
   border-radius: 4px;
-  overflow-x: auto;
-  margin: 1rem 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
   font-family: 'Courier New', Courier, monospace;
+  margin: 1rem 0;
+}
+
+pre .highlight {
+  color: var(--code-highlight);
 }
 
 .copy-btn {
@@ -166,5 +186,11 @@ pre {
 
   #toc-list {
     flex-direction: column;
+  }
+
+  .old-version {
+    position: static;
+    display: inline-block;
+    margin-bottom: 1rem;
   }
 }

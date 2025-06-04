@@ -5,6 +5,14 @@ function generateContent() {
   const programsContainer = document.getElementById('programs-container');
   const searchInput = document.getElementById('search');
 
+  function highlightCode(code) {
+    // Add syntax highlighting for specific keywords
+    return code.replace(
+      /(#include|#define|void|if|else|while|for|return|int|float|char|String|bool)\b/g,
+      '<span class="highlight">$1</span>'
+    );
+  }
+
   function createPinConfigTable(pinConfig) {
     const table = document.createElement('table');
     table.className = 'pin-config';
@@ -45,7 +53,7 @@ function generateContent() {
     copyBtn.className = 'copy-btn';
     
     const pre = document.createElement('pre');
-    pre.textContent = program.code;
+    pre.innerHTML = highlightCode(program.code);
 
     copyBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(program.code);
