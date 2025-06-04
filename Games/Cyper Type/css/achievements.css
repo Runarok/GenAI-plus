@@ -3,7 +3,6 @@
     padding: 2rem;
     text-align: center;
     max-height: 100vh;
-    overflow-y: auto;
 }
 
 #achievements-container, #highscores-container {
@@ -109,29 +108,7 @@
 }
 
 .scores-container {
-    max-height: calc(100vh - 250px);
-    overflow-y: auto;
     padding: 1rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent-color) var(--primary-bg);
-}
-
-.scores-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.scores-container::-webkit-scrollbar-track {
-    background: var(--primary-bg);
-    border-radius: 4px;
-}
-
-.scores-container::-webkit-scrollbar-thumb {
-    background: var(--accent-color);
-    border-radius: 4px;
-}
-
-.scores-container::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-glow);
 }
 
 .mode-scores {
@@ -140,15 +117,22 @@
     border-radius: 15px;
     padding: 2rem;
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 1200px;
 }
 
 .mode-scores h3 {
     color: var(--accent-color);
     margin: 0 0 1.5rem 0;
-    font-size: 1.8rem;
+    font-size: 2.5rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px var(--accent-glow);
+}
+
+.scores-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
 }
 
 @keyframes slideIn {

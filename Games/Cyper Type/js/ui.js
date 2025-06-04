@@ -47,20 +47,22 @@ function showModeScores(mode) {
 
     scoresContainer.innerHTML = `
         <div class="mode-scores">
-            <h3>${mode.charAt(0).toUpperCase() + mode.slice(1)} Mode</h3>
-            ${modeScores.length ? 
-                modeScores
-                    .sort((a, b) => b.score - a.score)
-                    .slice(0, 10)
-                    .map(score => `
-                        <div class="achievement">
-                            <div class="achievement-icon">🏆</div>
-                            <h3>${score.score} points</h3>
-                            <p>${new Date(score.date).toLocaleDateString()}</p>
-                        </div>
-                    `).join('') :
-                '<p>No scores yet!</p>'
-            }
+            <h3>${mode.charAt(0).toUpperCase() + mode.slice(1)} Mode High Scores</h3>
+            <div class="scores-grid">
+                ${modeScores.length ? 
+                    modeScores
+                        .sort((a, b) => b.score - a.score)
+                        .slice(0, 12)
+                        .map(score => `
+                            <div class="achievement">
+                                <div class="achievement-icon">🏆</div>
+                                <h3>${score.score} points</h3>
+                                <p>${new Date(score.date).toLocaleDateString()}</p>
+                            </div>
+                        `).join('') :
+                    '<p>No scores yet!</p>'
+                }
+            </div>
         </div>
     `;
 }
