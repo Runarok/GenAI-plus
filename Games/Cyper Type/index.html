@@ -3,264 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Game</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #0a0a0a;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        #game-container {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-        }
-
-        .letter {
-            position: absolute;
-            font-size: 24px;
-            font-weight: bold;
-            color: #00ffff;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-            transition: all 0.1s ease;
-        }
-
-        #score, #mode {
-            position: fixed;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 5px;
-            z-index: 100;
-        }
-
-        #score {
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            color: #00ffff;
-        }
-
-        #mode {
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 20px;
-            color: #00ffff;
-        }
-
-        #instructions {
-            position: fixed;
-            top: 60px;
-            left: 20px;
-            font-size: 16px;
-            color: #888;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        #mode-select {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
-        }
-
-        select {
-            background: #1a1a1a;
-            color: #00ffff;
-            border: 1px solid #00ffff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #game-over {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            z-index: 1000;
-            border: 1px solid #00ffff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-        }
-
-        button {
-            background: #00ffff;
-            color: #0a0a0a;
-            border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background: #00cccc;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-        }
-
-        .hit {
-            animation: hit 0.2s ease-out;
-        }
-
-        @keyframes hit {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
-            100% { transform: scale(0); opacity: 0; }
-        }
-    </style>
+    <title>Cyber Type Master</title>
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/achievements.css">
 </head>
 <body>
-    <div id="mode-select">
-        <select onchange="changeMode(this.value)">
-            <option value="normal">Normal Mode</option>
-            <option value="hard">Hard Mode</option>
-            <option value="expert">Expert Mode</option>
-        </select>
-    </div>
-    <div id="mode">Normal Mode</div>
-    <div id="instructions">Type the falling letters before they reach the bottom!</div>
-    <div id="score">Score: 0</div>
-    <div id="game-container"></div>
-    <div id="game-over">
-        <h2>Game Over!</h2>
-        <p>Final Score: <span id="final-score">0</span></p>
-        <button onclick="startGame()">Play Again</button>
+    <div id="menu" class="screen active">
+        <h1>Cyber Type Master</h1>
+        <div class="menu-options">
+            <button onclick="startGame()" class="menu-btn">Play Game</button>
+            <button onclick="showAchievements()" class="menu-btn">Achievements</button>
+            <button onclick="showHighScores()" class="menu-btn">High Scores</button>
+        </div>
     </div>
 
-    <script>
-        let score = 0;
-        let gameLoop;
-        let letters = [];
-        let speed = 2;
-        let spawnRate = 1500;
-        let lastSpawn = 0;
-        let isGameOver = false;
-        let currentMode = 'normal';
+    <div id="game-screen" class="screen">
+        <div id="mode-select">
+            <select onchange="changeMode(this.value)">
+                <option value="normal">Normal Mode</option>
+                <option value="hard">Hard Mode</option>
+                <option value="expert">Expert Mode</option>
+            </select>
+        </div>
+        <div id="mode">Normal Mode</div>
+        <div id="instructions">Type the falling letters before they reach the bottom!</div>
+        <div id="score">Score: 0</div>
+        <div id="game-container"></div>
+        <div id="game-over">
+            <h2>Game Over!</h2>
+            <p>Final Score: <span id="final-score">0</span></p>
+            <button onclick="restartGame()">Play Again</button>
+            <button onclick="showMenu()">Main Menu</button>
+        </div>
+        <div class="combo-text" id="combo-text"></div>
+    </div>
 
-        const gameModes = {
-            normal: { baseSpeed: 2, baseSpawnRate: 1500, speedIncrease: 0.001, spawnRateDecrease: 10 },
-            hard: { baseSpeed: 3, baseSpawnRate: 1200, speedIncrease: 0.002, spawnRateDecrease: 15 },
-            expert: { baseSpeed: 4, baseSpawnRate: 1000, speedIncrease: 0.003, spawnRateDecrease: 20 }
-        };
+    <div id="achievements-screen" class="screen">
+        <h2>Achievements</h2>
+        <div id="achievements-container"></div>
+        <button onclick="showMenu()" class="back-btn">Back to Menu</button>
+    </div>
 
-        function changeMode(mode) {
-            currentMode = mode;
-            document.getElementById('mode').textContent = mode.charAt(0).toUpperCase() + mode.slice(1) + ' Mode';
-            startGame();
-        }
+    <div id="highscores-screen" class="screen">
+        <h2>High Scores</h2>
+        <div id="highscores-container"></div>
+        <button onclick="showMenu()" class="back-btn">Back to Menu</button>
+    </div>
 
-        function startGame() {
-            // Reset game state
-            score = 0;
-            letters = [];
-            const mode = gameModes[currentMode];
-            speed = mode.baseSpeed;
-            spawnRate = mode.baseSpawnRate;
-            isGameOver = false;
-            
-            // Clear existing letters
-            document.getElementById('game-container').innerHTML = '';
-            document.getElementById('score').textContent = 'Score: 0';
-            document.getElementById('game-over').style.display = 'none';
-            
-            // Start game loop
-            gameLoop = requestAnimationFrame(update);
-        }
-
-        function createLetter() {
-            const letter = document.createElement('div');
-            letter.className = 'letter';
-            letter.textContent = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-            letter.style.left = Math.random() * (window.innerWidth - 30) + 'px';
-            letter.style.top = '0px';
-            document.getElementById('game-container').appendChild(letter);
-            
-            return {
-                element: letter,
-                y: 0,
-                char: letter.textContent
-            };
-        }
-
-        function update(timestamp) {
-            if (isGameOver) return;
-
-            const mode = gameModes[currentMode];
-
-            // Spawn new letters
-            if (timestamp - lastSpawn > spawnRate) {
-                letters.push(createLetter());
-                lastSpawn = timestamp;
-                
-                // Increase difficulty
-                if (spawnRate > 500) spawnRate -= mode.spawnRateDecrease;
-                speed += mode.speedIncrease;
-            }
-
-            // Update letters position
-            letters.forEach((letter, index) => {
-                letter.y += speed;
-                letter.element.style.top = letter.y + 'px';
-
-                // Check if letter reached bottom
-                if (letter.y > window.innerHeight - 30) {
-                    gameOver();
-                    return;
-                }
-            });
-
-            gameLoop = requestAnimationFrame(update);
-        }
-
-        function gameOver() {
-            isGameOver = true;
-            cancelAnimationFrame(gameLoop);
-            document.getElementById('game-over').style.display = 'block';
-            document.getElementById('final-score').textContent = score;
-        }
-
-        function removeLetter(index) {
-            letters[index].element.remove();
-            letters.splice(index, 1);
-        }
-
-        document.addEventListener('keydown', (event) => {
-            if (isGameOver) return;
-
-            const key = event.key.toUpperCase();
-            const letterIndex = letters.findIndex(l => l.char === key);
-
-            if (letterIndex !== -1) {
-                // Hit animation
-                letters[letterIndex].element.classList.add('hit');
-                setTimeout(() => removeLetter(letterIndex), 200);
-                
-                // Update score
-                score += 10;
-                document.getElementById('score').textContent = `Score: ${score}`;
-            }
-        });
-
-        // Start the game when the page loads
-        startGame();
-    </script>
+    <script src="js/achievements.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/audio.js"></script>
 </body>
 </html>

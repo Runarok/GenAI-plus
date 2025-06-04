@@ -1,0 +1,51 @@
+/* Achievements Screen Styles */
+#achievements-screen, #highscores-screen {
+    padding: 2rem;
+    text-align: center;
+}
+
+#achievements-container, #highscores-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.achievement {
+    background: rgba(0, 20, 40, 0.8);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.achievement.unlocked {
+    border-color: #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.achievement h3 {
+    color: #00ffff;
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+}
+
+.achievement p {
+    color: #aaa;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.achievement-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.achievement.unlocked .achievement-icon {
+    opacity: 1;
+    color: #00ffff;
+}
