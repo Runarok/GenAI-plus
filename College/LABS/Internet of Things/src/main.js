@@ -1,17 +1,35 @@
-import { programs } from './data/IOT.js';
-
 function generateContent() {
   const tocList = document.getElementById('toc-list');
   const programsContainer = document.getElementById('programs-container');
   const searchInput = document.getElementById('search');
 
-  function highlightCode(code) {
-    // Add syntax highlighting for specific keywords
-    return code.replace(
-      /(#include|#define|void|if|else|while|for|return|int|float|char|String|bool)\b/g,
-      '<span class="highlight">$1</span>'
-    );
-  }
+  // Add styles for code highlighting
+  const style = document.createElement('style');
+  style.textContent = `
+    .highlight {
+      color: #0000FF;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .pin-config {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+    .pin-config th, .pin-config td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .pin-config th {
+      background-color: #f2f2f2;
+    }
+  `;
+  document.head.appendChild(style);
 
   function createPinConfigTable(pinConfig) {
     const table = document.createElement('table');
@@ -42,53 +60,100 @@ function generateContent() {
 
   function showProgram(program) {
     programsContainer.innerHTML = '';
-    
+  
     const section = document.createElement('section');
-    
+    section.className = 'program-section';
+  
     const title = document.createElement('h2');
     title.textContent = program.title;
-    
-    const copyBtn = document.createElement('button');
-    copyBtn.textContent = 'Copy Code';
-    copyBtn.className = 'copy-btn';
-    
-    const pre = document.createElement('pre');
-    pre.innerHTML = highlightCode(program.code);
-
-    copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(program.code);
-      copyBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copyBtn.textContent = 'Copy Code';
-      }, 1500);
-    });
-
-    section.appendChild(title);
+  
+    const description = document.createElement('div');
+    description.className = 'description';
+  
+    let descriptionText = '';
+    let codeText = '';
+  
+    // Check if <QUES> and </QUES> exist in program.code
+    const hasQuesTags = program.code.includes('<QUES>') && program.code.includes('</QUES>');
+  
+    if (hasQuesTags) {
+      // Extract description between <QUES> and </QUES>
+      const descMatch = program.code.match(/<QUES>([\s\S]*?)<\/QUES>/);
+      if (descMatch && descMatch[1]) {
+        descriptionText = descMatch[1].trim();
+      }
+  
+      // The rest of the code after </QUES>
+      const codeStartIndex = program.code.indexOf('</QUES>') + 7;
+      codeText = program.code.slice(codeStartIndex).trim();
+    } else {
+      // No QUES tags, entire code is description (or code)
+      descriptionText = program.code.trim();
+      codeText = ''; // no separate code
+    }
+  
+    // Add description (if any)
+    if (descriptionText) {
+      // Use textContent for safety (or innerHTML if you want formatting)
+      description.textContent = descriptionText;
+      section.appendChild(description);
+    }
+  
+    // Create copy button & code container only if codeText exists
+    if (codeText) {
+      const copyBtn = document.createElement('button');
+      copyBtn.textContent = 'Copy Code';
+      copyBtn.className = 'copy-btn';
+  
+      const codeContainer = document.createElement('div');
+      codeContainer.className = 'code-container';
+  
+      const pre = document.createElement('pre');
+      pre.textContent = codeText; // preserve formatting
+      codeContainer.appendChild(pre);
+  
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(codeText);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy Code';
+        }, 1500);
+      });
+  
+      section.appendChild(copyBtn);
+      section.appendChild(codeContainer);
+    }
+  
+    // Pin config table (optional)
     if (program.pinConfig) {
       section.appendChild(createPinConfigTable(program.pinConfig));
     }
-    section.appendChild(copyBtn);
-    section.appendChild(pre);
-    
+  
+    section.insertBefore(title, section.firstChild);
     programsContainer.appendChild(section);
   }
+ 
 
   // Generate Table of Contents
-  programs.forEach((program, index) => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = '#';
-    a.textContent = program.title;
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      showProgram(program);
-      // Update active state
-      document.querySelectorAll('#toc-list a').forEach(link => link.classList.remove('active'));
-      a.classList.add('active');
+  if (programs && programs.length > 0) {
+    programs.forEach((program, index) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#';
+      a.textContent = program.title;
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        showProgram(program);
+        // Update active state
+        document.querySelectorAll('#toc-list a').forEach(link => link.classList.remove('active'));
+        a.classList.add('active');
+      });
+      li.appendChild(a);
+      tocList.appendChild(li);
     });
-    li.appendChild(a);
-    tocList.appendChild(li);
-  });
+  } else {
+    tocList.innerHTML = '<li>No programs available</li>';
+  }
 
   // Show first program by default
   if (programs.length > 0) {
