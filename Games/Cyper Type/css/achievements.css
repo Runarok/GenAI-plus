@@ -2,6 +2,8 @@
 #achievements-screen, #highscores-screen {
     padding: 2rem;
     text-align: center;
+    max-height: 100vh;
+    overflow-y: auto;
 }
 
 #achievements-container, #highscores-container {
@@ -89,4 +91,31 @@
         transform: translateX(-50%) translateY(-100%);
         opacity: 0;
     }
+}
+
+/* High Scores specific styles */
+#highscores-container {
+    display: block;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) var(--primary-bg);
+}
+
+#highscores-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#highscores-container::-webkit-scrollbar-track {
+    background: var(--primary-bg);
+    border-radius: 4px;
+}
+
+#highscores-container::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+#highscores-container::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-glow);
 }
