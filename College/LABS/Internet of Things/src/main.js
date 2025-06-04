@@ -32,51 +32,61 @@ function generateContent() {
     return table;
   }
 
-  function renderPrograms(filteredPrograms = programs) {
+  function showProgram(program) {
     programsContainer.innerHTML = '';
     
-    filteredPrograms.forEach((program, index) => {
-      const section = document.createElement('section');
-      section.id = `program${index + 1}`;
-      
-      const title = document.createElement('h2');
-      title.textContent = program.title;
-      
-      const copyBtn = document.createElement('button');
-      copyBtn.textContent = 'Copy Code';
-      copyBtn.className = 'copy-btn';
-      
-      const pre = document.createElement('pre');
-      pre.textContent = program.code;
+    const section = document.createElement('section');
+    
+    const title = document.createElement('h2');
+    title.textContent = program.title;
+    
+    const copyBtn = document.createElement('button');
+    copyBtn.textContent = 'Copy Code';
+    copyBtn.className = 'copy-btn';
+    
+    const pre = document.createElement('pre');
+    pre.textContent = program.code;
 
-      copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(program.code);
-        copyBtn.textContent = 'Copied!';
-        setTimeout(() => {
-          copyBtn.textContent = 'Copy Code';
-        }, 1500);
-      });
-
-      section.appendChild(title);
-      if (program.pinConfig) {
-        section.appendChild(createPinConfigTable(program.pinConfig));
-      }
-      section.appendChild(copyBtn);
-      section.appendChild(pre);
-      
-      programsContainer.appendChild(section);
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(program.code);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy Code';
+      }, 1500);
     });
+
+    section.appendChild(title);
+    if (program.pinConfig) {
+      section.appendChild(createPinConfigTable(program.pinConfig));
+    }
+    section.appendChild(copyBtn);
+    section.appendChild(pre);
+    
+    programsContainer.appendChild(section);
   }
 
   // Generate Table of Contents
   programs.forEach((program, index) => {
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.href = `#program${index + 1}`;
+    a.href = '#';
     a.textContent = program.title;
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      showProgram(program);
+      // Update active state
+      document.querySelectorAll('#toc-list a').forEach(link => link.classList.remove('active'));
+      a.classList.add('active');
+    });
     li.appendChild(a);
     tocList.appendChild(li);
   });
+
+  // Show first program by default
+  if (programs.length > 0) {
+    showProgram(programs[0]);
+    tocList.querySelector('a').classList.add('active');
+  }
 
   // Search functionality
   searchInput.addEventListener('input', (e) => {
@@ -85,11 +95,20 @@ function generateContent() {
       program.title.toLowerCase().includes(searchTerm) ||
       program.code.toLowerCase().includes(searchTerm)
     );
-    renderPrograms(filteredPrograms);
-  });
+    
+    if (filteredPrograms.length > 0) {
+      showProgram(filteredPrograms[0]);
+    } else {
+      programsContainer.innerHTML = '<p class="no-results">No matching programs found</p>';
+    }
 
-  // Initial render
-  renderPrograms();
+    // Update TOC visibility
+    document.querySelectorAll('#toc-list li').forEach(li => {
+      const link = li.querySelector('a');
+      const matches = programs.find(p => p.title === link.textContent)?.title.toLowerCase().includes(searchTerm);
+      li.style.display = matches ? 'block' : 'none';
+    });
+  });
 }
 
 // Initialize when DOM is loaded
