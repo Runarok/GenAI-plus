@@ -2,14 +2,42 @@ function generateContent() {
   const tocList = document.getElementById('toc-list');
   const programsContainer = document.getElementById('programs-container');
   const searchInput = document.getElementById('search');
+  const partsSelector = document.getElementById('parts-selector');
 
   function highlightCode(code) {
-    // First highlight the <QUES> tags
+    // Highlight the tags
     code = code.replace(
       /(<QUES>.*?<\/QUES>)/g,
       '<span class="highlight-question">$1</span>'
     );
+    code = code.replace(
+      /(<STEPS>.*?<\/STEPS>)/g,
+      '<span class="highlight-steps">$1</span>'
+    );
+    code = code.replace(
+      /(<COMMENTS>.*?<\/COMMENTS>)/g,
+      '<span class="highlight-comments">$1</span>'
+    );
     return code;
+  }
+
+  function extractCodePart(code, part) {
+    switch(part) {
+      case 'pinconfig':
+        return code.match(/Pin connection:.*?(?=●|$)/s)?.[0] || 'No pin configuration found.';
+      case 'setup':
+        return code.match(/void setup\(\) {[\s\S]*?}(?=\s*void loop|\s*$)/)?.[0] || 'No setup function found.';
+      case 'loop':
+        return code.match(/void loop\(\) {[\s\S]*?}(?=\s*$)/)?.[0] || 'No loop function found.';
+      case 'question':
+        return code.match(/<QUES>.*?<\/QUES>/s)?.[0] || 'No question found.';
+      case 'steps':
+        return code.match(/<STEPS>.*?<\/STEPS>/s)?.[0] || 'No steps found.';
+      case 'comments':
+        return code.match(/<COMMENTS>.*?<\/COMMENTS>/s)?.[0] || 'No comments found.';
+      default:
+        return code;
+    }
   }
 
   function createPinConfigTable(pinConfig) {
@@ -39,7 +67,7 @@ function generateContent() {
     return table;
   }
 
-  function showProgram(program) {
+  function showProgram(program, selectedPart = 'all') {
     programsContainer.innerHTML = '';
     
     const section = document.createElement('section');
@@ -52,10 +80,11 @@ function generateContent() {
     copyBtn.className = 'copy-btn';
     
     const pre = document.createElement('pre');
-    pre.innerHTML = highlightCode(program.code);
+    const codeToShow = selectedPart === 'all' ? program.code : extractCodePart(program.code, selectedPart);
+    pre.innerHTML = highlightCode(codeToShow);
 
     copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(program.code);
+      navigator.clipboard.writeText(codeToShow);
       copyBtn.textContent = 'Copied!';
       setTimeout(() => {
         copyBtn.textContent = 'Copy Code';
@@ -63,7 +92,7 @@ function generateContent() {
     });
 
     section.appendChild(title);
-    if (program.pinConfig) {
+    if (program.pinConfig && (selectedPart === 'all' || selectedPart === 'pinconfig')) {
       section.appendChild(createPinConfigTable(program.pinConfig));
     }
     section.appendChild(copyBtn);
@@ -80,13 +109,23 @@ function generateContent() {
     a.textContent = program.title;
     a.addEventListener('click', (e) => {
       e.preventDefault();
-      showProgram(program);
+      showProgram(program, partsSelector.value);
       // Update active state
       document.querySelectorAll('#toc-list a').forEach(link => link.classList.remove('active'));
       a.classList.add('active');
     });
     li.appendChild(a);
     tocList.appendChild(li);
+  });
+
+  // Parts selector functionality
+  partsSelector.addEventListener('change', () => {
+    const activeProgram = programs.find(program => 
+      program.title === document.querySelector('#toc-list a.active')?.textContent
+    );
+    if (activeProgram) {
+      showProgram(activeProgram, partsSelector.value);
+    }
   });
 
   // Show first program by default
@@ -104,7 +143,7 @@ function generateContent() {
     );
     
     if (filteredPrograms.length > 0) {
-      showProgram(filteredPrograms[0]);
+      showProgram(filteredPrograms[0], partsSelector.value);
     } else {
       programsContainer.innerHTML = '<p class="no-results">No matching programs found</p>';
     }
