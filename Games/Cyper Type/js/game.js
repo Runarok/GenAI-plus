@@ -45,7 +45,7 @@ function startGame() {
     isGameOver = false;
     
     document.getElementById('game-container').innerHTML = '';
-    document.getElementById('score').textContent = 'Score: 0';
+    document.getElementById('score').textContent = `Score: ${score}`;
     document.getElementById('high-score').textContent = `High Score: ${getHighScore(currentMode)}`;
     document.getElementById('mode').textContent = currentMode.charAt(0).toUpperCase() + currentMode.slice(1) + ' Mode';
     document.getElementById('game-over').style.display = 'none';
@@ -121,7 +121,12 @@ function removeLetter(index) {
 function updateScore() {
     const points = Math.max(10, Math.floor(10 * combo));
     score += points;
-    document.getElementById('score').textContent = `Score: ${score}`;
+    const scoreElement = document.getElementById('score');
+    scoreElement.textContent = `Score: ${score}`;
+    
+    // Add score bump animation
+    scoreElement.classList.add('score-bump');
+    setTimeout(() => scoreElement.classList.remove('score-bump'), 200);
 }
 
 document.addEventListener('keydown', (event) => {
