@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "vite"
+    "start": "vite",
+    "dev": "vite"
   },
   "devDependencies": {
     "vite": "^5.0.8"
