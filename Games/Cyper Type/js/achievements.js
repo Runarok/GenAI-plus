@@ -46,9 +46,8 @@ const achievements = [
 
 let unlockedAchievements = JSON.parse(localStorage.getItem('achievements') || '[]');
 let playedModes = JSON.parse(localStorage.getItem('playedModes') || '[]');
-let perfectStreak = 0;
 
-function checkAchievements(score, combo, mode) {
+function checkAchievements(score, combo, mode, perfectStreak) {
     if (!playedModes.includes(mode)) {
         playedModes.push(mode);
         localStorage.setItem('playedModes', JSON.stringify(playedModes));

@@ -95,7 +95,7 @@ function gameOver() {
     document.getElementById('game-over').style.display = 'block';
     document.getElementById('final-score').textContent = score;
     
-    checkAchievements(score, combo, currentMode);
+    checkAchievements(score, combo, currentMode, perfectStreak);
     updateHighScores(score);
 }
 
