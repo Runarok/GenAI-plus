@@ -16,6 +16,12 @@ const gameModes = {
     expert: { baseSpeed: 4, baseSpawnRate: 1000, speedIncrease: 0.003, spawnRateDecrease: 20 }
 };
 
+function getHighScore(mode) {
+    const highScores = JSON.parse(localStorage.getItem('highScores') || '[]');
+    const modeScores = highScores.filter(score => score.mode === mode);
+    return modeScores.length > 0 ? Math.max(...modeScores.map(s => s.score)) : 0;
+}
+
 function changeMode(mode) {
     currentMode = mode;
     document.getElementById('mode').textContent = mode.charAt(0).toUpperCase() + mode.slice(1) + ' Mode';
@@ -40,6 +46,7 @@ function startGame() {
     
     document.getElementById('game-container').innerHTML = '';
     document.getElementById('score').textContent = 'Score: 0';
+    document.getElementById('high-score').textContent = `High Score: ${getHighScore(currentMode)}`;
     document.getElementById('mode').textContent = currentMode.charAt(0).toUpperCase() + currentMode.slice(1) + ' Mode';
     document.getElementById('game-over').style.display = 'none';
     document.getElementById('combo-text').style.opacity = '0';
