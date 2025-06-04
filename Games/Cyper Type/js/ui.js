@@ -16,7 +16,6 @@ function showHighScores() {
     const allHighScores = JSON.parse(localStorage.getItem('highScores') || '[]');
     const container = document.getElementById('highscores-container');
     
-    // Create mode selection buttons
     container.innerHTML = `
         <div class="mode-buttons">
             <button class="mode-btn active" data-mode="normal">Normal Mode</button>
@@ -26,7 +25,6 @@ function showHighScores() {
         <div class="scores-container"></div>
     `;
 
-    // Add click handlers to buttons
     const buttons = container.querySelectorAll('.mode-btn');
     buttons.forEach(button => {
         button.addEventListener('click', () => {
@@ -36,21 +34,27 @@ function showHighScores() {
         });
     });
 
-    // Show initial scores (Normal mode)
     showModeScores('normal');
 }
 
 function showModeScores(mode) {
     const allHighScores = JSON.parse(localStorage.getItem('highScores') || '[]');
-    const modeScores = allHighScores.filter(score => score.mode === mode);
+    const uniqueScores = allHighScores
+        .filter(score => score.mode === mode)
+        .reduce((unique, score) => {
+            const exists = unique.find(s => s.score === score.score);
+            if (!exists) unique.push(score);
+            return unique;
+        }, []);
+
     const scoresContainer = document.querySelector('.scores-container');
 
     scoresContainer.innerHTML = `
         <div class="mode-scores">
             <h3>${mode.charAt(0).toUpperCase() + mode.slice(1)} Mode High Scores</h3>
             <div class="scores-grid">
-                ${modeScores.length ? 
-                    modeScores
+                ${uniqueScores.length ? 
+                    uniqueScores
                         .sort((a, b) => b.score - a.score)
                         .slice(0, 12)
                         .map(score => `
@@ -69,12 +73,16 @@ function showModeScores(mode) {
 
 function updateHighScores(score) {
     const highScores = JSON.parse(localStorage.getItem('highScores') || '[]');
-    highScores.push({
-        score,
-        mode: currentMode,
-        date: new Date().toISOString()
-    });
-    localStorage.setItem('highScores', JSON.stringify(highScores));
+    const exists = highScores.some(s => s.score === score && s.mode === currentMode);
+    
+    if (!exists) {
+        highScores.push({
+            score,
+            mode: currentMode,
+            date: new Date().toISOString()
+        });
+        localStorage.setItem('highScores', JSON.stringify(highScores));
+    }
 }
 
 function updateCombo() {
@@ -105,7 +113,6 @@ function toggleTheme() {
     localStorage.setItem('theme', newTheme);
 }
 
-// Initialize theme from localStorage
 document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
