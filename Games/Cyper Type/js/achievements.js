@@ -41,11 +41,40 @@ const achievements = [
         description: 'Score 5000 points in a single game',
         icon: '🏆',
         condition: (score) => score >= 5000
+    },
+    {
+        id: 'lightning_fast',
+        title: 'Lightning Fast',
+        description: 'Achieve a 20x combo',
+        icon: '⚡',
+        condition: (score, combo) => combo >= 20
+    },
+    {
+        id: 'perfectionist',
+        title: 'Perfectionist',
+        description: 'Type 100 letters without missing',
+        icon: '💯',
+        condition: (score, combo, mode, perfectStreak) => perfectStreak >= 100
+    },
+    {
+        id: 'marathon_runner',
+        title: 'Marathon Runner',
+        description: 'Score 10000 points in a single game',
+        icon: '🏃‍♂️',
+        condition: (score) => score >= 10000
+    },
+    {
+        id: 'keyboard_warrior',
+        title: 'Keyboard Warrior',
+        description: 'Play 10 games in expert mode',
+        icon: '⌨️',
+        condition: (score, combo, mode, perfectStreak, playedModes, expertGames) => expertGames >= 10
     }
 ];
 
 let unlockedAchievements = JSON.parse(localStorage.getItem('achievements') || '[]');
 let playedModes = JSON.parse(localStorage.getItem('playedModes') || '[]');
+let expertGames = parseInt(localStorage.getItem('expertGames') || '0');
 
 function checkAchievements(score, combo, mode, perfectStreak) {
     if (!playedModes.includes(mode)) {
@@ -53,9 +82,14 @@ function checkAchievements(score, combo, mode, perfectStreak) {
         localStorage.setItem('playedModes', JSON.stringify(playedModes));
     }
 
+    if (mode === 'expert') {
+        expertGames++;
+        localStorage.setItem('expertGames', expertGames);
+    }
+
     achievements.forEach(achievement => {
         if (!unlockedAchievements.includes(achievement.id) && 
-            achievement.condition(score, combo, mode, perfectStreak, playedModes)) {
+            achievement.condition(score, combo, mode, perfectStreak, playedModes, expertGames)) {
             unlockAchievement(achievement);
         }
     });
