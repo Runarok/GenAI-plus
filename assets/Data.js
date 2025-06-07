@@ -59,9 +59,10 @@ const menuData = [
     id: "experiments",
     title: "Experiments",
     links: [
+      { label: "Productive-Tips", url: "Experiments/Productive/index.html", desc: "Be more productive." },
       { label: "Quotes", url: "Experiments/Quotes/index.html", desc: "Fav Quotes/Words." },
-      { label: "SnarkBot", url: "Experiments/AI Chat/SnarkBot/index.html", desc: "Snarky AI bot." },
       { label: "Sandbox", url: "Experiments/Sandbox/Sandbox.html", desc: "Try out ideas in the sandbox." },
+      { label: "SnarkBot", url: "Experiments/AI Chat/SnarkBot/index.html", desc: "Snarky AI bot." },
       { label: "Anime Merch", url: "Experiments/AnimeMerch/index.html", desc: "Just front end." },
       { label: "Audio Visualizer", url: "visualizer.html", desc: "Music meets visuals." },
       { label: "Particle Playground", url: "particles.html", desc: "Interactive particle demo." }
