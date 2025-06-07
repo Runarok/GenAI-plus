@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Top 50 Productivity Hacks</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+  <!-- CSS Reset -->
+  <link rel="stylesheet" href="https://unpkg.com/modern-css-reset/dist/reset.min.css" />
+  <style>
+    :root {
+      --font-family: 'Inter', Arial, sans-serif;
+      --transition: 0.2s cubic-bezier(.4,0,.2,1);
+
+      /* Light Theme */
+      --color-bg-light: #fbf7f2;
+      --color-surface-light: #fffdfa;
+      --color-primary-light: #FF9A76;
+      --color-secondary-light: #FFD6C0;
+      --color-text-light: #3a312a;
+      --color-heading-light: #b05c34;
+      --color-border-light: #ffe1ce;
+
+      /* Dark Theme */
+      --color-bg-dark: #161e27;
+      --color-surface-dark: #212a36;
+      --color-primary-dark: #5fd1ff;
+      --color-secondary-dark: #1a7fa5;
+      --color-text-dark: #eaf6fa;
+      --color-heading-dark: #5fd1ff;
+      --color-border-dark: #233040;
+
+      /* Accent Theme */
+      --color-bg-accent: #e3f0e4;
+      --color-surface-accent: #ffffff;
+      --color-primary-accent: #4ECDC4;
+      --color-secondary-accent: #FF6B6B;
+      --color-text-accent: #214d4d;
+      --color-heading-accent: #ff6b6b;
+      --color-border-accent: #b3ecec;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--color-bg-light);
+      color: var(--color-text-light);
+      transition: background var(--transition), color var(--transition);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 60px auto 40px auto;
+      background: var(--color-surface-light);
+      border-radius: 18px;
+      padding: 44px 28px 28px 28px;
+      box-shadow: 0 2px 16px 0 rgba(40,40,60,0.07);
+      transition: background var(--transition);
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--color-heading-light);
+      letter-spacing: -1px;
+      transition: color var(--transition);
+    }
+    .theme-switcher {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .theme-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 8px 18px;
+      font: inherit;
+      font-weight: 600;
+      border-radius: 20px;
+      background: var(--color-secondary-light);
+      color: var(--color-heading-light);
+      border: 2px solid transparent;
+      transition: background var(--transition), color var(--transition), border var(--transition);
+    }
+    .theme-btn.active, .theme-btn:focus-visible {
+      border-color: var(--color-primary-light);
+      outline: none;
+    }
+    .theme-btn:focus-visible {
+      box-shadow: 0 0 0 2px var(--color-primary-light);
+    }
+
+    main {
+      margin-top: 12px;
+    }
+
+    .hack-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .hack-item {
+      margin-bottom: 14px;
+    }
+
+    .hack-heading {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--color-heading-light);
+      padding: 18px 18px 18px 0;
+      border-radius: 8px;
+      background: var(--color-border-light);
+      transition: background var(--transition), color var(--transition);
+      position: relative;
+      outline: none;
+      display: flex;
+      align-items: center;
+    }
+    .hack-heading:after {
+      content: '+';
+      margin-left: auto;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: var(--color-primary-light);
+      transition: transform var(--transition);
+    }
+    .hack-heading[aria-expanded="true"]:after {
+      content: '−';
+      transform: rotate(180deg);
+    }
+    .hack-heading:focus-visible {
+      background: var(--color-primary-light);
+      color: #fffdfa;
+    }
+
+    .hack-details {
+      max-height: 0;
+      overflow: hidden;
+      background: var(--color-surface-light);
+      border-left: 4px solid var(--color-primary-light);
+      margin-top: -6px;
+      margin-bottom: 6px;
+      border-radius: 0 0 8px 8px;
+      padding: 0 16px;
+      color: var(--color-text-light);
+      font-size: 1.04rem;
+      transition: max-height 0.28s var(--transition), padding 0.28s var(--transition), color var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .hack-details.open {
+      padding: 14px 16px 18px 16px;
+      max-height: 350px;
+      /* for smooth expansion */
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 18px 4vw 18px 4vw;
+      }
+      h1 { font-size: 2.1rem; }
+      .hack-heading { font-size: 1.05rem; }
+    }
+
+    /* ====== DARK THEME ====== */
+    body.theme-dark {
+      background: var(--color-bg-dark);
+      color: var(--color-text-dark);
+    }
+    .container.theme-dark {
+      background: var(--color-surface-dark);
+    }
+    h1.theme-dark {
+      color: var(--color-heading-dark);
+    }
+    .theme-btn.theme-dark {
+      background: var(--color-secondary-dark);
+      color: var(--color-heading-dark);
+      border-color: transparent;
+    }
+    .theme-btn.theme-dark.active, .theme-btn.theme-dark:focus-visible {
+      border-color: var(--color-primary-dark);
+      box-shadow: 0 0 0 2px var(--color-primary-dark);
+    }
+    .hack-heading.theme-dark {
+      background: var(--color-border-dark);
+      color: var(--color-heading-dark);
+    }
+    .hack-heading.theme-dark:after {
+      color: var(--color-primary-dark);
+    }
+    .hack-heading.theme-dark:focus-visible {
+      background: var(--color-primary-dark);
+      color: #14202b;
+    }
+    .hack-details.theme-dark {
+      background: var(--color-surface-dark);
+      color: var(--color-text-dark);
+      border-left-color: var(--color-primary-dark);
+    }
+
+    /* ====== ACCENT THEME ====== */
+    body.theme-accent {
+      background: var(--color-bg-accent);
+      color: var(--color-text-accent);
+    }
+    .container.theme-accent {
+      background: var(--color-surface-accent);
+    }
+    h1.theme-accent {
+      color: var(--color-heading-accent);
+    }
+    .theme-btn.theme-accent {
+      background: var(--color-primary-accent);
+      color: #fff;
+      border-color: transparent;
+    }
+    .theme-btn.theme-accent.active, .theme-btn.theme-accent:focus-visible {
+      border-color: var(--color-secondary-accent);
+      box-shadow: 0 0 0 2px var(--color-secondary-accent);
+    }
+    .hack-heading.theme-accent {
+      background: var(--color-border-accent);
+      color: var(--color-heading-accent);
+    }
+    .hack-heading.theme-accent:after {
+      color: var(--color-primary-accent);
+    }
+    .hack-heading.theme-accent:focus-visible {
+      background: var(--color-primary-accent);
+      color: #fff;
+    }
+    .hack-details.theme-accent {
+      background: var(--color-surface-accent);
+      color: var(--color-text-accent);
+      border-left-color: var(--color-secondary-accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <header>
+      <h1 id="page-title">Top 50 Productivity Hacks</h1>
+      <nav aria-label="Theme switcher" class="theme-switcher" id="theme-switcher">
+        <button type="button" class="theme-btn active" data-theme="light" aria-current="true" aria-label="Switch to Light Theme">Light</button>
+        <button type="button" class="theme-btn" data-theme="dark" aria-label="Switch to Dark Theme">Dark</button>
+        <button type="button" class="theme-btn" data-theme="accent" aria-label="Switch to Accent Theme">Accent</button>
+      </nav>
+    </header>
+    <main>
+      <ul class="hack-list" id="hack-list"></ul>
+    </main>
+  </div>
+  <script>
+    // === GLOBALS ===
+    // Minimal sample content; replace details as needed
+    const HACKS = [
+      {
+        title: "1. Set Clear Daily Goals",
+        details: "Begin each day by writing down 1–3 key goals. This gives your day direction and helps you focus on what matters most."
+      },
+      {
+        title: "2. Use the Pomodoro Technique",
+        details: "Work in focused 25-minute bursts, followed by a 5-minute break. After four rounds, take a longer break. This boosts concentration and staves off burnout."
+      },
+      {
+        title: "3. Batch Similar Tasks Together",
+        details: "Group similar tasks (like replying to emails) and do them all at once to minimize context switching and increase efficiency."
+      },
+      {
+        title: "4. Eliminate Distractions",
+        details: "Silence notifications, close unused tabs, and create a dedicated workspace to keep your mind on the task at hand."
+      },
+      {
+        title: "5. Prioritize with the Eisenhower Matrix",
+        details: "Sort tasks into: urgent/important, important/not urgent, urgent/not important, and neither. Focus on what’s important, not just what’s urgent."
+      },
+      {
+        title: "6. Plan Tomorrow, Tonight",
+        details: "End your workday by preparing your tasks for the next day. You’ll start each morning with clarity and motivation."
+      },
+      {
+        title: "7. Leverage 'Two-Minute Rule'",
+        details: "If something takes less than two minutes, do it immediately. This keeps small tasks from piling up."
+      },
+      {
+        title: "8. Automate Repetitive Tasks",
+        details: "Use tools and scripts to automate routine work, freeing up time for high-value activities."
+      },
+      {
+        title: "9. Delegate When Possible",
+        details: "Don’t do everything yourself. Delegate tasks that don’t require your unique skills."
+      },
+      {
+        title: "10. Schedule Email Blocks",
+        details: "Avoid checking email constantly. Set specific times during the day for reading and responding to messages."
+      },
+      {
+        title: "11. Use Templates for Frequent Responses",
+        details: "Save time on repetitive emails or messages by creating templates for common replies."
+      },
+      {
+        title: "12. Stand Up Regularly",
+        details: "Take standing or movement breaks every hour to boost energy and maintain focus."
+      },
+      {
+        title: "13. Start with the Hardest Task (Eat That Frog)",
+        details: "Tackle your most challenging task first. Accomplishing it early gives you momentum for the rest of the day."
+      },
+      {
+        title: "14. Limit Your To-Do List",
+        details: "Avoid overwhelming yourself. Focus on a small number of achievable tasks each day."
+      },
+      {
+        title: "15. Use Keyboard Shortcuts",
+        details: "Learn shortcuts for your most-used apps to save seconds that add up over time."
+      },
+      {
+        title: "16. Say 'No' More Often",
+        details: "Protect your time by declining tasks or meetings that don’t align with your priorities."
+      },
+      {
+        title: "17. Keep Your Workspace Organized",
+        details: "A tidy desk (digital or physical) reduces stress and makes it easier to find what you need."
+      },
+      {
+        title: "18. Leverage Technology Wisely",
+        details: "Use productivity tools, but don’t overcomplicate your workflow with too many apps."
+      },
+      {
+        title: "19. Review and Reflect Weekly",
+        details: "Set aside time each week to review accomplishments and plan improvements."
+      },
+      {
+        title: "20. Practice Mindfulness",
+        details: "Start or end your day with meditation, mindful breathing, or journaling to improve focus and resilience."
+      },
+      // Add 30 more hacks here...
+      {
+        title: "21. Block Social Media During Work",
+        details: "Use browser extensions or device settings to prevent access to distracting sites during working hours."
+      },
+      {
+        title: "22. Set Time Limits for Meetings",
+        details: "Keep meetings short and purposeful. Use a timed agenda to stay on track."
+      },
+      {
+        title: "23. Prepare Meeting Agendas",
+        details: "Share clear agendas before meetings to ensure productive discussions."
+      },
+      {
+        title: "24. Use a Single Task Management System",
+        details: "Avoid juggling multiple to-do lists. Centralize your tasks in one trusted system."
+      },
+      {
+        title: "25. Review Your Calendar Every Morning",
+        details: "Start your day with a quick calendar check to avoid surprises and plan your time."
+      },
+      {
+        title: "26. Set Office Hours for Deep Work",
+        details: "Block off time on your calendar for focused, distraction-free work sessions."
+      },
+      {
+        title: "27. Keep a Notepad Handy",
+        details: "Write down ideas, tasks, or reminders as they come to mind to avoid mental clutter."
+      },
+      {
+        title: "28. Use Visual Progress Trackers",
+        details: "Kanban boards or progress bars help you see your workflow and stay motivated."
+      },
+      {
+        title: "29. Limit Multitasking",
+        details: "Focus on one thing at a time for better results and less stress."
+      },
+      {
+        title: "30. Set Deadlines for Yourself",
+        details: "Even self-imposed deadlines help you stay accountable and avoid procrastination."
+      },
+      {
+        title: "31. Start Meetings on Time",
+        details: "Begin meetings promptly, regardless of latecomers, to respect everyone’s schedule."
+      },
+      {
+        title: "32. Use Headphones for Focus",
+        details: "Listening to music or white noise can help block distractions and signal you’re in focus mode."
+      },
+      {
+        title: "33. Limit Smartphone Use",
+        details: "Put your phone away or use 'Do Not Disturb' during work sessions."
+      },
+      {
+        title: "34. Use Checklists for Routine Tasks",
+        details: "Standardize recurring processes with checklists to reduce errors and free up mental space."
+      },
+      {
+        title: "35. Practice Inbox Zero",
+        details: "Aim to keep your email inbox empty or nearly so. Archive, delete, or respond promptly."
+      },
+      {
+        title: "36. Take Real Lunch Breaks",
+        details: "Step away from your desk and enjoy a real break to recharge for the afternoon."
+      },
+      {
+        title: "37. Review Your Goals Regularly",
+        details: "Check in with your short and long-term goals to ensure your daily work aligns with them."
+      },
+      {
+        title: "38. Break Big Tasks into Steps",
+        details: "Divide complex projects into manageable chunks to reduce overwhelm and track progress."
+      },
+      {
+        title: "39. Use Cloud Storage",
+        details: "Store important documents online for easy access and collaboration."
+      },
+      {
+        title: "40. Keep Learning",
+        details: "Invest time in reading, online courses, or professional development to stay sharp."
+      },
+      {
+        title: "41. Set Boundaries for Work-Life Balance",
+        details: "Define clear start and end times for work to protect your personal time."
+      },
+      {
+        title: "42. Regularly Unsubscribe from Unwanted Emails",
+        details: "Keep your inbox tidy and reduce distraction by unsubscribing from irrelevant lists."
+      },
+      {
+        title: "43. Limit Decision Fatigue",
+        details: "Simplify routine choices (like meals or outfits) so you can focus decision-making on important matters."
+      },
+      {
+        title: "44. Use 'Do Not Disturb' Mode",
+        details: "Silence digital notifications during deep work periods."
+      },
+      {
+        title: "45. Celebrate Small Wins",
+        details: "Acknowledge progress and reward yourself to stay motivated."
+      },
+      {
+        title: "46. Get Enough Sleep",
+        details: "Rest is foundational to productivity. Prioritize quality sleep for better focus and creativity."
+      },
+      {
+        title: "47. Hydrate and Snack Smartly",
+        details: "Drink water and eat nourishing snacks to maintain energy throughout the day."
+      },
+      {
+        title: "48. Use Voice-to-Text Tools",
+        details: "Dictate notes or messages to save time and capture thoughts on the go."
+      },
+      {
+        title: "49. Practice Saying 'Later'",
+        details: "Not every task is urgent. Defer or schedule non-critical items to avoid overload."
+      },
+      {
+        title: "50. End Each Day with Gratitude",
+        details: "Reflect on what went well. Gratitude boosts mood and motivation for tomorrow."
+      }
+    ];
+    const THEMES = ['light', 'dark', 'accent'];
+    let currentTheme = 'light';
+    let openHacks = Array(HACKS.length).fill(false);
+
+    // === RENDERING ===
+    function renderHacks() {
+      const ul = document.getElementById('hack-list');
+      ul.innerHTML = '';
+      HACKS.forEach((hack, idx) => {
+        const li = document.createElement('li');
+        li.className = 'hack-item';
+
+        // Button Heading (for accessibility)
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'hack-heading ' + themeClass();
+        btn.id = `hack-heading-${idx}`;
+        btn.setAttribute('aria-expanded', openHacks[idx] ? 'true' : 'false');
+        btn.setAttribute('aria-controls', `hack-details-${idx}`);
+        btn.innerText = hack.title;
+        btn.addEventListener('click', () => toggleHack(idx));
+        btn.addEventListener('keydown', e => {
+          if (e.key === 'ArrowDown' && idx < HACKS.length - 1) {
+            document.getElementById(`hack-heading-${idx + 1}`).focus();
+          } else if (e.key === 'ArrowUp' && idx > 0) {
+            document.getElementById(`hack-heading-${idx - 1}`).focus();
+          }
+        });
+
+        // Details
+        const details = document.createElement('section');
+        details.className = 'hack-details' + (openHacks[idx] ? ' open' : '') + ' ' + themeClass();
+        details.id = `hack-details-${idx}`;
+        details.setAttribute('aria-labelledby', btn.id);
+        details.setAttribute('role', 'region');
+        details.style.display = openHacks[idx] ? 'block' : 'none';
+        details.innerHTML = `<p>${hack.details}</p>`;
+
+        li.appendChild(btn);
+        li.appendChild(details);
+        ul.appendChild(li);
+      });
+    }
+
+    function themeClass() {
+      return `theme-${currentTheme}`;
+    }
+
+    function applyTheme(theme) {
+      currentTheme = theme;
+      // Update body and container classes
+      document.body.className = 'theme-' + theme;
+      document.getElementById('container').className = 'container theme-' + theme;
+      document.getElementById('page-title').className = 'theme-' + theme;
+      // Update theme buttons
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.classList.remove('theme-light', 'theme-dark', 'theme-accent');
+        btn.classList.add('theme-' + theme);
+        if (btn.dataset.theme === theme) {
+          btn.classList.add('active');
+          btn.setAttribute('aria-current', 'true');
+        } else {
+          btn.removeAttribute('aria-current');
+        }
+      });
+      // Update hack headings and details
+      document.querySelectorAll('.hack-heading').forEach(el => {
+        el.className = 'hack-heading ' + themeClass();
+      });
+      document.querySelectorAll('.hack-details').forEach(el => {
+        el.className = 'hack-details' + (el.classList.contains('open') ? ' open' : '') + ' ' + themeClass();
+      });
+    }
+
+    function toggleHack(idx) {
+      openHacks[idx] = !openHacks[idx];
+      // Only one open at a time? (Optional: comment out if not desired)
+      // openHacks = openHacks.map((v, i) => i === idx ? !v : false);
+      renderHacks();
+      applyTheme(currentTheme);
+      // Return focus to heading for accessibility
+      setTimeout(() => {
+        document.getElementById(`hack-heading-${idx}`).focus();
+      }, 0);
+    }
+
+    // === THEME SWITCHER ===
+    function setupThemeSwitcher() {
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          applyTheme(btn.dataset.theme);
+        });
+      });
+    }
+
+    // === INIT ===
+    function init() {
+      renderHacks();
+      setupThemeSwitcher();
+      applyTheme(currentTheme);
+    }
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
