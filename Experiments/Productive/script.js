@@ -77,7 +77,7 @@ function setupEventListeners() {
         });
     });
     
-    // Hack expansion
+    // Hack expansion with lazy loading
     const hacks = document.querySelectorAll('.hack');
     hacks.forEach(hack => {
         const header = hack.querySelector('.hack-header');
@@ -90,9 +90,9 @@ function setupEventListeners() {
             // Load content if it hasn't been loaded yet
             if (hack.classList.contains('active') && content.innerHTML.trim() === '') {
                 const description = decodeURIComponent(content.dataset.description);
-                const descElement = document.createElement('p');
+                const descElement = document.createElement('div');
                 descElement.className = 'hack-description';
-                descElement.textContent = description;
+                descElement.innerHTML = description; // Use innerHTML to render HTML tags
                 content.appendChild(descElement);
             }
         });
