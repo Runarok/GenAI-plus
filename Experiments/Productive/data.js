@@ -45,7 +45,27 @@ const productivityHacks = [
     },
     {
         title: "Use keyboard shortcuts",
-        description: "Learn and use keyboard shortcuts for your most-used applications. This small efficiency can save significant time over the long run."
+        description: `
+<p>Using keyboard shortcuts can save you time and increase productivity. Here are some
+pointers to keep in mind when using keyboard shortcuts:</p>
+<ul>
+<li><b>Identify the most commonly used shortcuts:</b> Start by identifying the most commonly
+used shortcuts for your operating system and software. You can find a list of shortcuts
+online or in the software's help menu.</li>
+<li><b>Memorize shortcuts:</b> Once you have identified the most commonly used shortcuts,
+take the time to memorize them. This will help you use them quickly and efficiently.</li>
+<li><b>Customize shortcuts:</b> Some software allows you to customize keyboard shortcuts to
+fit your workflow. Consider customizing shortcuts for tasks that you do frequently.</li>
+<li><b>Use a cheat sheet:</b> If you are having trouble remembering shortcuts, use a cheat
+sheet. You can create your own or download one online.</li>
+<li><b>Practice regularly:</b> The more you use keyboard shortcuts, the more comfortable and
+efficient you will become. Make it a habit to use shortcuts whenever possible.</li>
+</ul>
+<p>Using keyboard shortcuts can help you work more efficiently and save time. By
+identifying commonly used shortcuts, memorizing them, customizing shortcuts, using a
+cheat sheet, and practicing regularly, you can increase your productivity and streamline
+your workflow.</p>
+`
     },
     {
         title: "Automate repetitive tasks",

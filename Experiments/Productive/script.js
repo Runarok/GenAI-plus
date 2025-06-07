@@ -36,8 +36,7 @@ function generateHackList() {
                 <div class="hack-title">${hack.title}</div>
                 <div class="hack-toggle"></div>
             </div>
-            <div class="hack-content">
-                <p class="hack-description">${hack.description}</p>
+            <div class="hack-content" data-description="${encodeURIComponent(hack.description)}">
             </div>
         `;
         
@@ -82,9 +81,20 @@ function setupEventListeners() {
     const hacks = document.querySelectorAll('.hack');
     hacks.forEach(hack => {
         const header = hack.querySelector('.hack-header');
+        const content = hack.querySelector('.hack-content');
         
         header.addEventListener('click', () => {
+            // Toggle active class
             hack.classList.toggle('active');
+            
+            // Load content if it hasn't been loaded yet
+            if (hack.classList.contains('active') && content.innerHTML.trim() === '') {
+                const description = decodeURIComponent(content.dataset.description);
+                const descElement = document.createElement('p');
+                descElement.className = 'hack-description';
+                descElement.textContent = description;
+                content.appendChild(descElement);
+            }
         });
     });
 }
