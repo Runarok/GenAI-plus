@@ -92,32 +92,54 @@ function showSection(idx, focusBtn = false) {
   history.replaceState(null, '', `#${menuData[idx].id}`);
 }
 
-// Keyboard navigation for section toggles including WASD keys
-sectionToggle.addEventListener('keydown', (e) => {
+// Keyboard navigation for sections and links (global listener)
+document.addEventListener('keydown', (e) => {
   const len = menuData.length;
-  let handled = false;
-
-  // Normalize key to lower case for easier matching
   const key = e.key.toLowerCase();
 
-  if (key === 'arrowleft' || key === 'arrowup' || key === 'a' || key === 'w') {
-    // Previous section
-    showSection((currentSectionIdx - 1 + len) % len, true);
-    handled = true;
-  } else if (key === 'arrowright' || key === 'arrowdown' || key === 'd' || key === 's') {
-    // Next section
-    showSection((currentSectionIdx + 1) % len, true);
-    handled = true;
-  } else if (key === 'home') {
-    showSection(0, true);
-    handled = true;
-  } else if (key === 'end') {
-    showSection(len - 1, true);
-    handled = true;
-  }
+  const activePanel = mainContent.querySelector('.section-panel.active');
+  if (!activePanel) return;
+  const links = Array.from(activePanel.querySelectorAll('.menu-link'));
+  const focusedElement = document.activeElement;
 
-  if (handled) {
+  // Determine if focus is inside the links of the active panel
+  const isFocusOnLink = links.includes(focusedElement);
+
+  // Navigate sections with Arrow Up/Down or W/S
+  if (key === 'arrowup' || key === 'w' || key === 'arrowdown' || key === 's') {
     e.preventDefault();
+    if (key === 'arrowup' || key === 'w') {
+      const newIdx = (currentSectionIdx - 1 + len) % len;
+      showSection(newIdx, true);
+    } else {
+      // arrowdown or s
+      const newIdx = (currentSectionIdx + 1) % len;
+      showSection(newIdx, true);
+    }
+  }
+  // Navigate links with Arrow Left/Right or A/D, only if links exist
+  else if ((key === 'arrowleft' || key === 'a' || key === 'arrowright' || key === 'd') && links.length > 0) {
+    e.preventDefault();
+
+    // If focus currently inside links, move within them
+    if (isFocusOnLink) {
+      const focusedIdx = links.indexOf(focusedElement);
+      let nextIdx = focusedIdx;
+      if (key === 'arrowright' || key === 'd') {
+        nextIdx = (focusedIdx + 1) % links.length;
+      } else if (key === 'arrowleft' || key === 'a') {
+        nextIdx = (focusedIdx - 1 + links.length) % links.length;
+      }
+      links[nextIdx].focus();
+    }
+    // Otherwise, if focus not on a link, focus first or last link based on key
+    else {
+      if (key === 'arrowright' || key === 'd') {
+        links[0].focus();
+      } else if (key === 'arrowleft' || key === 'a') {
+        links[links.length - 1].focus();
+      }
+    }
   }
 });
 
@@ -145,26 +167,6 @@ mainContent.addEventListener('touchend', (e) => {
     }
   }
   touchStartX = touchStartY = null;
-});
-
-// Keyboard navigation for links inside a section
-mainContent.addEventListener('keydown', (e) => {
-  if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
-  const activePanel = mainContent.querySelector('.section-panel.active');
-  if (!activePanel) return;
-  const links = Array.from(activePanel.querySelectorAll('.menu-link'));
-  if (!links.length) return;
-  const focusedIdx = links.findIndex(link => link === document.activeElement);
-  let nextIdx = focusedIdx;
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-    nextIdx = (focusedIdx + 1) % links.length;
-  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-    nextIdx = (focusedIdx - 1 + links.length) % links.length;
-  }
-  if (nextIdx !== focusedIdx) {
-    links[nextIdx].focus();
-    e.preventDefault();
-  }
 });
 
 // Initial render
