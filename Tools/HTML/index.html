@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Editor</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1>HTML Editor</h1>
+        <p>Edit HTML, CSS, and JavaScript with live preview</p>
+      </header>
+      
+      <main class="main-container">
+        <section class="editor-section">
+          <div class="tab-buttons">
+            <button class="tab-button active" data-tab="html">HTML</button>
+            <button class="tab-button" data-tab="css">CSS</button>
+            <button class="tab-button" data-tab="js">JavaScript</button>
+          </div>
+          
+          <div class="editor-container">
+            <div class="tab-content active" data-tab="html">
+              <textarea id="htmlEditor" placeholder="Enter your HTML code here..." spellcheck="false"><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview</title>
+</head>
+<body>
+    <h1>Hello World!</h1>
+    <p>Start editing to see your changes live!</p>
+    <button onclick="alert('Hello from HTML Editor!')">Click me!</button>
+</body>
+</html></textarea>
+            </div>
+            
+            <div class="tab-content" data-tab="css">
+              <textarea id="cssEditor" placeholder="Enter your CSS code here..." spellcheck="false">/* Add your CSS styles here */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+p {
+    color: white;
+    text-align: center;
+    font-size: 18px;
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 24px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #ff5252;
+}</textarea>
+            </div>
+            
+            <div class="tab-content" data-tab="js">
+              <textarea id="jsEditor" placeholder="Enter your JavaScript code here..." spellcheck="false">// Add your JavaScript code here
+console.log('JavaScript editor is ready!');
+
+// Example: Add some interactivity
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM is loaded and ready!');
+    
+    // You can add event listeners and other JavaScript functionality here
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('mouseover', function() {
+            console.log('Button hovered!');
+        });
+    });
+});</textarea>
+            </div>
+          </div>
+          
+          <div class="status-bar">
+            <span id="statusText">Ready</span>
+            <span id="errorCount" class="error-count hidden">0 errors</span>
+          </div>
+        </section>
+        
+        <section class="preview-section">
+          <div class="preview-header">
+            <h3>Live Preview</h3>
+            <button id="refreshBtn" class="refresh-button">⟳ Refresh</button>
+          </div>
+          <iframe id="preview" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
