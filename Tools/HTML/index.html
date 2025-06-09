@@ -4,13 +4,19 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HTML Editor</title>
+    <title>HTML Editor Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <div id="app">
       <header class="header">
-        <h1>HTML Editor</h1>
-        <p>Edit HTML, CSS, and JavaScript with live preview</p>
+        <div>
+          <h1>HTML Editor Pro</h1>
+          <p>Professional web development environment with live preview</p>
+        </div>
       </header>
       
       <main class="main-container">
@@ -23,82 +29,150 @@
           
           <div class="editor-container">
             <div class="tab-content active" data-tab="html">
-              <textarea id="htmlEditor" placeholder="Enter your HTML code here..." spellcheck="false"><!DOCTYPE html>
+              <textarea id="htmlEditor" placeholder="Write your HTML code here..." spellcheck="false"><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preview</title>
+    <title>My Awesome Page</title>
 </head>
 <body>
-    <h1>Hello World!</h1>
-    <p>Start editing to see your changes live!</p>
-    <button onclick="alert('Hello from HTML Editor!')">Click me!</button>
+    <div class="container">
+        <h1>Welcome to HTML Editor Pro!</h1>
+        <p>Start building amazing web experiences.</p>
+        <button class="cta-button">Get Started</button>
+    </div>
 </body>
 </html></textarea>
             </div>
             
             <div class="tab-content" data-tab="css">
-              <textarea id="cssEditor" placeholder="Enter your CSS code here..." spellcheck="false">/* Add your CSS styles here */
+              <textarea id="cssEditor" placeholder="Write your CSS styles here..." spellcheck="false">/* Modern CSS Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     margin: 0;
-    padding: 20px;
+    padding: 0;
     min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
 }
 
 h1 {
-    color: white;
-    text-align: center;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    color: #2d3748;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 p {
-    color: white;
-    text-align: center;
-    font-size: 18px;
+    color: #4a5568;
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
 }
 
-button {
-    display: block;
-    margin: 20px auto;
-    padding: 12px 24px;
-    background-color: #ff6b6b;
+.cta-button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
-button:hover {
-    background-color: #ff5252;
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
 }</textarea>
             </div>
             
             <div class="tab-content" data-tab="js">
-              <textarea id="jsEditor" placeholder="Enter your JavaScript code here..." spellcheck="false">// Add your JavaScript code here
-console.log('JavaScript editor is ready!');
+              <textarea id="jsEditor" placeholder="Write your JavaScript code here..." spellcheck="false">// Interactive JavaScript
+console.log('🚀 HTML Editor Pro is ready!');
 
-// Example: Add some interactivity
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM is loaded and ready!');
+    console.log('✨ DOM loaded successfully!');
     
-    // You can add event listeners and other JavaScript functionality here
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(button => {
-        button.addEventListener('mouseover', function() {
-            console.log('Button hovered!');
+    // Add smooth interactions
+    const button = document.querySelector('.cta-button');
+    
+    if (button) {
+        button.addEventListener('click', function() {
+            // Create a ripple effect
+            const ripple = document.createElement('span');
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            `;
+            
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+            ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+            
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+            
+            // Show success message
+            alert('🎉 Welcome to the future of web development!');
         });
-    });
-});</textarea>
+        
+        // Add hover effects
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.05)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    }
+});
+
+// Add ripple animation CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);</textarea>
             </div>
           </div>
           
           <div class="status-bar">
-            <span id="statusText">Ready</span>
+            <span id="statusText">Ready to code</span>
             <span id="errorCount" class="error-count hidden">0 errors</span>
           </div>
         </section>
@@ -106,7 +180,10 @@ document.addEventListener('DOMContentLoaded', function() {
         <section class="preview-section">
           <div class="preview-header">
             <h3>Live Preview</h3>
-            <button id="refreshBtn" class="refresh-button">⟳ Refresh</button>
+            <button id="refreshBtn" class="refresh-button">
+              <span>⟳</span>
+              Refresh
+            </button>
           </div>
           <iframe id="preview" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
         </section>
