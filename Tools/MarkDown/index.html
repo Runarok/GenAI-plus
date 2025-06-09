@@ -14,7 +14,87 @@
   </head>
   <body>
     <div id="app">
-      <header class="header">
+      <!-- Settings Button -->
+      <button id="settings-btn" class="settings-btn" title="Settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="m12 1 0 6m0 6 0 6"></path>
+          <path d="m17.5 6.5-3.5 3.5-3.5-3.5"></path>
+          <path d="m6.5 17.5 3.5-3.5 3.5 3.5"></path>
+        </svg>
+      </button>
+
+      <!-- Settings Panel -->
+      <div id="settings-panel" class="settings-panel">
+        <div class="settings-content">
+          <div class="settings-header">
+            <h3>⚙️ Settings</h3>
+            <button id="close-settings" class="close-btn">×</button>
+          </div>
+          
+          <div class="settings-section">
+            <h4>🎨 Theme</h4>
+            <div class="theme-options">
+              <button class="theme-btn active" data-theme="dark">
+                <div class="theme-preview dark-preview"></div>
+                <span>Dark</span>
+              </button>
+              <button class="theme-btn" data-theme="light">
+                <div class="theme-preview light-preview"></div>
+                <span>Light</span>
+              </button>
+              <button class="theme-btn" data-theme="blue">
+                <div class="theme-preview blue-preview"></div>
+                <span>Ocean Blue</span>
+              </button>
+              <button class="theme-btn" data-theme="purple">
+                <div class="theme-preview purple-preview"></div>
+                <span>Purple</span>
+              </button>
+              <button class="theme-btn" data-theme="green">
+                <div class="theme-preview green-preview"></div>
+                <span>Forest</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h4>📐 Layout</h4>
+            <div class="layout-options">
+              <label class="toggle-option">
+                <input type="checkbox" id="fit-to-screen">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Fit to Screen Mode</span>
+              </label>
+              <p class="option-description">Hide header banner for maximum editing space</p>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <h4>✨ Editor</h4>
+            <div class="editor-options">
+              <label class="toggle-option">
+                <input type="checkbox" id="sync-scroll" checked>
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Sync Scroll</span>
+              </label>
+              <p class="option-description">Synchronize scrolling between editor and preview</p>
+              
+              <label class="toggle-option">
+                <input type="checkbox" id="word-wrap" checked>
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Word Wrap</span>
+              </label>
+              <p class="option-description">Wrap long lines in the editor</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Overlay -->
+      <div id="settings-overlay" class="settings-overlay"></div>
+      
+      <header class="header" id="main-header">
         <h1>✨ Markdown Editor & Previewer</h1>
         <p>Write beautiful Markdown with live preview and GitHub-style rendering</p>
       </header>
@@ -26,23 +106,24 @@
           </div>
           <textarea 
             id="markdown-input" 
-            placeholder="# Welcome to the Dark Markdown Editor! 🌙
+            placeholder="# Welcome to the Markdown Editor! 🌙
 
 Start crafting your beautiful Markdown here...
 
 ## ✨ Features
-- **Live preview** with stunning dark theme
+- **Live preview** with multiple stunning themes
 - GitHub-style rendering with enhanced visuals
 - Responsive design that adapts to any screen
 - Smooth animations and micro-interactions
 - Professional typography and spacing
+- **Fit-to-screen mode** for distraction-free writing
 
 ### 🚀 Code Example
 ```javascript
 function createAwesome() {
   const magic = '✨';
   console.log(`Hello, Markdown! ${magic}`);
-  return 'Beautiful code in dark theme';
+  return 'Beautiful code with syntax highlighting';
 }
 ```
 
@@ -56,7 +137,8 @@ function createAwesome() {
 ![Sample Image](https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400&h=200&fit=crop)
 
 ### ✅ Task Lists
-- [x] Dark theme implementation
+- [x] Multiple theme support
+- [x] Fit-to-screen mode
 - [x] Smooth animations
 - [x] Responsive design
 - [ ] Even more awesome features coming soon!
@@ -64,9 +146,9 @@ function createAwesome() {
 ### 📊 Tables
 | Feature | Status | Priority |
 |---------|--------|----------|
-| Dark Theme | ✅ Complete | High |
+| Themes | ✅ Complete | High |
 | Live Preview | ✅ Complete | High |
-| Animations | ✅ Complete | Medium |
+| Settings Panel | ✅ Complete | Medium |
 
 ---
 

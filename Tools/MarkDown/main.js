@@ -4,8 +4,11 @@ class MarkdownEditor {
     this.input = document.getElementById('markdown-input');
     this.preview = document.getElementById('markdown-preview');
     this.debounceTimer = null;
+    this.syncScrollEnabled = true;
+    this.wordWrapEnabled = true;
     
     this.init();
+    this.initSettings();
   }
   
   init() {
@@ -38,6 +41,141 @@ class MarkdownEditor {
     this.input.focus();
   }
   
+  initSettings() {
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsPanel = document.getElementById('settings-panel');
+    const settingsOverlay = document.getElementById('settings-overlay');
+    const closeSettings = document.getElementById('close-settings');
+    
+    // Theme buttons
+    const themeButtons = document.querySelectorAll('.theme-btn');
+    const fitToScreenToggle = document.getElementById('fit-to-screen');
+    const syncScrollToggle = document.getElementById('sync-scroll');
+    const wordWrapToggle = document.getElementById('word-wrap');
+    
+    // Load saved settings
+    this.loadSettings();
+    
+    // Settings panel toggle
+    settingsBtn.addEventListener('click', () => {
+      settingsPanel.classList.add('active');
+      settingsOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    const closeSettingsPanel = () => {
+      settingsPanel.classList.remove('active');
+      settingsOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+    
+    closeSettings.addEventListener('click', closeSettingsPanel);
+    settingsOverlay.addEventListener('click', closeSettingsPanel);
+    
+    // Theme switching
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const theme = btn.dataset.theme;
+        this.setTheme(theme);
+        
+        // Update active state
+        themeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+    
+    // Fit to screen toggle
+    fitToScreenToggle.addEventListener('change', (e) => {
+      this.toggleFitToScreen(e.target.checked);
+    });
+    
+    // Sync scroll toggle
+    syncScrollToggle.addEventListener('change', (e) => {
+      this.syncScrollEnabled = e.target.checked;
+      this.saveSettings();
+    });
+    
+    // Word wrap toggle
+    wordWrapToggle.addEventListener('change', (e) => {
+      this.wordWrapEnabled = e.target.checked;
+      this.toggleWordWrap(e.target.checked);
+    });
+    
+    // Keyboard shortcut for settings
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === ',') {
+        e.preventDefault();
+        settingsBtn.click();
+      }
+      if (e.key === 'Escape' && settingsPanel.classList.contains('active')) {
+        closeSettingsPanel();
+      }
+    });
+  }
+  
+  setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('markdown-editor-theme', theme);
+  }
+  
+  toggleFitToScreen(enabled) {
+    const header = document.getElementById('main-header');
+    const container = document.querySelector('.editor-container');
+    
+    if (enabled) {
+      header.classList.add('hidden');
+      container.classList.add('fit-to-screen');
+    } else {
+      header.classList.remove('hidden');
+      container.classList.remove('fit-to-screen');
+    }
+    
+    localStorage.setItem('markdown-editor-fit-to-screen', enabled);
+  }
+  
+  toggleWordWrap(enabled) {
+    if (enabled) {
+      this.input.classList.remove('no-wrap');
+    } else {
+      this.input.classList.add('no-wrap');
+    }
+    
+    localStorage.setItem('markdown-editor-word-wrap', enabled);
+  }
+  
+  loadSettings() {
+    // Load theme
+    const savedTheme = localStorage.getItem('markdown-editor-theme') || 'dark';
+    this.setTheme(savedTheme);
+    
+    // Update active theme button
+    const themeBtn = document.querySelector(`[data-theme="${savedTheme}"]`);
+    if (themeBtn) {
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      themeBtn.classList.add('active');
+    }
+    
+    // Load fit to screen
+    const fitToScreen = localStorage.getItem('markdown-editor-fit-to-screen') === 'true';
+    document.getElementById('fit-to-screen').checked = fitToScreen;
+    this.toggleFitToScreen(fitToScreen);
+    
+    // Load sync scroll
+    const syncScroll = localStorage.getItem('markdown-editor-sync-scroll') !== 'false';
+    this.syncScrollEnabled = syncScroll;
+    document.getElementById('sync-scroll').checked = syncScroll;
+    
+    // Load word wrap
+    const wordWrap = localStorage.getItem('markdown-editor-word-wrap') !== 'false';
+    this.wordWrapEnabled = wordWrap;
+    document.getElementById('word-wrap').checked = wordWrap;
+    this.toggleWordWrap(wordWrap);
+  }
+  
+  saveSettings() {
+    localStorage.setItem('markdown-editor-sync-scroll', this.syncScrollEnabled);
+  }
+  
   setupEventListeners() {
     // Update preview on input with debouncing for better performance
     this.input.addEventListener('input', () => {
@@ -54,7 +192,9 @@ class MarkdownEditor {
     
     // Sync scroll positions (optional enhancement)
     this.input.addEventListener('scroll', () => {
-      this.syncScroll();
+      if (this.syncScrollEnabled) {
+        this.syncScroll();
+      }
     });
   }
   
@@ -124,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle window resize
   window.addEventListener('resize', handleResize);
   
-  console.log('Markdown Editor initialized successfully!');
+  console.log('Markdown Editor with Settings initialized successfully!');
 });
 
 // Export for potential future use
