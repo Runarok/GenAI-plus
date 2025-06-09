@@ -37,6 +37,29 @@ class HTMLEditor {
     this.setupResizing();
     this.updatePreview();
     this.updateStatus('Ready');
+    this.applyEditorFontClass();
+  }
+  
+  applyEditorFontClass() {
+    // Apply the shared font class to all editor elements
+    const editors = [this.htmlEditor, this.cssEditor, this.jsEditor];
+    const highlights = [this.htmlHighlight, this.cssHighlight, this.jsHighlight];
+    
+    editors.forEach(editor => {
+      if (editor) {
+        editor.classList.add('editor-font-base');
+      }
+    });
+    
+    highlights.forEach(highlight => {
+      if (highlight) {
+        highlight.classList.add('editor-font-base');
+        const code = highlight.querySelector('code');
+        if (code) {
+          code.classList.add('editor-font-base');
+        }
+      }
+    });
   }
   
   setupTabSwitching() {
@@ -129,7 +152,12 @@ class HTMLEditor {
       if (editor && highlight && window.Prism && window.Prism.languages[language]) {
         const code = editor.value;
         const highlightedCode = Prism.highlight(code, Prism.languages[language], language);
-        highlight.querySelector('code').innerHTML = highlightedCode;
+        const codeElement = highlight.querySelector('code');
+        if (codeElement) {
+          codeElement.innerHTML = highlightedCode;
+          // Ensure the code element maintains the font class
+          codeElement.classList.add('editor-font-base');
+        }
         this.syncScroll(editor);
       }
     });
