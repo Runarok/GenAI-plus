@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Theme Hub - CSS Theme Browser</title>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h1>Theme Hub</h1>
+          <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search themes..." />
+          </div>
+        </div>
+        <div class="theme-list" id="themeList">
+          <!-- Theme items will be dynamically generated -->
+        </div>
+      </aside>
+      
+      <main class="preview-area">
+        <div class="preview-header">
+          <h2 id="currentThemeName">Select a Theme</h2>
+          <button class="view-code-btn" id="viewCodeBtn" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16,18 22,12 16,6"></polyline>
+              <polyline points="8,6 2,12 8,18"></polyline>
+            </svg>
+            View Code
+          </button>
+        </div>
+        <div class="preview-container">
+          <div class="preview-content" id="previewContent">
+            <div class="welcome-message">
+              <h2>Welcome to Theme Hub</h2>
+              <p>Select a theme from the sidebar to see a live preview here.</p>
+              <p>You can browse through dozens of beautiful CSS themes and copy their code instantly.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal for code viewing -->
+    <div class="modal" id="codeModal">
+      <div class="modal-backdrop" id="modalBackdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Theme Code</h3>
+          <button class="close-btn" id="closeModal">&times;</button>
+        </div>
+        <div class="modal-tabs">
+          <button class="tab-btn active" data-tab="html">HTML</button>
+          <button class="tab-btn" data-tab="css">CSS</button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content active" id="htmlTab">
+            <div class="code-header">
+              <span>HTML</span>
+              <button class="copy-btn" data-type="html">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="m5,15 0,-10 10,0"></path>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre><code id="htmlCode"></code></pre>
+          </div>
+          <div class="tab-content" id="cssTab">
+            <div class="code-header">
+              <span>CSS</span>
+              <button class="copy-btn" data-type="css">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="m5,15 0,-10 10,0"></path>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre><code id="cssCode"></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
