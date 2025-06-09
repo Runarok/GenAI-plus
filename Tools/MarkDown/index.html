@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Editor & Previewer</title>
+    
+    <!-- Marked.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1>✨ Markdown Editor & Previewer</h1>
+        <p>Write beautiful Markdown with live preview and GitHub-style rendering</p>
+      </header>
+      
+      <main class="editor-container">
+        <div class="editor-pane">
+          <div class="pane-header">
+            <h2>📝 Editor</h2>
+          </div>
+          <textarea 
+            id="markdown-input" 
+            placeholder="# Welcome to the Dark Markdown Editor! 🌙
+
+Start crafting your beautiful Markdown here...
+
+## ✨ Features
+- **Live preview** with stunning dark theme
+- GitHub-style rendering with enhanced visuals
+- Responsive design that adapts to any screen
+- Smooth animations and micro-interactions
+- Professional typography and spacing
+
+### 🚀 Code Example
+```javascript
+function createAwesome() {
+  const magic = '✨';
+  console.log(`Hello, Markdown! ${magic}`);
+  return 'Beautiful code in dark theme';
+}
+```
+
+### 🎨 Styling Examples
+
+> This is a beautifully styled blockquote with gradient accents
+> Perfect for highlighting important information
+
+[🔗 Visit GitHub](https://github.com) - Links with hover effects
+
+![Sample Image](https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400&h=200&fit=crop)
+
+### ✅ Task Lists
+- [x] Dark theme implementation
+- [x] Smooth animations
+- [x] Responsive design
+- [ ] Even more awesome features coming soon!
+
+### 📊 Tables
+| Feature | Status | Priority |
+|---------|--------|----------|
+| Dark Theme | ✅ Complete | High |
+| Live Preview | ✅ Complete | High |
+| Animations | ✅ Complete | Medium |
+
+---
+
+**Happy writing!** 🎉"
+          ></textarea>
+        </div>
+        
+        <div class="preview-pane">
+          <div class="pane-header">
+            <h2>👁️ Live Preview</h2>
+          </div>
+          <div id="markdown-preview" class="markdown-body">
+            <!-- Preview content will be inserted here -->
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
