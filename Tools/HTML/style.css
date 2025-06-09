@@ -258,7 +258,7 @@ body {
   background: var(--gradient-primary);
   border: none;
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem;
   border-radius: 12px;
   font-size: 0.875rem;
   font-weight: 600;
@@ -266,8 +266,10 @@ body {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
   box-shadow: var(--shadow);
+  width: 48px;
+  height: 48px;
 }
 
 .refresh-button:hover {
@@ -283,6 +285,7 @@ body {
   gap: 0;
   background: var(--border-color);
   position: relative;
+  will-change: grid-template-columns;
 }
 
 .main-container.code-only {
@@ -303,6 +306,13 @@ body {
   display: none;
 }
 
+.main-container.preview-only .preview-section {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
 .editor-section {
   background: var(--bg-card);
   display: flex;
@@ -319,6 +329,7 @@ body {
   cursor: col-resize;
   position: relative;
   transition: background-color 0.2s ease;
+  user-select: none;
 }
 
 .resize-handle:hover {
@@ -1008,4 +1019,18 @@ textarea::-webkit-scrollbar-thumb:hover {
 textarea {
   scrollbar-width: thin;
   scrollbar-color: var(--text-muted) var(--bg-secondary);
+}
+
+/* Smooth dragging optimizations */
+.main-container.resizing {
+  pointer-events: none;
+}
+
+.main-container.resizing * {
+  user-select: none;
+  pointer-events: none;
+}
+
+.main-container.resizing .resize-handle {
+  pointer-events: auto;
 }

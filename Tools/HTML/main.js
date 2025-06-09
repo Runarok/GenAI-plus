@@ -77,7 +77,7 @@ class HTMLEditor {
           clearTimeout(this.updateTimeout);
           this.updateTimeout = setTimeout(() => {
             this.updatePreview();
-          }, 500); // 500ms debounce
+          }, 300); // Reduced debounce for better responsiveness
         }
       });
       
@@ -219,11 +219,16 @@ class HTMLEditor {
       startX = e.clientX;
       startWidth = this.editorSection.offsetWidth;
       
+      // Add resizing class for performance optimization
+      this.mainContainer.classList.add('resizing');
+      
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       
       document.body.style.cursor = 'col-resize';
       document.body.style.userSelect = 'none';
+      
+      e.preventDefault();
     });
     
     const handleMouseMove = (e) => {
@@ -239,12 +244,21 @@ class HTMLEditor {
         const percentage = (newWidth / containerWidth) * 100;
         const remainingPercentage = 100 - percentage;
         
-        this.mainContainer.style.gridTemplateColumns = `${percentage}% auto ${remainingPercentage}%`;
+        // Use transform for smoother performance during drag
+        requestAnimationFrame(() => {
+          this.mainContainer.style.gridTemplateColumns = `${percentage}% auto ${remainingPercentage}%`;
+        });
       }
+      
+      e.preventDefault();
     };
     
     const handleMouseUp = () => {
       this.isResizing = false;
+      
+      // Remove resizing class
+      this.mainContainer.classList.remove('resizing');
+      
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       
