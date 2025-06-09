@@ -1,9 +1,3 @@
-import Prism from 'prismjs';
-import 'prismjs/components/prism-markup-templating';
-import 'prismjs/components/prism-markup';
-import 'prismjs/components/prism-css';
-import 'prismjs/components/prism-javascript';
-
 class HTMLEditor {
   constructor() {
     this.htmlEditor = document.getElementById('htmlEditor');
@@ -113,7 +107,15 @@ class HTMLEditor {
   }
   
   setupSyntaxHighlighting() {
-    this.updateSyntaxHighlighting();
+    // Wait for Prism to load before highlighting
+    if (window.Prism) {
+      this.updateSyntaxHighlighting();
+    } else {
+      // Retry after a short delay if Prism isn't loaded yet
+      setTimeout(() => {
+        this.updateSyntaxHighlighting();
+      }, 100);
+    }
   }
   
   updateSyntaxHighlighting() {
@@ -124,7 +126,7 @@ class HTMLEditor {
     ];
     
     editors.forEach(({ editor, highlight, language }) => {
-      if (editor && highlight) {
+      if (editor && highlight && window.Prism && window.Prism.languages[language]) {
         const code = editor.value;
         const highlightedCode = Prism.highlight(code, Prism.languages[language], language);
         highlight.querySelector('code').innerHTML = highlightedCode;
@@ -149,23 +151,29 @@ class HTMLEditor {
     // Settings buttons (both header and floating)
     [this.settingsBtn, this.settingsBtnFloat].forEach(btn => {
       if (btn) {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           this.settingsOverlay.classList.add('active');
         });
       }
     });
     
     // Close settings
-    this.closeSettings.addEventListener('click', () => {
-      this.settingsOverlay.classList.remove('active');
-    });
+    if (this.closeSettings) {
+      this.closeSettings.addEventListener('click', () => {
+        this.settingsOverlay.classList.remove('active');
+      });
+    }
     
     // Close on overlay click
-    this.settingsOverlay.addEventListener('click', (e) => {
-      if (e.target === this.settingsOverlay) {
-        this.settingsOverlay.classList.remove('active');
-      }
-    });
+    if (this.settingsOverlay) {
+      this.settingsOverlay.addEventListener('click', (e) => {
+        if (e.target === this.settingsOverlay) {
+          this.settingsOverlay.classList.remove('active');
+        }
+      });
+    }
     
     // Theme switching
     const themeOptions = document.querySelectorAll('.theme-option');
@@ -182,20 +190,24 @@ class HTMLEditor {
     
     // Toggle header
     const toggleHeader = document.getElementById('toggleHeader');
-    toggleHeader.addEventListener('change', () => {
-      if (toggleHeader.checked) {
-        this.header.classList.remove('hidden');
-      } else {
-        this.header.classList.add('hidden');
-      }
-    });
+    if (toggleHeader) {
+      toggleHeader.addEventListener('change', () => {
+        if (toggleHeader.checked) {
+          this.header.classList.remove('hidden');
+        } else {
+          this.header.classList.add('hidden');
+        }
+      });
+    }
     
     // Toggle live update
     const toggleLiveUpdate = document.getElementById('toggleLiveUpdate');
-    toggleLiveUpdate.addEventListener('change', () => {
-      this.liveUpdate = toggleLiveUpdate.checked;
-      this.updateStatus(this.liveUpdate ? 'Live updates enabled' : 'Live updates disabled');
-    });
+    if (toggleLiveUpdate) {
+      toggleLiveUpdate.addEventListener('change', () => {
+        this.liveUpdate = toggleLiveUpdate.checked;
+        this.updateStatus(this.liveUpdate ? 'Live updates enabled' : 'Live updates disabled');
+      });
+    }
     
     // View mode buttons
     const viewModeButtons = document.querySelectorAll('.view-mode-btn');
@@ -401,18 +413,21 @@ class HTMLEditor {
 
 // Initialize the editor when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  const editor = new HTMLEditor();
-  
-  // Load saved theme
-  const savedTheme = localStorage.getItem('editor-theme');
-  if (savedTheme) {
-    editor.setTheme(savedTheme);
-    const themeOption = document.querySelector(`[data-theme="${savedTheme}"]`);
-    if (themeOption) {
-      document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
-      themeOption.classList.add('active');
+  // Wait a bit for Prism to fully load
+  setTimeout(() => {
+    const editor = new HTMLEditor();
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('editor-theme');
+    if (savedTheme) {
+      editor.setTheme(savedTheme);
+      const themeOption = document.querySelector(`[data-theme="${savedTheme}"]`);
+      if (themeOption) {
+        document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
+        themeOption.classList.add('active');
+      }
     }
-  }
+  }, 200);
 });
 
 // Add some helpful console messages
@@ -460,7 +475,7 @@ document.addEventListener('keydown', (e) => {
   // Escape to close settings
   if (e.key === 'Escape') {
     const settingsOverlay = document.getElementById('settingsOverlay');
-    if (settingsOverlay.classList.contains('active')) {
+    if (settingsOverlay && settingsOverlay.classList.contains('active')) {
       settingsOverlay.classList.remove('active');
     }
   }
