@@ -51,8 +51,8 @@ const menuData = [
     title: "Tools",
     links: [
       { label: "Calculator", url: "Tools/Calculator/index.html", desc: "Simple math calculator." },
-      { label: "Markdown Editor", url: "MarkDown/index.html", desc: "Live Github markdown." }
-      { label: "Unit Converter", url: "converter.html", desc: "Convert units easily." },
+      { label: "Markdown Editor", url: "MarkDown/index.html", desc: "Live Github markdown." },
+      { label: "Unit Converter", url: "converter.html", desc: "Convert units easily." }
     ]
   },
   {
