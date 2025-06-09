@@ -13,10 +13,10 @@
             --blue4: #3b82f6;
             --blue5: #1d4ed8;
             --blue6: #60a5fa;
-            --card-bg: rgba(15, 23, 42, 0.92);
-            --border: rgba(59, 130, 246, 0.18);
-            --border-hover: rgba(59, 130, 246, 0.5);
-            --shadow: 0 18px 64px 0 rgba(59, 130, 246, 0.16), 0 2px 12px 0 rgba(15, 23, 42, 0.16);
+            --card-bg: rgba(15, 23, 42, 0.96);
+            --border: rgba(59, 130, 246, 0.13);
+            --border-hover: rgba(59, 130, 246, 0.38);
+            --shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.18), 0 1px 5px 0 rgba(15, 23, 42, 0.20);
             --text-main: #e2e8f0;
             --text-sub: #94a3b8;
         }
@@ -46,31 +46,31 @@
         }
         .glow-orb {
             position: fixed;
-            width: 540px;
-            height: 540px;
+            width: 340px;
+            height: 340px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(59,130,246,0.17) 0%, rgba(59,130,246,0.05) 70%, transparent 100%);
-            filter: blur(60px);
+            background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, rgba(59,130,246,0.03) 70%, transparent 100%);
+            filter: blur(45px);
             z-index: 0;
             pointer-events: none;
         }
         .glow-orb:nth-child(1) {
-            top: -180px;
-            left: -180px;
+            top: -120px;
+            left: -120px;
             animation: float 10s ease-in-out infinite alternate;
         }
         .glow-orb:nth-child(2) {
-            bottom: -180px;
-            right: -180px;
+            bottom: -120px;
+            right: -120px;
             animation: float 10s 2.5s ease-in-out infinite alternate;
         }
         @keyframes float {
             0% { transform: translateY(0px) scale(1);}
-            100% { transform: translateY(-24px) scale(1.06);}
+            100% { transform: translateY(-18px) scale(1.04);}
         }
         .container {
-            max-width: 700px;
-            width: 98vw;
+            max-width: 800px;
+            width: 96vw;
             padding: 0 2vw;
             position: relative;
             z-index: 2;
@@ -81,9 +81,9 @@
         }
         .main-card {
             background: var(--card-bg);
-            border: 2.5px solid var(--border);
-            border-radius: 2.75rem;
-            padding: 4.5rem 4rem 3.5rem 4rem;
+            border: 1.5px solid var(--border);
+            border-radius: 1.8rem;
+            padding: 2rem 2.2rem 2.2rem 2.2rem;
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
@@ -92,52 +92,53 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
+            min-width: 0;
         }
         .main-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.32), transparent);
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.22), transparent);
         }
         .header {
-            margin-bottom: 3rem;
+            margin-bottom: 2.2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .header-icon {
-            width: 94px; height: 94px;
-            margin: 0 auto 2rem;
+            width: 54px; height: 54px;
+            margin: 0 auto 1.2rem;
             background: linear-gradient(135deg, var(--blue4), var(--blue6), var(--blue5));
-            border-radius: 26px;
+            border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 14px 44px rgba(59,130,246,0.23);
-            animation: pulse 2.9s ease-in-out infinite;
+            box-shadow: 0 7px 24px rgba(59,130,246,0.19);
+            animation: pulse 2.7s ease-in-out infinite;
         }
         @keyframes pulse {
             0%, 100% { transform: scale(1);}
-            50% { transform: scale(1.10);}
+            50% { transform: scale(1.07);}
         }
         .header-icon svg {
-            width: 52px; height: 52px; color: #fff;
+            width: 30px; height: 30px; color: #fff;
         }
         .title {
-            font-size: 3.6rem;
-            font-weight: 900;
+            font-size: 2.3rem;
+            font-weight: 800;
             background: linear-gradient(135deg, #60a5fa, #3b82f6, #1d4ed8);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1.15rem;
+            margin-bottom: 0.7rem;
             line-height: 1.08;
             text-align: center;
-            letter-spacing: -2px;
+            letter-spacing: -1px;
         }
         .subtitle {
-            font-size: 1.6rem;
+            font-size: 1.11rem;
             color: var(--text-sub);
             font-weight: 400;
-            max-width: 550px;
+            max-width: 480px;
             margin: 0 auto;
             line-height: 1.6;
             text-align: center;
@@ -145,11 +146,11 @@
         .choices-container {
             display: flex;
             flex-direction: row;
-            gap: 2.7rem;
+            gap: 2.3rem;
             width: 100%;
             justify-content: center;
             align-items: stretch;
-            margin-top: 2.8rem;
+            margin-top: 1.5rem;
         }
         .choice-button {
             display: flex;
@@ -158,24 +159,24 @@
             justify-content: flex-start;
             flex: 1 1 0;
             min-width: 0;
-            max-width: 320px;
+            max-width: 350px;
             text-decoration: none;
-            background: rgba(30,41,59,0.92);
-            backdrop-filter: blur(11px);
-            border: 2px solid var(--border);
-            border-radius: 1.9rem;
-            padding: 2.9rem 1.5rem 2.2rem 1.5rem;
-            transition: all .28s cubic-bezier(.4,0,.2,1);
+            background: rgba(30,41,59,0.98);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid var(--border);
+            border-radius: 1.2rem;
+            padding: 1.7rem 1.1rem 1.3rem 1.1rem;
+            transition: all .24s cubic-bezier(.4,0,.2,1);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 6px 24px -6px rgba(59,130,246,0.13);
+            box-shadow: 0 4px 16px -6px rgba(59,130,246,0.13);
         }
         .choice-button::before {
             content: '';
             position: absolute;
             top: 0; left: -100%;
             width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.08), transparent);
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.09), transparent);
             transition: left 0.5s cubic-bezier(.4,0,.2,1);
             z-index: 1;
         }
@@ -184,34 +185,34 @@
         }
         .choice-button:hover,
         .choice-button:focus-visible {
-            transform: translateY(-10px) scale(1.04);
+            transform: translateY(-7px) scale(1.035);
             border-color: var(--border-hover);
-            box-shadow: 0 18px 42px -8px rgba(59,130,246,0.29);
-            background: rgba(30,41,59,0.98);
+            box-shadow: 0 12px 32px -8px rgba(59,130,246,0.18);
+            background: rgba(30,41,59,1);
             z-index: 2;
         }
         .choice-icon {
-            width: 60px; height: 60px;
-            margin: 0 auto 1.55rem;
+            width: 44px; height: 44px;
+            margin: 0 auto 1.2rem;
             background: linear-gradient(135deg, var(--blue4), var(--blue5));
-            border-radius: 16px;
+            border-radius: 11px;
             display: flex; align-items: center; justify-content: center;
-            transition: all .25s;
+            transition: all .23s;
             z-index: 2;
         }
         .choice-button:hover .choice-icon {
-            transform: scale(1.1);
-            box-shadow: 0 9px 28px rgba(59,130,246,.29);
+            transform: scale(1.09);
+            box-shadow: 0 7px 18px rgba(59,130,246,.17);
         }
         .choice-icon svg {
-            width: 36px; height: 36px; color: #fff;
+            width: 24px; height: 24px; color: #fff;
         }
         .choice-title {
-            font-size: 2.1rem;
-            font-weight: 800;
+            font-size: 1.29rem;
+            font-weight: 700;
             color: #e2e8f0;
-            margin-bottom: 1.1rem;
-            transition: color .22s;
+            margin-bottom: 0.7rem;
+            transition: color .18s;
             text-align: center;
             z-index: 2;
         }
@@ -219,55 +220,46 @@
             color: #60a5fa;
         }
         .choice-description {
-            font-size: 1.15rem;
+            font-size: 1.01rem;
             color: var(--text-sub);
-            line-height: 1.6;
-            transition: color .22s;
+            line-height: 1.5;
+            transition: color .18s;
             text-align: center;
             z-index: 2;
         }
         .choice-button:hover .choice-description {
             color: #cbd5e1;
         }
-        @media (max-width: 1000px) {
-            .main-card {
-                padding: 3.3rem 1.6rem 2.5rem 1.6rem;
-                border-radius: 1.7rem;
-            }
-            .title {
-                font-size: 2.4rem;
-            }
-        }
-        @media (max-width: 800px) {
+        @media (max-width: 900px) {
             .container {
                 max-width: 99vw;
                 padding: 0 1vw;
             }
             .main-card {
-                padding: 2.3rem 0.3rem 1.6rem 0.3rem;
+                padding: 1.4rem 0.3rem 1.3rem 0.3rem;
                 border-radius: 1rem;
             }
             .title {
-                font-size: 1.45rem;
+                font-size: 1.5rem;
             }
             .choices-container {
                 flex-direction: column;
-                gap: 1.7rem;
-                margin-top: 1.2rem;
+                gap: 1.2rem;
+                margin-top: 1rem;
             }
             .choice-title {
-                font-size: 1.27rem;
+                font-size: 1.07rem;
             }
             .choice-button {
-                padding: 1.3rem 0.5rem 1.1rem 0.5rem;
-                border-radius: 1.02rem;
+                padding: 1.1rem 0.5rem 0.7rem 0.5rem;
+                border-radius: 0.88rem;
                 max-width: 100vw;
             }
             .choice-icon {
-                width: 38px; height: 38px; border-radius: 7px;
+                width: 32px; height: 32px; border-radius: 7px;
             }
             .choice-icon svg {
-                width: 20px; height: 20px;
+                width: 16px; height: 16px;
             }
         }
     </style>
@@ -279,7 +271,7 @@
         <div class="main-card">
             <div class="header">
                 <div class="header-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
                         <path d="M19 3v4"/>
                         <path d="M21 5h-4"/>
@@ -291,7 +283,7 @@
             <div class="choices-container">
                 <a href="Summarised/" class="choice-button">
                     <div class="choice-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 12h6"/>
                             <path d="M9 16h6"/>
                             <path d="m14 2 3 3v5a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h3"/>
@@ -303,7 +295,7 @@
                 </a>
                 <a href="Depth/" class="choice-button">
                     <div class="choice-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                             <polyline points="14,2 14,8 20,8"/>
                             <line x1="16" y1="13" x2="8" y2="13"/>
