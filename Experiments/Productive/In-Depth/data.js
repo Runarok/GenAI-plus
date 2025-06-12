@@ -136,5 +136,64 @@ const productivityHacks = [
   <li><b>Practice regularly:</b> The more you use keyboard shortcuts, the more comfortable and efficient you will become. Make it a habit to use shortcuts whenever possible.</li>
 </ol>
 <p>Using keyboard shortcuts can help you work more efficiently and save time. By identifying commonly used shortcuts, memorizing them, customizing shortcuts, using a cheat sheet, and practicing regularly, you can increase your productivity and streamline your workflow.</p>`
-  }
+  },
+{
+  title: "Take breaks",
+  description: `<p>Taking breaks can help you recharge and refocus, leading to increased productivity and improved overall well-being. Here are some pointers to keep in mind when taking breaks:</p>
+<ol>
+  <li><b>Schedule breaks:</b> Schedule regular breaks throughout your workday. This can help you stay on track and avoid burnout.</li>
+  <li><b>Get up and move:</b> During your breaks, get up and move your body. Take a walk, stretch, or do some light exercise. This can help increase blood flow and reduce fatigue.</li>
+  <li><b>Disconnect:</b> During your breaks, disconnect from work-related tasks and technology. This can help reduce stress and improve overall well-being.</li>
+  <li><b>Engage in a relaxing activity:</b> During your breaks, engage in an activity that you find relaxing. This can include reading a book, listening to music, or practicing mindfulness.</li>
+  <li><b>Take longer breaks:</b> In addition to scheduling regular breaks, take longer breaks as needed. This can include taking a day off or a longer vacation to recharge and refresh.</li>
+</ol>`
+},
+{
+  title: "Use the 80/20 rule",
+  description: `<ol>
+  <li><b>Identify the most important tasks:</b> Start by making a list of all the tasks you need to accomplish. Then, identify the 20% of tasks that will give you 80% of the results. These are the tasks that will have the most impact on your productivity and success.</li>
+  <li><b>Focus on the high-priority tasks:</b> Once you've identified the most important tasks, focus your time and energy on completing them first. By doing so, you'll be able to accomplish the most critical work before moving on to less important tasks.</li>
+  <li><b>Eliminate or delegate low-priority tasks:</b> Take a look at the remaining 80% of tasks and determine which ones can be eliminated or delegated to someone else. This will free up more time and energy for you to focus on the high-priority tasks.</li>
+  <li><b>Evaluate and adjust:</b> Regularly evaluate your task list and adjust as necessary. As your priorities and goals change, so will the tasks that are most important for you to focus on.</li>
+</ol>
+<p>By following the 80/20 rule, you can be more productive and efficient in your work by focusing on the tasks that will have the most impact on your success.</p>`
+},
+{
+  title: "Use a second monitor",
+  description: `<p>By using a second monitor, you can increase your productivity and reduce eye strain. Here are some pointers on how you can make the most out of a second monitor</p>
+<ol>
+  <li><b>Increased screen real estate:</b> With a second monitor, you have more screen real estate to work with, which can help you multitask more efficiently.</li>
+  <li><b>Reduced need for window switching:</b> With two monitors, you can keep different windows open on each screen, eliminating the need for constantly switching between windows.</li>
+  <li><b>Better organization:</b> With a second monitor, you can organize your work more effectively by dedicating one monitor to your main task and the other to supporting applications like email or chat.</li>
+  <li><b>Reduced eye strain:</b> Using a second monitor can reduce eye strain by allowing you to adjust the distance and angle of the monitors, as well as the size of the text and images.</li>
+  <li><b>Increased productivity:</b> The increased screen real estate and reduced need for window switching can lead to increased productivity by allowing you to work more efficiently and with fewer distractions.</li>
+  <li><b>Cost-effective solution:</b> With the decreasing cost of monitors, adding a second monitor can be a relatively cost-effective solution for increasing productivity.</li>
+</ol>`
+},
+{
+  title: "Turn off notifications",
+  description: `<p>In today's world, notifications can be distracting and hinder productivity. Turning them off is a simple but powerful productivity hack that minimizes distractions, prioritizes tasks, and increases focus and productivity. It creates a more efficient work environment that allows you to get more done in less time.</p>
+<p>Here are some pointers on how you can increase your productivity by turning off notifications:</p>
+<ol>
+  <li><b>Minimize distractions:</b> Turning off notifications on your phone and computer can minimize distractions and allow you to focus more on your work.</li>
+  <li><b>Improve concentration:</b> Without constant interruptions from notifications, you can improve your concentration and stay in the flow of your work.</li>
+  <li><b>Reduce stress:</b> Constant notifications can lead to feelings of stress and anxiety, so turning them off can help you feel more relaxed and in control.</li>
+  <li><b>Prioritize important tasks:</b> When you're not constantly interrupted by notifications, you can better prioritize and focus on important tasks.</li>
+  <li><b>Increase productivity:</b> By minimizing distractions and improving concentration, turning off notifications can increase productivity and help you get more done in less time.</li>
+  <li><b>Customize notification settings:</b> You can still receive important notifications by customizing your settings to allow notifications from specific people or apps, while turning off less important notifications.</li>
+</ol>
+<p>In conclusion, turning off notifications is a simple but effective way to minimize distractions, improve concentration, reduce stress, prioritize tasks, increase productivity, and customize your work environment to your needs.</p>`
+},
+{
+  title: "Use a distraction blocker",
+  description: `<ol>
+  <li><b>Block distracting websites and apps:</b> A distraction blocker like Freedom or Cold Turkey allows you to block distracting websites and apps during your work hours, helping you stay focused on your tasks.</li>
+  <li><b>Set custom schedules:</b> You can set custom schedules to block specific distractions during certain times of the day, allowing you to manage your time more effectively.</li>
+  <li><b>Break bad habits:</b> Using a distraction blocker can help break bad habits of checking social media or other distracting websites repeatedly throughout the day.</li>
+  <li><b>Improve self-control:</b> By using a distraction blocker, you can improve your self-control by resisting the urge to check distracting websites or apps.</li>
+  <li><b>Increase productivity:</b> By reducing distractions and improving self-control, using a distraction blocker can increase productivity and help you get more done in less time.</li>
+</ol>
+<p>Using a distraction blocker is a powerful productivity hack that can help you stay focused on your work, manage your time more effectively, break bad habits, improve self-control, and increase productivity.</p>`
+}
+
 ];
