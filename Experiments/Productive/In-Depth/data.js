@@ -25,5 +25,34 @@ const productivityHacks = [
     <li><b>Take longer breaks:</b> After completing four Pomodoros, take a longer break (usually around 15-30 minutes). This longer break allows you to fully recharge before starting the next set of Pomodoros.</li>
 </ol>
 <p>Overall, the Pomodoro Technique can help you stay focused and productive by breaking your workday into manageable intervals and providing regular breaks for rest and recharge.</p>`
+},
+{
+    title: "Use the Eisenhower Matrix",
+    description: `<p>The Eisenhower Matrix is a tool for prioritizing tasks based on their level of urgency and importance. It helps you focus on the tasks that are most important and need to be completed first.</p>
+<p>Here are some tips for using the Eisenhower Matrix effectively:</p>
+<ol>
+    <li><b>Define your tasks:</b> Start by listing all the tasks you need to complete, no matter how big or small.</li>
+    <li><b>Categorize your tasks:</b> Categorize your tasks into four categories: urgent and important, important but not urgent, urgent but not important, and neither urgent nor important.</li>
+    <li><b>Prioritize urgent and important tasks:</b> These are the tasks that need to be completed immediately, such as deadlines or emergencies. Prioritize these tasks and complete them first.</li>
+    <li><b>Schedule important but not urgent tasks:</b> These are the tasks that are important but not time-sensitive. Schedule time in your calendar to work on these tasks, so they don't fall by the wayside.</li>
+    <li><b>Delegate urgent but not important tasks:</b> These are the tasks that are urgent but not important to you specifically. Delegate these tasks to someone else if possible, so you can focus on your own important tasks.</li>
+    <li><b>Eliminate neither urgent nor important tasks:</b> These are the tasks that are neither urgent nor important. Eliminate them from your to-do list if they are not necessary.</li>
+    <li><b>Reassess regularly:</b> Regularly reassess your tasks and priorities, as they may change over time. Use the Eisenhower Matrix to help you stay focused on what's important and manage your time more effectively.</li>
+</ol>
+<p>Overall, the Eisenhower Matrix can help you prioritize your tasks and focus on what's most important, so you can make the most of your time and energy.</p>`
+},
+{
+    title: "Batch similar tasks together",
+    description: `<p>Batching similar tasks together is a productivity hack that can help you work more efficiently by reducing context switching. Context switching occurs when you switch from one task to another and can lead to a loss of productivity and focus.</p>
+<p>Here are some tips for batching similar tasks together:</p>
+<ol>
+    <li><b>Identify similar tasks:</b> Identify tasks that are similar in nature or require similar skills. For example, responding to emails or phone calls, scheduling meetings, or doing research.</li>
+    <li><b>Group tasks together:</b> Once you've identified similar tasks, group them together and do them all at once. For example, schedule a block of time each day to respond to emails or make phone calls.</li>
+    <li><b>Minimize distractions:</b> When batching tasks, it's important to minimize distractions to stay focused. Turn off notifications, close unnecessary tabs or applications, and let others know that you're not available during this time.</li>
+    <li><b>Take breaks:</b> Taking breaks is important to avoid burnout and stay productive. Take short breaks between batches to recharge and avoid fatigue.</li>
+    <li><b>Be flexible:</b> Be open to adjusting your batched tasks as needed. For example, if a new urgent task comes up, you may need to adjust your batched tasks to accommodate it.</li>
+    <li><b>Review and adjust:</b> Regularly review your batching process to see if it's working for you. Adjust as needed to maximize your productivity and efficiency.</li>
+</ol>
+<p>Overall, batching similar tasks together can help you stay focused, minimize context switching, and work more efficiently. By grouping tasks together, you can make the most of your time and energy and increase your productivity.</p>`
 }
 ];
