@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">📚 Markdown Hub</h1>
+                <button class="settings-btn" id="settingsBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h2 class="sidebar-title">Chapters</h2>
+                <ul class="chapter-list" id="chapterList">
+                    <li class="loading">Loading chapters...</li>
+                </ul>
+            </aside>
+
+            <!-- Content -->
+            <section class="content">
+                <div class="content-header">
+                    <h2 id="contentTitle">Welcome to Markdown Hub</h2>
+                </div>
+                <div class="content-body" id="contentBody">
+                    <div class="welcome-message">
+                        <h3>🚀 Getting Started</h3>
+                        <p>Select a chapter from the sidebar to begin reading. This hub automatically reads and renders markdown files from the <code>chapters/</code> folder.</p>
+                        <div class="feature-list">
+                            <div class="feature">
+                                <span class="feature-icon">📝</span>
+                                <span>Supports both Markdown and HTML content</span>
+                            </div>
+                            <div class="feature">
+                                <span class="feature-icon">🎨</span>
+                                <span>10 beautiful themes to choose from</span>
+                            </div>
+                            <div class="feature">
+                                <span class="feature-icon">📱</span>
+                                <span>Responsive design for all devices</span>
+                            </div>
+                            <div class="feature">
+                                <span class="feature-icon">⚡</span>
+                                <span>Fast and lightweight</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Theme Settings Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Theme Settings</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="theme-section">
+                    <h4>Dark Themes</h4>
+                    <div class="theme-grid">
+                        <button class="theme-btn" data-theme="dark-default">
+                            <div class="theme-preview dark-default-preview"></div>
+                            <span>Dark Default</span>
+                        </button>
+                        <button class="theme-btn" data-theme="dark-blue">
+                            <div class="theme-preview dark-blue-preview"></div>
+                            <span>Midnight Blue</span>
+                        </button>
+                        <button class="theme-btn" data-theme="dark-purple">
+                            <div class="theme-preview dark-purple-preview"></div>
+                            <span>Deep Purple</span>
+                        </button>
+                        <button class="theme-btn" data-theme="dark-green">
+                            <div class="theme-preview dark-green-preview"></div>
+                            <span>Forest Green</span>
+                        </button>
+                        <button class="theme-btn" data-theme="dark-orange">
+                            <div class="theme-preview dark-orange-preview"></div>
+                            <span>Dark Orange</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="theme-section">
+                    <h4>Light Themes</h4>
+                    <div class="theme-grid">
+                        <button class="theme-btn" data-theme="light-default">
+                            <div class="theme-preview light-default-preview"></div>
+                            <span>Light Default</span>
+                        </button>
+                        <button class="theme-btn" data-theme="light-blue">
+                            <div class="theme-preview light-blue-preview"></div>
+                            <span>Sky Blue</span>
+                        </button>
+                        <button class="theme-btn" data-theme="light-purple">
+                            <div class="theme-preview light-purple-preview"></div>
+                            <span>Lavender</span>
+                        </button>
+                        <button class="theme-btn" data-theme="light-green">
+                            <div class="theme-preview light-green-preview"></div>
+                            <span>Mint Green</span>
+                        </button>
+                        <button class="theme-btn" data-theme="light-orange">
+                            <div class="theme-preview light-orange-preview"></div>
+                            <span>Warm Orange</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
