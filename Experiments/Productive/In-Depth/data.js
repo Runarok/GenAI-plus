@@ -83,5 +83,58 @@ const productivityHacks = [
     <li><b>Provide feedback:</b> Provide feedback on the completed task, including what was done well and what could be improved. This will help the person learn and improve, and also help you refine your delegation skills.</li>
 </ol>
 <p>Delegating tasks can help you increase your productivity by freeing up time, reducing stress, and allowing you to focus on important tasks. By following these tips, you can delegate effectively and achieve better results with less effort.</p>`
-}
+  },
+  {
+    title: "Set clear goals",
+    description: `<p>Setting clear goals is an essential productivity hack that can help you stay focused, motivated, and productive. Clear goals provide direction and purpose, helping you prioritize tasks and make progress towards your objectives.</p>
+<p>Here are some tips for setting clear goals:</p>
+<ol>
+  <li><b>Be specific:</b> Clearly define what you want to achieve and why. Make sure your goals are specific, measurable, achievable, relevant, and time-bound (SMART).</li>
+  <li><b>Break down larger goals:</b> If you have a large goal, break it down into smaller, more manageable steps. This will help you track progress and avoid feeling overwhelmed.</li>
+  <li><b>Align goals with your values and vision:</b> Make sure your goals align with your personal or professional values and vision. This will help you stay motivated and focused on what's important.</li>
+  <li><b>Write down your goals:</b> Writing down your goals can help you clarify your thinking and commit to them. It can also serve as a reminder and help you track progress.</li>
+  <li><b>Review and adjust goals regularly:</b> Regularly review your goals to ensure they are still relevant and aligned with your priorities. Adjust them as needed to reflect changes in your circumstances or objectives.</li>
+  <li><b>Celebrate progress:</b> Celebrate small wins along the way to help you stay motivated and focused on your goals.</li>
+</ol>
+<p>Setting clear goals can help you stay focused, motivated, and productive. By following these tips, you can set goals that are specific, achievable, and aligned with your values and vision.</p>`
+  },
+  {
+    title: "Use the two-minute rule",
+    description: `<p>The two-minute rule is a productivity hack that can help you tackle small tasks quickly and avoid procrastination. The rule is simple: if a task takes less than two minutes to complete, do it immediately.</p>
+<p>Here are some pointers to keep in mind when using the two-minute rule:</p>
+<ol>
+  <li><b>Identify small tasks:</b> Look for small tasks that can be completed quickly, such as responding to an email, filing a document, or making a quick phone call.</li>
+  <li><b>Prioritize small tasks:</b> Prioritize small tasks based on their importance and urgency. If a small task is important and urgent, do it right away, even if it takes more than two minutes.</li>
+  <li><b>Set a time limit:</b> If a task takes more than two minutes but less than 15 minutes, consider setting a timer and completing it within that time frame. This will help you avoid getting sidetracked and spending too much time on small tasks.</li>
+  <li><b>Avoid distractions:</b> When working on small tasks, avoid distractions such as social media or email notifications. Turn off notifications and set specific times to check your email or social media accounts.</li>
+  <li><b>Use the two-minute rule regularly:</b> Make the two-minute rule a regular habit. By completing small tasks quickly, you can free up time and focus on larger, more important tasks.</li>
+</ol>
+<p>Using the two-minute rule can help you avoid procrastination and increase your productivity. By following these pointers, you can identify and prioritize small tasks and complete them quickly and efficiently.</p>`
+  },
+  {
+    title: "Avoid multitasking",
+    description: `<p>Multitasking can be tempting, but it can actually decrease productivity and increase stress.</p>
+<p>Here are some pointers to keep in mind when trying to avoid multitasking:</p>
+<ol>
+  <li><b>Recognize the limitations of the brain:</b> The human brain can only effectively focus on one task at a time. When we try to multitask, our brain has to constantly switch between tasks, which can lead to decreased productivity and increased stress.</li>
+  <li><b>Prioritize tasks:</b> Prioritize your tasks and focus on one task at a time. This will help you stay focused and avoid getting distracted.</li>
+  <li><b>Use time blocking:</b> Time blocking involves scheduling blocks of time for specific tasks. This can help you stay focused on one task at a time and avoid the temptation to multitask.</li>
+  <li><b>Turn off notifications:</b> Notifications can be a major distraction and can lead to multitasking. Turn off notifications for non-essential apps or during certain times of the day when you need to focus.</li>
+  <li><b>Take breaks:</b> Taking breaks can help you recharge and refocus. Instead of multitasking during breaks, take a walk, read a book, or engage in a relaxing activity.</li>
+</ol>
+<p>By avoiding multitasking, you can increase your productivity and decrease stress. By prioritizing tasks, using time blocking, turning off notifications, and taking breaks, you can stay focused and accomplish more.</p>`
+  },
+  {
+    title: "Use keyboard shortcuts",
+    description: `<p>Using keyboard shortcuts can save you time and increase productivity.</p>
+<p>Here are some pointers to keep in mind when using keyboard shortcuts:</p>
+<ol>
+  <li><b>Identify the most commonly used shortcuts:</b> Start by identifying the most commonly used shortcuts for your operating system and software. You can find a list of shortcuts online or in the software's help menu.</li>
+  <li><b>Memorize shortcuts:</b> Once you have identified the most commonly used shortcuts, take the time to memorize them. This will help you use them quickly and efficiently.</li>
+  <li><b>Customize shortcuts:</b> Some software allows you to customize keyboard shortcuts to fit your workflow. Consider customizing shortcuts for tasks that you do frequently.</li>
+  <li><b>Use a cheat sheet:</b> If you are having trouble remembering shortcuts, use a cheat sheet. You can create your own or download one online.</li>
+  <li><b>Practice regularly:</b> The more you use keyboard shortcuts, the more comfortable and efficient you will become. Make it a habit to use shortcuts whenever possible.</li>
+</ol>
+<p>Using keyboard shortcuts can help you work more efficiently and save time. By identifying commonly used shortcuts, memorizing them, customizing shortcuts, using a cheat sheet, and practicing regularly, you can increase your productivity and streamline your workflow.</p>`
+  }
 ];
