@@ -194,6 +194,65 @@ const productivityHacks = [
   <li><b>Increase productivity:</b> By reducing distractions and improving self-control, using a distraction blocker can increase productivity and help you get more done in less time.</li>
 </ol>
 <p>Using a distraction blocker is a powerful productivity hack that can help you stay focused on your work, manage your time more effectively, break bad habits, improve self-control, and increase productivity.</p>`
+},
+{
+  title: "Schedule email time",
+  description: `Scheduling email time can save a lot of your work and increase your productivity. Here’s how:
+<ol>
+  <li><b>Minimize distractions:</b> Constantly checking your email throughout the day can be a major distraction and hinder productivity. By scheduling specific times to check and respond to emails, you can minimize distractions and stay focused on your work.</li>
+  <li><b>Prioritize important emails:</b> By scheduling specific times to check your email, you can prioritize important emails and respond to them in a timely manner, while also preventing less important emails from taking up too much of your time.</li>
+  <li><b>Increase efficiency:</b> By checking your email at specific times, you can increase your efficiency and avoid wasting time constantly checking and responding to emails throughout the day.</li>
+  <li><b>Improve work-life balance:</b> Constantly checking and responding to emails can lead to feelings of burnout and negatively impact your work-life balance. By scheduling specific times to check and respond to emails, you can better manage your time and reduce stress.</li>
+  <li><b>Set expectations:</b> By letting others know when you will be checking and responding to emails, you can set expectations and avoid feeling overwhelmed by constant email notifications.</li>
+  <li><b>Use automated responses:</b> If you receive a lot of emails, you can use automated responses to let others know when you will be checking and responding to emails.</li>
+</ol>
+<p>Scheduling email time is a powerful productivity hack that can minimize distractions, prioritize important emails, increase efficiency, improve work-life balance, set expectations, and use automated responses to save time.</p>`
+},
+{
+  title: "Use a standing desk",
+  description: `With the work from home culture. It is very important to have a good posture for your health while working. Using a standing desk helps with:
+<ol>
+  <li><b>Improve posture:</b> Sitting for long periods of time can lead to poor posture, which can cause back pain, neck pain, and other health issues. Using a standing desk can help improve your posture by encouraging you to stand up straight.</li>
+  <li><b>Increase energy levels:</b> Sitting for long periods of time can also lead to feelings of lethargy and fatigue. Using a standing desk can help increase your energy levels and improve your alertness throughout the day.</li>
+  <li><b>Burn more calories:</b> Using a standing desk can help you burn more calories than sitting, which can contribute to overall better health.</li>
+  <li><b>Reduce back pain:</b> Standing desks can help reduce back pain by allowing you to adjust your posture and avoid the pressure on your lower back that sitting can cause.</li>
+  <li><b>Improve circulation:</b> Using a standing desk can improve blood flow and circulation, which can reduce the risk of blood clots and other health issues.</li>
+  <li><b>Increase productivity:</b> By improving posture, increasing energy levels, reducing back pain, and improving circulation, using a standing desk can also increase productivity by helping you stay focused and alert throughout the day.</li>
+</ol>
+<p>Using a standing desk is a powerful productivity hack that can improve posture, increase energy levels, burn more calories, reduce back pain, improve circulation, and increase productivity.</p>`
+},
+{
+  title: "Use a noise-canceling headphone",
+  description: `Here’s how using a noise-canceling headphone will help you increase productivity:
+<ol>
+  <li><b>Block out distractions:</b> Noise-canceling headphones can help block out distracting noises in your environment, allowing you to focus on your work without being disturbed by external sounds.</li>
+  <li><b>Improve concentration:</b> By blocking out distractions, noise-canceling headphones can help improve your concentration and allow you to complete your work more efficiently.</li>
+  <li><b>Increase privacy:</b> If you work in a noisy environment, noise-canceling headphones can provide you with increased privacy and help you avoid being overheard by others.</li>
+  <li><b>Protect your hearing:</b> Exposure to loud noises over a prolonged period can damage your hearing. Using noise-canceling headphones can protect your hearing by reducing the amount of external noise that reaches your ears.</li>
+  <li><b>Enhance audio quality:</b> Noise-canceling headphones can enhance the audio quality of music or other audio you're listening to by reducing background noise, providing a more immersive listening experience.</li>
+  <li><b>Reduce stress:</b> Noise-canceling headphones can help reduce stress by creating a quiet and calming environment in which you can work, study, or relax.</li>
+</ol>
+<p>In conclusion, using noise-canceling headphones is a valuable productivity hack that can block out distractions, improve concentration, increase privacy, protect your hearing, enhance audio quality, and reduce stress.</p>`
+},
+{
+  title: "Use a note-taking app",
+  description: `Keeping track of ideas, notes, and to-do lists is crucial for productivity, and using a note-taking app like Evernote or OneNote can help you do this in a simple and organized way. Here are some of the benefits of using a note-taking app:
+<ol>
+  <li><b>Keep track of ideas:</b> Note-taking apps allow you to capture ideas as they come to you, no matter where you are. You can quickly jot down notes, record audio, or take pictures, and everything is automatically saved and synced across all your devices. This helps you stay organized and ensures that you don't forget important ideas or tasks.</li>
+  <li><b>Organize notes and to-do lists:</b> Note-taking apps make it easy to manage and organize your notes and to-do lists. You can create different notebooks or folders to categorize your notes and tasks, and easily search for specific information when you need it. This helps you stay on top of your work and avoid missing important deadlines or tasks.</li>
+  <li><b>Collaboration and sharing:</b> Note-taking apps also allow you to collaborate and share your notes and to-do lists with others. You can share your notes with colleagues, classmates, or friends, and work together on projects or assignments. This can help you stay connected and improve your productivity.</li>
+</ol>
+<p>Overall, using a note-taking app is a simple and effective way to keep track of your ideas, notes, and to-do lists, and improve your productivity.</p>`
+},
+{
+  title: "Use a password manager",
+  description: `Using a password manager like LastPass or 1Password can save you time and improve your security. Here are some benefits of using a password manager:
+<ol>
+  <li><b>Stronger passwords:</b> Password managers generate strong and unique passwords for each of your accounts, making it much harder for hackers to guess or crack them. This helps to improve your security and protect your personal information.</li>
+  <li><b>Convenient access:</b> With a password manager, you only need to remember one master password to access all of your other passwords. This saves you time and hassle, as you no longer need to remember multiple passwords or write them down somewhere.</li>
+  <li><b>Syncing across devices:</b> Password managers sync your passwords across all your devices, so you can access your accounts from anywhere. This makes it easier to switch between devices and ensures that you always have access to your passwords.</li>
+  <li><b>Security alerts:</b> Many password managers will alert you if any of your accounts have been compromised, so you can take action to protect your information. This can help you stay ahead of potential security threats and keep your data safe.</li>
+</ol>
+<p>Overall, using a password manager is a smart and easy way to improve your security and save time. By generating strong and unique passwords, syncing across devices, and providing security alerts, a password manager can help you stay protected online.</p>`
 }
-
 ];
