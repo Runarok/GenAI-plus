@@ -1,15 +1,22 @@
 // File configuration
 const FileNames = [
-  { file: 'chapters/introduction.md', title: 'Introduction' },
-  { file: 'chapters/getting-started.md', title: 'Getting Started' },
-  { file: 'chapters/advanced-features.md', title: 'Advanced Features' },
-  { file: 'chapters/troubleshooting.md', title: 'Troubleshooting' },
-  { file: 'chapters/conclusion.md', title: 'Conclusion' }
+{ file: 'Chapters/Introduction.md', title: 'Introduction' },
+{ file: 'Chapters/Chapter_1.md', title: 'Chapter 1' },
+{ file: 'Chapters/Chapter_2.md', title: 'Chapter 2' },
+{ file: 'Chapters/Chapter_3.md', title: 'Chapter 3' },
+{ file: 'Chapters/Chapter_4.md', title: 'Chapter 4' },
+{ file: 'Chapters/Chapter_5.md', title: 'Chapter 5' },
+{ file: 'Chapters/Chapter_6.md', title: 'Chapter 6' },
+{ file: 'Chapters/Chapter_7.md', title: 'Chapter 7' },
+{ file: 'Chapters/Chapter_8.md', title: 'Chapter 8' },
+{ file: 'Chapters/Chapter_9.md', title: 'Chapter 9' },
+{ file: 'Chapters/Chapter_10.md', title: 'Chapter 10' },
+{ file: 'Chapters/Chapter_11.md', title: 'Chapter 11' }
 ];
 
 // Theme management
 const THEMES = [
-  'black-red', 'black-purple', 'black-navy', 'black-green', 'black-gold', 'black-teal', 'black-gray', 'black-brown',
+  'black-gray', 'black-purple', 'black-navy', 'black-green', 'black-gold', 'black-teal', 'black-red', 'black-brown',
   'white-gold', 'white-mint', 'white-pink', 'white-yellow', 'white-blue', 'white-lavender', 'white-peach', 'white-cream'
 ];
 
