@@ -9,8 +9,8 @@ const FileNames = [
 
 // Theme management
 const THEMES = [
-  'dark-default', 'dark-blue', 'dark-purple', 'dark-green', 'dark-orange',
-  'light-default', 'light-blue', 'light-purple', 'light-green', 'light-orange'
+  'black-red', 'black-purple', 'black-navy', 'black-green', 'black-gold', 'black-teal', 'black-gray', 'black-brown',
+  'white-gold', 'white-mint', 'white-pink', 'white-yellow', 'white-blue', 'white-lavender', 'white-peach', 'white-cream'
 ];
 
 // Global state
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Theme initialization
 function initializeTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'dark-default';
+  const savedTheme = localStorage.getItem('theme') || 'black-red';
   applyTheme(savedTheme);
 }
 
