@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Theme initialization
 function initializeTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'black-red';
+  const savedTheme = localStorage.getItem('theme') || 'black-gray';
   applyTheme(savedTheme);
 }
 
