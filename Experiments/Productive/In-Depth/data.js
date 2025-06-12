@@ -11,5 +11,19 @@ const productivityHacks = [
     <li><b>Break down large tasks:</b> If you have large tasks on your list, break them down into smaller, more manageable tasks. This will make them less overwhelming and easier to prioritize.</li>
     <li><b>Be flexible:</b> Remember that priorities can change throughout the day or week. Be willing to adjust your priorities as needed to ensure that you are focusing your time and energy on the most important tasks.</li>
 </ol>`
+},
+{
+    title: "Use the Pomodoro Technique",
+    description: `<p>The Pomodoro Technique is a time-management method that can help you stay focused and productive throughout the day. It involves breaking your workday into 25-minute intervals (called Pomodoros) separated by short breaks.</p>
+<p>Here are some tips for using the Pomodoro Technique effectively:</p>
+<ol>
+    <li><b>Set a timer:</b> Use a timer (either a physical timer or a timer app) to set 25-minute intervals for focused work. During each Pomodoro, work on one specific task without interruption.</li>
+    <li><b>Take breaks:</b> After each Pomodoro, take a short break (usually around 5 minutes). This break allows your mind and body to recharge and prepare for the next Pomodoro.</li>
+    <li><b>Track your progress:</b> Keep track of how many Pomodoros you complete each day. This will help you see how much time you are spending on specific tasks and can help you adjust your priorities if needed.</li>
+    <li><b>Eliminate distractions:</b> During each Pomodoro, eliminate all distractions (such as phone notifications or email alerts) that could interrupt your work.</li>
+    <li><b>Adjust the length of Pomodoros:</b> If 25-minute Pomodoros don't work for you, adjust the length of each Pomodoro to suit your needs. You may find that 30-minute Pomodoros work better for you, or that shorter (or longer) breaks are more effective.</li>
+    <li><b>Take longer breaks:</b> After completing four Pomodoros, take a longer break (usually around 15-30 minutes). This longer break allows you to fully recharge before starting the next set of Pomodoros.</li>
+</ol>
+<p>Overall, the Pomodoro Technique can help you stay focused and productive by breaking your workday into manageable intervals and providing regular breaks for rest and recharge.</p>`
 }
 ];
