@@ -47,5 +47,17 @@ const quotes = [
         author: "Runarok Hrafn",
         source: "Own",
         url: "https://github.com/Runarok"
+    },
+    {
+      quote: "The most painful thing is losing yourself in the process of loving someone too much, and forgetting that you are special too",
+      author: "Ernest Hemingway",
+      source: "Goodreads",
+      url: "https://www.goodreads.com/author/show/1455.Ernest_Hemingway"
+    },
+    {
+      quote: "Morality is simply the attitude we adopt towards people we personally dislike",
+      author: "Oscar Wilde",
+      source: "Goodreads",
+      url: "https://www.goodreads.com/author/show/3565.Oscar_Wilde"
     }
 ];
