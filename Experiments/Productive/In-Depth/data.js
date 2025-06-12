@@ -255,6 +255,28 @@ const productivityHacks = [
 </ol>
 <p>Overall, using a password manager is a smart and easy way to improve your security and save time. By generating strong and unique passwords, syncing across devices, and providing security alerts, a password manager can help you stay protected online.</p>`
 },
+{
+  title: "Use a time-tracking tool",
+  description: `<p>Using a time-tracking tool like Toggl or RescueTime can help you monitor how you spend your time and increase your productivity. Here are some benefits of using a time-tracking tool:</p>
+<ol>
+  <li><b>Better time management:</b> Time-tracking tools help you identify how you're spending your time and where you might be wasting it. This allows you to make adjustments to your schedule and focus on the most important tasks.</li>
+  <li><b>Increased productivity:</b> By tracking your time, you can see how long it takes you to complete certain tasks and set more realistic goals. This helps you stay motivated and focused, and can ultimately lead to increased productivity.</li>
+  <li><b>Improved billing and invoicing:</b> If you're a freelancer or run your own business, time-tracking tools can help you accurately track your billable hours and create more accurate invoices. This can save you time and help you get paid faster.</li>
+  <li><b>Insights and analytics:</b> Many time-tracking tools provide detailed reports and analytics on how you spend your time. This can help you identify patterns and trends, and make adjustments to your workflow to improve your efficiency.</li>
+</ol>
+<p>Overall, using a time-tracking tool is a valuable way to increase your productivity and manage your time more effectively. By providing insights and analytics, helping with billing and invoicing, and improving your overall time management skills, a time-tracking tool can help you achieve your goals more efficiently.</p>`
+},
+{
+  title: "Use a mind-mapping tool",
+  description: `<p>Using a mind-mapping tool like MindNode or XMind can help you visualize your ideas and increase your creativity. Here are some benefits of using a mind-mapping tool:</p>
+<ol>
+  <li><b>Improved brainstorming:</b> Mind-mapping tools help you brainstorm and organize your ideas more effectively. By visually mapping out your thoughts, you can see how they relate to each other and identify new connections and patterns.</li>
+  <li><b>Increased creativity:</b> By using a mind-mapping tool, you can tap into your creative side and come up with more innovative ideas. Mind-mapping encourages free-form thinking and allows you to explore new possibilities.</li>
+  <li><b>Better organization:</b> Mind-mapping tools help you organize your thoughts and ideas in a way that's easy to understand and reference. You can create hierarchies, add notes, and attach files to your mind maps to create a more comprehensive picture of your ideas.</li>
+  <li><b>Collaboration:</b> Many mind-mapping tools allow for real-time collaboration, making it easy to work with others on a project or idea. This can be especially useful for remote teams or when working with multiple stakeholders.</li>
+</ol>
+<p>Overall, using a mind-mapping tool is a valuable way to increase your creativity, improve your organization, and collaborate more effectively with others. By allowing you to visualize your ideas in a more intuitive way, a mind-mapping tool can help you come up with more innovative solutions and achieve your goals more effectively.</p>`
+},
   {
     title: "Use a bookmark manager",
     description: `<p>Using a bookmark manager like Pocket or Instapaper can help you save articles and web pages for later and keep them organized.</p>
