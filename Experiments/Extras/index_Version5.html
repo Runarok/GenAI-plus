@@ -6,105 +6,154 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     :root {
-      --bg: #181a1b;
-      --panel: #222426;
-      --border: #2c2f31;
-      --accent: #4f8cff;
-      --text: #e1e6eb;
-      --muted: #8893a6;
-      --error: #ff6b6b;
-      --input-bg: #23262a;
-      --input-border: #33383f;
-      --input-focus: #4f8cff;
+      --bg: #101318;
+      --panel: #181c24;
+      --border: #232a36;
+      --card: #1c2230;
+      --accent: #5da7ff;
+      --accent-gradient: linear-gradient(90deg,#5da7ff 0%,#7f53ff 100%);
+      --text: #f1f3fa;
+      --muted: #8b98b6;
+      --input-bg: #23283b;
+      --input-border: #3a4151;
+      --input-focus: #5da7ff;
+      --error: #ff5e7e;
+      --shadow: 0 8px 32px #0b122444, 0 1.5px 7px #0002;
+      --radius: 16px;
+      --radius-sm: 8px;
+      --font-main: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      --transition: 0.2s cubic-bezier(.4,1.4,.6,1);
     }
     html, body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      font-family: var(--font-main);
       margin: 0;
       padding: 0;
       min-height: 100vh;
     }
     body {
-      max-width: 600px;
-      margin: 3em auto;
-      padding: 2em 1.5em;
+      max-width: 500px;
+      margin: 4vh auto;
+      padding: 2.2em 2em 1.5em 2em;
       background: var(--panel);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 32px #0004;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+      box-sizing: border-box;
     }
     h2 {
-      margin-top: 0;
-      font-weight: 700;
-      color: var(--accent);
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      font-weight: 900;
+      margin-top: 0.2em;
+      margin-bottom: 1.6em;
+      font-size: 2em;
+      letter-spacing: -1px;
+      text-shadow: 0 2px 8px #5da7ff33;
     }
     label {
       display: block;
-      margin-bottom: 0.5em;
+      margin-bottom: 0.65em;
       color: var(--muted);
-      font-size: 1.05em;
+      font-size: 1.08em;
+      font-weight: 500;
+      letter-spacing: 0.01em;
     }
     input[type="text"] {
       background: var(--input-bg);
       color: var(--text);
-      border: 1.5px solid var(--input-border);
-      border-radius: 6px;
-      padding: 0.7em 1em;
+      border: 1.7px solid var(--input-border);
+      border-radius: var(--radius-sm);
+      padding: 0.85em 1.1em;
       width: 100%;
-      font-size: 1.08em;
-      transition: border-color 0.2s;
-      margin-bottom: 1em;
+      font-size: 1.12em;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      margin-bottom: 1.15em;
       outline: none;
+      box-shadow: none;
     }
     input[type="text"]:focus {
       border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px #5da7ff44;
     }
     button {
-      background: var(--accent);
+      background: var(--accent-gradient);
       color: #fff;
       border: none;
-      border-radius: 6px;
-      padding: 0.7em 1.5em;
-      font-size: 1.09em;
-      font-weight: 600;
+      border-radius: var(--radius-sm);
+      padding: 0.78em 2.1em;
+      font-size: 1.13em;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 2px 6px #0002;
-      transition: background 0.2s;
-      margin-bottom: 1.3em;
+      box-shadow: 0 2px 7px #5da7ff24;
+      transition: background 0.18s, transform 0.13s;
+      margin-bottom: 1.35em;
+      letter-spacing: 0.02em;
+      outline: none;
+      border-bottom: 2.5px solid #335a98aa;
     }
     button:hover, button:focus {
-      background: #2962ff;
+      filter: brightness(1.09);
+      transform: translateY(-2px) scale(1.03);
     }
     .output {
-      margin-top: 1.2em;
-      background: var(--bg);
-      border-radius: 10px;
-      padding: 1em 1.2em;
-      border: 1px solid var(--border);
-      box-shadow: 0 2px 6px #0002;
+      margin-top: 1.6em;
+      background: var(--card);
+      border-radius: var(--radius-sm);
+      padding: 1.15em 1.2em 1.05em 1.2em;
+      border: 1.2px solid var(--border);
+      box-shadow: 0 3px 16px #5da7ff15;
+      font-size: 1.07em;
+    }
+    .output > div {
+      margin-bottom: 1.05em;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1em;
     }
     .output strong {
       color: var(--accent);
-      font-weight: 600;
-      letter-spacing: 0.02em;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.1em;
     }
     .url {
       word-break: break-all;
       color: var(--text);
+      font-size: 1.01em;
+      margin-top: 0.06em;
     }
     .url a {
       color: var(--accent);
       text-decoration: underline;
       word-break: break-all;
+      transition: color 0.17s;
+    }
+    .url a:hover {
+      color: #fff;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      text-decoration: underline wavy 1.5px;
     }
     .error {
       color: var(--error);
-      margin-top: 1em;
+      margin-top: 0.7em;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      font-size: 1.02em;
     }
-    @media (max-width: 700px) {
-      body { max-width: 97vw; padding: 1em 0.3em; }
-      .output { padding: 0.9em 0.5em; }
+    @media (max-width: 610px) {
+      body { max-width: 98vw; padding: 1.1em 0.4em; }
+      .output { padding: 0.9em 0.5em 0.7em 0.5em; }
+      h2 { font-size: 1.35em; }
+      button { padding: 0.7em 1.5em; font-size: 1em;}
     }
   </style>
 </head>
@@ -114,11 +163,11 @@
   <input type="text" id="link" autocomplete="off" placeholder="e.g. https://github.com/user/repo/blob/main/docs/index.html">
   <button onclick="analyze()">Analyze</button>
   <div class="output">
-    <div style="margin-bottom: 0.7em;">
+    <div>
       <strong>GitHub Repository or File:</strong>
       <span class="url" id="repoLink"></span>
     </div>
-    <div style="margin-bottom: 0.7em;">
+    <div>
       <strong>GitHub Pages Site or Subpath:</strong>
       <span class="url" id="pagesLink"></span>
     </div>
@@ -142,20 +191,14 @@
         // GitHub.com links
         if (url.hostname === 'github.com') {
           isGithub = true;
-          // e.g. /user/repo
-          //      /user/repo/
-          //      /user/repo/blob/branch/path...
-          //      /user/repo/tree/branch/path...
+          // e.g. /user/repo/blob/main/path...
           const parts = url.pathname.split('/').filter(Boolean);
           if (parts.length < 2) throw new Error('Invalid GitHub repository link!');
           user = parts[0];
           repo = parts[1];
-
-          // Default: main repo page
           let baseRepoURL = `https://github.com/${user}/${repo}`;
           let basePagesURL = `https://${user}.github.io/${repo}`;
 
-          // If blob/tree, extract branch and path
           if (parts[2] === 'blob' || parts[2] === 'tree') {
             branch = parts[3];
             if (parts.length > 4) {
@@ -163,9 +206,7 @@
             }
           }
 
-          // Compose GitHub URL (exact input or repo)
           repoURL = input;
-          // Compose Pages URL (with subpath if available)
           pagesURL = basePagesURL;
           if (subPath) pagesURL += '/' + subPath;
         }
@@ -179,16 +220,9 @@
           if (parts.length > 1) {
             subPath = parts.slice(1).join('/');
           }
-
-          // Compose Pages URL (exact input)
-          pagesURL = input.replace(/\/+$/, ''); // Remove trailing slashes
-          // Compose base repo URL
+          pagesURL = input.replace(/\/+$/, '');
           let baseRepoURL = `https://github.com/${user}/${repo}`;
-
-          // If subPath exists, show direct link to file/folder in repo (on default branch, typically main)
           if (subPath) {
-            // Show both as file and folder links
-            // Prefer blob/main for files, but since we can't know, just use blob/main
             repoURL = `${baseRepoURL}/blob/main/${subPath}`;
           } else {
             repoURL = baseRepoURL;
@@ -198,7 +232,6 @@
           throw new Error('Link must be a github.com or github.io URL!');
         }
 
-        // Output results
         repoEl.innerHTML = `<a href="${repoURL}" target="_blank">${repoURL}</a>`;
         pagesEl.innerHTML = `<a href="${pagesURL}" target="_blank">${pagesURL}</a>`;
 
