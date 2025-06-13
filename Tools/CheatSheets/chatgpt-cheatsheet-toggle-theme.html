@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
+      /* DARK THEME */
       --bg: #11323f;
       --main: #1e606e;
       --section-bg: #f2fafc;
       --white: #fff;
-      --black: #222;
       --teal: #1fc1c3;
       --teal-dark: #148b8c;
       --blue: #00a8e8;
@@ -20,6 +20,27 @@
       --highlight: #ffef62;
       --text-main: #1c2c36;
       --text-dark: #11323f;
+      --header-gradient: linear-gradient(90deg, #148b8c 0%, #1fc1c3 100%);
+      --icon-bg: #b7c3ca;
+      --icon-color: #1e606e;
+    }
+    body[data-theme="light"] {
+      --bg: #f7fafc;
+      --main: #49b7e4;
+      --section-bg: #fff;
+      --white: #fff;
+      --teal: #1fc1c3;
+      --teal-dark: #158b8c;
+      --blue: #00a8e8;
+      --gray: #e4f0f6;
+      --gray-dark: #d5e0e7;
+      --accent: #1fc1c3;
+      --highlight: #ffef62;
+      --text-main: #1a2b35;
+      --text-dark: #15606c;
+      --header-gradient: linear-gradient(90deg, #49b7e4 0%, #1fc1c3 100%);
+      --icon-bg: #d5e0e7;
+      --icon-color: #49b7e4;
     }
     body {
       background: var(--bg);
@@ -27,6 +48,7 @@
       font-family: 'Segoe UI', 'Fira Sans', 'Arial', sans-serif;
       margin: 0;
       padding: 0;
+      transition: background 0.2s, color 0.2s;
     }
     .cheat-container {
       max-width: 980px;
@@ -36,10 +58,10 @@
       overflow: hidden;
       box-shadow: 0 6px 32px 0 rgba(17, 50, 63, 0.18);
       border: 1px solid var(--gray);
+      transition: background 0.2s, color 0.2s;
     }
-    /* Header */
     .cheat-header {
-      background: linear-gradient(90deg, var(--teal-dark) 0%, var(--teal) 100%);
+      background: var(--header-gradient);
       color: var(--white);
       padding: 22px 0 14px 0;
       text-align: center;
@@ -50,7 +72,34 @@
     .cheat-header span {
       color: var(--highlight);
     }
-    /* Layout grid */
+    .theme-toggle {
+      position: absolute;
+      top: 26px;
+      right: 32px;
+      z-index: 10;
+    }
+    .theme-toggle button {
+      background: var(--gray-dark);
+      color: var(--icon-color);
+      border: none;
+      border-radius: 20px;
+      padding: 8px 22px;
+      font-size: 1.04em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+      box-shadow: 0 2px 12px 0 rgba(17,50,63,0.08);
+      display: flex;
+      align-items: center;
+      gap: 0.7em;
+    }
+    .theme-toggle button .sun,
+    .theme-toggle button .moon {
+      font-size: 1.17em;
+      display: inline-block;
+      vertical-align: middle;
+    }
     .cheat-content {
       display: grid;
       grid-template-columns: 2.1fr 1.25fr 1.3fr;
@@ -58,7 +107,6 @@
       gap: 0;
       background: var(--section-bg);
     }
-    /* Left column (Prompting Cheat Sheet) */
     .cheat-section {
       padding: 32px 30px 20px 32px;
       background: var(--section-bg);
@@ -88,7 +136,6 @@
       color: var(--blue);
       font-weight: 700;
     }
-    /* Center column (Prompt Frameworks) */
     .framework-section {
       padding: 32px 18px 22px 18px;
       background: var(--section-bg);
@@ -130,7 +177,6 @@
       letter-spacing: 0.03em;
       margin-bottom: 1px;
     }
-    /* Right column (Tools, Plugins) */
     .tools-section {
       padding: 32px 22px 22px 20px;
       background: var(--section-bg);
@@ -162,16 +208,15 @@
       width: 32px;
       height: 32px;
       border-radius: 8px;
-      background: var(--gray-dark);
+      background: var(--icon-bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Placeholder for icon, swap with real image or SVG */
       font-size: 1.26em;
       font-weight: 900;
-      color: var(--main);
+      color: var(--icon-color);
+      transition: background 0.2s, color 0.2s;
     }
-    /* Plugins */
     .plugins-section {
       margin-top: 22px;
     }
@@ -198,39 +243,14 @@
       width: 32px;
       height: 32px;
       border-radius: 8px;
-      background: var(--gray-dark);
+      background: var(--icon-bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Placeholder for icon, swap with real image or SVG */
       font-size: 1.1em;
       font-weight: 900;
       color: var(--blue);
-    }
-    /* Footer "Get the Guide" */
-    .cheat-footer {
-      background: var(--main);
-      color: var(--white);
-      text-align: center;
-      padding: 22px 0 20px 0;
-      font-size: 1.13rem;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-      border-top: 3px solid var(--accent);
-    }
-    .cheat-footer .big {
-      font-size: 1.45rem;
-      color: var(--accent);
-      margin: 0 4px;
-      font-weight: 900;
-      letter-spacing: 0.01em;
-    }
-    .cheat-footer .red {
-      color: #e8413c;
-      font-size: 1.15em;
-      font-weight: 900;
-      margin: 0 2px;
-      letter-spacing: 0.01em;
+      transition: background 0.2s, color 0.2s;
     }
     @media (max-width: 900px) {
       .cheat-content {
@@ -244,6 +264,15 @@
       .tools-section {
         border-bottom: none;
       }
+      .theme-toggle {
+        position: static;
+        display: flex;
+        justify-content: flex-end;
+        margin: 0 18px 0 0;
+        top: unset;
+        right: unset;
+        padding-top: 20px;
+      }
     }
     @media (max-width: 600px) {
       .cheat-header {
@@ -253,14 +282,17 @@
       .cheat-section, .framework-section, .tools-section {
         padding: 18px 7px 12px 11px;
       }
-      .cheat-footer {
-        font-size: 1em;
-        padding: 16px 0 14px 0;
-      }
     }
   </style>
 </head>
 <body>
+  <div class="theme-toggle">
+    <button id="theme-toggle-btn" aria-label="Switch theme">
+      <span class="moon" id="moon-icon" style="display:inline;">🌙</span>
+      <span class="sun" id="sun-icon" style="display:none;">☀️</span>
+      <span id="theme-label">Dark</span>
+    </button>
+  </div>
   <div class="cheat-container">
     <div class="cheat-header">
       CHATGPT <span>CHEAT SHEET</span>
@@ -339,9 +371,32 @@
         </div>
       </div>
     </div>
-    <div class="cheat-footer">
-      CLICK TO GET <span class="big">FULL CHATGPT GUIDE</span> FOR <span class="red">$100</span> FREE
-    </div>
   </div>
+  <script>
+    // Theme toggle
+    const btn = document.getElementById('theme-toggle-btn');
+    const themeLabel = document.getElementById('theme-label');
+    const moonIcon = document.getElementById('moon-icon');
+    const sunIcon = document.getElementById('sun-icon');
+    function setTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      if (theme === 'light') {
+        sunIcon.style.display = 'inline';
+        moonIcon.style.display = 'none';
+        themeLabel.textContent = 'Light';
+      } else {
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'inline';
+        themeLabel.textContent = 'Dark';
+      }
+      localStorage.setItem('theme', theme);
+    }
+    // On load, use saved theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+    btn.onclick = function() {
+      setTheme(document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    };
+  </script>
 </body>
 </html>
