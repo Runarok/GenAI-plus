@@ -26,6 +26,13 @@ class HTMLEditor {
     this.liveUpdate = true;
     this.isResizing = false;
     
+    // Local storage keys for each editor
+    this.localStorageKeys = {
+      html: 'editor-html-content',
+      css: 'editor-css-content',
+      js: 'editor-js-content'
+    };
+    
     this.init();
   }
   
@@ -35,6 +42,7 @@ class HTMLEditor {
     this.setupSyntaxHighlighting();
     this.setupSettings();
     this.setupResizing();
+    this.loadAllCodeFromLocalStorage(); // Load saved or default content
     this.updatePreview();
     this.updateStatus('Ready');
     this.applyEditorFontClass();
@@ -87,9 +95,14 @@ class HTMLEditor {
   
   setupEventListeners() {
     // Auto-update on typing (with debounce)
-    [this.htmlEditor, this.cssEditor, this.jsEditor].forEach(editor => {
+    [
+      { editor: this.htmlEditor, type: 'html' },
+      { editor: this.cssEditor, type: 'css' },
+      { editor: this.jsEditor, type: 'js' }
+    ].forEach(({ editor, type }) => {
       editor.addEventListener('input', () => {
         this.updateSyntaxHighlighting();
+        this.saveCodeToLocalStorage(type, editor.value); // Save on input
         if (this.liveUpdate) {
           clearTimeout(this.updateTimeout);
           this.updateTimeout = setTimeout(() => {
@@ -436,6 +449,29 @@ class HTMLEditor {
   debounce(func, wait) {
     clearTimeout(this.updateTimeout);
     this.updateTimeout = setTimeout(func, wait);
+  }
+  
+  loadAllCodeFromLocalStorage() {
+    // Get default content from the DOM (index.html)
+    const defaultHTML = this.htmlEditor.defaultValue;
+    const defaultCSS = this.cssEditor.defaultValue;
+    const defaultJS = this.jsEditor.defaultValue;
+
+    // Try to load from localStorage, fallback to default
+    const html = localStorage.getItem(this.localStorageKeys.html) ?? defaultHTML;
+    const css = localStorage.getItem(this.localStorageKeys.css) ?? defaultCSS;
+    const js = localStorage.getItem(this.localStorageKeys.js) ?? defaultJS;
+
+    this.htmlEditor.value = html;
+    this.cssEditor.value = css;
+    this.jsEditor.value = js;
+    this.updateSyntaxHighlighting();
+  }
+
+  saveCodeToLocalStorage(type, content) {
+    if (this.localStorageKeys[type]) {
+      localStorage.setItem(this.localStorageKeys[type], content);
+    }
   }
 }
 
