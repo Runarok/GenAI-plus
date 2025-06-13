@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ChatGPT Prompting Cheat Sheet (Dark Theme)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #181924;
+      --card-bg: #24263a;
+      --accent: #30cfcf;
+      --text: #f7f7fa;
+      --subtle: #c5c5d1;
+      --border: #31334b;
+      --section: #2b2d44;
+      --code-bg: #23243a;
+      --keyword: #6ee7b7;
+      --highlight: #fbbf24;
+      --plugin: #a5b4fc;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', 'Fira Sans', 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 850px;
+      margin: 2rem auto;
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: 0 2px 24px 0 rgba(0,0,0,0.18);
+      padding: 2.5rem 2rem;
+      border: 1px solid var(--border);
+    }
+    h1, h2, h3 {
+      color: var(--accent);
+      margin-top: 1.2em;
+      margin-bottom: .5em;
+    }
+    h1 {
+      font-size: 2.3rem;
+      letter-spacing: 0.03em;
+      text-align: center;
+    }
+    h2 {
+      font-size: 1.4rem;
+      border-left: 4px solid var(--accent);
+      padding-left: .5em;
+      margin-bottom: .7em;
+    }
+    ul, ol {
+      margin-left: 2em;
+      margin-bottom: 1.2em;
+    }
+    li {
+      margin-bottom: .4em;
+    }
+    .card {
+      background: var(--section);
+      border-radius: 8px;
+      padding: 1.1em 1.3em;
+      margin-bottom: 1.4em;
+      border: 1px solid var(--border);
+    }
+    .framework-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+      gap: 1em;
+      margin-bottom: 2em;
+    }
+    .framework {
+      background: var(--code-bg);
+      border-left: 5px solid var(--accent);
+      border-radius: 6px;
+      padding: .9em .8em;
+      margin-bottom: 0;
+      color: var(--text)
+    }
+    .framework-title {
+      font-weight: bold;
+      color: var(--highlight);
+      margin-bottom: .3em;
+      font-size: 1.1em;
+      letter-spacing: 0.01em;
+    }
+    .framework-desc {
+      color: var(--subtle);
+      font-size: 0.97em;
+    }
+    .tools-list, .plugins-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .7em;
+      margin-bottom: 1.6em;
+    }
+    .tool, .plugin {
+      background: var(--code-bg);
+      color: var(--keyword);
+      padding: .4em .85em;
+      border-radius: 4px;
+      font-size: 1.02em;
+      border: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .plugin {
+      color: var(--plugin);
+      font-weight: 500;
+    }
+    code, pre {
+      background: var(--code-bg);
+      color: var(--keyword);
+      padding: .1em .4em;
+      border-radius: 4px;
+      font-size: 0.98em;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 1rem 0.4rem; }
+      .framework-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ChatGPT Prompting Cheat Sheet</h1>
+    
+    <h2>Prompt Engineering Options</h2>
+    <div class="card">
+      <ul>
+        <li><b>Tone:</b> Specify the desired tone (e.g., <code>formal</code>, <code>casual</code>, <code>informative</code>, <code>persuasive</code>).</li>
+        <li><b>Format:</b> Define the format or structure (e.g., <code>essay</code>, <code>bullet points</code>, <code>outline</code>).</li>
+        <li><b>Act as:</b> Indicate a role or perspective to adopt (e.g., <code>expert</code>, <code>critic</code>, <code>enthusiast</code>).</li>
+        <li><b>Objective:</b> State the goal or purpose of the response (e.g., <code>inform</code>, <code>persuade</code>).</li>
+        <li><b>Context:</b> Provide background information, data, or context for content generation.</li>
+        <li><b>Scope:</b> Define the scope or range of the topic.</li>
+        <li><b>Keywords:</b> List important keywords or phrases to be included.</li>
+        <li><b>Limitations:</b> Specify constraints, such as word or character count.</li>
+        <li><b>Examples:</b> Provide examples of desired style, structure, or content.</li>
+        <li><b>Deadline:</b> Mention deadlines or time frames for time-sensitive responses.</li>
+        <li><b>Audience:</b> Specify the target audience for tailored content.</li>
+        <li><b>Language:</b> Indicate the language for the response, if different from the prompt.</li>
+        <li><b>Citations:</b> Request the inclusion of citations or sources to support information.</li>
+        <li><b>Point of view:</b> Ask AI to consider multiple perspectives or opinions.</li>
+        <li><b>Counterarguments:</b> Request addressing potential counterarguments.</li>
+        <li><b>Terminology:</b> Specify industry-specific or technical terms to use or avoid.</li>
+        <li><b>Analogies:</b> Ask AI to use analogies or examples to clarify concepts.</li>
+        <li><b>Quotes:</b> Request inclusion of relevant quotes or statements from experts.</li>
+        <li><b>Statistics:</b> Encourage the use of statistics or data to support claims.</li>
+        <li><b>Call to action:</b> Request a clear call to action or next steps.</li>
+        <li><b>Questions:</b> Have the AI ask you questions for further clarification or direction.</li>
+      </ul>
+    </div>
+    
+    <h2>Prompt Frameworks</h2>
+    <div class="framework-list">
+      <div class="framework">
+        <div class="framework-title">R-T-F</div>
+        <div class="framework-desc">
+          <b>Act as</b> a [role]<br>
+          <b>Create</b> a [task]<br>
+          <b>Show as</b> [format]
+        </div>
+      </div>
+      <div class="framework">
+        <div class="framework-title">T-A-G</div>
+        <div class="framework-desc">
+          <b>Define</b> the [task]<br>
+          <b>State</b> the [action]<br>
+          <b>Clarify</b> the [goal]
+        </div>
+      </div>
+      <div class="framework">
+        <div class="framework-title">B-A-B</div>
+        <div class="framework-desc">
+          <b>Explain problem</b> [before]<br>
+          <b>State the goal</b> [task]<br>
+          <b>Ask for output</b> [format]
+        </div>
+      </div>
+      <div class="framework">
+        <div class="framework-title">C-A-R-E</div>
+        <div class="framework-desc">
+          <b>Give the</b> [context]<br>
+          <b>Describe</b> [action]<br>
+          <b>Clarify</b> [results]<br>
+          <b>Give the</b> [example]
+        </div>
+      </div>
+      <div class="framework">
+        <div class="framework-title">A-P-E</div>
+        <div class="framework-desc">
+          <b>State the</b> [action]<br>
+          <b>Create a</b> [purpose]<br>
+          <b>Describe</b> [expectation]
+        </div>
+      </div>
+      <div class="framework">
+        <div class="framework-title">E-R-A</div>
+        <div class="framework-desc">
+          <b>Describe</b> [expectation]<br>
+          <b>Act as a</b> [role]<br>
+          <b>State the</b> [action]
+        </div>
+      </div>
+      <div class="framework">
+        <div class="framework-title">R-I-S-E</div>
+        <div class="framework-desc">
+          <b>Specify the</b> [role]<br>
+          <b>Describe the</b> [input]<br>
+          <b>Ask for output</b> [steps]<br>
+          <b>Describe</b> [expectation]
+        </div>
+      </div>
+      <div class="framework">
+        <div class="framework-title">R-A-C-E</div>
+        <div class="framework-desc">
+          <b>Specify the</b> [role]<br>
+          <b>State the</b> [action]<br>
+          <b>Give the</b> [context]<br>
+          <b>Describe</b> [expectation]
+        </div>
+      </div>
+    </div>
+    
+    <h2>Tools</h2>
+    <div class="tools-list">
+      <div class="tool">ChatGPT</div>
+      <div class="tool">Claude</div>
+      <div class="tool">Visme</div>
+      <div class="tool">Opus Clip</div>
+      <div class="tool">Adobe Firefly</div>
+      <div class="tool">Visla</div>
+      <div class="tool">Lela</div>
+      <div class="tool">Mint</div>
+      <div class="tool">Uber Suggest</div>
+      <div class="tool">Speechify</div>
+    </div>
+    
+    <h2>Plugins</h2>
+    <div class="plugins-list">
+      <div class="plugin">Video Insights</div>
+      <div class="plugin">Scholar AI</div>
+      <div class="plugin">Wolfram</div>
+      <div class="plugin">Zapier</div>
+      <div class="plugin">Create QR code</div>
+      <div class="plugin">Keymate Search</div>
+      <div class="plugin">WebPilot</div>
+      <div class="plugin">Vexscript</div>
+      <div class="plugin">Pixellow</div>
+      <div class="plugin">Ask Your PDF</div>
+    </div>
+    
+    <footer style="color:var(--subtle);text-align:center;font-size:1em;margin-top:2em;">
+      &copy; 2025 ChatGPT Prompting Cheat Sheet · Dark Theme
+    </footer>
+  </div>
+</body>
+</html>
