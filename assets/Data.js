@@ -14,36 +14,12 @@ const menuData = [
     id: "college",
     title: "College",
     links: [
-      {
-        label: "Embedded Systems",
-        url: "College/LABS/Embedded Systems/Embedded Systems.html",
-        desc: "Explore embedded systems projects."
-      },
-      {
-        label: "Internet of Things",
-        url: "College/LABS/Internet of Things/Internet of Things.html",
-        desc: "IoT experiments and implementations."
-      },
-      {
-        label: "Paging Algorithms",
-        url: "College/Paging Algorithms/Paging Algorithms.html",
-        desc: "Visualize memory paging techniques."
-      },      
-      {
-        label: "Memory Allocation",
-        url: "College/Memory Allocation/Memory Allocation.html",
-        desc: "Visualize Memory Allocation techniques."
-      },      
-      {
-        label: "CPU Scheduler",
-        url: "College/CPU Scheduler/index.html",
-        desc: "Visualize CPU Scheduler techniques."
-      },
-      {
-        label: "Cipher Programs",
-        url: "College/Cipher Programs/Cipher Programs.html",
-        desc: "Basic cryptographic ciphers demo."
-      }
+      { label: "CPU Scheduler", url: "College/CPU Scheduler/index.html", desc: "Visualize CPU Scheduler techniques." },
+      { label: "Paging Algorithms", url: "College/Paging Algorithms/Paging Algorithms.html", desc: "Visualize memory paging techniques." },
+      { label: "Cipher Programs", url: "College/Cipher Programs/Cipher Programs.html", desc: "Basic cryptographic ciphers demo." },
+      { label: "Memory Allocation", url: "College/Memory Allocation/Memory Allocation.html", desc: "Visualize Memory Allocation techniques." },
+      { label: "Internet of Things", url: "College/LABS/Internet of Things/Internet of Things.html", desc: "IoT experiments and implementations." },
+      { label: "Embedded Systems", url: "College/LABS/Embedded Systems/Embedded Systems.html", desc: "Explore embedded systems projects." }
     ]
   },
   {
@@ -80,3 +56,8 @@ const menuData = [
     ]
   }
 ];
+
+// Sort links within each category alphabetically by label
+menuData.forEach(category => {
+  category.links.sort((a, b) => a.label.localeCompare(b.label));
+});
