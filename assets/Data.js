@@ -30,8 +30,7 @@ const menuData = [
       { label: "Cheat Sheets", url: "Tools/CheatSheets/index.html", desc: "CheatSheets for Remembering." },
       { label: "HTML Editor", url: "Tools/HTML/index.html", desc: "Live Html editor." },
       { label: "Markdown Editor", url: "Tools/MarkDown/index.html", desc: "Live Github markdown." },
-      { label: "Themes", url: "Tools/Theme/index.html", desc: "Few Themes." },
-      { label: "Unit Converter", url: "converter.html", desc: "Convert units easily." }
+      { label: "Themes", url: "Tools/Theme/index.html", desc: "Few Themes." }
     ]
   },
   {
@@ -42,9 +41,7 @@ const menuData = [
       { label: "Quotes", url: "Experiments/Quotes/index.html", desc: "Fav Quotes/Words." },
       { label: "Sandbox", url: "Experiments/Sandbox/Sandbox.html", desc: "Try out ideas in the sandbox." },
       { label: "SnarkBot", url: "Experiments/AI Chat/SnarkBot/index.html", desc: "Snarky AI bot." },
-      { label: "Anime Merch", url: "Experiments/AnimeMerch/index.html", desc: "Just front end." },
-      { label: "Audio Visualizer", url: "visualizer.html", desc: "Music meets visuals." },
-      { label: "Particle Playground", url: "particles.html", desc: "Interactive particle demo." }
+      { label: "Anime Merch", url: "Experiments/AnimeMerch/index.html", desc: "Just front end." }
     ]
   },
   {
