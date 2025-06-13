@@ -101,13 +101,6 @@
       color: #fff;
       border-color: #bb86fc;
     }
-    .copied {
-      color: #8bc34a;
-      font-size: 0.98em;
-      margin-left: 0.5em;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-    }
     .error {
       color: #ff5e7e;
       font-weight: 600;
@@ -117,8 +110,34 @@
       text-align: center;
       padding-left: 0.1em;
     }
+    /* Toast styles */
+    #toast {
+      visibility: hidden;
+      min-width: 160px;
+      background-color: #222;
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 14px 32px;
+      position: fixed;
+      left: 50%;
+      bottom: 40px;
+      font-size: 1em;
+      transform: translateX(-50%);
+      z-index: 99;
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+      box-shadow: 0 4px 20px #0007;
+      pointer-events: none;
+    }
+    #toast.show {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
     @media (max-width: 480px) {
       .container { padding: 1em 0.5em; }
+      #toast { font-size: 0.98em; padding: 12px 8px; }
     }
   </style>
 </head>
@@ -132,32 +151,35 @@
         <div class="output-label">GitHub Repository or File:</div>
         <div class="button-row">
           <button class="action-btn" id="copyRepoBtn">Copy Link</button>
-          <button class="action-btn" id="openRepoBtn">Open Link</button>
-          <span class="copied" id="repoCopied" style="display: none;">Copied!</span>
+          <a class="action-btn" id="openRepoBtn" href="#" target="_self" rel="noopener">Open Link</a>
         </div>
       </div>
       <div class="output-row">
         <div class="output-label">GitHub Pages Site or Subpath:</div>
         <div class="button-row">
           <button class="action-btn" id="copyPagesBtn">Copy Link</button>
-          <button class="action-btn" id="openPagesBtn">Open Link</button>
-          <span class="copied" id="pagesCopied" style="display: none;">Copied!</span>
+          <a class="action-btn" id="openPagesBtn" href="#" target="_self" rel="noopener">Open Link</a>
         </div>
       </div>
     </div>
     <div class="error" id="error"></div>
   </div>
+  <div id="toast"></div>
   <script>
     const input = document.getElementById('link');
     const errorEl = document.getElementById('error');
     const output = document.getElementById('output');
+    const copyRepoBtn = document.getElementById('copyRepoBtn');
+    const openRepoBtn = document.getElementById('openRepoBtn');
+    const copyPagesBtn = document.getElementById('copyPagesBtn');
+    const openPagesBtn = document.getElementById('openPagesBtn');
+    const toast = document.getElementById('toast');
     let repoURL = '', pagesURL = '';
 
-    function showCopied(id) {
-      document.getElementById(id).style.display = 'inline';
-      setTimeout(() => {
-        document.getElementById(id).style.display = 'none';
-      }, 1200);
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.className = "show";
+      setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 1500);
     }
 
     function analyzeLink(val) {
@@ -213,6 +235,14 @@
           throw new Error('Link must be a github.com or github.io URL!');
         }
 
+        // Update open link anchors
+        openRepoBtn.href = repoURL;
+        openPagesBtn.href = pagesURL;
+
+        // Always open in same tab (target="_self"), but let user choose new tab with ctrl/cmd/middle click
+        openRepoBtn.setAttribute('target', '_self');
+        openPagesBtn.setAttribute('target', '_self');
+
         output.style.display = '';
       } catch (e) {
         errorEl.textContent = e.message;
@@ -223,24 +253,17 @@
       analyzeLink(e.target.value);
     });
 
-    // Copy/Open button handlers
-    document.getElementById('copyRepoBtn').onclick = () => {
+    copyRepoBtn.onclick = () => {
       if (repoURL) {
         navigator.clipboard.writeText(repoURL);
-        showCopied('repoCopied');
+        showToast("Copied GitHub Repository or File link!");
       }
     };
-    document.getElementById('openRepoBtn').onclick = () => {
-      if (repoURL) window.open(repoURL, '_blank');
-    };
-    document.getElementById('copyPagesBtn').onclick = () => {
+    copyPagesBtn.onclick = () => {
       if (pagesURL) {
         navigator.clipboard.writeText(pagesURL);
-        showCopied('pagesCopied');
+        showToast("Copied GitHub Pages Site or Subpath link!");
       }
-    };
-    document.getElementById('openPagesBtn').onclick = () => {
-      if (pagesURL) window.open(pagesURL, '_blank');
     };
 
     // Optionally analyze on load if input is prefilled
