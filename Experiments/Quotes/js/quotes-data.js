@@ -49,15 +49,99 @@ const quotes = [
         url: "https://github.com/Runarok"
     },
     {
-      quote: "The most painful thing is losing yourself in the process of loving someone too much, and forgetting that you are special too",
-      author: "Ernest Hemingway",
-      source: "Goodreads",
-      url: "https://www.goodreads.com/author/show/1455.Ernest_Hemingway"
+        quote: "The most painful thing is losing yourself in the process of loving someone too much, and forgetting that you are special too",
+        author: "Ernest Hemingway",
+        source: "Goodreads",
+        url: "https://www.goodreads.com/author/show/1455.Ernest_Hemingway"
     },
     {
-      quote: "Morality is simply the attitude we adopt towards people we personally dislike",
-      author: "Oscar Wilde",
-      source: "Goodreads",
-      url: "https://www.goodreads.com/author/show/3565.Oscar_Wilde"
+        quote: "Morality is simply the attitude we adopt towards people we personally dislike",
+        author: "Oscar Wilde",
+        source: "Goodreads",
+        url: "https://www.goodreads.com/author/show/3565.Oscar_Wilde"
+    },
+    {
+        quote: "Sometimes we break the things that keep us safe, just because we don’t understand why they’re there.",
+        author: "Runarok Hrafn",
+        source: "Instagram",
+        url: "https://www.instagram.com/reel/DKrvdJnTLbI/"
+    },
+    {
+        quote: "Even a fire learns to stop burning when it realizes the warmth is wasted on cold hands.",
+        author: "Runarok Hrafn",
+        source: "Instagram",
+        url: "https://www.instagram.com/reel/DKpSVc-TACA"
+    },
+    {
+        quote: "Focus on the good, and you'll attract more of it.",
+        author: "Runarok Hrafn",
+        source: "Instagram",
+        url: "https://www.instagram.com/reel/DKuXDMFIBup/?igsh=MTNrbTluZjVicHk2Zg=="
+    },
+    {
+        quote: "Nothing can be gained without losing. Even the heaven demands death.",
+        author: "Unknown",
+        source: "Youtube",
+        url: "https://youtube.com/shorts/R-6xXITIwfE?si=scdbEznsdoFUOycS"
+    },
+    {
+        quote: "Who am I to judge another, when I myself walk as an imperfect man.",
+        author: "Unknown",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
+    },
+    {
+        quote: "He who worries before it is necessary worries more than necessary.",
+        author: "Unknown",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
+    },
+    {
+        quote: "If the situation isn't in your hands it shouldn't be in your head.",
+        author: "Unknown",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
+    },
+    {
+        quote: "A candle loses nothing by lighting another candle.",
+        author: "Unknown",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
+    },
+    {
+        quote: "Patience isn't the ability to wait but is the ability to keep a positive attitude while waiting.",
+        author: "Unknown",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
+    },
+    {
+        quote: "You can't control the wind, but you can adjust your sails.",
+        author: "Unknown",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
+    },
+    {
+        quote: "A river cuts through rock not because of its power, but because of its persistence.",
+        author: "Unknown",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
+    },
+    {
+        quote: "The best revenge is not to be like your enemy.",
+        author: "Marcus Aurelius",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
+    },
+    {
+        quote: "Happiness isn't about getting what you want, but enjoying what you have.",
+        author: "Unknown",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
+    },
+    {
+        quote: "Worrying doesn't take away tomorrow's trouble. It takes away today's peace.",
+        author: "Unknown",
+        source: "Instagram",
+        url: "https://www.instagram.com/p/DBr2nQqR5ms/?igsh=MWE0eDE3YzI2N3hibQ=="
     }
 ];
