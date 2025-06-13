@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ChatGPT Prompting Cheat Sheet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #11323f;
+      --main: #1e606e;
+      --section-bg: #f2fafc;
+      --white: #fff;
+      --black: #222;
+      --teal: #1fc1c3;
+      --teal-dark: #148b8c;
+      --blue: #00a8e8;
+      --gray: #e4f0f6;
+      --gray-dark: #b7c3ca;
+      --accent: #2cfaad;
+      --highlight: #ffef62;
+      --text-main: #1c2c36;
+      --text-dark: #11323f;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: 'Segoe UI', 'Fira Sans', 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .cheat-container {
+      max-width: 980px;
+      margin: 38px auto 0 auto;
+      background: var(--white);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 6px 32px 0 rgba(17, 50, 63, 0.18);
+      border: 1px solid var(--gray);
+    }
+    /* Header */
+    .cheat-header {
+      background: linear-gradient(90deg, var(--teal-dark) 0%, var(--teal) 100%);
+      color: var(--white);
+      padding: 22px 0 14px 0;
+      text-align: center;
+      font-size: 2.35rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }
+    .cheat-header span {
+      color: var(--highlight);
+    }
+    /* Layout grid */
+    .cheat-content {
+      display: grid;
+      grid-template-columns: 2.1fr 1.25fr 1.3fr;
+      grid-template-rows: auto 1fr;
+      gap: 0;
+      background: var(--section-bg);
+    }
+    /* Left column (Prompting Cheat Sheet) */
+    .cheat-section {
+      padding: 32px 30px 20px 32px;
+      background: var(--section-bg);
+      border-right: 2px solid var(--gray);
+      border-bottom: 2px solid var(--gray);
+    }
+    .cheat-section h3 {
+      margin-top: 0;
+      font-size: 1.17rem;
+      letter-spacing: 0.01em;
+      color: var(--teal-dark);
+      margin-bottom: 14px;
+      font-weight: 800;
+    }
+    .cheat-section ol {
+      margin: 0 0 0 18px;
+      padding: 0;
+      font-size: 1.06rem;
+    }
+    .cheat-section li {
+      margin: 0 0 3px 0;
+      padding: 0 0 0 2px;
+      line-height: 1.5;
+      color: var(--text-dark);
+    }
+    .cheat-section li b {
+      color: var(--blue);
+      font-weight: 700;
+    }
+    /* Center column (Prompt Frameworks) */
+    .framework-section {
+      padding: 32px 18px 22px 18px;
+      background: var(--section-bg);
+      border-right: 2px solid var(--gray);
+      border-bottom: 2px solid var(--gray);
+      text-align: left;
+    }
+    .framework-section h3 {
+      margin-top: 0;
+      font-size: 1.17rem;
+      color: var(--teal-dark);
+      margin-bottom: 15px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+    .framework-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .framework-block {
+      background: var(--white);
+      border-radius: 6px;
+      border: 1.5px solid var(--gray-dark);
+      margin-bottom: 0;
+      padding: 10px 13px 7px 13px;
+      font-size: 1.04rem;
+      font-weight: 600;
+      color: var(--main);
+      box-shadow: 0 1px 2px 0 rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .framework-block span {
+      color: var(--teal-dark);
+      font-size: 1.13em;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      margin-bottom: 1px;
+    }
+    /* Right column (Tools, Plugins) */
+    .tools-section {
+      padding: 32px 22px 22px 20px;
+      background: var(--section-bg);
+      border-bottom: 2px solid var(--gray);
+      text-align: left;
+    }
+    .tools-section h3 {
+      margin-top: 0;
+      font-size: 1.17rem;
+      color: var(--teal-dark);
+      margin-bottom: 13px;
+      font-weight: 800;
+    }
+    .icon-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 18px;
+      margin-bottom: 1.2em;
+    }
+    .icon-list .icon-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.02em;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    .icon-list .icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--gray-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Placeholder for icon, swap with real image or SVG */
+      font-size: 1.26em;
+      font-weight: 900;
+      color: var(--main);
+    }
+    /* Plugins */
+    .plugins-section {
+      margin-top: 22px;
+    }
+    .plugins-section h3 {
+      margin-bottom: 14px;
+      font-size: 1.12rem;
+      color: var(--teal-dark);
+      font-weight: 800;
+    }
+    .plugins-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 18px;
+    }
+    .plugins-list .plugin-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--main);
+      font-weight: 600;
+      font-size: 1.01em;
+    }
+    .plugins-list .plugin-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--gray-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Placeholder for icon, swap with real image or SVG */
+      font-size: 1.1em;
+      font-weight: 900;
+      color: var(--blue);
+    }
+    /* Footer "Get the Guide" */
+    .cheat-footer {
+      background: var(--main);
+      color: var(--white);
+      text-align: center;
+      padding: 22px 0 20px 0;
+      font-size: 1.13rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      border-top: 3px solid var(--accent);
+    }
+    .cheat-footer .big {
+      font-size: 1.45rem;
+      color: var(--accent);
+      margin: 0 4px;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+    }
+    .cheat-footer .red {
+      color: #e8413c;
+      font-size: 1.15em;
+      font-weight: 900;
+      margin: 0 2px;
+      letter-spacing: 0.01em;
+    }
+    @media (max-width: 900px) {
+      .cheat-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: unset;
+      }
+      .cheat-section, .framework-section, .tools-section {
+        border-right: none;
+        border-bottom: 2px solid var(--gray);
+      }
+      .tools-section {
+        border-bottom: none;
+      }
+    }
+    @media (max-width: 600px) {
+      .cheat-header {
+        font-size: 1.3rem;
+        padding: 14px 0 8px 0;
+      }
+      .cheat-section, .framework-section, .tools-section {
+        padding: 18px 7px 12px 11px;
+      }
+      .cheat-footer {
+        font-size: 1em;
+        padding: 16px 0 14px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cheat-container">
+    <div class="cheat-header">
+      CHATGPT <span>CHEAT SHEET</span>
+    </div>
+    <div class="cheat-content">
+      <!-- LEFT: Prompting Cheat Sheet -->
+      <div class="cheat-section">
+        <h3>CHATGPT PROMPTING CHEAT SHEET</h3>
+        <ol>
+          <li><b>Tone:</b> Specify the desired tone (e.g., formal, casual, informative, persuasive).</li>
+          <li><b>Format:</b> Define the format or structure (e.g., essay, bullet points, outline).</li>
+          <li><b>Act as:</b> Indicate a role or perspective to adopt (e.g., expert, critic, enthusiast).</li>
+          <li><b>Objective:</b> State the goal or purpose of the response (e.g., inform, persuade).</li>
+          <li><b>Context:</b> Provide background information, data, or context for content generation.</li>
+          <li><b>Scope:</b> Define the scope or range of the topic.</li>
+          <li><b>Keywords:</b> List important keywords or phrases to be included.</li>
+          <li><b>Limitations:</b> Specify constraints, such as word or character count.</li>
+          <li><b>Examples:</b> Provide examples of desired style, structure, or content.</li>
+          <li><b>Deadline:</b> Mention deadlines or time frames for time-sensitive responses.</li>
+          <li><b>Audience:</b> Specify the target audience for tailored content.</li>
+          <li><b>Language:</b> Indicate the language for the response, if different from the prompt.</li>
+          <li><b>Citations:</b> Request the inclusion of citations or sources to support information.</li>
+          <li><b>Point of view:</b> Ask AI to consider multiple perspectives or opinions.</li>
+          <li><b>Counterarguments:</b> Request addressing potential counterarguments.</li>
+          <li><b>Terminology:</b> Specify industry-specific or technical terms to use or avoid.</li>
+          <li><b>Analogies:</b> Ask AI to use analogies or examples to clarify concepts.</li>
+          <li><b>Quotes:</b> Request inclusion of relevant quotes or statements from experts.</li>
+          <li><b>Statistics:</b> Encourage the use of statistics or data to support claims.</li>
+          <li><b>Call to action:</b> Request a clear call to action or next steps.</li>
+          <li><b>Questions:</b> Have the AI ask you questions for further clarification or direction.</li>
+        </ol>
+      </div>
+      <!-- CENTER: Frameworks -->
+      <div class="framework-section">
+        <h3>PROMPT FRAMEWORKS</h3>
+        <div class="framework-list">
+          <div class="framework-block"><span>R-T-F</span>ACT AS A [ROLE]<br>CREATE A [TASK]<br>SHOW AS [FORMAT]</div>
+          <div class="framework-block"><span>T-A-G</span>DEFINE THE [TASK]<br>STATE THE [ACTION]<br>CLARIFY THE [GOAL]</div>
+          <div class="framework-block"><span>B-A-B</span>EXPLAIN PROBLEM [BEFORE]<br>STATE THE GOAL [TASK]<br>ASK FOR OUTPUT [FORMAT]</div>
+          <div class="framework-block"><span>C-A-R-E</span>GIVE THE [CONTEXT]<br>DESCRIBE [ACTION]<br>CLARIFY [RESULTS]<br>GIVE THE [EXAMPLE]</div>
+          <div class="framework-block"><span>A-P-E</span>STATE THE [ACTION]<br>CREATE A [PURPOSE]<br>DESCRIBE [EXPECTATION]</div>
+          <div class="framework-block"><span>E-R-A</span>DESCRIBE [EXPECTATION]<br>ACT AS A [ROLE]<br>STATE THE [ACTION]</div>
+          <div class="framework-block"><span>R-I-S-E</span>SPECIFY THE [ROLE]<br>DESCRIBE THE [INPUT]<br>ASK FOR OUTPUT [STEPS]<br>DESCRIBE [EXPECTATION]</div>
+          <div class="framework-block"><span>R-A-C-E</span>SPECIFY THE [ROLE]<br>STATE THE [ACTION]<br>GIVE THE [CONTEXT]<br>DESCRIBE [EXPECTATION]</div>
+        </div>
+      </div>
+      <!-- RIGHT: Tools, Plugins -->
+      <div class="tools-section">
+        <h3>TOOLS</h3>
+        <div class="icon-list">
+          <div class="icon-item"><span class="icon">🤖</span>ChatGPT</div>
+          <div class="icon-item"><span class="icon">🌞</span>Visla</div>
+          <div class="icon-item"><span class="icon">🟤</span>Claude</div>
+          <div class="icon-item"><span class="icon">🟣</span>Leia</div>
+          <div class="icon-item"><span class="icon">🟢</span>Mint</div>
+          <div class="icon-item"><span class="icon">🟠</span>Visme</div>
+          <div class="icon-item"><span class="icon">🎬</span>Opus Clip</div>
+          <div class="icon-item"><span class="icon">🔎</span>Uber Suggest</div>
+          <div class="icon-item"><span class="icon">🔥</span>Adobe Firefly</div>
+          <div class="icon-item"><span class="icon">🔊</span>Speechify</div>
+        </div>
+        <div class="plugins-section">
+          <h3>PLUGINS</h3>
+          <div class="plugins-list">
+            <div class="plugin-item"><span class="plugin-icon">📹</span>Video Insights</div>
+            <div class="plugin-item"><span class="plugin-icon">🔎</span>Keymate Search</div>
+            <div class="plugin-item"><span class="plugin-icon">👨‍🎓</span>Scholar AI</div>
+            <div class="plugin-item"><span class="plugin-icon">🌐</span>WebPilot</div>
+            <div class="plugin-item"><span class="plugin-icon">🧮</span>Wolfram</div>
+            <div class="plugin-item"><span class="plugin-icon">🎤</span>VoxScript</div>
+            <div class="plugin-item"><span class="plugin-icon">🔗</span>Zapier</div>
+            <div class="plugin-item"><span class="plugin-icon">🖼️</span>Pixellow</div>
+            <div class="plugin-item"><span class="plugin-icon">🔲</span>Create QR code</div>
+            <div class="plugin-item"><span class="plugin-icon">📄</span>Ask Your PDF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cheat-footer">
+      CLICK TO GET <span class="big">FULL CHATGPT GUIDE</span> FOR <span class="red">$100</span> FREE
+    </div>
+  </div>
+</body>
+</html>
