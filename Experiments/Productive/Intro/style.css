@@ -685,12 +685,12 @@ body {
   margin-top: 2rem;
 }
 
-.content-body h1 { font-size: 2.5rem; }
-.content-body h2 { font-size: 2rem; }
-.content-body h3 { font-size: 1.5rem; }
-.content-body h4 { font-size: 1.25rem; }
-.content-body h5 { font-size: 1.125rem; }
-.content-body h6 { font-size: 1rem; }
+.content-body h1 { font-size: 1.5rem; }
+.content-body h2 { font-size: 1.25rem; }
+.content-body h3 { font-size: 1.125rem; }
+.content-body h4 { font-size: 1rem; }
+.content-body h5 { font-size: 0.875rem; }
+.content-body h6 { font-size: 0.75rem; }
 
 .content-body p {
   margin-bottom: 1rem;
