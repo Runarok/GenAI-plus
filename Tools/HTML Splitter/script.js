@@ -2,7 +2,9 @@ class HTMLParser {
     constructor() {
         this.initializeElements();
         this.setupEventListeners();
-        this.setupThemeToggle();
+        this.setupThemeSystem();
+        this.setupTabSystem();
+        this.setupActionMenus();
         this.parseHTML(); // Initial parse
     }
 
@@ -12,8 +14,15 @@ class HTMLParser {
         this.cssOutput = document.getElementById('css-output');
         this.jsOutput = document.getElementById('js-output');
         this.clearBtn = document.getElementById('clear-input');
-        this.downloadBtns = document.querySelectorAll('.download-btn');
-        this.themeSwitch = document.getElementById('theme-switch');
+        this.settingsBtn = document.getElementById('settings-btn');
+        this.settingsMenu = document.getElementById('settings-menu');
+        this.downloadAllBtn = document.getElementById('download-all-btn');
+        this.themeOptions = document.querySelectorAll('.theme-option');
+        this.tabBtns = document.querySelectorAll('.tab-btn');
+        this.tabContents = document.querySelectorAll('.tab-content');
+        this.actionBtns = document.querySelectorAll('.action-btn');
+        this.actionMenus = document.querySelectorAll('.action-menu');
+        this.actionItems = document.querySelectorAll('.action-item');
     }
 
     setupEventListeners() {
@@ -27,39 +36,128 @@ class HTMLParser {
             this.clearInput();
         });
 
-        // Download buttons
-        this.downloadBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
+        // Settings dropdown
+        this.settingsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleSettingsMenu();
+        });
+
+        // Close settings menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!this.settingsMenu.contains(e.target) && !this.settingsBtn.contains(e.target)) {
+                this.closeSettingsMenu();
+            }
+        });
+
+        // Download all button
+        this.downloadAllBtn.addEventListener('click', () => {
+            this.downloadAllFiles();
+        });
+
+        // Action items
+        this.actionItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const action = e.currentTarget.dataset.action;
                 const type = e.currentTarget.dataset.type;
-                this.downloadFile(type);
+                
+                if (action === 'download') {
+                    this.downloadFile(type);
+                }
+                
+                this.closeAllActionMenus();
             });
         });
 
         // Prevent default paste behavior and handle it manually
         this.htmlInput.addEventListener('paste', (e) => {
-            // Allow default paste behavior
             setTimeout(() => this.parseHTML(), 10);
         });
     }
 
-    setupThemeToggle() {
+    setupThemeSystem() {
         // Check for saved theme preference
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            this.themeSwitch.checked = savedTheme === 'light';
-        } else if (!prefersDark) {
-            document.documentElement.setAttribute('data-theme', 'light');
-            this.themeSwitch.checked = true;
-        }
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        this.setTheme(savedTheme);
 
-        this.themeSwitch.addEventListener('change', () => {
-            const theme = this.themeSwitch.checked ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
+        // Theme option listeners
+        this.themeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const theme = option.dataset.theme;
+                this.setTheme(theme);
+                localStorage.setItem('theme', theme);
+            });
         });
+    }
+
+    setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        // Update active theme option
+        this.themeOptions.forEach(option => {
+            option.classList.toggle('active', option.dataset.theme === theme);
+        });
+    }
+
+    setupTabSystem() {
+        this.tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                this.switchTab(tabId);
+            });
+        });
+    }
+
+    switchTab(tabId) {
+        // Update tab buttons
+        this.tabBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === tabId);
+        });
+
+        // Update tab contents
+        this.tabContents.forEach(content => {
+            content.classList.toggle('active', content.id === `${tabId}-tab`);
+        });
+    }
+
+    setupActionMenus() {
+        this.actionBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const menuId = btn.id.replace('-download', '-menu');
+                const menu = document.getElementById(menuId);
+                
+                // Close other menus
+                this.actionMenus.forEach(m => {
+                    if (m !== menu) {
+                        m.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current menu
+                menu.classList.toggle('active');
+            });
+        });
+
+        // Close action menus when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.tab-actions')) {
+                this.closeAllActionMenus();
+            }
+        });
+    }
+
+    closeAllActionMenus() {
+        this.actionMenus.forEach(menu => {
+            menu.classList.remove('active');
+        });
+    }
+
+    toggleSettingsMenu() {
+        this.settingsMenu.classList.toggle('active');
+    }
+
+    closeSettingsMenu() {
+        this.settingsMenu.classList.remove('active');
     }
 
     parseHTML() {
@@ -239,6 +337,43 @@ class HTMLParser {
         }
     }
 
+    downloadAllFiles() {
+        const files = [
+            { content: this.htmlOutput.value, filename: 'index.html', type: 'HTML' },
+            { content: this.cssOutput.value, filename: 'styles.css', type: 'CSS' },
+            { content: this.jsOutput.value, filename: 'script.js', type: 'JavaScript' }
+        ];
+
+        const filesToDownload = files.filter(file => file.content.trim());
+
+        if (filesToDownload.length === 0) {
+            this.showNotification('No content to download', 'warning');
+            return;
+        }
+
+        // Download each file with a small delay
+        filesToDownload.forEach((file, index) => {
+            setTimeout(() => {
+                try {
+                    const blob = new Blob([file.content], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = file.filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                } catch (error) {
+                    console.error(`Failed to download ${file.filename}:`, error);
+                }
+            }, index * 200); // 200ms delay between downloads
+        });
+
+        this.showNotification(`Downloading ${filesToDownload.length} files...`, 'success');
+        this.closeSettingsMenu();
+    }
+
     showNotification(message, type = 'info') {
         // Create notification element
         const notification = document.createElement('div');
@@ -251,7 +386,7 @@ class HTMLParser {
             top: 20px;
             right: 20px;
             padding: 12px 20px;
-            border-radius: 6px;
+            border-radius: 8px;
             color: white;
             font-weight: 500;
             z-index: 1000;
@@ -260,6 +395,7 @@ class HTMLParser {
             transition: all 0.3s ease;
             max-width: 300px;
             word-wrap: break-word;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         `;
 
         // Set background color based on type
@@ -328,26 +464,61 @@ document.addEventListener('DOMContentLoaded', () => {
             color: #333;
             text-align: center;
         }
+        
+        .button {
+            background: linear-gradient(45deg, #007acc, #00d4ff);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Welcome to My Website</h1>
         <p>This is a sample HTML document with embedded CSS and JavaScript.</p>
-        <button id="clickMe">Click Me!</button>
+        <button id="clickMe" class="button">Click Me!</button>
+        <div id="output"></div>
     </div>
     
     <script>
         // This is embedded JavaScript
         document.addEventListener('DOMContentLoaded', function() {
             const button = document.getElementById('clickMe');
+            const output = document.getElementById('output');
+            let clickCount = 0;
             
             button.addEventListener('click', function() {
-                alert('Hello from embedded JavaScript!');
+                clickCount++;
+                output.innerHTML = \`<p style="margin-top: 20px; color: #007acc;">Button clicked \${clickCount} time(s)!</p>\`;
+                
+                // Add some animation
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = '';
+                }, 150);
             });
             
             console.log('Page loaded successfully');
+            
+            // Add some dynamic styling
+            setTimeout(() => {
+                document.body.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+            }, 1000);
         });
+        
+        // Another script block
+        function showAlert() {
+            alert('Hello from embedded JavaScript!');
+        }
     </script>
     
     <script src="external-script.js"></script>

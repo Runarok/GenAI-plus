@@ -11,13 +11,57 @@
     <div class="container">
         <header>
             <h1><i class="fas fa-code"></i> HTML Parser & Extractor</h1>
-            <div class="theme-toggle">
-                <input type="checkbox" id="theme-switch" class="theme-switch-input">
-                <label for="theme-switch" class="theme-switch-label">
-                    <i class="fas fa-sun"></i>
-                    <i class="fas fa-moon"></i>
-                    <span class="toggle-slider"></span>
-                </label>
+            <div class="header-controls">
+                <div class="settings-dropdown">
+                    <button class="settings-btn" id="settings-btn">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="settings-menu" id="settings-menu">
+                        <div class="settings-section">
+                            <h4><i class="fas fa-palette"></i> Themes</h4>
+                            <div class="theme-grid">
+                                <button class="theme-option" data-theme="dark" title="Dark">
+                                    <div class="theme-preview dark-preview"></div>
+                                    <span>Dark</span>
+                                </button>
+                                <button class="theme-option" data-theme="light" title="Light">
+                                    <div class="theme-preview light-preview"></div>
+                                    <span>Light</span>
+                                </button>
+                                <button class="theme-option" data-theme="blue" title="Ocean Blue">
+                                    <div class="theme-preview blue-preview"></div>
+                                    <span>Ocean</span>
+                                </button>
+                                <button class="theme-option" data-theme="purple" title="Purple Haze">
+                                    <div class="theme-preview purple-preview"></div>
+                                    <span>Purple</span>
+                                </button>
+                                <button class="theme-option" data-theme="green" title="Forest Green">
+                                    <div class="theme-preview green-preview"></div>
+                                    <span>Forest</span>
+                                </button>
+                                <button class="theme-option" data-theme="orange" title="Sunset Orange">
+                                    <div class="theme-preview orange-preview"></div>
+                                    <span>Sunset</span>
+                                </button>
+                                <button class="theme-option" data-theme="pink" title="Rose Pink">
+                                    <div class="theme-preview pink-preview"></div>
+                                    <span>Rose</span>
+                                </button>
+                                <button class="theme-option" data-theme="teal" title="Teal Mint">
+                                    <div class="theme-preview teal-preview"></div>
+                                    <span>Teal</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h4><i class="fas fa-download"></i> Download</h4>
+                            <button class="download-all-btn" id="download-all-btn">
+                                <i class="fas fa-file-archive"></i> Download All Files
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -36,34 +80,69 @@
             </div>
 
             <div class="output-section">
-                <div class="output-group">
-                    <div class="section-header">
-                        <h3><i class="fas fa-code"></i> HTML Output</h3>
-                        <button class="download-btn" data-type="html">
-                            <i class="fas fa-download"></i> Download
+                <div class="tabs-container">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" data-tab="html">
+                            <i class="fab fa-html5"></i> HTML
+                        </button>
+                        <button class="tab-btn" data-tab="css">
+                            <i class="fab fa-css3-alt"></i> CSS
+                        </button>
+                        <button class="tab-btn" data-tab="js">
+                            <i class="fab fa-js-square"></i> JavaScript
                         </button>
                     </div>
-                    <textarea id="html-output" readonly></textarea>
-                </div>
+                    
+                    <div class="tab-content active" id="html-tab">
+                        <div class="tab-header">
+                            <h3><i class="fab fa-html5"></i> HTML Output</h3>
+                            <div class="tab-actions">
+                                <button class="action-btn" id="html-download" title="Download HTML">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <div class="action-menu" id="html-menu">
+                                    <button class="action-item" data-action="download" data-type="html">
+                                        <i class="fas fa-download"></i> Download HTML
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea id="html-output" readonly></textarea>
+                    </div>
 
-                <div class="output-group">
-                    <div class="section-header">
-                        <h3><i class="fab fa-css3-alt"></i> CSS Output</h3>
-                        <button class="download-btn" data-type="css">
-                            <i class="fas fa-download"></i> Download
-                        </button>
+                    <div class="tab-content" id="css-tab">
+                        <div class="tab-header">
+                            <h3><i class="fab fa-css3-alt"></i> CSS Output</h3>
+                            <div class="tab-actions">
+                                <button class="action-btn" id="css-download" title="Download CSS">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <div class="action-menu" id="css-menu">
+                                    <button class="action-item" data-action="download" data-type="css">
+                                        <i class="fas fa-download"></i> Download CSS
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea id="css-output" readonly></textarea>
                     </div>
-                    <textarea id="css-output" readonly></textarea>
-                </div>
 
-                <div class="output-group">
-                    <div class="section-header">
-                        <h3><i class="fab fa-js-square"></i> JavaScript Output</h3>
-                        <button class="download-btn" data-type="js">
-                            <i class="fas fa-download"></i> Download
-                        </button>
+                    <div class="tab-content" id="js-tab">
+                        <div class="tab-header">
+                            <h3><i class="fab fa-js-square"></i> JavaScript Output</h3>
+                            <div class="tab-actions">
+                                <button class="action-btn" id="js-download" title="Download JavaScript">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <div class="action-menu" id="js-menu">
+                                    <button class="action-item" data-action="download" data-type="js">
+                                        <i class="fas fa-download"></i> Download JavaScript
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea id="js-output" readonly></textarea>
                     </div>
-                    <textarea id="js-output" readonly></textarea>
                 </div>
             </div>
         </main>
