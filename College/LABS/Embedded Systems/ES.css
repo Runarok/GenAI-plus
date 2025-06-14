@@ -1,178 +1,147 @@
-/* Reset some default styles */
-body, h1, h2, h3, ul, li, pre, section {
+body {
+    font-family: Arial, sans-serif;
+    background: #222;
+    color: #f0f0f0;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #232526 0%, #282c34 100%);
-    color: #f3f3f3;
     min-height: 100vh;
-    padding-bottom: 40px;
 }
 
-/* Header */
 h1 {
     color: #fff;
-    padding: 32px 0 24px 0;
-    background: linear-gradient(90deg, #212121 60%, #3a6186 100%);
-    margin-bottom: 0;
-    font-size: 2.4rem;
+    padding: 20px 0;
+    background: #333;
+    margin: 0;
     text-align: center;
-    letter-spacing: 2px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    font-size: 2rem;
 }
 
-/* Table of Contents */
 #toc {
-    background: rgba(36, 38, 48, 0.95);
-    padding: 22px 30px;
-    border-radius: 12px;
-    margin: 32px auto 28px auto;
+    background: #292b32;
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin: 28px auto 22px auto;
     max-width: 700px;
-    box-shadow: 0 4px 16px rgba(30,40,60,0.16);
 }
 
 #toc h3 {
-    margin-bottom: 12px;
-    letter-spacing: 1px;
-    color: #7ec9fc;
-    font-size: 1.3rem;
-    font-weight: 600;
-    border-bottom: 1px solid #384254;
-    padding-bottom: 5px;
+    color: #79b8ff;
+    margin-bottom: 10px;
+    font-size: 1.15rem;
 }
 
 #toc-list {
     list-style: none;
-    margin-top: 14px;
+    margin: 0;
+    padding: 0;
 }
 
 #toc-list li {
-    margin: 9px 0;
+    margin: 7px 0;
 }
 
 #toc a {
-    color: #9ad7ff;
+    color: #89c2ff;
     text-decoration: none;
-    font-size: 1.08rem;
-    padding: 6px 10px 6px 0;
-    border-radius: 4px;
-    transition: background 0.15s, color 0.15s, padding-left 0.2s;
-    display: inline-block;
+    border-radius: 3px;
+    padding: 2px 6px;
+    transition: background 0.15s, color 0.15s;
 }
 
 #toc a:hover {
-    background: linear-gradient(90deg, #40a1ff44 0%, #5b86e5 100%);
+    background: #364156;
     color: #fff;
-    padding-left: 14px;
 }
 
-/* Program Sections */
 #programs-container {
-    max-width: 850px;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 12px;
 }
 
 section {
-    margin-bottom: 46px;
-    background: rgba(40, 44, 52, 0.95);
-    border-radius: 14px;
-    box-shadow: 0 2px 10px rgba(45,60,90,0.13);
-    padding: 26px 32px 28px 32px;
+    margin-bottom: 36px;
+    background: #26282f;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(20,30,40,.08);
+    padding: 20px 18px 22px 18px;
     position: relative;
-    transition: box-shadow 0.2s;
-}
-
-section:hover {
-    box-shadow: 0 6px 24px rgba(80, 170, 255, 0.07);
 }
 
 h2 {
-    color: #7ec9fc;
-    margin-bottom: 14px;
-    font-size: 1.5rem;
-    letter-spacing: 1px;
+    color: #b9e0ff;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
 }
 
 pre {
-    background: #232936;
+    background: #191a1e;
     color: #f6f8fa;
-    padding: 22px 16px 18px 16px;
-    border-radius: 8px;
+    padding: 14px 10px 10px 10px;
+    border-radius: 6px;
     white-space: pre-wrap;
     word-break: break-word;
-    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-    font-size: 1.03rem;
-    line-height: 1.65;
-    margin-top: 12px;
+    font-family: 'Consolas', 'Menlo', monospace;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-top: 10px;
     margin-bottom: 0;
     position: relative;
-    box-shadow: 0 2px 10px rgba(20,40,80,0.10);
-    border: 1px solid #2f3b4b;
+    border: 1px solid #22242a;
 }
 
-/* Copy Button Style */
 .copy-btn {
-    background: linear-gradient(90deg, #54a8ff 0%, #6be6d3 100%);
-    color: #232936;
-    padding: 7px 18px;
+    background: #4cb9fc;
+    color: #181d23;
+    padding: 6px 14px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 0.98rem;
     position: absolute;
-    top: 13px;
-    right: 14px;
+    top: 10px;
+    right: 10px;
     z-index: 2;
-    transition: background 0.14s, color 0.14s, box-shadow 0.17s;
-    box-shadow: 0 2px 8px rgba(54, 168, 255, 0.08);
+    transition: background 0.15s, color 0.15s;
 }
-
 .copy-btn:hover, .copy-btn:focus {
-    background: linear-gradient(90deg, #66eeff 0%, #5b86e5 100%);
-    color: #16232a;
-    box-shadow: 0 4px 12px rgba(60, 200, 255, 0.20);
+    background: #2fa3e6;
+    color: #fff;
     outline: none;
 }
 
-/* Responsive Design */
-@media (max-width: 900px) {
-    #programs-container, #toc {
-        max-width: 98vw;
-        padding-left: 7vw;
-        padding-right: 7vw;
+@media (max-width: 700px) {
+    #toc, #programs-container {
+        max-width: 100vw;
+        padding-left: 2vw;
+        padding-right: 2vw;
     }
     section {
-        padding-left: 7vw;
-        padding-right: 7vw;
+        padding-left: 4vw;
+        padding-right: 4vw;
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 500px) {
     h1 {
-        font-size: 1.45rem;
-        padding: 18px 0 12px 0;
+        font-size: 1.2rem;
+        padding: 14px 0;
     }
     #toc, section {
-        padding: 13px 5vw;
+        padding: 10px 3vw;
         font-size: 0.97rem;
     }
     h2 {
-        font-size: 1.11rem;
+        font-size: 1rem;
     }
     .copy-btn {
-        top: 8px;
-        right: 7px;
-        padding: 5px 10px;
+        top: 7px;
+        right: 6px;
+        padding: 4px 8px;
         font-size: 0.95rem;
     }
     pre {
-        padding: 12px 5px 9px 5px;
+        padding: 8px 2px 8px 2px;
         font-size: 0.95rem;
     }
 }
