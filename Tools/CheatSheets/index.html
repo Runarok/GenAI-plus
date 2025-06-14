@@ -1,393 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>ChatGPT Prompting Cheat Sheet</title>
-  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    :root {
-      --bg-dark: #13151b;
-      --card-dark: #222736;
-      --section-dark: #21222e;
-      --subtle-dark: #a6accd;
-      --border-dark: #23253a;
-      --accent: #3ef5e5;
-      --teal: #13e8c8;
-      --blue: #64baff;
-      --highlight: #ffe066;
-      --header-fade: linear-gradient(90deg, #0b4858 0%, #13e8c8 100%);
-      --text-main: #e8ebff;
-      --text-muted: #a6accd;
-      --shadow: 0 4px 32px rgba(0,0,0,0.23);
-      --icon-bg: #23253a;
-    }
-
-    body {
-      background: var(--bg-dark);
-      color: var(--text-main);
-      font-family: 'Segoe UI', 'Fira Sans', 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-    }
-    .cheat-container {
-      max-width: 1000px;
-      margin: 38px auto 0 auto;
-      background: var(--card-dark);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      border: 1.5px solid var(--border-dark);
-      position: relative;
-    }
-    .cheat-header {
-      background: var(--header-fade);
-      color: var(--accent);
-      text-shadow: 0 1px 14px #0008;
-      padding: 28px 0 18px 0;
-      text-align: center;
-      font-size: 2.4rem;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-      position: relative;
-    }
-    .cheat-header span {
-      color: var(--highlight);
-    }
-    .theme-toggle {
-      position: absolute;
-      top: 22px;
-      right: 30px;
-      z-index: 10;
-    }
-    .theme-toggle button {
-      background: var(--section-dark);
-      color: var(--teal);
-      border: none;
-      border-radius: 20px;
-      padding: 8px 22px;
-      font-size: 1.04em;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 2px 12px 0 rgba(17,50,63,0.08);
-      display: flex;
-      align-items: center;
-      gap: 0.7em;
-      transition: background 0.2s, color 0.2s;
-      outline: none;
-    }
-    .theme-toggle button .sun,
-    .theme-toggle button .moon {
-      font-size: 1.15em;
-      display: inline-block;
-      vertical-align: middle;
-    }
-    .cheat-content {
-      display: grid;
-      grid-template-columns: 2.25fr 1.15fr 1.2fr;
-      background: var(--section-dark);
-    }
-    .cheat-section {
-      padding: 32px 30px 22px 32px;
-      background: var(--section-dark);
-      border-right: 2px solid var(--border-dark);
-      border-bottom: 2px solid var(--border-dark);
-      min-width: 0;
-    }
-    .cheat-section h3 {
-      margin-top: 0;
-      font-size: 1.15rem;
-      letter-spacing: 0.01em;
-      color: var(--accent);
-      margin-bottom: 16px;
-      font-weight: 800;
-    }
-    .cheat-section ol {
-      margin: 0 0 0 18px;
-      padding: 0;
-      font-size: 1.06rem;
-    }
-    .cheat-section li {
-      margin: 0 0 3px 0;
-      padding: 0 0 0 2px;
-      line-height: 1.55;
-      color: var(--text-main);
-    }
-    .cheat-section li b {
-      color: var(--teal);
-      font-weight: 700;
-    }
-    .framework-section {
-      padding: 32px 15px 22px 18px;
-      background: var(--section-dark);
-      border-right: 2px solid var(--border-dark);
-      border-bottom: 2px solid var(--border-dark);
-      text-align: left;
-      min-width: 0;
-    }
-    .framework-section h3 {
-      margin-top: 0;
-      font-size: 1.15rem;
-      color: var(--accent);
-      margin-bottom: 17px;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-    }
-    .framework-list {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-    .framework-block {
-      background: var(--card-dark);
-      border-radius: 6px;
-      border: 1.5px solid var(--border-dark);
-      margin-bottom: 0;
-      padding: 10px 13px 7px 13px;
-      font-size: 1.04rem;
-      font-weight: 600;
-      color: var(--text-main);
-      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.09);
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .framework-block span {
-      color: var(--teal);
-      font-size: 1.13em;
-      font-weight: 900;
-      letter-spacing: 0.03em;
-      margin-bottom: 1px;
-    }
-    .tools-section {
-      padding: 32px 18px 22px 15px;
-      background: var(--section-dark);
-      border-bottom: 2px solid var(--border-dark);
-      min-width: 0;
-    }
-    .tools-section h3 {
-      margin-top: 0;
-      font-size: 1.15rem;
-      color: var(--accent);
-      margin-bottom: 14px;
-      font-weight: 800;
-    }
-    .tools-bar, .plugins-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 18px;
-      margin-bottom: 1.2em;
-      align-items: center;
-      justify-content: flex-start;
-    }
-    .tools-bar a, .plugins-bar a {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 14px 7px 8px;
-      background: var(--icon-bg);
-      border-radius: 18px;
-      color: var(--teal);
-      font-size: 1.02em;
-      font-weight: 600;
-      text-decoration: none;
-      border: 1px solid var(--border-dark);
-      transition: background 0.15s, color 0.15s, box-shadow 0.2s;
-      box-shadow: 0 0.5px 1.5px #0005;
-    }
-    .tools-bar a:hover, .plugins-bar a:hover {
-      background: var(--teal);
-      color: #1a2632;
-      box-shadow: 0 2px 10px #13e8c86c;
-      text-decoration: none;
-    }
-    .tools-bar .icon, .plugins-bar .icon {
-      width: 22px;
-      height: 22px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.2em;
-      background: none;
-      border-radius: 50%;
-    }
-    .plugins-section {
-      margin-top: 14px;
-    }
-    .plugins-section h3 {
-      margin-bottom: 14px;
-      font-size: 1.12rem;
-      color: var(--accent);
-      font-weight: 800;
-    }
-    .plugins-bar {
-      margin-bottom: 0.7em;
-    }
-    @media (max-width: 900px) {
-      .cheat-content {
-        grid-template-columns: 1fr;
-      }
-      .cheat-section, .framework-section, .tools-section {
-        border-right: none;
-        border-bottom: 2px solid var(--border-dark);
-      }
-      .tools-section {
-        border-bottom: none;
-      }
-      .theme-toggle {
-        position: static;
-        display: flex;
-        justify-content: flex-end;
-        margin: 0 18px 0 0;
-        top: unset;
-        right: unset;
-        padding-top: 22px;
-      }
-    }
-    @media (max-width: 600px) {
-      .cheat-header {
-        font-size: 1.3rem;
-        padding: 14px 0 8px 0;
-      }
-      .cheat-section, .framework-section, .tools-section {
-        padding: 18px 7px 12px 11px;
-      }
-      .tools-bar, .plugins-bar {
-        flex-wrap: wrap;
-        gap: 7px 12px;
-      }
-    }
-    /* Light mode styles */
-    body[data-theme="light"] {
-      --bg-dark: #f7fafc;
-      --card-dark: #fff;
-      --section-dark: #fbfcfe;
-      --subtle-dark: #3b4451;
-      --border-dark: #dde1ea;
-      --accent: #13e8c8;
-      --teal: #1fc1c3;
-      --blue: #43aefb;
-      --highlight: #ffef62;
-      --header-fade: linear-gradient(90deg, #29c4ed 0%, #13e8c8 100%);
-      --text-main: #21222e;
-      --text-muted: #4b5161;
-      --shadow: 0 4px 32px rgba(87,180,220,0.08);
-      --icon-bg: #eaf8fa;
-    }
-  </style>
-</head>
-<body>
-  <div class="theme-toggle">
-    <button id="theme-toggle-btn" aria-label="Switch theme">
-      <span class="moon" id="moon-icon" style="display:inline;">🌙</span>
-      <span class="sun" id="sun-icon" style="display:none;">☀️</span>
-      <span id="theme-label">Dark</span>
-    </button>
-  </div>
-  <div class="cheat-container">
-    <div class="cheat-header">
-      CHATGPT <span>CHEAT SHEET</span>
-    </div>
-    <div class="cheat-content">
-      <!-- LEFT: Prompting Cheat Sheet -->
-      <div class="cheat-section">
-        <h3>CHATGPT PROMPTING CHEAT SHEET</h3>
-        <ol>
-          <li><b>Tone:</b> Specify the desired tone (e.g., formal, casual, informative, persuasive).</li>
-          <li><b>Format:</b> Define the format or structure (e.g., essay, bullet points, outline).</li>
-          <li><b>Act as:</b> Indicate a role or perspective to adopt (e.g., expert, critic, enthusiast).</li>
-          <li><b>Objective:</b> State the goal or purpose of the response (e.g., inform, persuade).</li>
-          <li><b>Context:</b> Provide background information, data, or context for content generation.</li>
-          <li><b>Scope:</b> Define the scope or range of the topic.</li>
-          <li><b>Keywords:</b> List important keywords or phrases to be included.</li>
-          <li><b>Limitations:</b> Specify constraints, such as word or character count.</li>
-          <li><b>Examples:</b> Provide examples of desired style, structure, or content.</li>
-          <li><b>Deadline:</b> Mention deadlines or time frames for time-sensitive responses.</li>
-          <li><b>Audience:</b> Specify the target audience for tailored content.</li>
-          <li><b>Language:</b> Indicate the language for the response, if different from the prompt.</li>
-          <li><b>Citations:</b> Request the inclusion of citations or sources to support information.</li>
-          <li><b>Point of view:</b> Ask AI to consider multiple perspectives or opinions.</li>
-          <li><b>Counterarguments:</b> Request addressing potential counterarguments.</li>
-          <li><b>Terminology:</b> Specify industry-specific or technical terms to use or avoid.</li>
-          <li><b>Analogies:</b> Ask AI to use analogies or examples to clarify concepts.</li>
-          <li><b>Quotes:</b> Request inclusion of relevant quotes or statements from experts.</li>
-          <li><b>Statistics:</b> Encourage the use of statistics or data to support claims.</li>
-          <li><b>Call to action:</b> Request a clear call to action or next steps.</li>
-          <li><b>Questions:</b> Have the AI ask you questions for further clarification or direction.</li>
-        </ol>
-      </div>
-      <!-- CENTER: Frameworks -->
-      <div class="framework-section">
-        <h3>PROMPT FRAMEWORKS</h3>
-        <div class="framework-list">
-          <div class="framework-block"><span>R-T-F</span>ACT AS A [ROLE]<br>CREATE A [TASK]<br>SHOW AS [FORMAT]</div>
-          <div class="framework-block"><span>T-A-G</span>DEFINE THE [TASK]<br>STATE THE [ACTION]<br>CLARIFY THE [GOAL]</div>
-          <div class="framework-block"><span>B-A-B</span>EXPLAIN PROBLEM [BEFORE]<br>STATE THE GOAL [TASK]<br>ASK FOR OUTPUT [FORMAT]</div>
-          <div class="framework-block"><span>C-A-R-E</span>GIVE THE [CONTEXT]<br>DESCRIBE [ACTION]<br>CLARIFY [RESULTS]<br>GIVE THE [EXAMPLE]</div>
-          <div class="framework-block"><span>A-P-E</span>STATE THE [ACTION]<br>CREATE A [PURPOSE]<br>DESCRIBE [EXPECTATION]</div>
-          <div class="framework-block"><span>E-R-A</span>DESCRIBE [EXPECTATION]<br>ACT AS A [ROLE]<br>STATE THE [ACTION]</div>
-          <div class="framework-block"><span>R-I-S-E</span>SPECIFY THE [ROLE]<br>DESCRIBE THE [INPUT]<br>ASK FOR OUTPUT [STEPS]<br>DESCRIBE [EXPECTATION]</div>
-          <div class="framework-block"><span>R-A-C-E</span>SPECIFY THE [ROLE]<br>STATE THE [ACTION]<br>GIVE THE [CONTEXT]<br>DESCRIBE [EXPECTATION]</div>
+    <head>
+        <meta charset="UTF-8">
+        <title>ChatGPT Prompting Cheat Sheet</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="theme-toggle">
+            <button id="theme-toggle-btn" aria-label="Switch theme">
+                <span class="moon" id="moon-icon" style="display:inline;">🌙</span>
+                <span class="sun" id="sun-icon" style="display:none;">☀️</span>
+                <span id="theme-label">Dark</span>
+            </button>
         </div>
-      </div>
-      <!-- RIGHT: Tools/Plugins single line -->
-      <div class="tools-section">
-        <h3>TOOLS</h3>
-        <div class="tools-bar">
-          <a href="https://chat.openai.com/" target="_blank" rel="noopener"><span class="icon">🤖</span>ChatGPT</a>
-          <a href="https://claude.ai/" target="_blank" rel="noopener"><span class="icon">🟤</span>Claude</a>
-          <a href="https://www.visme.co/" target="_blank" rel="noopener"><span class="icon">🟠</span>Visme</a>
-          <a href="https://www.opus.pro/" target="_blank" rel="noopener"><span class="icon">🎬</span>Opus Clip</a>
-          <a href="https://firefly.adobe.com/" target="_blank" rel="noopener"><span class="icon">🔥</span>Adobe Firefly</a>
-          <a href="https://www.visla.us/" target="_blank" rel="noopener"><span class="icon">🌞</span>Visla</a>
-          <a href="https://www.heyhela.com/" target="_blank" rel="noopener"><span class="icon">🟣</span>Leia</a>
-          <a href="https://mintlify.com/" target="_blank" rel="noopener"><span class="icon">🟢</span>Mint</a>
-          <a href="https://neilpatel.com/ubersuggest/" target="_blank" rel="noopener"><span class="icon">🔎</span>Uber Suggest</a>
-          <a href="https://speechify.com/" target="_blank" rel="noopener"><span class="icon">🔊</span>Speechify</a>
+        <div class="cheat-container">
+            <div class="cheat-header">
+                CHATGPT
+                <span>CHEAT SHEET</span>
+            </div>
+            <div class="cheat-content">
+                <!-- LEFT: Prompting Cheat Sheet -->
+                <div class="cheat-section">
+                    <h3>CHATGPT PROMPTING CHEAT SHEET</h3>
+                    <ol>
+                        <li>
+                            <b>Tone:</b>
+                            Specify the desired tone (e.g., formal, casual, informative, persuasive).
+                        </li>
+                        <li>
+                            <b>Format:</b>
+                            Define the format or structure (e.g., essay, bullet points, outline).
+                        </li>
+                        <li>
+                            <b>Act as:</b>
+                            Indicate a role or perspective to adopt (e.g., expert, critic, enthusiast).
+                        </li>
+                        <li>
+                            <b>Objective:</b>
+                            State the goal or purpose of the response (e.g., inform, persuade).
+                        </li>
+                        <li>
+                            <b>Context:</b>
+                            Provide background information, data, or context for content generation.
+                        </li>
+                        <li>
+                            <b>Scope:</b>
+                            Define the scope or range of the topic.
+                        </li>
+                        <li>
+                            <b>Keywords:</b>
+                            List important keywords or phrases to be included.
+                        </li>
+                        <li>
+                            <b>Limitations:</b>
+                            Specify constraints, such as word or character count.
+                        </li>
+                        <li>
+                            <b>Examples:</b>
+                            Provide examples of desired style, structure, or content.
+                        </li>
+                        <li>
+                            <b>Deadline:</b>
+                            Mention deadlines or time frames for time-sensitive responses.
+                        </li>
+                        <li>
+                            <b>Audience:</b>
+                            Specify the target audience for tailored content.
+                        </li>
+                        <li>
+                            <b>Language:</b>
+                            Indicate the language for the response, if different from the prompt.
+                        </li>
+                        <li>
+                            <b>Citations:</b>
+                            Request the inclusion of citations or sources to support information.
+                        </li>
+                        <li>
+                            <b>Point of view:</b>
+                            Ask AI to consider multiple perspectives or opinions.
+                        </li>
+                        <li>
+                            <b>Counterarguments:</b>
+                            Request addressing potential counterarguments.
+                        </li>
+                        <li>
+                            <b>Terminology:</b>
+                            Specify industry-specific or technical terms to use or avoid.
+                        </li>
+                        <li>
+                            <b>Analogies:</b>
+                            Ask AI to use analogies or examples to clarify concepts.
+                        </li>
+                        <li>
+                            <b>Quotes:</b>
+                            Request inclusion of relevant quotes or statements from experts.
+                        </li>
+                        <li>
+                            <b>Statistics:</b>
+                            Encourage the use of statistics or data to support claims.
+                        </li>
+                        <li>
+                            <b>Call to action:</b>
+                            Request a clear call to action or next steps.
+                        </li>
+                        <li>
+                            <b>Questions:</b>
+                            Have the AI ask you questions for further clarification or direction.
+                        </li>
+                    </ol>
+                </div>
+                <!-- CENTER: Frameworks -->
+                <div class="framework-section">
+                    <h3>PROMPT FRAMEWORKS</h3>
+                    <div class="framework-list">
+                        <div class="framework-block">
+                            <span>R-T-F</span>
+                            ACT AS A [ROLE]
+                            <br>
+                            CREATE A [TASK]
+                            <br>
+                            SHOW AS [FORMAT]
+                        </div>
+                        <div class="framework-block">
+                            <span>T-A-G</span>
+                            DEFINE THE [TASK]
+                            <br>
+                            STATE THE [ACTION]
+                            <br>
+                            CLARIFY THE [GOAL]
+                        </div>
+                        <div class="framework-block">
+                            <span>B-A-B</span>
+                            EXPLAIN PROBLEM [BEFORE]
+                            <br>
+                            STATE THE GOAL [TASK]
+                            <br>
+                            ASK FOR OUTPUT [FORMAT]
+                        </div>
+                        <div class="framework-block">
+                            <span>C-A-R-E</span>
+                            GIVE THE [CONTEXT]
+                            <br>
+                            DESCRIBE [ACTION]
+                            <br>
+                            CLARIFY [RESULTS]
+                            <br>
+                            GIVE THE [EXAMPLE]
+                        </div>
+                        <div class="framework-block">
+                            <span>A-P-E</span>
+                            STATE THE [ACTION]
+                            <br>
+                            CREATE A [PURPOSE]
+                            <br>
+                            DESCRIBE [EXPECTATION]
+                        </div>
+                        <div class="framework-block">
+                            <span>E-R-A</span>
+                            DESCRIBE [EXPECTATION]
+                            <br>
+                            ACT AS A [ROLE]
+                            <br>
+                            STATE THE [ACTION]
+                        </div>
+                        <div class="framework-block">
+                            <span>R-I-S-E</span>
+                            SPECIFY THE [ROLE]
+                            <br>
+                            DESCRIBE THE [INPUT]
+                            <br>
+                            ASK FOR OUTPUT [STEPS]
+                            <br>
+                            DESCRIBE [EXPECTATION]
+                        </div>
+                        <div class="framework-block">
+                            <span>R-A-C-E</span>
+                            SPECIFY THE [ROLE]
+                            <br>
+                            STATE THE [ACTION]
+                            <br>
+                            GIVE THE [CONTEXT]
+                            <br>
+                            DESCRIBE [EXPECTATION]
+                        </div>
+                    </div>
+                </div>
+                <!-- RIGHT: Tools/Plugins single line -->
+                <div class="tools-section">
+                    <h3>TOOLS</h3>
+                    <div class="tools-bar">
+                        <a href="https://chat.openai.com/" target="_blank" rel="noopener">
+                            <span class="icon">🤖</span>
+                            ChatGPT
+                        </a>
+                        <a href="https://claude.ai/" target="_blank" rel="noopener">
+                            <span class="icon">🟤</span>
+                            Claude
+                        </a>
+                        <a href="https://www.visme.co/" target="_blank" rel="noopener">
+                            <span class="icon">🟠</span>
+                            Visme
+                        </a>
+                        <a href="https://www.opus.pro/" target="_blank" rel="noopener">
+                            <span class="icon">🎬</span>
+                            Opus Clip
+                        </a>
+                        <a href="https://firefly.adobe.com/" target="_blank" rel="noopener">
+                            <span class="icon">🔥</span>
+                            Adobe Firefly
+                        </a>
+                        <a href="https://www.visla.us/" target="_blank" rel="noopener">
+                            <span class="icon">🌞</span>
+                            Visla
+                        </a>
+                        <a href="https://www.heyhela.com/" target="_blank" rel="noopener">
+                            <span class="icon">🟣</span>
+                            Leia
+                        </a>
+                        <a href="https://mintlify.com/" target="_blank" rel="noopener">
+                            <span class="icon">🟢</span>
+                            Mint
+                        </a>
+                        <a href="https://neilpatel.com/ubersuggest/" target="_blank" rel="noopener">
+                            <span class="icon">🔎</span>
+                            Uber Suggest
+                        </a>
+                        <a href="https://speechify.com/" target="_blank" rel="noopener">
+                            <span class="icon">🔊</span>
+                            Speechify
+                        </a>
+                    </div>
+                    <div class="plugins-section">
+                        <h3>PLUGINS</h3>
+                        <div class="plugins-bar">
+                            <a href="https://videoinsights.io/" target="_blank" rel="noopener">
+                                <span class="icon">📹</span>
+                                Video Insights
+                            </a>
+                            <a href="https://www.keymate.ai/" target="_blank" rel="noopener">
+                                <span class="icon">🔎</span>
+                                Keymate Search
+                            </a>
+                            <a href="https://scholarai.info/" target="_blank" rel="noopener">
+                                <span class="icon">👨‍🎓</span>
+                                Scholar AI
+                            </a>
+                            <a href="https://www.webpilot.ai/" target="_blank" rel="noopener">
+                                <span class="icon">🌐</span>
+                                WebPilot
+                            </a>
+                            <a href="https://www.wolframalpha.com/" target="_blank" rel="noopener">
+                                <span class="icon">🧮</span>
+                                Wolfram
+                            </a>
+                            <a href="https://www.voc.ai/" target="_blank" rel="noopener">
+                                <span class="icon">🎤</span>
+                                VoxScript
+                            </a>
+                            <a href="https://zapier.com/" target="_blank" rel="noopener">
+                                <span class="icon">🔗</span>
+                                Zapier
+                            </a>
+                            <a href="https://pixellow.com/" target="_blank" rel="noopener">
+                                <span class="icon">🖼️</span>
+                                Pixellow
+                            </a>
+                            <a href="https://www.qr-code-generator.com/" target="_blank" rel="noopener">
+                                <span class="icon">🔲</span>
+                                Create QR code
+                            </a>
+                            <a href="https://askyourpdf.com/" target="_blank" rel="noopener">
+                                <span class="icon">📄</span>
+                                Ask Your PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="plugins-section">
-          <h3>PLUGINS</h3>
-          <div class="plugins-bar">
-            <a href="https://videoinsights.io/" target="_blank" rel="noopener"><span class="icon">📹</span>Video Insights</a>
-            <a href="https://www.keymate.ai/" target="_blank" rel="noopener"><span class="icon">🔎</span>Keymate Search</a>
-            <a href="https://scholarai.info/" target="_blank" rel="noopener"><span class="icon">👨‍🎓</span>Scholar AI</a>
-            <a href="https://www.webpilot.ai/" target="_blank" rel="noopener"><span class="icon">🌐</span>WebPilot</a>
-            <a href="https://www.wolframalpha.com/" target="_blank" rel="noopener"><span class="icon">🧮</span>Wolfram</a>
-            <a href="https://www.voc.ai/" target="_blank" rel="noopener"><span class="icon">🎤</span>VoxScript</a>
-            <a href="https://zapier.com/" target="_blank" rel="noopener"><span class="icon">🔗</span>Zapier</a>
-            <a href="https://pixellow.com/" target="_blank" rel="noopener"><span class="icon">🖼️</span>Pixellow</a>
-            <a href="https://www.qr-code-generator.com/" target="_blank" rel="noopener"><span class="icon">🔲</span>Create QR code</a>
-            <a href="https://askyourpdf.com/" target="_blank" rel="noopener"><span class="icon">📄</span>Ask Your PDF</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script>
-    // Theme toggle
-    const btn = document.getElementById('theme-toggle-btn');
-    const themeLabel = document.getElementById('theme-label');
-    const moonIcon = document.getElementById('moon-icon');
-    const sunIcon = document.getElementById('sun-icon');
-    function setTheme(theme) {
-      document.body.setAttribute('data-theme', theme);
-      if (theme === 'light') {
-        sunIcon.style.display = 'inline';
-        moonIcon.style.display = 'none';
-        themeLabel.textContent = 'Light';
-      } else {
-        sunIcon.style.display = 'none';
-        moonIcon.style.display = 'inline';
-        themeLabel.textContent = 'Dark';
-      }
-      localStorage.setItem('theme', theme);
-    }
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    setTheme(savedTheme);
-    btn.onclick = function() {
-      setTheme(document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    };
-  </script>
-</body>
+        <script src="script.js">
+        </script>
+    </body>
 </html>

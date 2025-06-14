@@ -1,4 +1,4 @@
-# Understanding Time
+# Chapter 1: Understanding Time
 
 ## 1.1 The Concept of Time
 
