@@ -1,0 +1,652 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Neon Reflex</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts: Inter for UI, Roboto Mono for numbers -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --frost-bg-dark: #101217;
+      --frost-bg-light: #eaf6ff;
+      --frost-panel-dark: rgba(40,44,54,0.82);
+      --frost-panel-light: rgba(255,255,255,0.82);
+      --frost-txt-dark: #fafdff;
+      --frost-txt-light: #1a2330;
+      --frost-accent: #00eaff;
+      --frost-accent2: #b6eaff;
+      --frost-accent3: #c0e6ff;
+      --frost-silver: #e0e8f0;
+      --frost-cyan: #00eaff;
+      --frost-blue: #7be9ff;
+      --frost-shadow: 0 4px 32px 0 #00eaff33;
+      --frost-radius: 18px;
+      --frost-panel-blur: blur(8px);
+      --frost-transition: 0.22s cubic-bezier(.4,0,.2,1);
+      --frost-mist: url('data:image/svg+xml;utf8,<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg"><ellipse cx="200" cy="100" rx="180" ry="60" fill="white" fill-opacity="0.08"/></svg>');
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--frost-bg-dark);
+      color: var(--frost-txt-dark);
+      transition: background var(--frost-transition), color var(--frost-transition);
+    }
+    body.frost-light {
+      background: var(--frost-bg-light);
+      color: var(--frost-txt-light);
+    }
+    #bg-canvas, #noise-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      display: block;
+    }
+    #noise-canvas {
+      opacity: 0.18;
+      mix-blend-mode: lighten;
+      z-index: 1;
+      filter: blur(0.5px) contrast(1.2);
+    }
+    #mist-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: none;
+      transition: opacity var(--frost-transition);
+      opacity: 0;
+    }
+    #mist-overlay.active {
+      opacity: 1;
+      background: var(--frost-mist) repeat;
+      background-size: cover;
+      animation: mist-move 12s linear infinite alternate;
+    }
+    @keyframes mist-move {
+      0% { background-position: 0 0; }
+      100% { background-position: 80px 40px; }
+    }
+    .frost-panel {
+      background: var(--frost-panel-dark);
+      color: var(--frost-txt-dark);
+      border-radius: var(--frost-radius);
+      box-shadow: var(--frost-shadow);
+      padding: 2.2rem 2.2rem 1.7rem 2.2rem;
+      margin: 0 auto;
+      max-width: 420px;
+      width: 94vw;
+      backdrop-filter: var(--frost-panel-blur);
+      -webkit-backdrop-filter: var(--frost-panel-blur);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background var(--frost-transition), color var(--frost-transition);
+    }
+    body.frost-light .frost-panel {
+      background: var(--frost-panel-light);
+      color: var(--frost-txt-light);
+      box-shadow: 0 4px 32px 0 #b6eaff33;
+    }
+    h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--frost-accent);
+      text-shadow: 0 2px 24px #00eaff99;
+      margin: 0 0 0.7rem 0;
+      text-align: center;
+      user-select: none;
+    }
+    .frost-btn {
+      background: linear-gradient(90deg, var(--frost-accent) 0%, var(--frost-accent3) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 2em;
+      padding: 0.7em 2.2em;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.13rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 16px 0 #00eaff55;
+      margin: 1.2em 0 0.2em 0;
+      transition: background var(--frost-transition), color var(--frost-transition), box-shadow var(--frost-transition), transform var(--frost-transition);
+      outline: none;
+      position: relative;
+      letter-spacing: 0.04em;
+    }
+    .frost-btn:active, .frost-btn:focus-visible {
+      background: linear-gradient(90deg, var(--frost-accent3) 0%, var(--frost-accent) 100%);
+      color: var(--frost-accent);
+      box-shadow: 0 0 0 3px var(--frost-accent2), 0 2px 16px 0 #00eaff55;
+      z-index: 1;
+    }
+    .frost-btn.toggle {
+      background: none;
+      color: var(--frost-accent);
+      border: 2px solid var(--frost-accent2);
+      margin: 0.5em 0 0 0;
+      font-size: 1.01rem;
+      padding: 0.5em 1.3em;
+      box-shadow: none;
+    }
+    .frost-btn.toggle.active {
+      background: var(--frost-accent2);
+      color: #1a2330;
+      border-color: var(--frost-accent);
+    }
+    .stats-row {
+      display: flex;
+      gap: 1.5em;
+      justify-content: center;
+      margin: 1.2em 0 0.7em 0;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.13rem;
+      color: var(--frost-accent2);
+      text-shadow: 0 1px 8px #00eaff44;
+    }
+    .stats-row .label {
+      font-size: 0.98em;
+      color: var(--frost-silver);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      margin-right: 0.3em;
+      text-shadow: none;
+    }
+    .leaderboard-panel {
+      margin-top: 1.5em;
+      width: 100%;
+      background: rgba(30,40,50,0.72);
+      border-radius: 1em;
+      padding: 1.1em 1em 0.7em 1em;
+      box-shadow: 0 2px 16px 0 #00eaff22;
+      font-family: 'Roboto Mono', monospace;
+      color: var(--frost-accent3);
+      font-size: 1.01rem;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: background var(--frost-transition);
+    }
+    body.frost-light .leaderboard-panel {
+      background: rgba(255,255,255,0.7);
+      color: #1a2330;
+    }
+    .leaderboard-panel h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.13rem;
+      color: var(--frost-accent);
+      margin: 0 0 0.5em 0;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+    .leaderboard-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .leaderboard-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.3em 0.2em;
+      border-bottom: 1px solid rgba(0,234,255,0.08);
+      font-size: 1.01em;
+    }
+    .leaderboard-list li:last-child {
+      border-bottom: none;
+    }
+    .node {
+      position: absolute;
+      border-radius: 50%;
+      box-shadow: 0 0 32px 8px #00eaff55, 0 0 0 2px #b6eaff99;
+      cursor: pointer;
+      z-index: 10;
+      transition: filter 0.12s, box-shadow 0.18s;
+      filter: brightness(1.2) blur(0.2px);
+      outline: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      animation: node-pop 0.18s cubic-bezier(.4,0,.2,1);
+    }
+    .node.icy {
+      background: radial-gradient(circle at 60% 40%, #e0e8f0 0%, #b6eaff 100%);
+      box-shadow: 0 0 32px 8px #e0e8f055, 0 0 0 2px #b6eaff99;
+    }
+    .node.cyan {
+      background: radial-gradient(circle at 40% 60%, #00eaff 0%, #7be9ff 100%);
+      box-shadow: 0 0 32px 8px #00eaff55, 0 0 0 2px #7be9ff99;
+    }
+    .node.silver {
+      background: radial-gradient(circle at 50% 50%, #b6eaff 0%, #e0e8f0 100%);
+      box-shadow: 0 0 32px 8px #b6eaff55, 0 0 0 2px #e0e8f099;
+    }
+    .node:active, .node:focus-visible {
+      filter: brightness(1.5) blur(0px);
+      box-shadow: 0 0 48px 16px #00eaff99, 0 0 0 3px #fff;
+    }
+    @keyframes node-pop {
+      from { transform: scale(0.7); opacity: 0.2;}
+      to { transform: scale(1); opacity: 1;}
+    }
+    .frost-flash {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, #eaf6ffcc 0%, #00eaff33 60%, transparent 100%);
+      opacity: 0;
+      animation: frost-flash 0.32s cubic-bezier(.4,0,.2,1);
+      mix-blend-mode: lighten;
+      filter: blur(1.5px) contrast(1.2);
+    }
+    body.frost-light .frost-flash {
+      background: radial-gradient(circle at 50% 50%, #b6eaffcc 0%, #eaf6ff33 60%, transparent 100%);
+    }
+    @keyframes frost-flash {
+      0% { opacity: 0.85; filter: blur(2.5px) contrast(1.5);}
+      60% { opacity: 0.45; filter: blur(1.2px) contrast(1.1);}
+      100% { opacity: 0; filter: blur(0.5px) contrast(1);}
+    }
+    .session-summary {
+      margin-top: 1.5em;
+      width: 100%;
+      background: rgba(30,40,50,0.82);
+      border-radius: 1em;
+      padding: 1.2em 1em 1em 1em;
+      box-shadow: 0 2px 16px 0 #00eaff22;
+      font-family: 'Inter', sans-serif;
+      color: var(--frost-accent3);
+      font-size: 1.09rem;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: background var(--frost-transition);
+    }
+    body.frost-light .session-summary {
+      background: rgba(255,255,255,0.7);
+      color: #1a2330;
+    }
+    .session-summary .summary-title {
+      font-size: 1.18em;
+      color: var(--frost-accent);
+      margin-bottom: 0.5em;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .session-summary .summary-row {
+      margin: 0.3em 0;
+      font-family: 'Roboto Mono', monospace;
+      color: var(--frost-accent2);
+      font-size: 1.01em;
+    }
+    @media (max-width: 600px) {
+      .frost-panel {
+        padding: 1.1rem 0.7rem 1.1rem 0.7rem;
+        max-width: 99vw;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .stats-row {
+        flex-direction: column;
+        gap: 0.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <canvas id="noise-canvas"></canvas>
+  <div id="mist-overlay"></div>
+  <div class="frost-panel" id="ui-panel">
+    <h1>Neon Reflex</h1>
+    <div class="stats-row" id="stats-row" style="display:none;">
+      <span><span class="label">Nodes:</span> <span id="stat-nodes">0</span></span>
+      <span><span class="label">Hit:</span> <span id="stat-hit">0</span></span>
+      <span><span class="label">Miss:</span> <span id="stat-miss">0</span></span>
+      <span><span class="label">Streak:</span> <span id="stat-streak">0</span></span>
+    </div>
+    <button class="frost-btn" id="start-btn">Start</button>
+    <button class="frost-btn toggle" id="mode-toggle" aria-pressed="false" title="Toggle frost mode">Light Frost</button>
+    <div class="session-summary" id="session-summary" style="display:none;"></div>
+    <div class="leaderboard-panel" id="leaderboard-panel" style="display:none;">
+      <h2>Leaderboard</h2>
+      <ol class="leaderboard-list" id="leaderboard-list"></ol>
+    </div>
+  </div>
+  <div class="frost-flash" id="frost-flash" style="display:none;"></div>
+  <script>
+    // --- Neon Reflex Game Logic ---
+    // Sound assets (synthesized)
+    const SFX = {
+      click: () => {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'triangle';
+        o.frequency.value = 420 + Math.random() * 60;
+        g.gain.value = 0.13;
+        o.connect(g).connect(ctx.destination);
+        o.start();
+        o.stop(ctx.currentTime + 0.09);
+        o.onended = () => ctx.close();
+      },
+      ping: () => {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.value = 880 + Math.random() * 80;
+        g.gain.value = 0.11;
+        o.connect(g).connect(ctx.destination);
+        o.start();
+        o.frequency.linearRampToValueAtTime(660, ctx.currentTime + 0.13);
+        o.stop(ctx.currentTime + 0.18);
+        o.onended = () => ctx.close();
+      },
+      miss: () => {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'square';
+        o.frequency.value = 220;
+        g.gain.value = 0.09;
+        o.connect(g).connect(ctx.destination);
+        o.start();
+        o.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.18);
+        o.stop(ctx.currentTime + 0.22);
+        o.onended = () => ctx.close();
+      }
+    };
+
+    // UI/DOM refs
+    const bgCanvas = document.getElementById('bg-canvas');
+    const noiseCanvas = document.getElementById('noise-canvas');
+    const mistOverlay = document.getElementById('mist-overlay');
+    const uiPanel = document.getElementById('ui-panel');
+    const startBtn = document.getElementById('start-btn');
+    const modeToggle = document.getElementById('mode-toggle');
+    const statsRow = document.getElementById('stats-row');
+    const statNodes = document.getElementById('stat-nodes');
+    const statHit = document.getElementById('stat-hit');
+    const statMiss = document.getElementById('stat-miss');
+    const statStreak = document.getElementById('stat-streak');
+    const frostFlash = document.getElementById('frost-flash');
+    const sessionSummary = document.getElementById('session-summary');
+    const leaderboardPanel = document.getElementById('leaderboard-panel');
+    const leaderboardList = document.getElementById('leaderboard-list');
+
+    // Game state
+    let game = null;
+    let frostMode = localStorage.getItem('neonreflex_mode') || 'dark';
+    let unlockedEffects = parseInt(localStorage.getItem('neonreflex_effects') || '0', 10);
+
+    // --- Background: Matte Black Grid + Animated Noise ---
+    function resizeCanvas() {
+      [bgCanvas, noiseCanvas].forEach(c => {
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+      });
+    }
+    function drawGrid() {
+      const ctx = bgCanvas.getContext('2d');
+      ctx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
+      ctx.save();
+      ctx.globalAlpha = 0.13;
+      ctx.strokeStyle = frostMode === 'dark' ? '#b6eaff22' : '#b6eaff33';
+      ctx.lineWidth = 1.1;
+      const step = 56;
+      for(let x=0;x<bgCanvas.width;x+=step){
+        ctx.beginPath();
+        ctx.moveTo(x,0); ctx.lineTo(x,bgCanvas.height);
+        ctx.stroke();
+      }
+      for(let y=0;y<bgCanvas.height;y+=step){
+        ctx.beginPath();
+        ctx.moveTo(0,y); ctx.lineTo(bgCanvas.width,y);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+    function drawNoise() {
+      const ctx = noiseCanvas.getContext('2d');
+      const w = noiseCanvas.width, h = noiseCanvas.height;
+      const img = ctx.createImageData(w, h);
+      for(let i=0;i<img.data.length;i+=4){
+        const v = Math.floor(Math.random()*32+210);
+        img.data[i]=img.data[i+1]=img.data[i+2]=v;
+        img.data[i+3]=Math.random()<0.5?10:18;
+      }
+      ctx.putImageData(img,0,0);
+    }
+    function animateNoise() {
+      drawNoise();
+      requestAnimationFrame(animateNoise);
+    }
+    window.addEventListener('resize', ()=>{
+      resizeCanvas();
+      drawGrid();
+    });
+    resizeCanvas();
+    drawGrid();
+    animateNoise();
+
+    // --- Frost Mode Toggle ---
+    function setFrostMode(mode) {
+      frostMode = mode;
+      document.body.classList.toggle('frost-light', mode === 'light');
+      modeToggle.textContent = mode === 'dark' ? 'Light Frost' : 'Dark Frost';
+      modeToggle.setAttribute('aria-pressed', mode === 'light');
+      localStorage.setItem('neonreflex_mode', mode);
+      drawGrid();
+    }
+    modeToggle.addEventListener('click', ()=>{
+      setFrostMode(frostMode === 'dark' ? 'light' : 'dark');
+    });
+    setFrostMode(frostMode);
+
+    // --- Milestone Effects ---
+    function unlockEffect(milestone) {
+      if (milestone > unlockedEffects) {
+        unlockedEffects = milestone;
+        localStorage.setItem('neonreflex_effects', unlockedEffects);
+      }
+      if (milestone >= 1) mistOverlay.classList.add('active');
+    }
+    if (unlockedEffects >= 1) mistOverlay.classList.add('active');
+
+    // --- Leaderboard ---
+    function getLeaderboard() {
+      try {
+        return JSON.parse(localStorage.getItem('neonreflex_leaderboard') || '[]');
+      } catch { return []; }
+    }
+    function saveLeaderboard(lb) {
+      localStorage.setItem('neonreflex_leaderboard', JSON.stringify(lb.slice(0,10)));
+    }
+    function updateLeaderboardPanel() {
+      const lb = getLeaderboard();
+      leaderboardList.innerHTML = '';
+      if (!lb.length) {
+        leaderboardList.innerHTML = '<li style="text-align:center; color:#b6eaff99;">No scores yet</li>';
+        return;
+      }
+      lb.forEach((entry, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>#${i+1}</span> <span>${entry.score} <span style="color:#b6eaff99;font-size:0.93em;">(${entry.streak}x)</span> <span style="color:#7be9ff99;font-size:0.93em;">${entry.accuracy}%</span></span>`;
+        leaderboardList.appendChild(li);
+      });
+    }
+
+    // --- Game Logic ---
+    function startGame() {
+      if (game && game.running) return;
+      // Reset state
+      game = {
+        running: true,
+        round: 1,
+        nodes: 0,
+        hit: 0,
+        miss: 0,
+        streak: 0,
+        bestStreak: 0,
+        accuracy: 0,
+        nodeTimeout: null,
+        nodeEl: null,
+        spawnDelay: 1100,
+        minDelay: 350,
+        nodeRadius: 44,
+        nodeColors: ['icy','cyan','silver'],
+        effectMilestones: [20, 50, 100],
+        effectUnlocked: unlockedEffects,
+        startTime: Date.now(),
+        endTime: null,
+        sessionNodes: [],
+      };
+      statsRow.style.display = '';
+      sessionSummary.style.display = 'none';
+      leaderboardPanel.style.display = '';
+      updateStats();
+      updateLeaderboardPanel();
+      startBtn.style.display = 'none';
+      spawnNode();
+    }
+    function endGame() {
+      if (!game || !game.running) return;
+      game.running = false;
+      clearTimeout(game.nodeTimeout);
+      if (game.nodeEl) game.nodeEl.remove();
+      game.endTime = Date.now();
+      showSessionSummary();
+      // Save to leaderboard
+      const score = game.hit;
+      const streak = game.bestStreak;
+      const accuracy = Math.round((game.hit/(game.nodes||1))*100);
+      const lb = getLeaderboard();
+      lb.push({score, streak, accuracy});
+      lb.sort((a,b)=>b.score-a.score || b.streak-a.streak);
+      saveLeaderboard(lb);
+      updateLeaderboardPanel();
+      startBtn.style.display = '';
+    }
+    function updateStats() {
+      statNodes.textContent = game.nodes;
+      statHit.textContent = game.hit;
+      statMiss.textContent = game.miss;
+      statStreak.textContent = game.streak;
+    }
+    function showSessionSummary() {
+      const t = (game.endTime - game.startTime)/1000;
+      const acc = Math.round((game.hit/(game.nodes||1))*100);
+      sessionSummary.innerHTML = `
+        <div class="summary-title">Session Summary</div>
+        <div class="summary-row">Nodes: <b>${game.nodes}</b></div>
+        <div class="summary-row">Hit: <b>${game.hit}</b></div>
+        <div class="summary-row">Miss: <b>${game.miss}</b></div>
+        <div class="summary-row">Best Streak: <b>${game.bestStreak}</b></div>
+        <div class="summary-row">Accuracy: <b>${acc}%</b></div>
+        <div class="summary-row">Time: <b>${t.toFixed(1)}s</b></div>
+      `;
+      sessionSummary.style.display = '';
+    }
+    function spawnNode() {
+      if (!game.running) return;
+      // Increase difficulty
+      if (game.nodes && game.nodes % 10 === 0 && game.spawnDelay > game.minDelay) {
+        game.spawnDelay = Math.max(game.minDelay, game.spawnDelay - 80);
+        game.round++;
+      }
+      // Unlock effects
+      if (game.effectMilestones.includes(game.nodes)) {
+        unlockEffect(game.nodes);
+      }
+      // Remove previous node
+      if (game.nodeEl) game.nodeEl.remove();
+      // Random position
+      const r = game.nodeRadius + Math.random()*10-5;
+      const x = Math.random()*(window.innerWidth-2*r) + r;
+      const y = Math.random()*(window.innerHeight-2*r-80) + r+40;
+      const color = game.nodeColors[Math.floor(Math.random()*game.nodeColors.length)];
+      const node = document.createElement('button');
+      node.className = `node ${color}`;
+      node.style.width = node.style.height = `${r*2}px`;
+      node.style.left = `${x-r}px`;
+      node.style.top = `${y-r}px`;
+      node.tabIndex = 0;
+      node.setAttribute('aria-label','Click me!');
+      node.addEventListener('click', ()=>hitNode(node));
+      node.addEventListener('keydown', e=>{
+        if (e.key===' '||e.key==='Enter') { hitNode(node); }
+      });
+      document.body.appendChild(node);
+      game.nodeEl = node;
+      game.nodes++;
+      updateStats();
+      // Miss if not clicked in time
+      game.nodeTimeout = setTimeout(()=>missNode(node), Math.max(350, game.spawnDelay-80));
+    }
+    function hitNode(node) {
+      if (!game.running || !node || node !== game.nodeEl) return;
+      SFX.click();
+      node.remove();
+      clearTimeout(game.nodeTimeout);
+      game.hit++;
+      game.streak++;
+      if (game.streak > game.bestStreak) game.bestStreak = game.streak;
+      updateStats();
+      setTimeout(spawnNode, 180 + Math.random()*80);
+    }
+    function missNode(node) {
+      if (!game.running || !node || node !== game.nodeEl) return;
+      SFX.miss();
+      node.remove();
+      game.miss++;
+      game.streak = 0;
+      updateStats();
+      frostScreenFlash();
+      if (game.miss >= 3) {
+        endGame();
+      } else {
+        setTimeout(spawnNode, 320 + Math.random()*120);
+      }
+    }
+    function frostScreenFlash() {
+      frostFlash.style.display = '';
+      frostFlash.classList.remove('active');
+      void frostFlash.offsetWidth;
+      frostFlash.classList.add('active');
+      setTimeout(()=>{frostFlash.style.display='none';}, 320);
+    }
+    // --- UI Events ---
+    startBtn.addEventListener('click', startGame);
+    document.addEventListener('keydown', e=>{
+      if (e.key===' ' && !game?.running) { startGame(); }
+      if (e.key==='Escape' && game?.running) { endGame(); }
+    });
+    // --- Accessibility: Focus trap for node
+    document.body.addEventListener('keydown', e=>{
+      if (!game?.running) return;
+      if (e.key==='Tab' && game.nodeEl) {
+        e.preventDefault();
+        game.nodeEl.focus();
+      }
+    });
+    // --- Show leaderboard on load
+    leaderboardPanel.style.display = '';
+    updateLeaderboardPanel();
+  </script>
+</body>
+</html>

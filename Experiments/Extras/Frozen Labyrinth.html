@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frozen Labyrinth</title>
+    <style>
+        :root {
+            --frost-bg: #0a1620;
+            --frost-accent: #00eaff;
+            --frost-accent2: #00b8cc;
+            --frost-panel: rgba(26, 35, 48, 0.85);
+            --frost-text: #e0e0e0;
+            --frost-shadow: 0 4px 32px 0 #00eaff33;
+            --frost-blur: blur(12px);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--frost-bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--frost-text);
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            position: relative;
+            border-radius: 12px;
+            box-shadow: var(--frost-shadow);
+        }
+
+        .ui-panel {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--frost-panel);
+            backdrop-filter: var(--frost-blur);
+            padding: 15px 25px;
+            border-radius: 12px;
+            display: flex;
+            gap: 20px;
+            box-shadow: var(--frost-shadow);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+
+        .stat-value {
+            font-size: 1.2em;
+            color: var(--frost-accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-panel">
+        <div class="stat">
+            <span class="stat-label">Time</span>
+            <span class="stat-value" id="timer">00:00</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Score</span>
+            <span class="stat-value" id="score">0</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Level</span>
+            <span class="stat-value" id="level">1</span>
+        </div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const timerEl = document.getElementById('timer');
+        const scoreEl = document.getElementById('score');
+        const levelEl = document.getElementById('level');
+
+        // Game settings
+        const CELL_SIZE = 30;
+        const PLAYER_RADIUS = 10;
+        const FOG_RADIUS = 150;
+        let maze = [];
+        let player = { x: 0, y: 0 };
+        let startTime = Date.now();
+        let score = 0;
+        let level = 1;
+        let gameActive = true;
+
+        // Initialize canvas
+        function initCanvas() {
+            canvas.width = window.innerWidth * 0.8;
+            canvas.height = window.innerHeight * 0.8;
+            generateMaze();
+        }
+
+        // Generate maze using recursive backtracking
+        function generateMaze() {
+            const rows = Math.floor(canvas.height / CELL_SIZE);
+            const cols = Math.floor(canvas.width / CELL_SIZE);
+            
+            // Initialize maze with walls
+            maze = Array(rows).fill().map(() => Array(cols).fill(1));
+            
+            // Start position
+            player.x = 1;
+            player.y = 1;
+            maze[player.y][player.x] = 0;
+
+            function carvePath(x, y) {
+                const directions = [
+                    [0, 2], [2, 0], [0, -2], [-2, 0]
+                ].sort(() => Math.random() - 0.5);
+
+                for (let [dx, dy] of directions) {
+                    const newX = x + dx;
+                    const newY = y + dy;
+
+                    if (newX > 0 && newX < cols - 1 && newY > 0 && newY < rows - 1 
+                        && maze[newY][newX] === 1) {
+                        maze[y + dy/2][x + dx/2] = 0;
+                        maze[newY][newX] = 0;
+                        carvePath(newX, newY);
+                    }
+                }
+            }
+
+            carvePath(player.x, player.y);
+            
+            // Set exit
+            maze[rows-2][cols-2] = 0;
+        }
+
+        // Game loop
+        function gameLoop() {
+            if (!gameActive) return;
+
+            ctx.fillStyle = var(--frost-bg);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw maze
+            for (let y = 0; y < maze.length; y++) {
+                for (let x = 0; x < maze[y].length; x++) {
+                    if (maze[y][x] === 1) {
+                        const distance = Math.hypot(
+                            (x * CELL_SIZE + CELL_SIZE/2) - player.x,
+                            (y * CELL_SIZE + CELL_SIZE/2) - player.y
+                        );
+
+                        if (distance < FOG_RADIUS) {
+                            ctx.fillStyle = `rgba(200, 200, 255, ${0.3 + Math.random() * 0.2})`;
+                            ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                        }
+                    }
+                }
+            }
+
+            // Draw player
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, PLAYER_RADIUS, 0, Math.PI * 2);
+            ctx.fillStyle = var(--frost-accent);
+            ctx.fill();
+
+            // Update timer
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            timerEl.textContent = `${String(Math.floor(elapsed/60)).padStart(2, '0')}:${String(elapsed%60).padStart(2, '0')}`;
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Handle keyboard input
+        document.addEventListener('keydown', (e) => {
+            if (!gameActive) return;
+
+            const speed = 5;
+            let newX = player.x;
+            let newY = player.y;
+
+            switch(e.key) {
+                case 'ArrowUp': newY -= speed; break;
+                case 'ArrowDown': newY += speed; break;
+                case 'ArrowLeft': newX -= speed; break;
+                case 'ArrowRight': newX += speed; break;
+            }
+
+            // Collision detection
+            const cellX = Math.floor(newX / CELL_SIZE);
+            const cellY = Math.floor(newY / CELL_SIZE);
+
+            if (cellX >= 0 && cellX < maze[0].length && 
+                cellY >= 0 && cellY < maze.length && 
+                maze[cellY][cellX] === 0) {
+                player.x = newX;
+                player.y = newY;
+            }
+
+            // Check for level completion
+            if (cellX === maze[0].length - 2 && cellY === maze.length - 2) {
+                level++;
+                levelEl.textContent = level;
+                score += Math.floor(1000 / (Date.now() - startTime) / 1000);
+                scoreEl.textContent = score;
+                generateMaze();
+                startTime = Date.now();
+            }
+        });
+
+        // Initialize and start game
+        initCanvas();
+        gameLoop();
+
+        // Handle window resize
+        window.addEventListener('resize', initCanvas);
+    </script>
+</body>
+</html>
