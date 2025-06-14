@@ -27,7 +27,9 @@ let currentChapter = null;
 document.addEventListener('DOMContentLoaded', function() {
   initializeTheme();
   initializeEventListeners();
-  loadChapters();
+  loadChapters().then(() => {
+    loadInitialChapter();
+  });
 });
 
 // Theme initialization
@@ -86,10 +88,15 @@ function initializeEventListeners() {
       modalOverlay.classList.remove('active');
     }
   });
+
+  // Handle browser history navigation
+  window.addEventListener('popstate', () => {
+    loadInitialChapter();
+  });
 }
 
 // Chapter loading
-function loadChapters() {
+async function loadChapters() {
   try {
     renderChapterList();
   } catch (error) {
@@ -107,13 +114,32 @@ function renderChapterList() {
   }
   
   const listHTML = FileNames.map((chapter, index) => 
-    `<li><a href="#" onclick="loadChapter('${chapter.file}', '${chapter.title}', ${index})">${chapter.title}</a></li>`
+    `<li><a href="#" onclick="loadChapter('${chapter.file}', '${chapter.title}', ${index}, true)">${chapter.title}</a></li>`
   ).join('');
   
   chapterList.innerHTML = listHTML;
 }
 
-async function loadChapter(filePath, title, index) {
+function loadInitialChapter() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const chapterParam = urlParams.get('chapter');
+  
+  if (chapterParam) {
+    // Find the chapter index by file path
+    const chapterIndex = FileNames.findIndex(chapter => chapter.file === chapterParam);
+    if (chapterIndex !== -1) {
+      loadChapter(chapterParam, FileNames[chapterIndex].title, chapterIndex, false);
+      return;
+    }
+  }
+  
+  // If no valid chapter parameter found, load the first chapter
+  if (FileNames.length > 0) {
+    loadChapter(FileNames[0].file, FileNames[0].title, 0, false);
+  }
+}
+
+async function loadChapter(filePath, title, index, updateHistory = true) {
   try {
     // Update active chapter
     const links = document.querySelectorAll('.chapter-list a');
@@ -140,6 +166,18 @@ async function loadChapter(filePath, title, index) {
     contentBody.innerHTML = htmlContent;
     
     currentChapter = filePath;
+
+    // Update URL
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set('chapter', filePath);
+    
+    if (updateHistory) {
+      // Add new history entry for user-initiated navigation
+      window.history.pushState({}, '', newUrl);
+    } else {
+      // Replace current history entry for initial load or popstate
+      window.history.replaceState({}, '', newUrl);
+    }
     
   } catch (error) {
     console.error('Error loading chapter:', error);
