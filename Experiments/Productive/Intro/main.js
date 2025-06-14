@@ -27,17 +27,7 @@ let currentChapter = null;
 document.addEventListener('DOMContentLoaded', function() {
   initializeTheme();
   initializeEventListeners();
-  
-  // First load chapters, then handle URL
   loadChapters().then(() => {
-    // Small delay to ensure DOM is updated with chapter list
-    setTimeout(() => {
-      loadInitialChapter();
-    }, 100);
-  });
-  
-  // Listen for browser history changes
-  window.addEventListener('popstate', () => {
     loadInitialChapter();
   });
 });
@@ -45,12 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // URL handling functions
 function getChapterFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  const chapterParam = params.get('chapter');
-  if (!chapterParam) return null;
+  const chapterFile = params.get('chapter');
+  if (!chapterFile) return null;
   
-  // Find the chapter index that matches the file path
-  const chapterIndex = FileNames.findIndex(chapter => chapter.file === chapterParam);
-  return chapterIndex >= 0 ? chapterIndex : null;
+  return FileNames.find(chapter => chapter.file === chapterFile);
 }
 
 function updateUrl(chapterFile, replace = false) {
@@ -65,14 +53,18 @@ function updateUrl(chapterFile, replace = false) {
 }
 
 function loadInitialChapter() {
-  const chapterIndex = getChapterFromUrl();
-  if (chapterIndex !== null) {
-    const chapter = FileNames[chapterIndex];
-    loadChapter(chapter.file, chapter.title, chapterIndex, true);
-  } else if (FileNames.length > 0) {
-    // Load first chapter if no valid chapter in URL
-    const firstChapter = FileNames[0];
-    loadChapter(firstChapter.file, firstChapter.title, 0, true);
+  const chapter = getChapterFromUrl();
+  if (chapter) {
+    const index = FileNames.findIndex(c => c.file === chapter.file);
+    if (index !== -1) {
+      loadChapter(chapter.file, chapter.title, index, true);
+    } else {
+      // Invalid chapter in URL, load first chapter and update URL
+      loadChapter(FileNames[0].file, FileNames[0].title, 0, true);
+    }
+  } else {
+    // No chapter in URL, load first chapter
+    loadChapter(FileNames[0].file, FileNames[0].title, 0, true);
   }
 }
 
@@ -132,20 +124,21 @@ function initializeEventListeners() {
       modalOverlay.classList.remove('active');
     }
   });
+
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', () => {
+    loadInitialChapter();
+  });
 }
 
 // Chapter loading
-function loadChapters() {
-  return new Promise((resolve) => {
-    try {
-      renderChapterList();
-      resolve();
-    } catch (error) {
-      console.error('Error loading chapters:', error);
-      document.getElementById('chapterList').innerHTML = '<li class="loading">Error loading chapters</li>';
-      resolve(); // Still resolve to continue with initial chapter loading
-    }
-  });
+async function loadChapters() {
+  try {
+    renderChapterList();
+  } catch (error) {
+    console.error('Error loading chapters:', error);
+    document.getElementById('chapterList').innerHTML = '<li class="loading">Error loading chapters</li>';
+  }
 }
 
 function renderChapterList() {
