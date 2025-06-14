@@ -11,17 +11,13 @@
   --shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.18), 0 1px 5px 0 rgba(15, 23, 42, 0.20);
   --text-main: #e2e8f0;
   --text-sub: #94a3b8;
-  --radius: 1.5rem;
+  --radius: 1.2rem;
   --transition: 0.18s cubic-bezier(.45,.03,.51,.95);
-}
-
-* {
-  box-sizing: border-box;
 }
 
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--blue1) 0%, var(--blue3) 100%);
+  background: linear-gradient(120deg, var(--blue1) 0%, var(--blue3) 85%);
   color: var(--text-main);
   font-family: 'Segoe UI', 'Inter', 'Roboto', Arial, sans-serif;
   display: flex;
@@ -31,114 +27,129 @@ body {
 }
 
 .hub-container {
-  width: 100%;
-  max-width: 520px;
-  margin: auto;
-  padding: 2.5rem 1.5rem;
   background: var(--blue2);
-  border-radius: var(--radius);
   box-shadow: var(--shadow);
+  border-radius: var(--radius);
   border: 1.5px solid var(--border);
+  padding: 2.7rem 2.1rem;
+  min-width: 320px;
+  max-width: 410px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.5rem;
+  gap: 2.3rem;
 }
 
-.hub-header {
+.hub-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
   text-align: center;
 }
 
-.hub-header h1 {
-  font-size: 2.3rem;
-  font-weight: 700;
-  margin-bottom: 0.6rem;
-  letter-spacing: 0.01em;
-}
-
-.hub-header .accent {
+.accent {
   color: var(--blue4);
-  text-shadow: 0 2px 12px rgba(59, 130, 246, 0.14);
+  text-shadow: 0 2px 14px rgba(59, 130, 246, 0.12);
 }
 
-.hub-header .subtext {
+.hub-info {
+  background: var(--blue1);
+  border: 1.5px solid var(--border);
+  border-radius: 0.9rem;
+  padding: 1.2rem 1.2rem 1.1rem 1.1rem;
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  font-size: 1.03rem;
   color: var(--text-sub);
-  font-size: 1.13rem;
-  font-weight: 400;
-  margin: 0;
-  letter-spacing: 0.01em;
+  box-shadow: 0 4px 18px 0 rgba(59, 130, 246, 0.08);
+  width: 100%;
 }
 
-.hub-cards {
-  width: 100%;
+.info-icon {
+  font-size: 1.7rem;
+  color: var(--blue6);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.hub-info strong {
+  color: var(--blue6);
+}
+
+.hub-links {
   display: flex;
   flex-direction: column;
-  gap: 1.3rem;
+  gap: 1.1rem;
+  width: 100%;
 }
 
-.card {
+.hub-link {
   background: var(--card-bg);
   border: 1.5px solid var(--border);
   border-radius: calc(var(--radius) - 0.5rem);
   box-shadow: var(--shadow);
-  padding: 1.2rem 1.5rem;
+  padding: 1.1rem 1.4rem;
   display: flex;
   flex-direction: column;
   text-decoration: none;
   color: var(--text-main);
-  transition: 
+  transition:
     box-shadow var(--transition),
     border-color var(--transition),
     background 0.12s;
-  cursor: pointer;
   outline: none;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
-.card:hover, .card:focus {
+.hub-link:hover,
+.hub-link:focus {
   border-color: var(--border-hover);
   box-shadow: 0 12px 40px 0 rgba(59, 130, 246, 0.27), 0 1px 5px 0 rgba(15, 23, 42, 0.25);
   background: linear-gradient(100deg, var(--blue2) 80%, var(--blue4) 130%);
   color: var(--blue6);
 }
 
-.card-title {
-  font-size: 1.35rem;
+.link-title {
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--blue6);
-  margin-bottom: 0.24rem;
-  letter-spacing: 0.01em;
+  margin-bottom: 0.1rem;
   transition: color var(--transition);
 }
 
-.card-desc {
+.link-desc {
   color: var(--text-sub);
-  font-size: 1rem;
+  font-size: 0.97rem;
   font-weight: 400;
   transition: color var(--transition);
 }
 
-.card:hover .card-title, .card:focus .card-title {
+.hub-link:hover .link-title,
+.hub-link:focus .link-title {
   color: var(--blue4);
 }
 
-.card:hover .card-desc, .card:focus .card-desc {
+.hub-link:hover .link-desc,
+.hub-link:focus .link-desc {
   color: #cbd5e1;
 }
 
 @media (max-width: 600px) {
   .hub-container {
-    padding: 1.2rem 0.3rem;
+    padding: 1.2rem 0.4rem;
+    min-width: 0;
     max-width: 97vw;
   }
-  .hub-header h1 {
-    font-size: 1.4rem;
+  .hub-title {
+    font-size: 1.3rem;
   }
-  .hub-cards {
-    gap: 1rem;
-  }
-  .card {
-    padding: 1rem 0.7rem;
+  .hub-info {
+    font-size: 0.94rem;
+    padding: 0.8rem 0.7rem 0.8rem 0.9rem;
   }
 }
