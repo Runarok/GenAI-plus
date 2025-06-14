@@ -30,7 +30,46 @@ document.addEventListener('DOMContentLoaded', function() {
   loadChapters().then(() => {
     loadInitialChapter();
   });
+  
+  // Listen for browser history changes
+  window.addEventListener('popstate', () => {
+    loadInitialChapter();
+  });
 });
+
+// URL handling functions
+function getChapterFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const chapterParam = params.get('chapter');
+  if (!chapterParam) return null;
+  
+  // Find the chapter index that matches the file path
+  const chapterIndex = FileNames.findIndex(chapter => chapter.file === chapterParam);
+  return chapterIndex >= 0 ? chapterIndex : null;
+}
+
+function updateUrl(chapterFile, replace = false) {
+  const url = new URL(window.location.href);
+  url.searchParams.set('chapter', chapterFile);
+  
+  if (replace) {
+    window.history.replaceState({}, '', url);
+  } else {
+    window.history.pushState({}, '', url);
+  }
+}
+
+function loadInitialChapter() {
+  const chapterIndex = getChapterFromUrl();
+  if (chapterIndex !== null) {
+    const chapter = FileNames[chapterIndex];
+    loadChapter(chapter.file, chapter.title, chapterIndex, true);
+  } else if (FileNames.length > 0) {
+    // Load first chapter if no valid chapter in URL
+    const firstChapter = FileNames[0];
+    loadChapter(firstChapter.file, firstChapter.title, 0, true);
+  }
+}
 
 // Theme initialization
 function initializeTheme() {
@@ -88,15 +127,10 @@ function initializeEventListeners() {
       modalOverlay.classList.remove('active');
     }
   });
-
-  // Handle browser history navigation
-  window.addEventListener('popstate', () => {
-    loadInitialChapter();
-  });
 }
 
 // Chapter loading
-async function loadChapters() {
+function loadChapters() {
   try {
     renderChapterList();
   } catch (error) {
@@ -114,32 +148,13 @@ function renderChapterList() {
   }
   
   const listHTML = FileNames.map((chapter, index) => 
-    `<li><a href="#" onclick="loadChapter('${chapter.file}', '${chapter.title}', ${index}, true)">${chapter.title}</a></li>`
+    `<li><a href="#" onclick="loadChapter('${chapter.file}', '${chapter.title}', ${index})">${chapter.title}</a></li>`
   ).join('');
   
   chapterList.innerHTML = listHTML;
 }
 
-function loadInitialChapter() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const chapterParam = urlParams.get('chapter');
-  
-  if (chapterParam) {
-    // Find the chapter index by file path
-    const chapterIndex = FileNames.findIndex(chapter => chapter.file === chapterParam);
-    if (chapterIndex !== -1) {
-      loadChapter(chapterParam, FileNames[chapterIndex].title, chapterIndex, false);
-      return;
-    }
-  }
-  
-  // If no valid chapter parameter found, load the first chapter
-  if (FileNames.length > 0) {
-    loadChapter(FileNames[0].file, FileNames[0].title, 0, false);
-  }
-}
-
-async function loadChapter(filePath, title, index, updateHistory = true) {
+async function loadChapter(filePath, title, index, replace = false) {
   try {
     // Update active chapter
     const links = document.querySelectorAll('.chapter-list a');
@@ -166,18 +181,9 @@ async function loadChapter(filePath, title, index, updateHistory = true) {
     contentBody.innerHTML = htmlContent;
     
     currentChapter = filePath;
-
-    // Update URL
-    const newUrl = new URL(window.location.href);
-    newUrl.searchParams.set('chapter', filePath);
     
-    if (updateHistory) {
-      // Add new history entry for user-initiated navigation
-      window.history.pushState({}, '', newUrl);
-    } else {
-      // Replace current history entry for initial load or popstate
-      window.history.replaceState({}, '', newUrl);
-    }
+    // Update URL
+    updateUrl(filePath, replace);
     
   } catch (error) {
     console.error('Error loading chapter:', error);
