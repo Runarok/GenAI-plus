@@ -162,6 +162,13 @@
           <a class="action-btn" id="openPagesBtn" href="#" target="_self" rel="noopener">Open Link</a>
         </div>
       </div>
+      <div class="output-row" id="rawRow" style="display:none;">
+        <div class="output-label">Raw File Content URL:</div>
+        <div class="button-row">
+          <button class="action-btn" id="copyRawBtn">Copy Link</button>
+          <a class="action-btn" id="openRawBtn" href="#" target="_self" rel="noopener">Open Link</a>
+        </div>
+      </div>
     </div>
     <div class="error" id="error"></div>
   </div>
@@ -175,7 +182,12 @@
     const copyPagesBtn = document.getElementById('copyPagesBtn');
     const openPagesBtn = document.getElementById('openPagesBtn');
     const toast = document.getElementById('toast');
-    let repoURL = '', pagesURL = '';
+    // Raw content elements
+    const rawRow = document.getElementById('rawRow');
+    const copyRawBtn = document.getElementById('copyRawBtn');
+    const openRawBtn = document.getElementById('openRawBtn');
+
+    let repoURL = '', pagesURL = '', rawURL = '';
 
     function showToast(msg) {
       toast.textContent = msg;
@@ -183,11 +195,48 @@
       setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 1500);
     }
 
+    function getRawUrlFromGithubUrl(url) {
+      // Only convert github.com/user/repo/blob/branch/path or tree/branch/path URLs
+      try {
+        const u = new URL(url);
+        if (u.hostname !== 'github.com') return '';
+        const parts = u.pathname.split('/').filter(Boolean);
+        if (parts.length < 5) return '';
+        if (parts[2] !== 'blob' && parts[2] !== 'tree') return '';
+        // https://raw.githubusercontent.com/user/repo/branch/path/to/file
+        const user = parts[0], repo = parts[1], branch = parts[3];
+        const filePath = parts.slice(4).join('/');
+        return `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filePath}`;
+      } catch {
+        return '';
+      }
+    }
+
+    function getRawUrlFromPagesUrl(url) {
+      // https://user.github.io/repo/path/to/file → https://raw.githubusercontent.com/user/repo/branch/path/to/file (default branch: main)
+      try {
+        const u = new URL(url);
+        if (!/^[^.]+\.github\.io$/.test(u.hostname)) return '';
+        const user = u.hostname.split('.')[0];
+        const parts = u.pathname.split('/').filter(Boolean);
+        if (parts.length < 1) return '';
+        const repo = parts[0];
+        const filePath = parts.slice(1).join('/');
+        if (!filePath) return '';
+        // By default, assume 'main' branch
+        return `https://raw.githubusercontent.com/${user}/${repo}/main/${filePath}`;
+      } catch {
+        return '';
+      }
+    }
+
     function analyzeLink(val) {
       repoURL = '';
       pagesURL = '';
+      rawURL = '';
       errorEl.textContent = '';
       output.style.display = 'none';
+      rawRow.style.display = 'none';
 
       if (!val || val.trim() === '') return;
 
@@ -214,6 +263,10 @@
           repoURL = val;
           pagesURL = basePagesURL;
           if (subPath) pagesURL += '/' + subPath;
+
+          // Try to get raw URL if pointing to a file
+          rawURL = getRawUrlFromGithubUrl(val);
+
         }
         // GitHub Pages links
         else if (/^[^.]+\.github\.io$/.test(url.hostname)) {
@@ -228,8 +281,11 @@
           let baseRepoURL = `https://github.com/${user}/${repo}`;
           if (subPath) {
             repoURL = `${baseRepoURL}/blob/main/${subPath}`;
+            // Try to get raw URL if path is present
+            rawURL = getRawUrlFromPagesUrl(val);
           } else {
             repoURL = baseRepoURL;
+            rawURL = '';
           }
         }
         else {
@@ -239,12 +295,20 @@
         // Update open link anchors
         openRepoBtn.href = repoURL;
         openPagesBtn.href = pagesURL;
+        openRawBtn.href = rawURL;
 
         // Always open in same tab (target="_self"), but let user choose new tab with ctrl/cmd/middle click
         openRepoBtn.setAttribute('target', '_self');
         openPagesBtn.setAttribute('target', '_self');
+        openRawBtn.setAttribute('target', '_self');
 
         output.style.display = '';
+
+        if (rawURL) {
+          rawRow.style.display = '';
+        } else {
+          rawRow.style.display = 'none';
+        }
       } catch (e) {
         errorEl.textContent = e.message;
       }
@@ -264,6 +328,12 @@
       if (pagesURL) {
         navigator.clipboard.writeText(pagesURL);
         showToast("Copied GitHub Pages Site or Subpath link!");
+      }
+    };
+    copyRawBtn.onclick = () => {
+      if (rawURL) {
+        navigator.clipboard.writeText(rawURL);
+        showToast("Copied Raw File Content link!");
       }
     };
 
