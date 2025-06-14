@@ -27,8 +27,13 @@ let currentChapter = null;
 document.addEventListener('DOMContentLoaded', function() {
   initializeTheme();
   initializeEventListeners();
+  
+  // First load chapters, then handle URL
   loadChapters().then(() => {
-    loadInitialChapter();
+    // Small delay to ensure DOM is updated with chapter list
+    setTimeout(() => {
+      loadInitialChapter();
+    }, 100);
   });
   
   // Listen for browser history changes
@@ -131,12 +136,16 @@ function initializeEventListeners() {
 
 // Chapter loading
 function loadChapters() {
-  try {
-    renderChapterList();
-  } catch (error) {
-    console.error('Error loading chapters:', error);
-    document.getElementById('chapterList').innerHTML = '<li class="loading">Error loading chapters</li>';
-  }
+  return new Promise((resolve) => {
+    try {
+      renderChapterList();
+      resolve();
+    } catch (error) {
+      console.error('Error loading chapters:', error);
+      document.getElementById('chapterList').innerHTML = '<li class="loading">Error loading chapters</li>';
+      resolve(); // Still resolve to continue with initial chapter loading
+    }
+  });
 }
 
 function renderChapterList() {
