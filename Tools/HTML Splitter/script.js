@@ -4,7 +4,7 @@ class HTMLParser {
         this.setupEventListeners();
         this.setupThemeSystem();
         this.setupTabSystem();
-        this.setupActionMenus();
+        this.setupSoftWrapToggle();
         this.parseHTML(); // Initial parse
     }
 
@@ -17,12 +17,12 @@ class HTMLParser {
         this.settingsBtn = document.getElementById('settings-btn');
         this.settingsMenu = document.getElementById('settings-menu');
         this.downloadAllBtn = document.getElementById('download-all-btn');
+        this.softWrapToggle = document.getElementById('soft-wrap-toggle');
         this.themeOptions = document.querySelectorAll('.theme-option');
+        this.modeButtons = document.querySelectorAll('.mode-btn');
         this.tabBtns = document.querySelectorAll('.tab-btn');
         this.tabContents = document.querySelectorAll('.tab-content');
-        this.actionBtns = document.querySelectorAll('.action-btn');
-        this.actionMenus = document.querySelectorAll('.action-menu');
-        this.actionItems = document.querySelectorAll('.action-item');
+        this.tabActionBtns = document.querySelectorAll('.tab-action-btn');
     }
 
     setupEventListeners() {
@@ -54,17 +54,18 @@ class HTMLParser {
             this.downloadAllFiles();
         });
 
-        // Action items
-        this.actionItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                const action = e.currentTarget.dataset.action;
-                const type = e.currentTarget.dataset.type;
+        // Tab action buttons
+        this.tabActionBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const action = btn.dataset.action;
+                const type = btn.dataset.type;
                 
                 if (action === 'download') {
                     this.downloadFile(type);
+                } else if (action === 'copy') {
+                    this.copyToClipboard(type);
                 }
-                
-                this.closeAllActionMenus();
             });
         });
 
@@ -76,25 +77,43 @@ class HTMLParser {
 
     setupThemeSystem() {
         // Check for saved theme preference
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        this.setTheme(savedTheme);
+        const savedTheme = localStorage.getItem('theme') || 'blue';
+        const savedMode = localStorage.getItem('theme-mode') || 'dark';
+        this.setTheme(savedTheme, savedMode);
 
         // Theme option listeners
         this.themeOptions.forEach(option => {
             option.addEventListener('click', () => {
                 const theme = option.dataset.theme;
-                this.setTheme(theme);
+                const currentMode = document.documentElement.getAttribute('data-mode') || 'dark';
+                this.setTheme(theme, currentMode);
                 localStorage.setItem('theme', theme);
+            });
+        });
+
+        // Mode button listeners
+        this.modeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mode = btn.dataset.mode;
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'blue';
+                this.setTheme(currentTheme, mode);
+                localStorage.setItem('theme-mode', mode);
             });
         });
     }
 
-    setTheme(theme) {
+    setTheme(theme, mode) {
         document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-mode', mode);
         
         // Update active theme option
         this.themeOptions.forEach(option => {
             option.classList.toggle('active', option.dataset.theme === theme);
+        });
+
+        // Update active mode button
+        this.modeButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.mode === mode);
         });
     }
 
@@ -119,36 +138,30 @@ class HTMLParser {
         });
     }
 
-    setupActionMenus() {
-        this.actionBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const menuId = btn.id.replace('-download', '-menu');
-                const menu = document.getElementById(menuId);
-                
-                // Close other menus
-                this.actionMenus.forEach(m => {
-                    if (m !== menu) {
-                        m.classList.remove('active');
-                    }
-                });
-                
-                // Toggle current menu
-                menu.classList.toggle('active');
-            });
-        });
+    setupSoftWrapToggle() {
+        // Check for saved soft wrap preference
+        const savedSoftWrap = localStorage.getItem('soft-wrap') !== 'false';
+        this.softWrapToggle.checked = savedSoftWrap;
+        this.applySoftWrap(savedSoftWrap);
 
-        // Close action menus when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.tab-actions')) {
-                this.closeAllActionMenus();
-            }
+        // Soft wrap toggle listener
+        this.softWrapToggle.addEventListener('change', (e) => {
+            const enabled = e.target.checked;
+            this.applySoftWrap(enabled);
+            localStorage.setItem('soft-wrap', enabled);
         });
     }
 
-    closeAllActionMenus() {
-        this.actionMenus.forEach(menu => {
-            menu.classList.remove('active');
+    applySoftWrap(enabled) {
+        const textareas = [this.htmlInput, this.htmlOutput, this.cssOutput, this.jsOutput];
+        textareas.forEach(textarea => {
+            if (enabled) {
+                textarea.classList.add('soft-wrap');
+                textarea.classList.remove('no-wrap');
+            } else {
+                textarea.classList.add('no-wrap');
+                textarea.classList.remove('soft-wrap');
+            }
         });
     }
 
@@ -391,28 +404,49 @@ class HTMLParser {
         this.htmlInput.focus();
     }
 
-    downloadFile(type) {
-        let content = '';
-        let filename = '';
-        let mimeType = 'text/plain';
-
+    getContentByType(type) {
         switch (type) {
             case 'html':
-                content = this.htmlOutput.value;
-                filename = 'index.html';
-                mimeType = 'text/html';
-                break;
+                return this.htmlOutput.value;
             case 'css':
-                content = this.cssOutput.value;
-                filename = 'styles.css';
-                mimeType = 'text/css';
-                break;
+                return this.cssOutput.value;
             case 'js':
-                content = this.jsOutput.value;
-                filename = 'script.js';
-                mimeType = 'text/javascript';
-                break;
+                return this.jsOutput.value;
+            default:
+                return '';
         }
+    }
+
+    getFilenameByType(type) {
+        switch (type) {
+            case 'html':
+                return 'index.html';
+            case 'css':
+                return 'styles.css';
+            case 'js':
+                return 'script.js';
+            default:
+                return 'file.txt';
+        }
+    }
+
+    getMimeTypeByType(type) {
+        switch (type) {
+            case 'html':
+                return 'text/html';
+            case 'css':
+                return 'text/css';
+            case 'js':
+                return 'text/javascript';
+            default:
+                return 'text/plain';
+        }
+    }
+
+    downloadFile(type) {
+        const content = this.getContentByType(type);
+        const filename = this.getFilenameByType(type);
+        const mimeType = this.getMimeTypeByType(type);
 
         if (!content.trim()) {
             this.showNotification(`No ${type.toUpperCase()} content to download`, 'warning');
@@ -434,6 +468,35 @@ class HTMLParser {
         } catch (error) {
             console.error('Download failed:', error);
             this.showNotification('Download failed. Please try again.', 'error');
+        }
+    }
+
+    async copyToClipboard(type) {
+        const content = this.getContentByType(type);
+
+        if (!content.trim()) {
+            this.showNotification(`No ${type.toUpperCase()} content to copy`, 'warning');
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(content);
+            this.showNotification(`${type.toUpperCase()} copied to clipboard!`, 'success');
+        } catch (error) {
+            console.error('Copy failed:', error);
+            // Fallback for older browsers
+            try {
+                const textarea = document.createElement('textarea');
+                textarea.value = content;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                this.showNotification(`${type.toUpperCase()} copied to clipboard!`, 'success');
+            } catch (fallbackError) {
+                console.error('Fallback copy failed:', fallbackError);
+                this.showNotification('Copy failed. Please try again.', 'error');
+            }
         }
     }
 
@@ -480,33 +543,6 @@ class HTMLParser {
         notification.className = `notification notification-${type}`;
         notification.textContent = message;
         
-        // Add styles
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.3s ease;
-            max-width: 300px;
-            word-wrap: break-word;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-        `;
-
-        // Set background color based on type
-        const colors = {
-            success: '#4caf50',
-            warning: '#ff9800',
-            error: '#f44336',
-            info: '#2196f3'
-        };
-        notification.style.backgroundColor = colors[type] || colors.info;
-
         // Add to DOM
         document.body.appendChild(notification);
 
