@@ -207,10 +207,10 @@ class HTMLParser {
         cleanDoc.querySelectorAll('style').forEach(style => style.remove());
         cleanDoc.querySelectorAll('script:not([src])').forEach(script => script.remove());
 
-        // Get the clean HTML
-        const cleanHTML = this.formatHTML(cleanDoc.documentElement.outerHTML);
+        // Get the clean HTML with proper formatting
+        const cleanHTML = this.formatHTMLOutput(cleanDoc);
 
-        // Update outputs
+        // Update outputs with proper indentation
         this.updateOutputs(cleanHTML, cssContent, jsContent);
     }
 
@@ -246,19 +246,118 @@ class HTMLParser {
         cleanHTML = cleanHTML.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
         cleanHTML = cleanHTML.replace(/<script(?![^>]*src\s*=)[^>]*>[\s\S]*?<\/script>/gi, '');
         
-        // Clean up extra whitespace
-        cleanHTML = this.formatHTML(cleanHTML);
+        // Format HTML with regex fallback
+        cleanHTML = this.formatHTMLRegexFallback(cleanHTML);
 
-        // Update outputs
+        // Update outputs with proper indentation
         this.updateOutputs(cleanHTML, cssContent, jsContent);
     }
 
-    formatHTML(html) {
-        // Basic HTML formatting
+    formatHTMLOutput(doc) {
+        const indent = '    '; // 4 spaces for indentation
+        let result = '';
+        
+        // Add DOCTYPE if present
+        if (doc.doctype) {
+            result += '<!DOCTYPE html>\n';
+        }
+        
+        // Format the document element
+        result += this.formatNodeRecursive(doc.documentElement, 0, indent);
+        
+        return result;
+    }
+
+    formatNodeRecursive(node, level, indent) {
+        const indentation = indent.repeat(level);
+        let result = '';
+        
+        if (node.nodeType === Node.ELEMENT_NODE) {
+            const tagName = node.tagName.toLowerCase();
+            const attributes = this.formatAttributes(node);
+            
+            // Self-closing tags
+            const selfClosingTags = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
+            
+            if (selfClosingTags.includes(tagName)) {
+                result += `${indentation}<${tagName}${attributes}>\n`;
+            } else {
+                // Check if element has only text content (no child elements)
+                const hasOnlyTextContent = node.childNodes.length === 1 && 
+                                         node.childNodes[0].nodeType === Node.TEXT_NODE;
+                
+                if (hasOnlyTextContent) {
+                    const textContent = node.textContent.trim();
+                    if (textContent) {
+                        result += `${indentation}<${tagName}${attributes}>${textContent}</${tagName}>\n`;
+                    } else {
+                        result += `${indentation}<${tagName}${attributes}></${tagName}>\n`;
+                    }
+                } else {
+                    result += `${indentation}<${tagName}${attributes}>\n`;
+                    
+                    // Process child nodes
+                    for (const child of node.childNodes) {
+                        if (child.nodeType === Node.ELEMENT_NODE) {
+                            result += this.formatNodeRecursive(child, level + 1, indent);
+                        } else if (child.nodeType === Node.TEXT_NODE) {
+                            const textContent = child.textContent.trim();
+                            if (textContent) {
+                                result += `${indent.repeat(level + 1)}${textContent}\n`;
+                            }
+                        } else if (child.nodeType === Node.COMMENT_NODE) {
+                            result += `${indent.repeat(level + 1)}<!--${child.textContent}-->\n`;
+                        }
+                    }
+                    
+                    result += `${indentation}</${tagName}>\n`;
+                }
+            }
+        }
+        
+        return result;
+    }
+
+    formatAttributes(element) {
+        let attributes = '';
+        for (const attr of element.attributes) {
+            attributes += ` ${attr.name}="${attr.value}"`;
+        }
+        return attributes;
+    }
+
+    formatHTMLRegexFallback(html) {
+        // Basic HTML formatting for regex fallback
         return html
             .replace(/>\s*</g, '>\n<')
             .replace(/^\s*\n/gm, '')
-            .trim();
+            .split('\n')
+            .map(line => {
+                const trimmed = line.trim();
+                if (!trimmed) return '';
+                
+                // Simple indentation based on tag depth
+                const openTags = (trimmed.match(/</g) || []).length;
+                const closeTags = (trimmed.match(/\//g) || []).length;
+                const depth = Math.max(0, openTags - closeTags);
+                
+                return '    '.repeat(Math.max(0, depth - 1)) + trimmed;
+            })
+            .filter(line => line)
+            .join('\n');
+    }
+
+    indentCode(code, indentSize = 4) {
+        if (!code || !code.trim()) return code;
+        
+        const indent = ' '.repeat(indentSize);
+        return code
+            .split('\n')
+            .map(line => {
+                const trimmed = line.trim();
+                return trimmed ? indent + trimmed : '';
+            })
+            .join('\n');
     }
 
     updateOutputs(html, css, js) {
@@ -268,9 +367,10 @@ class HTMLParser {
         this.jsOutput.classList.add('updating');
 
         setTimeout(() => {
+            // Apply proper indentation to all outputs
             this.htmlOutput.value = html;
-            this.cssOutput.value = css;
-            this.jsOutput.value = js;
+            this.cssOutput.value = css ? this.indentCode(css) : '';
+            this.jsOutput.value = js ? this.indentCode(js) : '';
 
             // Remove updating class
             this.htmlOutput.classList.remove('updating');
