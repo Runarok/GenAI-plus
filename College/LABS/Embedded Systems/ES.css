@@ -1,64 +1,178 @@
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: #f0f0f0;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            color: #ffffff;
-            padding: 20px;
-            background-color: #333;
-            margin: 0;
-        }
-        #toc {
-            background-color: #333;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        #toc a {
-            text-decoration: none;
-            color: #66c0f4;
-            display: block;
-            margin: 8px 0;
-        }
-        #toc a:hover {
-            color: #ffffff;
-        }
-        section {
-            margin-bottom: 40px;
-            position: relative; /* Makes the section the reference point for absolute positioning */
-        }
-        h2 {
-            color: #f0f0f0;
-        }
-        pre {
-            background-color: #2e2e2e;
-            color: #f0f0f0;
-            padding: 15px;
-            border-radius: 5px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            font-family: "Courier New", monospace;
-            font-size: 1rem;
-            line-height: 1.4;
-            padding-top: 35px; /* Make space for the button at the top */
-        }
-        .copy-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            position: absolute; /* Position the button inside the wrapper */
-            top: 10px; /* Place the button 10px from the top */
-            right: 10px; /* Place the button 10px from the right */
-        }
-        .copy-btn:hover {
-            background-color: #45a049;
-        }
+/* Reset some default styles */
+body, h1, h2, h3, ul, li, pre, section {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #232526 0%, #282c34 100%);
+    color: #f3f3f3;
+    min-height: 100vh;
+    padding-bottom: 40px;
+}
+
+/* Header */
+h1 {
+    color: #fff;
+    padding: 32px 0 24px 0;
+    background: linear-gradient(90deg, #212121 60%, #3a6186 100%);
+    margin-bottom: 0;
+    font-size: 2.4rem;
+    text-align: center;
+    letter-spacing: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+/* Table of Contents */
+#toc {
+    background: rgba(36, 38, 48, 0.95);
+    padding: 22px 30px;
+    border-radius: 12px;
+    margin: 32px auto 28px auto;
+    max-width: 700px;
+    box-shadow: 0 4px 16px rgba(30,40,60,0.16);
+}
+
+#toc h3 {
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    color: #7ec9fc;
+    font-size: 1.3rem;
+    font-weight: 600;
+    border-bottom: 1px solid #384254;
+    padding-bottom: 5px;
+}
+
+#toc-list {
+    list-style: none;
+    margin-top: 14px;
+}
+
+#toc-list li {
+    margin: 9px 0;
+}
+
+#toc a {
+    color: #9ad7ff;
+    text-decoration: none;
+    font-size: 1.08rem;
+    padding: 6px 10px 6px 0;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s, padding-left 0.2s;
+    display: inline-block;
+}
+
+#toc a:hover {
+    background: linear-gradient(90deg, #40a1ff44 0%, #5b86e5 100%);
+    color: #fff;
+    padding-left: 14px;
+}
+
+/* Program Sections */
+#programs-container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+section {
+    margin-bottom: 46px;
+    background: rgba(40, 44, 52, 0.95);
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(45,60,90,0.13);
+    padding: 26px 32px 28px 32px;
+    position: relative;
+    transition: box-shadow 0.2s;
+}
+
+section:hover {
+    box-shadow: 0 6px 24px rgba(80, 170, 255, 0.07);
+}
+
+h2 {
+    color: #7ec9fc;
+    margin-bottom: 14px;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+pre {
+    background: #232936;
+    color: #f6f8fa;
+    padding: 22px 16px 18px 16px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    font-size: 1.03rem;
+    line-height: 1.65;
+    margin-top: 12px;
+    margin-bottom: 0;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(20,40,80,0.10);
+    border: 1px solid #2f3b4b;
+}
+
+/* Copy Button Style */
+.copy-btn {
+    background: linear-gradient(90deg, #54a8ff 0%, #6be6d3 100%);
+    color: #232936;
+    padding: 7px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    position: absolute;
+    top: 13px;
+    right: 14px;
+    z-index: 2;
+    transition: background 0.14s, color 0.14s, box-shadow 0.17s;
+    box-shadow: 0 2px 8px rgba(54, 168, 255, 0.08);
+}
+
+.copy-btn:hover, .copy-btn:focus {
+    background: linear-gradient(90deg, #66eeff 0%, #5b86e5 100%);
+    color: #16232a;
+    box-shadow: 0 4px 12px rgba(60, 200, 255, 0.20);
+    outline: none;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    #programs-container, #toc {
+        max-width: 98vw;
+        padding-left: 7vw;
+        padding-right: 7vw;
+    }
+    section {
+        padding-left: 7vw;
+        padding-right: 7vw;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.45rem;
+        padding: 18px 0 12px 0;
+    }
+    #toc, section {
+        padding: 13px 5vw;
+        font-size: 0.97rem;
+    }
+    h2 {
+        font-size: 1.11rem;
+    }
+    .copy-btn {
+        top: 8px;
+        right: 7px;
+        padding: 5px 10px;
+        font-size: 0.95rem;
+    }
+    pre {
+        padding: 12px 5px 9px 5px;
+        font-size: 0.95rem;
+    }
+}
