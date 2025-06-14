@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Parser & Extractor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code"></i> HTML Parser & Extractor</h1>
+            <div class="theme-toggle">
+                <input type="checkbox" id="theme-switch" class="theme-switch-input">
+                <label for="theme-switch" class="theme-switch-label">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="input-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-file-code"></i> Input HTML Document</h2>
+                    <button class="clear-btn" id="clear-input">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>
+                <textarea 
+                    id="html-input" 
+                    placeholder="Paste your complete HTML document here...&#10;&#10;Example:&#10;&lt;!DOCTYPE html&gt;&#10;&lt;html&gt;&#10;&lt;head&gt;&#10;    &lt;style&gt;&#10;        body { color: red; }&#10;    &lt;/style&gt;&#10;    &lt;link rel=&quot;stylesheet&quot; href=&quot;external.css&quot;&gt;&#10;&lt;/head&gt;&#10;&lt;body&gt;&#10;    &lt;h1&gt;Hello World&lt;/h1&gt;&#10;    &lt;script&gt;&#10;        console.log('Hello');&#10;    &lt;/script&gt;&#10;    &lt;script src=&quot;external.js&quot;&gt;&lt;/script&gt;&#10;&lt;/body&gt;&#10;&lt;/html&gt;"
+                ></textarea>
+            </div>
+
+            <div class="output-section">
+                <div class="output-group">
+                    <div class="section-header">
+                        <h3><i class="fas fa-code"></i> HTML Output</h3>
+                        <button class="download-btn" data-type="html">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                    <textarea id="html-output" readonly></textarea>
+                </div>
+
+                <div class="output-group">
+                    <div class="section-header">
+                        <h3><i class="fab fa-css3-alt"></i> CSS Output</h3>
+                        <button class="download-btn" data-type="css">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                    <textarea id="css-output" readonly></textarea>
+                </div>
+
+                <div class="output-group">
+                    <div class="section-header">
+                        <h3><i class="fab fa-js-square"></i> JavaScript Output</h3>
+                        <button class="download-btn" data-type="js">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                    <textarea id="js-output" readonly></textarea>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Parse and extract HTML, CSS, and JavaScript from complete HTML documents</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
