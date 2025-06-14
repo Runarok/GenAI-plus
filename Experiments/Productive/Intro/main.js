@@ -22,6 +22,7 @@ const THEMES = [
 
 // Global state
 let currentChapter = null;
+let isInitialLoad = true;
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', function() {
@@ -41,31 +42,29 @@ function getChapterFromUrl() {
   return FileNames.find(chapter => chapter.file === chapterFile);
 }
 
-function updateUrl(chapterFile, replace = false) {
+function updateUrl(chapterFile) {
   const url = new URL(window.location.href);
   url.searchParams.set('chapter', chapterFile);
-  
-  if (replace) {
-    window.history.replaceState({}, '', url);
-  } else {
-    window.history.pushState({}, '', url);
-  }
+  window.history.pushState({}, '', url);
 }
 
 function loadInitialChapter() {
+  if (!isInitialLoad) return;
+  
   const chapter = getChapterFromUrl();
   if (chapter) {
     const index = FileNames.findIndex(c => c.file === chapter.file);
     if (index !== -1) {
-      loadChapter(chapter.file, chapter.title, index, true);
+      loadChapter(chapter.file, chapter.title, index, false);
     } else {
-      // Invalid chapter in URL, load first chapter and update URL
-      loadChapter(FileNames[0].file, FileNames[0].title, 0, true);
+      // Invalid chapter in URL, load first chapter
+      loadChapter(FileNames[0].file, FileNames[0].title, 0, false);
     }
   } else {
     // No chapter in URL, load first chapter
-    loadChapter(FileNames[0].file, FileNames[0].title, 0, true);
+    loadChapter(FileNames[0].file, FileNames[0].title, 0, false);
   }
+  isInitialLoad = false;
 }
 
 // Theme initialization
@@ -127,6 +126,7 @@ function initializeEventListeners() {
 
   // Handle browser back/forward buttons
   window.addEventListener('popstate', () => {
+    isInitialLoad = true;
     loadInitialChapter();
   });
 }
@@ -156,7 +156,7 @@ function renderChapterList() {
   chapterList.innerHTML = listHTML;
 }
 
-async function loadChapter(filePath, title, index, replace = false) {
+async function loadChapter(filePath, title, index, updateUrlParam = true) {
   try {
     // Update active chapter
     const links = document.querySelectorAll('.chapter-list a');
@@ -184,8 +184,10 @@ async function loadChapter(filePath, title, index, replace = false) {
     
     currentChapter = filePath;
     
-    // Update URL
-    updateUrl(filePath, replace);
+    // Update URL only if explicitly changing chapters (not during initial load)
+    if (updateUrlParam && !isInitialLoad) {
+      updateUrl(filePath);
+    }
     
   } catch (error) {
     console.error('Error loading chapter:', error);
