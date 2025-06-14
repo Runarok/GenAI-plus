@@ -220,6 +220,21 @@ class HTMLParser {
         cleanDoc.querySelectorAll('style').forEach(style => style.remove());
         cleanDoc.querySelectorAll('script:not([src])').forEach(script => script.remove());
 
+        // If CSS content is not empty, add a link tag to the head
+        if (cssContent) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'styles.css';
+            cleanDoc.head.appendChild(link);
+        }
+
+        // If JS content is not empty, add a script tag to the body
+        if (jsContent) {
+            const script = document.createElement('script');
+            script.src = 'script.js';
+            cleanDoc.body.appendChild(script);
+        }
+
         // Get the clean HTML with proper formatting
         const cleanHTML = this.formatHTMLOutput(cleanDoc);
 
@@ -258,6 +273,16 @@ class HTMLParser {
         let cleanHTML = inputHTML;
         cleanHTML = cleanHTML.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
         cleanHTML = cleanHTML.replace(/<script(?![^>]*src\s*=)[^>]*>[\s\S]*?<\/script>/gi, '');
+        
+        // If CSS content is not empty, insert a link tag before </head>
+        if (cssContent) {
+            cleanHTML = cleanHTML.replace(/<\/head>/i, '<link rel="stylesheet" href="styles.css">\n</head>');
+        }
+
+        // If JS content is not empty, insert a script tag before </body>
+        if (jsContent) {
+            cleanHTML = cleanHTML.replace(/<\/body>/i, '<script src="script.js"></script>\n</body>');
+        }
         
         // Format HTML with regex fallback
         cleanHTML = this.formatHTMLRegexFallback(cleanHTML);
