@@ -10,99 +10,168 @@
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <h1><i class="fas fa-shield-alt"></i> Banker's Algorithm Analyzer</h1>
-                <p>Deadlock avoidance algorithm with step-by-step analysis</p>
+                <div class="header-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="header-text">
+                    <h1>Banker's Algorithm Analyzer</h1>
+                    <p>Advanced deadlock avoidance with step-by-step analysis</p>
+                </div>
             </div>
         </header>
 
-        <main class="main-content">
-            <!-- Input Section -->
-            <section class="card input-section">
-                <div class="card-header">
-                    <h2><i class="fas fa-cog"></i> System Configuration</h2>
+        <!-- Configuration Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-cog"></i> System Configuration</h2>
+                <p>Set up the number of processes and resources in your system</p>
+            </div>
+            <div class="config-grid">
+                <div class="config-item">
+                    <label for="processes">Processes</label>
+                    <input type="number" id="processes" min="1" max="10" value="5">
+                    <span class="config-hint">Number of processes (1-10)</span>
                 </div>
-                <div class="card-body">
-                    <div class="input-grid">
-                        <div class="input-group">
-                            <label for="processes">Number of Processes</label>
-                            <input type="number" id="processes" min="1" max="10" value="5">
-                        </div>
-                        <div class="input-group">
-                            <label for="resources">Number of Resources</label>
-                            <input type="number" id="resources" min="1" max="10" value="3">
-                        </div>
-                    </div>
+                <div class="config-item">
+                    <label for="resources">Resources</label>
+                    <input type="number" id="resources" min="1" max="10" value="3">
+                    <span class="config-hint">Number of resource types (1-10)</span>
+                </div>
+                <div class="config-action">
                     <button id="setupBtn" class="btn btn-primary">
-                        <i class="fas fa-wrench"></i> Setup Matrices
+                        <i class="fas fa-arrow-right"></i>
+                        Setup Matrices
                     </button>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Matrices Input Section -->
-            <section class="card matrices-section" id="matricesSection" style="display: none;">
-                <div class="card-header">
-                    <h2><i class="fas fa-table"></i> Input Matrices</h2>
-                </div>
-                <div class="card-body">
-                    <div class="matrices-grid">
-                        <div class="matrix-container">
+        <!-- Input Method Selection -->
+        <section class="section" id="inputMethodSection" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-keyboard"></i> Input Method</h2>
+                <p>Choose how you want to input your data</p>
+            </div>
+            <div class="input-method-selector">
+                <button class="method-btn active" data-method="table">
+                    <i class="fas fa-table"></i>
+                    <span>Table Input</span>
+                    <small>Interactive grid interface</small>
+                </button>
+                <button class="method-btn" data-method="text">
+                    <i class="fas fa-edit"></i>
+                    <span>Text Input</span>
+                    <small>Comma-separated values</small>
+                </button>
+            </div>
+        </section>
+
+        <!-- Data Input Section -->
+        <section class="section" id="dataInputSection" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-database"></i> System Data</h2>
+                <p>Enter your allocation, maximum demand, and available resources</p>
+            </div>
+            
+            <!-- Table Input -->
+            <div id="tableInput" class="input-container">
+                <div class="matrix-grid">
+                    <div class="matrix-card">
+                        <div class="matrix-header">
                             <h3>Allocation Matrix</h3>
-                            <div id="allocationMatrix"></div>
+                            <p>Current resource allocation to processes</p>
                         </div>
-                        <div class="matrix-container">
-                            <h3>Max Matrix</h3>
-                            <div id="maxMatrix"></div>
+                        <div id="allocationMatrix" class="matrix-content"></div>
+                    </div>
+                    
+                    <div class="matrix-card">
+                        <div class="matrix-header">
+                            <h3>Maximum Matrix</h3>
+                            <p>Maximum resource demand of each process</p>
                         </div>
-                        <div class="matrix-container">
+                        <div id="maxMatrix" class="matrix-content"></div>
+                    </div>
+                    
+                    <div class="matrix-card">
+                        <div class="matrix-header">
                             <h3>Available Vector</h3>
-                            <div id="availableVector"></div>
+                            <p>Currently available resources</p>
                         </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button id="loadExampleBtn" class="btn btn-secondary">
-                            <i class="fas fa-file-import"></i> Load Example
-                        </button>
-                        <button id="analyzeBtn" class="btn btn-success">
-                            <i class="fas fa-play"></i> Run Analysis
-                        </button>
+                        <div id="availableVector" class="matrix-content"></div>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Request Section -->
-            <section class="card request-section" id="requestSection" style="display: none;">
-                <div class="card-header">
-                    <h2><i class="fas fa-hand-paper"></i> Process Request</h2>
-                </div>
-                <div class="card-body">
-                    <div class="request-input">
-                        <div class="input-group">
-                            <label for="requestProcess">Process</label>
-                            <select id="requestProcess"></select>
-                        </div>
-                        <div class="request-vector">
-                            <label>Request Vector</label>
-                            <div id="requestVector"></div>
-                        </div>
+            <!-- Text Input -->
+            <div id="textInput" class="input-container" style="display: none;">
+                <div class="text-input-grid">
+                    <div class="text-input-card">
+                        <label for="allocationText">Allocation Matrix</label>
+                        <textarea id="allocationText" placeholder="Enter rows separated by newlines, values separated by commas:&#10;0,1,0&#10;2,0,0&#10;3,0,2"></textarea>
+                        <small>Each row on a new line, values separated by commas</small>
                     </div>
-                    <button id="processRequestBtn" class="btn btn-warning">
-                        <i class="fas fa-check-circle"></i> Process Request
-                    </button>
+                    
+                    <div class="text-input-card">
+                        <label for="maxText">Maximum Matrix</label>
+                        <textarea id="maxText" placeholder="Enter rows separated by newlines, values separated by commas:&#10;7,5,3&#10;3,2,2&#10;9,0,2"></textarea>
+                        <small>Each row on a new line, values separated by commas</small>
+                    </div>
+                    
+                    <div class="text-input-card">
+                        <label for="availableText">Available Vector</label>
+                        <input type="text" id="availableText" placeholder="3,3,2">
+                        <small>Values separated by commas</small>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Results Section -->
-            <section class="card results-section" id="resultsSection" style="display: none;">
-                <div class="card-header">
-                    <h2><i class="fas fa-chart-line"></i> Analysis Results</h2>
+            <div class="action-bar">
+                <button id="loadExampleBtn" class="btn btn-secondary">
+                    <i class="fas fa-file-import"></i>
+                    Load Example Data
+                </button>
+                <button id="analyzeBtn" class="btn btn-success">
+                    <i class="fas fa-play"></i>
+                    Run Analysis
+                </button>
+            </div>
+        </section>
+
+        <!-- Request Processing Section -->
+        <section class="section" id="requestSection" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-hand-paper"></i> Process Request</h2>
+                <p>Test if a specific resource request can be safely granted</p>
+            </div>
+            <div class="request-container">
+                <div class="request-input">
+                    <div class="request-process">
+                        <label for="requestProcess">Process</label>
+                        <select id="requestProcess"></select>
+                    </div>
+                    <div class="request-vector">
+                        <label>Request Vector</label>
+                        <div id="requestVector" class="vector-input"></div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div id="resultsContent"></div>
-                </div>
-            </section>
-        </main>
+                <button id="processRequestBtn" class="btn btn-warning">
+                    <i class="fas fa-check-circle"></i>
+                    Process Request
+                </button>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="section" id="resultsSection" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Analysis Results</h2>
+                <p>Step-by-step breakdown of the algorithm execution</p>
+            </div>
+            <div id="resultsContent" class="results-container"></div>
+        </section>
     </div>
 
     <script src="script.js"></script>
