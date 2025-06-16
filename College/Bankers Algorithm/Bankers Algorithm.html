@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banker's Algorithm Analyzer</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png" />
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,8 +21,146 @@
                     <h1>Banker's Algorithm Analyzer</h1>
                     <p>Advanced deadlock avoidance with step-by-step analysis</p>
                 </div>
+                <div class="header-actions">
+                    <button id="infoBtn" class="btn btn-info">
+                        <i class="fas fa-info-circle"></i>
+                        Learn More
+                    </button>
+                </div>
             </div>
         </header>
+
+        <!-- Info Modal -->
+        <div id="infoModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-graduation-cap"></i> Banker's Algorithm Guide</h2>
+                    <button id="closeModalBtn" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="info-section">
+                        <h3><i class="fas fa-lightbulb"></i> What is the Banker's Algorithm?</h3>
+                        <p>The Banker's Algorithm is a deadlock avoidance algorithm developed by Edsger Dijkstra. It's used in operating systems to decide whether or not to grant a resource allocation request by checking if the system will remain in a safe state after the allocation.</p>
+                        <div class="highlight-box">
+                            <strong>Key Purpose:</strong> Prevent deadlocks by ensuring the system never enters an unsafe state where processes might be stuck waiting for resources indefinitely.
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h3><i class="fas fa-table"></i> Matrix Definitions</h3>
+                        <div class="definition-grid">
+                            <div class="definition-card">
+                                <h4><i class="fas fa-clipboard-list"></i> Allocation Matrix</h4>
+                                <p>Shows the current allocation of resources to each process. Allocation[i][j] represents how many instances of resource j are currently allocated to process i.</p>
+                            </div>
+                            <div class="definition-card">
+                                <h4><i class="fas fa-chart-bar"></i> Maximum Matrix</h4>
+                                <p>Represents the maximum demand of each process. Max[i][j] is the maximum number of instances of resource j that process i may request during its execution.</p>
+                            </div>
+                            <div class="definition-card">
+                                <h4><i class="fas fa-cubes"></i> Available Vector</h4>
+                                <p>Indicates the number of available instances of each resource type. Available[j] shows how many instances of resource j are currently available.</p>
+                            </div>
+                            <div class="definition-card">
+                                <h4><i class="fas fa-calculator"></i> Need Matrix</h4>
+                                <p>Calculated as Need[i][j] = Max[i][j] - Allocation[i][j]. It represents the remaining resource requirements for each process to complete its execution.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h3><i class="fas fa-cogs"></i> Algorithm Steps</h3>
+                        <div class="steps-container">
+                            <div class="step-item">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h4>Initialize</h4>
+                                    <p>Set Work = Available and Finish[i] = false for all processes</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h4>Find Process</h4>
+                                    <p>Look for a process i where Finish[i] = false and Need[i] ≤ Work</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h4>Execute Process</h4>
+                                    <p>If found, execute the process: Work = Work + Allocation[i] and Finish[i] = true</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h4>Repeat</h4>
+                                    <p>Go back to step 2. If all processes are finished, the system is in a safe state</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h3><i class="fas fa-shield-check"></i> Deadlock Prevention</h3>
+                        <p>The algorithm prevents deadlocks by:</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> <strong>Safe State Guarantee:</strong> Only granting requests that keep the system in a safe state</li>
+                            <li><i class="fas fa-check"></i> <strong>Resource Planning:</strong> Ensuring there's always a sequence of process execution that can complete</li>
+                            <li><i class="fas fa-check"></i> <strong>Conservative Approach:</strong> Sometimes denying requests that could potentially lead to deadlock</li>
+                            <li><i class="fas fa-check"></i> <strong>Predictive Analysis:</strong> Simulating allocation before actually granting resources</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section">
+                        <h3><i class="fas fa-lightbulb"></i> Example Scenario</h3>
+                        <div class="example-box">
+                            <h4>Banking Analogy</h4>
+                            <p>Imagine a bank with limited cash reserves. The banker (algorithm) must decide whether to grant loans (resource requests) while ensuring the bank can always meet withdrawal demands from existing customers.</p>
+                            <div class="analogy-grid">
+                                <div class="analogy-item">
+                                    <strong>Bank Cash:</strong> Available Resources
+                                </div>
+                                <div class="analogy-item">
+                                    <strong>Current Loans:</strong> Allocation Matrix
+                                </div>
+                                <div class="analogy-item">
+                                    <strong>Credit Limits:</strong> Maximum Matrix
+                                </div>
+                                <div class="analogy-item">
+                                    <strong>Remaining Credit:</strong> Need Matrix
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h3><i class="fas fa-play"></i> Using This Tool</h3>
+                        <div class="usage-steps">
+                            <div class="usage-step">
+                                <span class="usage-number">1</span>
+                                <p>Set the number of processes and resources in your system</p>
+                            </div>
+                            <div class="usage-step">
+                                <span class="usage-number">2</span>
+                                <p>Choose your input method (table or text) and enter the matrices</p>
+                            </div>
+                            <div class="usage-step">
+                                <span class="usage-number">3</span>
+                                <p>Click "Check Safe Sequence" to analyze the current system state</p>
+                            </div>
+                            <div class="usage-step">
+                                <span class="usage-number">4</span>
+                                <p>Use "Check Process Request" to test specific resource requests</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Configuration Section -->
         <section class="section">

@@ -22,6 +22,34 @@ class BankersAlgorithm {
         document.querySelectorAll('.method-btn').forEach(btn => {
             btn.addEventListener('click', (e) => this.switchInputMethod(e.target.closest('.method-btn').dataset.method));
         });
+
+        // Info modal
+        document.getElementById('infoBtn').addEventListener('click', () => this.showInfoModal());
+        document.getElementById('closeModalBtn').addEventListener('click', () => this.hideInfoModal());
+        
+        // Close modal when clicking outside
+        document.getElementById('infoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'infoModal') {
+                this.hideInfoModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.hideInfoModal();
+            }
+        });
+    }
+
+    showInfoModal() {
+        document.getElementById('infoModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    hideInfoModal() {
+        document.getElementById('infoModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
     }
 
     setupMatrices() {
@@ -781,6 +809,7 @@ class BankersAlgorithm {
             gap: 0.5rem;
             animation: slideIn 0.3s ease-out;
             max-width: 400px;
+            font-family: 'Inter', sans-serif;
         `;
         
         document.body.appendChild(notification);
