@@ -568,93 +568,101 @@ class BankersAlgorithm {
 
             let resultsHTML = '';
             
-            // Step 1: Show request
+            // Step 1: Show request details
             resultsHTML += this.createStep(
                 1,
-                'Resource Request Details',
-                'Analyzing the incoming resource request',
-                `<div class="formula"><strong>Request:</strong> Process P${processId} requests [${request.join(', ')}] resources</div>`
-            );
-
-            // Step 2: Check if request ≤ need
-            let needCheck = true;
-            let needCheckHTML = '<div class="formula"><strong>Validation 1:</strong> Request ≤ Need (Process cannot request more than its remaining need)</div>';
-            for (let i = 0; i < this.resources; i++) {
-                const valid = request[i] <= this.need[processId][i];
-                needCheck = needCheck && valid;
-                needCheckHTML += `<div class="formula">R${i}: ${request[i]} ≤ ${this.need[processId][i]} ${valid ? '✅' : '❌'}</div>`;
-            }
-
-            resultsHTML += this.createStep(
-                2,
-                'Need Validation Check',
-                'Verify that the request does not exceed the process\'s declared maximum need',
-                needCheckHTML + `<div class="status-indicator ${needCheck ? 'status-safe' : 'status-unsafe'}">
-                    <i class="fas fa-${needCheck ? 'check' : 'times'}-circle"></i>
-                    <div>
-                        <strong>Request ≤ Need: ${needCheck ? 'VALID' : 'INVALID'}</strong>
-                        <div style="font-size: 0.9rem; opacity: 0.9;">${needCheck ? 'Process is not requesting more than declared' : 'Process is requesting more than its maximum claim'}</div>
-                    </div>
+                'Resource Request Analysis',
+                'Evaluating the incoming resource request',
+                `<div class="request-summary">
+                    <h4><i class="fas fa-hand-paper"></i> Request Details</h4>
+                    <div class="formula"><strong>Process:</strong> P${processId}</div>
+                    <div class="formula"><strong>Requested Resources:</strong> [${request.join(', ')}]</div>
                 </div>`
             );
 
-            if (!needCheck) {
+            // Step 2: Check Request ≤ Need
+            let needCheckPassed = true;
+            let needCheckHTML = '<div class="validation-check">';
+            needCheckHTML += '<h4><i class="fas fa-clipboard-check"></i> Validation 1: Request ≤ Need</h4>';
+            needCheckHTML += '<p style="color: var(--text-muted); margin-bottom: 1rem;">Verify that the request does not exceed the process\'s remaining need</p>';
+            
+            for (let i = 0; i < this.resources; i++) {
+                const valid = request[i] <= this.need[processId][i];
+                needCheckPassed = needCheckPassed && valid;
+                needCheckHTML += `<div class="check-item ${valid ? 'check-pass' : 'check-fail'}">
+                    <i class="fas fa-${valid ? 'check' : 'times'}"></i>
+                    R${i}: ${request[i]} ≤ ${this.need[processId][i]} ${valid ? '✅' : '❌'}
+                </div>`;
+            }
+            needCheckHTML += '</div>';
+
+            if (!needCheckPassed) {
+                resultsHTML += this.createStep(
+                    2,
+                    'Request Validation Failed',
+                    'The request exceeds the process\'s declared maximum need',
+                    needCheckHTML + `
+                    <div class="final-decision decision-no">
+                        <div class="decision-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="decision-content">
+                            <h3>NO</h3>
+                            <p>Request cannot be granted immediately</p>
+                            <small>Reason: Request exceeds the process's remaining need</small>
+                        </div>
+                    </div>`
+                );
+                this.displayResults(resultsHTML);
+                this.showNotification('Request denied - exceeds process need', 'error');
+                return;
+            }
+
+            // Step 3: Check Request ≤ Available
+            let availableCheckPassed = true;
+            let availableCheckHTML = '<div class="validation-check">';
+            availableCheckHTML += '<h4><i class="fas fa-cubes"></i> Validation 2: Request ≤ Available</h4>';
+            availableCheckHTML += '<p style="color: var(--text-muted); margin-bottom: 1rem;">Verify that sufficient resources are currently available</p>';
+            
+            for (let i = 0; i < this.resources; i++) {
+                const valid = request[i] <= this.available[i];
+                availableCheckPassed = availableCheckPassed && valid;
+                availableCheckHTML += `<div class="check-item ${valid ? 'check-pass' : 'check-fail'}">
+                    <i class="fas fa-${valid ? 'check' : 'times'}"></i>
+                    R${i}: ${request[i]} ≤ ${this.available[i]} ${valid ? '✅' : '❌'}
+                </div>`;
+            }
+            availableCheckHTML += '</div>';
+
+            resultsHTML += this.createStep(
+                2,
+                'Request Validation Checks',
+                'Checking if the request meets basic requirements',
+                needCheckHTML + availableCheckHTML
+            );
+
+            if (!availableCheckPassed) {
                 resultsHTML += this.createStep(
                     3,
                     'Final Decision',
                     'Request evaluation completed',
-                    `<div class="status-indicator status-denied">
-                        <i class="fas fa-times-circle"></i>
-                        <div>
-                            <strong>Request DENIED</strong>
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Exceeds maximum declared need</div>
+                    `<div class="final-decision decision-no">
+                        <div class="decision-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="decision-content">
+                            <h3>NO</h3>
+                            <p>Request cannot be granted immediately</p>
+                            <small>Reason: Insufficient resources currently available</small>
                         </div>
                     </div>`
                 );
                 this.displayResults(resultsHTML);
+                this.showNotification('Request denied - insufficient resources', 'error');
                 return;
             }
 
-            // Step 3: Check if request ≤ available
-            let availableCheck = true;
-            let availableCheckHTML = '<div class="formula"><strong>Validation 2:</strong> Request ≤ Available (System has enough resources)</div>';
-            for (let i = 0; i < this.resources; i++) {
-                const valid = request[i] <= this.available[i];
-                availableCheck = availableCheck && valid;
-                availableCheckHTML += `<div class="formula">R${i}: ${request[i]} ≤ ${this.available[i]} ${valid ? '✅' : '❌'}</div>`;
-            }
-
-            resultsHTML += this.createStep(
-                3,
-                'Resource Availability Check',
-                'Verify that sufficient resources are currently available',
-                availableCheckHTML + `<div class="status-indicator ${availableCheck ? 'status-safe' : 'status-unsafe'}">
-                    <i class="fas fa-${availableCheck ? 'check' : 'times'}-circle"></i>
-                    <div>
-                        <strong>Request ≤ Available: ${availableCheck ? 'VALID' : 'INVALID'}</strong>
-                        <div style="font-size: 0.9rem; opacity: 0.9;">${availableCheck ? 'Sufficient resources are available' : 'Insufficient resources currently available'}</div>
-                    </div>
-                </div>`
-            );
-
-            if (!availableCheck) {
-                resultsHTML += this.createStep(
-                    4,
-                    'Final Decision',
-                    'Request evaluation completed',
-                    `<div class="status-indicator status-denied">
-                        <i class="fas fa-times-circle"></i>
-                        <div>
-                            <strong>Request DENIED</strong>
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Insufficient resources available</div>
-                        </div>
-                    </div>`
-                );
-                this.displayResults(resultsHTML);
-                return;
-            }
-
-            // Step 4: Simulate allocation and check safety
+            // Step 4: Safety simulation (silent)
             const newAllocation = this.allocation.map(row => [...row]);
             const newAvailable = [...this.available];
 
@@ -672,7 +680,7 @@ class BankersAlgorithm {
                 }
             }
 
-            // Check safety with new state
+            // Check safety with new state (silently)
             const originalAllocation = this.allocation;
             const originalAvailable = this.available;
             const originalNeed = this.need;
@@ -683,55 +691,94 @@ class BankersAlgorithm {
 
             const safetyResult = this.checkSafeState();
 
-            resultsHTML += this.createStep(
-                4,
-                'Safety Simulation',
-                'Simulate the allocation and test if the system remains in a safe state',
-                `<div class="formula"><strong>Simulated Changes:</strong></div>
-                <div class="formula">New Allocation[${processId}] = [${originalAllocation[processId].join(', ')}] + [${request.join(', ')}] = [${newAllocation[processId].join(', ')}]</div>
-                <div class="formula">New Available = [${originalAvailable.join(', ')}] - [${request.join(', ')}] = [${newAvailable.join(', ')}]</div>
-                <br>
-                ${this.displaySafetyCheck(safetyResult)}`
-            );
-
-            // Step 5: Final decision
-            if (safetyResult.isSafe) {
-                resultsHTML += this.createStep(
-                    5,
-                    'Final Decision',
-                    'All checks passed - request can be safely granted',
-                    `<div class="status-indicator status-granted">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <strong>Request GRANTED</strong>
-                            <div style="font-size: 0.9rem; opacity: 0.9;">System remains in safe state after allocation</div>
-                        </div>
-                    </div>`
-                );
-            } else {
-                resultsHTML += this.createStep(
-                    5,
-                    'Final Decision',
-                    'Safety check failed - request must be denied',
-                    `<div class="status-indicator status-denied">
-                        <i class="fas fa-times-circle"></i>
-                        <div>
-                            <strong>Request DENIED</strong>
-                            <div style="font-size: 0.9rem; opacity: 0.9;">Would lead to unsafe state (potential deadlock)</div>
-                        </div>
-                    </div>`
-                );
-            }
-
             // Restore original state
             this.allocation = originalAllocation;
             this.available = originalAvailable;
             this.need = originalNeed;
 
+            // Step 3: Final decision with optional detailed analysis
+            if (safetyResult.isSafe) {
+                resultsHTML += this.createStep(
+                    3,
+                    'Final Decision',
+                    'All validations passed and safety check completed',
+                    `<div class="final-decision decision-yes">
+                        <div class="decision-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="decision-content">
+                            <h3>YES</h3>
+                            <p>Request can be granted immediately</p>
+                            <small>System will remain in a safe state after allocation</small>
+                        </div>
+                    </div>
+                    <div class="optional-analysis">
+                        <button id="showSafeSequenceBtn" class="btn btn-secondary">
+                            <i class="fas fa-eye"></i>
+                            Show Safe Sequence Analysis
+                        </button>
+                    </div>`
+                );
+            } else {
+                resultsHTML += this.createStep(
+                    3,
+                    'Final Decision',
+                    'Safety check failed - request must be denied',
+                    `<div class="final-decision decision-no">
+                        <div class="decision-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="decision-content">
+                            <h3>NO</h3>
+                            <p>Request cannot be granted immediately</p>
+                            <small>Reason: Would lead to an unsafe state (potential deadlock)</small>
+                        </div>
+                    </div>`
+                );
+            }
+
             this.displayResults(resultsHTML);
-            this.showNotification('Request analysis completed!', 'success');
+
+            // Add event listener for optional safe sequence button
+            if (safetyResult.isSafe) {
+                setTimeout(() => {
+                    const showSafeSequenceBtn = document.getElementById('showSafeSequenceBtn');
+                    if (showSafeSequenceBtn) {
+                        showSafeSequenceBtn.addEventListener('click', () => {
+                            this.showDetailedSafetyAnalysis(processId, request, newAllocation, newAvailable, newNeed, safetyResult);
+                        });
+                    }
+                }, 100);
+                this.showNotification('Request can be granted!', 'success');
+            } else {
+                this.showNotification('Request denied - would cause unsafe state', 'error');
+            }
+
         } catch (error) {
             this.showNotification('Request analysis failed: ' + error.message, 'error');
+        }
+    }
+
+    showDetailedSafetyAnalysis(processId, request, newAllocation, newAvailable, newNeed, safetyResult) {
+        let detailedHTML = `
+            <div class="detailed-analysis fade-in">
+                <h4><i class="fas fa-microscope"></i> Detailed Safety Analysis</h4>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Step-by-step breakdown of the safety check after simulated allocation</p>
+                
+                <div class="simulation-details">
+                    <h5><i class="fas fa-cogs"></i> Simulated Changes</h5>
+                    <div class="formula">New Allocation[${processId}] = [${this.allocation[processId].join(', ')}] + [${request.join(', ')}] = [${newAllocation[processId].join(', ')}]</div>
+                    <div class="formula">New Available = [${this.available.join(', ')}] - [${request.join(', ')}] = [${newAvailable.join(', ')}]</div>
+                </div>
+
+                ${this.displaySafetyCheck(safetyResult)}
+            </div>
+        `;
+
+        // Find the optional analysis section and replace it
+        const optionalAnalysis = document.querySelector('.optional-analysis');
+        if (optionalAnalysis) {
+            optionalAnalysis.innerHTML = detailedHTML;
         }
     }
 
