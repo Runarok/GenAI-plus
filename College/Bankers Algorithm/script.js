@@ -14,8 +14,8 @@ class BankersAlgorithm {
     initializeEventListeners() {
         document.getElementById('setupBtn').addEventListener('click', () => this.setupMatrices());
         document.getElementById('loadExampleBtn').addEventListener('click', () => this.loadExample());
-        document.getElementById('checkSafeSequenceBtn').addEventListener('click', () => this.runSafeSequenceAnalysis());
-        document.getElementById('checkProcessRequestBtn').addEventListener('click', () => this.showRequestInput());
+        document.getElementById('checkSafeSequenceBtn').addEventListener('click', () => this.showSafeSequenceAnalysis());
+        document.getElementById('checkProcessRequestBtn').addEventListener('click', () => this.showRequestAnalysis());
         document.getElementById('processRequestBtn').addEventListener('click', () => this.processRequest());
         
         // Input method selection
@@ -119,7 +119,53 @@ class BankersAlgorithm {
         requestVectorDiv.innerHTML = html;
     }
 
-    showRequestInput() {
+    showSafeSequenceAnalysis() {
+        if (!this.readInputData()) {
+            return;
+        }
+
+        try {
+            this.calculateNeed();
+            
+            // Hide request section and show results section
+            this.hideSection('requestInputSection');
+            this.showSection('resultsSection');
+            
+            let resultsHTML = '';
+            
+            // Step 1: Show input matrices
+            resultsHTML += this.createStep(
+                1,
+                'Input Data Overview',
+                'Review the system configuration and input matrices',
+                this.displayInputMatrices()
+            );
+
+            // Step 2: Calculate Need matrix
+            resultsHTML += this.createStep(
+                2,
+                'Need Matrix Calculation',
+                'Calculate the remaining resource needs for each process',
+                this.displayNeedCalculation()
+            );
+
+            // Step 3: Safety algorithm
+            const safetyResult = this.checkSafeState();
+            resultsHTML += this.createStep(
+                3,
+                'Safety Algorithm Execution',
+                'Determine if the current state is safe using the Banker\'s Algorithm',
+                this.displaySafetyCheck(safetyResult)
+            );
+
+            this.displayResults(resultsHTML);
+            this.showNotification('Safe sequence analysis completed successfully!', 'success');
+        } catch (error) {
+            this.showNotification('Analysis failed: ' + error.message, 'error');
+        }
+    }
+
+    showRequestAnalysis() {
         if (!this.readInputData()) {
             return;
         }
@@ -127,7 +173,11 @@ class BankersAlgorithm {
         try {
             this.calculateNeed();
             this.setupRequestSection();
+            
+            // Hide results section and show request section
+            this.hideSection('resultsSection');
             this.showSection('requestInputSection');
+            
             this.showNotification('Request input section is ready!', 'success');
         } catch (error) {
             this.showNotification('Error preparing request section: ' + error.message, 'error');
@@ -298,48 +348,6 @@ class BankersAlgorithm {
                     throw new Error(`Invalid data: Process P${i} has allocated more than maximum for resource R${j}`);
                 }
             }
-        }
-    }
-
-    runSafeSequenceAnalysis() {
-        if (!this.readInputData()) {
-            return;
-        }
-
-        try {
-            this.calculateNeed();
-            
-            let resultsHTML = '';
-            
-            // Step 1: Show input matrices
-            resultsHTML += this.createStep(
-                1,
-                'Input Data Overview',
-                'Review the system configuration and input matrices',
-                this.displayInputMatrices()
-            );
-
-            // Step 2: Calculate Need matrix
-            resultsHTML += this.createStep(
-                2,
-                'Need Matrix Calculation',
-                'Calculate the remaining resource needs for each process',
-                this.displayNeedCalculation()
-            );
-
-            // Step 3: Safety algorithm
-            const safetyResult = this.checkSafeState();
-            resultsHTML += this.createStep(
-                3,
-                'Safety Algorithm Execution',
-                'Determine if the current state is safe using the Banker\'s Algorithm',
-                this.displaySafetyCheck(safetyResult)
-            );
-
-            this.displayResults(resultsHTML);
-            this.showNotification('Safe sequence analysis completed successfully!', 'success');
-        } catch (error) {
-            this.showNotification('Analysis failed: ' + error.message, 'error');
         }
     }
 
@@ -525,6 +533,10 @@ class BankersAlgorithm {
             for (let i = 0; i < this.resources; i++) {
                 request[i] = parseInt(document.getElementById(`request_${i}`).value) || 0;
             }
+
+            // Hide request input and show results
+            this.hideSection('requestInputSection');
+            this.showSection('resultsSection');
 
             let resultsHTML = '';
             
@@ -731,6 +743,11 @@ class BankersAlgorithm {
         section.style.display = 'block';
         section.classList.add('fade-in');
         section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    hideSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        section.style.display = 'none';
     }
 
     displayResults(html) {
