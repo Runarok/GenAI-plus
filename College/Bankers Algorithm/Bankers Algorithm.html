@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banker's Algorithm Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-shield-alt"></i> Banker's Algorithm Analyzer</h1>
+                <p>Deadlock avoidance algorithm with step-by-step analysis</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="card input-section">
+                <div class="card-header">
+                    <h2><i class="fas fa-cog"></i> System Configuration</h2>
+                </div>
+                <div class="card-body">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="processes">Number of Processes</label>
+                            <input type="number" id="processes" min="1" max="10" value="5">
+                        </div>
+                        <div class="input-group">
+                            <label for="resources">Number of Resources</label>
+                            <input type="number" id="resources" min="1" max="10" value="3">
+                        </div>
+                    </div>
+                    <button id="setupBtn" class="btn btn-primary">
+                        <i class="fas fa-wrench"></i> Setup Matrices
+                    </button>
+                </div>
+            </section>
+
+            <!-- Matrices Input Section -->
+            <section class="card matrices-section" id="matricesSection" style="display: none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-table"></i> Input Matrices</h2>
+                </div>
+                <div class="card-body">
+                    <div class="matrices-grid">
+                        <div class="matrix-container">
+                            <h3>Allocation Matrix</h3>
+                            <div id="allocationMatrix"></div>
+                        </div>
+                        <div class="matrix-container">
+                            <h3>Max Matrix</h3>
+                            <div id="maxMatrix"></div>
+                        </div>
+                        <div class="matrix-container">
+                            <h3>Available Vector</h3>
+                            <div id="availableVector"></div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="loadExampleBtn" class="btn btn-secondary">
+                            <i class="fas fa-file-import"></i> Load Example
+                        </button>
+                        <button id="analyzeBtn" class="btn btn-success">
+                            <i class="fas fa-play"></i> Run Analysis
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Request Section -->
+            <section class="card request-section" id="requestSection" style="display: none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-hand-paper"></i> Process Request</h2>
+                </div>
+                <div class="card-body">
+                    <div class="request-input">
+                        <div class="input-group">
+                            <label for="requestProcess">Process</label>
+                            <select id="requestProcess"></select>
+                        </div>
+                        <div class="request-vector">
+                            <label>Request Vector</label>
+                            <div id="requestVector"></div>
+                        </div>
+                    </div>
+                    <button id="processRequestBtn" class="btn btn-warning">
+                        <i class="fas fa-check-circle"></i> Process Request
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="card results-section" id="resultsSection" style="display: none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-line"></i> Analysis Results</h2>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContent"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
