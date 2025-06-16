@@ -29,16 +29,18 @@
                 <h2><i class="fas fa-cog"></i> System Configuration</h2>
                 <p>Set up the number of processes and resources in your system</p>
             </div>
-            <div class="config-grid">
-                <div class="config-item">
-                    <label for="processes">Processes</label>
-                    <input type="number" id="processes" min="1" max="10" value="5">
-                    <span class="config-hint">Number of processes (1-10)</span>
-                </div>
-                <div class="config-item">
-                    <label for="resources">Resources</label>
-                    <input type="number" id="resources" min="1" max="10" value="3">
-                    <span class="config-hint">Number of resource types (1-10)</span>
+            <div class="config-container">
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label for="processes">Processes</label>
+                        <input type="number" id="processes" min="1" max="10" value="5">
+                        <span class="config-hint">Number of processes (1-10)</span>
+                    </div>
+                    <div class="config-item">
+                        <label for="resources">Resources</label>
+                        <input type="number" id="resources" min="1" max="10" value="3">
+                        <span class="config-hint">Number of resource types (1-10)</span>
+                    </div>
                 </div>
                 <div class="config-action">
                     <button id="setupBtn" class="btn btn-primary">
@@ -133,15 +135,29 @@
                     <i class="fas fa-file-import"></i>
                     Load Example Data
                 </button>
-                <button id="analyzeBtn" class="btn btn-success">
-                    <i class="fas fa-play"></i>
-                    Run Analysis
+            </div>
+        </section>
+
+        <!-- Analysis Actions Section -->
+        <section class="section" id="analysisActionsSection" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-play"></i> Analysis Options</h2>
+                <p>Choose the type of analysis you want to perform</p>
+            </div>
+            <div class="analysis-actions">
+                <button id="checkSafeSequenceBtn" class="btn btn-success">
+                    <i class="fas fa-shield-check"></i>
+                    Check Safe Sequence
+                </button>
+                <button id="checkProcessRequestBtn" class="btn btn-warning">
+                    <i class="fas fa-hand-paper"></i>
+                    Check Process Request
                 </button>
             </div>
         </section>
 
-        <!-- Request Processing Section -->
-        <section class="section" id="requestSection" style="display: none;">
+        <!-- Request Input Section -->
+        <section class="section" id="requestInputSection" style="display: none;">
             <div class="section-header">
                 <h2><i class="fas fa-hand-paper"></i> Process Request</h2>
                 <p>Test if a specific resource request can be safely granted</p>
@@ -157,10 +173,12 @@
                         <div id="requestVector" class="vector-input"></div>
                     </div>
                 </div>
-                <button id="processRequestBtn" class="btn btn-warning">
-                    <i class="fas fa-check-circle"></i>
-                    Process Request
-                </button>
+                <div class="request-action">
+                    <button id="processRequestBtn" class="btn btn-warning">
+                        <i class="fas fa-check-circle"></i>
+                        Process Request
+                    </button>
+                </div>
             </div>
         </section>
 

@@ -14,7 +14,8 @@ class BankersAlgorithm {
     initializeEventListeners() {
         document.getElementById('setupBtn').addEventListener('click', () => this.setupMatrices());
         document.getElementById('loadExampleBtn').addEventListener('click', () => this.loadExample());
-        document.getElementById('analyzeBtn').addEventListener('click', () => this.runAnalysis());
+        document.getElementById('checkSafeSequenceBtn').addEventListener('click', () => this.runSafeSequenceAnalysis());
+        document.getElementById('checkProcessRequestBtn').addEventListener('click', () => this.showRequestInput());
         document.getElementById('processRequestBtn').addEventListener('click', () => this.processRequest());
         
         // Input method selection
@@ -35,8 +36,7 @@ class BankersAlgorithm {
         this.showSection('inputMethodSection');
         this.showSection('dataInputSection');
         this.createInputs();
-        this.setupRequestSection();
-        this.showSection('requestSection');
+        this.showSection('analysisActionsSection');
     }
 
     switchInputMethod(method) {
@@ -117,6 +117,21 @@ class BankersAlgorithm {
             html += `<input type="number" id="request_${i}" min="0" value="0" placeholder="R${i}">`;
         }
         requestVectorDiv.innerHTML = html;
+    }
+
+    showRequestInput() {
+        if (!this.readInputData()) {
+            return;
+        }
+
+        try {
+            this.calculateNeed();
+            this.setupRequestSection();
+            this.showSection('requestInputSection');
+            this.showNotification('Request input section is ready!', 'success');
+        } catch (error) {
+            this.showNotification('Error preparing request section: ' + error.message, 'error');
+        }
     }
 
     loadExample() {
@@ -286,7 +301,7 @@ class BankersAlgorithm {
         }
     }
 
-    runAnalysis() {
+    runSafeSequenceAnalysis() {
         if (!this.readInputData()) {
             return;
         }
@@ -322,7 +337,7 @@ class BankersAlgorithm {
             );
 
             this.displayResults(resultsHTML);
-            this.showNotification('Analysis completed successfully!', 'success');
+            this.showNotification('Safe sequence analysis completed successfully!', 'success');
         } catch (error) {
             this.showNotification('Analysis failed: ' + error.message, 'error');
         }
