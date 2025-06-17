@@ -1,10 +1,3 @@
-// ===================================
-// PAGING ALGORITHM SIMULATOR - MAIN JAVASCRIPT
-// ===================================
-
-// ===================================
-// ALGORITHM CONTENT DATA
-// ===================================
 const ALGORITHM_CONTENT = {
   fifo: {
     title: 'FIFO (First In First Out)',
@@ -100,11 +93,11 @@ const ALGORITHM_CONTENT = {
         { step: 1, page: 7, frame1: 7, frame2: '-', frame3: '-', status: 'FAULT', explanation: 'First page, goes to empty frame 1' },
         { step: 2, page: 0, frame1: 7, frame2: 0, frame3: '-', status: 'FAULT', explanation: 'Second page, goes to empty frame 2' },
         { step: 3, page: 1, frame1: 7, frame2: 0, frame3: 1, status: 'FAULT', explanation: 'Third page, goes to empty frame 3' },
-        { step: 4, page: 2, frame1: 2, frame2: 0, frame3: 1, status: 'FAULT', explanation: 'Replace page 7 (used at step 18) with page 2' },
+        { step: 4, page: 2, frame1: 2, frame2: 0, frame3: 1, status: 'FAULT', explanation: 'Replace page 7 (next used at step 18) with page 2' },
         { step: 5, page: 0, frame1: 2, frame2: 0, frame3: 1, status: 'HIT', explanation: 'Page 0 already in memory' },
-        { step: 6, page: 3, frame1: 2, frame2: 0, frame3: 3, status: 'FAULT', explanation: 'Replace page 1 (used at step 14) with page 3' },
+        { step: 6, page: 3, frame1: 2, frame2: 0, frame3: 3, status: 'FAULT', explanation: 'Replace page 1 (next used at step 14) with page 3' },
         { step: 7, page: 0, frame1: 2, frame2: 0, frame3: 3, status: 'HIT', explanation: 'Page 0 already in memory' },
-        { step: 8, page: 4, frame1: 2, frame2: 4, frame3: 3, status: 'FAULT', explanation: 'Replace page 0 (used at step 11) with page 4' },
+        { step: 8, page: 4, frame1: 2, frame2: 4, frame3: 3, status: 'FAULT', explanation: 'Replace page 0 (next used at step 11) with page 4' },
         { step: 9, page: 2, frame1: 2, frame2: 4, frame3: 3, status: 'HIT', explanation: 'Page 2 already in memory' },
         { step: 10, page: 3, frame1: 2, frame2: 4, frame3: 3, status: 'HIT', explanation: 'Page 3 already in memory' }
       ]
@@ -130,9 +123,6 @@ const ALGORITHM_CONTENT = {
   }
 };
 
-// ===================================
-// MAIN SIMULATOR CLASS
-// ===================================
 class PagingSimulator {
   constructor() {
     this.currentStep = 0;
@@ -146,16 +136,11 @@ class PagingSimulator {
     this.updateAlgorithmInfo();
   }
 
-  // ===================================
-  // INITIALIZATION METHODS
-  // ===================================
   initializeElements() {
-    // Input elements
     this.referenceStringInput = document.getElementById('reference-string');
     this.frameCountInput = document.getElementById('frame-count');
     this.algorithmSelect = document.getElementById('algorithm');
     
-    // Button elements
     this.stepBtn = document.getElementById('step-btn');
     this.runBtn = document.getElementById('run-btn');
     this.resetBtn = document.getElementById('reset-btn');
@@ -163,14 +148,12 @@ class PagingSimulator {
     this.prevStepBtn = document.getElementById('prev-step');
     this.toggleInfoBtn = document.getElementById('toggle-info-btn');
     
-    // Display elements
     this.resultsContainer = document.getElementById('results-container');
     this.stepControls = document.getElementById('step-controls');
     this.stepInfo = document.getElementById('step-info');
     this.stepExplanation = document.getElementById('step-explanation');
     this.explanationContent = document.getElementById('explanation-content');
     
-    // Info elements
     this.infoPanel = document.getElementById('info-panel');
     this.infoAlgorithmSelect = document.getElementById('info-algorithm');
     this.algorithmDetails = document.getElementById('algorithm-details');
@@ -185,16 +168,12 @@ class PagingSimulator {
     this.toggleInfoBtn.addEventListener('click', () => this.toggleInfo());
     this.infoAlgorithmSelect.addEventListener('change', () => this.updateAlgorithmInfo());
     
-    // Sync algorithm selects
     this.algorithmSelect.addEventListener('change', () => {
       this.infoAlgorithmSelect.value = this.algorithmSelect.value;
       this.updateAlgorithmInfo();
     });
   }
 
-  // ===================================
-  // INFO PANEL METHODS
-  // ===================================
   toggleInfo() {
     this.isInfoVisible = !this.isInfoVisible;
     this.infoPanel.style.display = this.isInfoVisible ? 'block' : 'none';
@@ -259,7 +238,6 @@ class PagingSimulator {
         </div>
     `;
 
-    // Add implementation methods for LRU
     if (content.implementationMethods) {
       html += `
         <div class="detail-section">
@@ -275,7 +253,6 @@ class PagingSimulator {
       `;
     }
 
-    // Add lookahead analysis for Optimal
     if (content.lookaheadAnalysis) {
       html += `
         <div class="detail-section">
@@ -313,7 +290,6 @@ class PagingSimulator {
         </div>
     `;
 
-    // Add practical applications for Optimal
     if (content.practicalApplications) {
       html += `
         <div class="detail-section">
@@ -336,9 +312,6 @@ class PagingSimulator {
     return html;
   }
 
-  // ===================================
-  // INPUT VALIDATION METHODS
-  // ===================================
   parseReferenceString(input) {
     return input.split(',')
       .map(x => x.trim())
@@ -364,9 +337,6 @@ class PagingSimulator {
     return { referenceString, frameCount };
   }
 
-  // ===================================
-  // SIMULATION CONTROL METHODS
-  // ===================================
   startStepMode() {
     const inputs = this.validateInputs();
     if (!inputs) return;
@@ -391,18 +361,14 @@ class PagingSimulator {
     this.hideStepExplanation();
   }
 
-  // ===================================
-  // CORE SIMULATION ALGORITHM
-  // ===================================
   runSimulation(referenceString, frameCount, algorithm) {
     const steps = [];
     const frames = new Array(frameCount).fill(null);
     let pageFaults = 0;
     let pageHits = 0;
     
-    // Algorithm-specific data structures
-    let accessOrder = []; // For LRU
-    let fifoIndex = 0; // For FIFO
+    let accessOrder = [];
+    let fifoIndex = 0;
     
     referenceString.forEach((page, index) => {
       const step = {
@@ -416,16 +382,13 @@ class PagingSimulator {
         explanation: ''
       };
       
-      // Check if page is already in frames
       const pageIndex = frames.indexOf(page);
       
       if (pageIndex !== -1) {
-        // Page hit
         step.isPageFault = false;
         pageHits++;
         
         if (algorithm === 'lru') {
-          // Update access order for LRU
           accessOrder = accessOrder.filter(p => p !== page);
           accessOrder.push(page);
           step.explanation = `Page ${page} is already in memory (Page Hit). Updated access order for LRU: [${accessOrder.join(', ')}]`;
@@ -435,22 +398,18 @@ class PagingSimulator {
         
         step.framesAfter = [...frames];
       } else {
-        // Page fault
         step.isPageFault = true;
         pageFaults++;
         
-        // Find empty frame or determine which page to replace
         const emptyFrameIndex = frames.indexOf(null);
         
         if (emptyFrameIndex !== -1) {
-          // Use empty frame
           frames[emptyFrameIndex] = page;
           if (algorithm === 'lru') {
             accessOrder.push(page);
           }
           step.explanation = `Page ${page} not in memory (Page Fault). Loaded into empty frame ${emptyFrameIndex + 1}.`;
         } else {
-          // Need to replace a page
           let replaceIndex;
           
           switch (algorithm) {
@@ -488,7 +447,6 @@ class PagingSimulator {
       steps.push(step);
     });
     
-    // Add summary statistics
     const summary = {
       totalReferences: referenceString.length,
       pageFaults: pageFaults,
@@ -509,7 +467,6 @@ class PagingSimulator {
     frames.forEach((frame, index) => {
       let nextUse = -1;
       
-      // Find next occurrence of this frame in future references
       for (let i = currentIndex + 1; i < referenceString.length; i++) {
         if (referenceString[i] === frame) {
           nextUse = i;
@@ -523,14 +480,12 @@ class PagingSimulator {
         distance: nextUse === -1 ? '∞' : nextUse - currentIndex
       });
       
-      // If page is never used again, replace it immediately
       if (nextUse === -1) {
         replaceIndex = index;
         explanation = `Page ${frame} will never be used again.`;
         return;
       }
       
-      // Keep track of the page that will be used farthest in the future
       if (nextUse > farthestIndex) {
         farthestIndex = nextUse;
         replaceIndex = index;
@@ -545,9 +500,6 @@ class PagingSimulator {
     return { index: replaceIndex, explanation };
   }
 
-  // ===================================
-  // DISPLAY METHODS
-  // ===================================
   displayStepMode() {
     this.stepControls.style.display = 'flex';
     this.resultsContainer.innerHTML = this.createTableHTML(this.simulationSteps.steps, true);
@@ -572,7 +524,6 @@ class PagingSimulator {
               <th>Page</th>
     `;
     
-    // Add frame columns
     for (let i = 0; i < frameCount; i++) {
       html += `<th>Frame ${i + 1}</th>`;
     }
@@ -597,7 +548,6 @@ class PagingSimulator {
             <td><strong>${step.page}</strong></td>
         `;
         
-        // Add frame cells
         const framesToShow = step.framesAfter;
         for (let i = 0; i < frameCount; i++) {
           const frameValue = framesToShow[i];
@@ -605,7 +555,6 @@ class PagingSimulator {
           html += `<td class="frame-cell ${cellClass}">${frameValue || '-'}</td>`;
         }
         
-        // Status and replaced page
         const statusClass = step.isPageFault ? 'page-fault' : 'page-hit';
         const statusText = step.isPageFault ? 'FAULT' : 'HIT';
         const replacedText = step.replacedPage !== null ? step.replacedPage : '-';
@@ -656,9 +605,6 @@ class PagingSimulator {
     this.resultsContainer.insertAdjacentHTML('beforeend', statsHTML);
   }
 
-  // ===================================
-  // STEP EXPLANATION METHODS
-  // ===================================
   showStepExplanation() {
     this.stepExplanation.style.display = 'block';
     this.updateStepExplanation();
@@ -689,9 +635,6 @@ class PagingSimulator {
     this.explanationContent.innerHTML = explanationHTML;
   }
 
-  // ===================================
-  // STEP NAVIGATION METHODS
-  // ===================================
   updateStepDisplay() {
     if (!this.isStepMode) return;
     
@@ -699,11 +642,9 @@ class PagingSimulator {
     this.prevStepBtn.disabled = this.currentStep === 0;
     this.nextStepBtn.disabled = this.currentStep >= this.totalSteps - 1;
     
-    // Update table to show only steps up to current
     this.resultsContainer.innerHTML = this.createTableHTML(this.simulationSteps.steps, true);
     this.addStatsHTML(this.simulationSteps.summary);
     
-    // Update step explanation
     this.updateStepExplanation();
   }
 
@@ -721,9 +662,6 @@ class PagingSimulator {
     }
   }
 
-  // ===================================
-  // RESET METHOD
-  // ===================================
   reset() {
     this.referenceStringInput.value = '';
     this.frameCountInput.value = '3';
@@ -742,9 +680,6 @@ class PagingSimulator {
   }
 }
 
-// ===================================
-// INITIALIZE APPLICATION
-// ===================================
 document.addEventListener('DOMContentLoaded', () => {
   new PagingSimulator();
 });
