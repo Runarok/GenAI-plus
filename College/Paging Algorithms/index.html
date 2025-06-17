@@ -5,7 +5,13 @@
     <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Paging Algorithm Simulator</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/responsive.css">
   </head>
   <body>
     <div class="container">
@@ -25,7 +31,7 @@
           <div class="input-group">
             <label for="reference-string">Page Reference String:</label>
             <input type="text" id="reference-string" placeholder="e.g., 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1" />
-            <small>Enter page numbers separated by commas</small>
+            <small>Enter page numbers separated by commas or dots</small>
           </div>
 
           <div class="input-group">
@@ -102,6 +108,11 @@
       </div>
     </div>
 
-    <script src="main.js"></script>
+    <!-- JavaScript Files -->
+    <script src="js/utils.js"></script>
+    <script src="js/algorithms.js"></script>
+    <script src="js/algorithm-content.js"></script>
+    <script src="js/ui-manager.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
