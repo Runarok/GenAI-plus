@@ -14,13 +14,14 @@ const menuData = [
     id: "college",
     title: "College",
     links: [
-      { label: "CPU Scheduler", url: "College/CPU Scheduler/index.html", desc: "Visualize CPU Scheduler techniques." },
-      { label: "Paging Algorithms", url: "College/Paging Algorithms/Paging Algorithms.html", desc: "Visualize memory paging techniques." },
-      { label: "Cipher Programs", url: "College/Cipher Programs/Cipher Programs.html", desc: "Basic cryptographic ciphers demo." },
-      { label: "Memory Allocation", url: "College/Memory Allocation/Memory Allocation.html", desc: "Visualize Memory Allocation techniques." },
-      { label: "Internet of Things", url: "College/LABS/Internet of Things/index.html", desc: "IoT experiments and implementations." },
-      { label: "Embedded Systems", url: "College/LABS/Embedded Systems/Embedded Systems.html", desc: "Explore embedded systems projects." }
-    ]
+  { label: "CPU Scheduler", url: "College/CPU Scheduler/index.html", desc: "Visualize CPU scheduling algorithms." },
+  { label: "Paging Algorithms", url: "College/Paging Algorithms/index.html", desc: "Demonstrate memory paging techniques." },
+  { label: "Memory Allocation", url: "College/Memory Allocation/index.html", desc: "Explore memory allocation methods." },
+  { label: "Bankers Algorithm", url: "College/Memory Allocation/index.html", desc: "Simulate Banker's deadlock avoidance." },
+  { label: "Cipher Programs", url: "College/Cipher Programs/index.html", desc: "Demo classical cryptographic ciphers." },
+  { label: "Internet of Things", url: "College/LABS/Internet of Things/index.html", desc: "Hands-on IoT projects and demos." },
+  { label: "Embedded Systems", url: "College/LABS/Embedded Systems/index.html", desc: "Explore embedded system projects." }
+]
   },
   {
     id: "tools",
