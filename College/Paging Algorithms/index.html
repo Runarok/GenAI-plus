@@ -76,7 +76,7 @@
         
         <div class="info-section">
           <h3>Overview</h3>
-          <p>Page replacement algorithms are crucial components of virtual memory management in operating systems. When physical memory is full and a new page needs to be loaded, these algorithms determine which existing page should be removed to make space. The choice of algorithm significantly impacts system performance, as it affects the frequency of page faults and overall memory access patterns.</p>
+          <p>Page replacement algorithms are crucial components of virtual memory management in operating systems. When physical memory is full and a new page needs to be loaded, these algorithms determine which existing page should be removed to make space.</p>
           
           <p><strong>Key Concepts:</strong></p>
           <ul>
@@ -89,7 +89,7 @@
 
         <div class="info-section">
           <label for="info-algorithm">Select Algorithm for Details:</label>
-          <select id="info-algorithm">
+          <select id="info-algorithm" class="styled-select">
             <option value="fifo">FIFO (First In First Out)</option>
             <option value="lru">LRU (Least Recently Used)</option>
             <option value="optimal">Optimal</option>
@@ -97,196 +97,7 @@
         </div>
 
         <div id="algorithm-details" class="algorithm-details">
-          <div id="fifo-details" class="algorithm-detail active">
-            <h4>FIFO (First In First Out)</h4>
-            
-            <div class="detail-section">
-              <h5>Strategy</h5>
-              <p>FIFO replaces the page that has been in memory the longest, regardless of how recently or frequently it has been used. It maintains a simple queue structure where pages are added to the rear and removed from the front.</p>
-            </div>
-
-            <div class="detail-section">
-              <h5>How It Works</h5>
-              <ol>
-                <li>When a page fault occurs and all frames are occupied, remove the page at the front of the queue</li>
-                <li>Add the new page to the rear of the queue</li>
-                <li>The queue maintains the order in which pages were loaded into memory</li>
-              </ol>
-            </div>
-
-            <div class="detail-section">
-              <h5>Detailed Example</h5>
-              <p><strong>Reference String:</strong> 7, 0, 1, 2, 0, 3, 0, 4 (3 frames)</p>
-              <div class="example-table">
-                <table>
-                  <tr><th>Step</th><th>Page</th><th>Frame 1</th><th>Frame 2</th><th>Frame 3</th><th>Status</th><th>Explanation</th></tr>
-                  <tr><td>1</td><td>7</td><td>7</td><td>-</td><td>-</td><td>FAULT</td><td>First page, goes to empty frame 1</td></tr>
-                  <tr><td>2</td><td>0</td><td>7</td><td>0</td><td>-</td><td>FAULT</td><td>Second page, goes to empty frame 2</td></tr>
-                  <tr><td>3</td><td>1</td><td>7</td><td>0</td><td>1</td><td>FAULT</td><td>Third page, goes to empty frame 3</td></tr>
-                  <tr><td>4</td><td>2</td><td>2</td><td>0</td><td>1</td><td>FAULT</td><td>Replace page 7 (oldest) with page 2</td></tr>
-                  <tr><td>5</td><td>0</td><td>2</td><td>0</td><td>1</td><td>HIT</td><td>Page 0 already in memory</td></tr>
-                  <tr><td>6</td><td>3</td><td>2</td><td>3</td><td>1</td><td>FAULT</td><td>Replace page 0 (oldest) with page 3</td></tr>
-                </table>
-              </div>
-            </div>
-
-            <div class="detail-section">
-              <h5>Advantages</h5>
-              <ul>
-                <li>Simple to implement and understand</li>
-                <li>Low overhead - only requires tracking insertion order</li>
-                <li>Fair allocation - each page gets equal time in memory</li>
-              </ul>
-            </div>
-
-            <div class="detail-section">
-              <h5>Disadvantages</h5>
-              <ul>
-                <li>Suffers from Belady's Anomaly (more frames can lead to more page faults)</li>
-                <li>Ignores page usage patterns and frequency</li>
-                <li>May remove frequently used pages simply because they're old</li>
-                <li>Generally poor performance compared to other algorithms</li>
-              </ul>
-            </div>
-          </div>
-
-          <div id="lru-details" class="algorithm-detail">
-            <h4>LRU (Least Recently Used)</h4>
-            
-            <div class="detail-section">
-              <h5>Strategy</h5>
-              <p>LRU replaces the page that hasn't been accessed for the longest time. It's based on the principle of temporal locality - if a page was recently accessed, it's likely to be accessed again soon.</p>
-            </div>
-
-            <div class="detail-section">
-              <h5>How It Works</h5>
-              <ol>
-                <li>Track the last access time for each page in memory</li>
-                <li>When a page is accessed (hit), update its access time to current</li>
-                <li>When a page fault occurs, replace the page with the oldest access time</li>
-                <li>Add the new page with current access time</li>
-              </ol>
-            </div>
-
-            <div class="detail-section">
-              <h5>Detailed Example</h5>
-              <p><strong>Reference String:</strong> 7, 0, 1, 2, 0, 3, 0, 4 (3 frames)</p>
-              <div class="example-table">
-                <table>
-                  <tr><th>Step</th><th>Page</th><th>Frame 1</th><th>Frame 2</th><th>Frame 3</th><th>Status</th><th>Explanation</th></tr>
-                  <tr><td>1</td><td>7</td><td>7</td><td>-</td><td>-</td><td>FAULT</td><td>First page, goes to empty frame 1</td></tr>
-                  <tr><td>2</td><td>0</td><td>7</td><td>0</td><td>-</td><td>FAULT</td><td>Second page, goes to empty frame 2</td></tr>
-                  <tr><td>3</td><td>1</td><td>7</td><td>0</td><td>1</td><td>FAULT</td><td>Third page, goes to empty frame 3</td></tr>
-                  <tr><td>4</td><td>2</td><td>2</td><td>0</td><td>1</td><td>FAULT</td><td>Replace page 7 (least recently used) with page 2</td></tr>
-                  <tr><td>5</td><td>0</td><td>2</td><td>0</td><td>1</td><td>HIT</td><td>Page 0 found, update its access time</td></tr>
-                  <tr><td>6</td><td>3</td><td>2</td><td>0</td><td>3</td><td>FAULT</td><td>Replace page 1 (least recently used) with page 3</td></tr>
-                </table>
-              </div>
-            </div>
-
-            <div class="detail-section">
-              <h5>Implementation Methods</h5>
-              <ul>
-                <li><strong>Counter Method:</strong> Each page has a counter incremented on access</li>
-                <li><strong>Stack Method:</strong> Maintain a stack of page numbers, move accessed page to top</li>
-                <li><strong>Matrix Method:</strong> Use a matrix to track relative access order</li>
-              </ul>
-            </div>
-
-            <div class="detail-section">
-              <h5>Advantages</h5>
-              <ul>
-                <li>Good approximation of optimal algorithm</li>
-                <li>Exploits temporal locality effectively</li>
-                <li>Generally performs well in practice</li>
-                <li>No Belady's Anomaly</li>
-              </ul>
-            </div>
-
-            <div class="detail-section">
-              <h5>Disadvantages</h5>
-              <ul>
-                <li>Higher implementation complexity</li>
-                <li>Requires additional hardware support or software overhead</li>
-                <li>May need to update access information on every memory reference</li>
-              </ul>
-            </div>
-          </div>
-
-          <div id="optimal-details" class="algorithm-detail">
-            <h4>Optimal Algorithm (Belady's Algorithm)</h4>
-            
-            <div class="detail-section">
-              <h5>Strategy</h5>
-              <p>The Optimal algorithm replaces the page that will not be used for the longest period in the future. It provides the theoretical minimum number of page faults for any given reference string.</p>
-            </div>
-
-            <div class="detail-section">
-              <h5>How It Works</h5>
-              <ol>
-                <li>When a page fault occurs, examine all pages currently in memory</li>
-                <li>For each page, find when it will next be referenced in the future</li>
-                <li>Replace the page that will be referenced furthest in the future</li>
-                <li>If a page is never referenced again, replace it immediately</li>
-              </ol>
-            </div>
-
-            <div class="detail-section">
-              <h5>Detailed Example</h5>
-              <p><strong>Reference String:</strong> 7, 0, 1, 2, 0, 3, 0, 4 (3 frames)</p>
-              <div class="example-table">
-                <table>
-                  <tr><th>Step</th><th>Page</th><th>Frame 1</th><th>Frame 2</th><th>Frame 3</th><th>Status</th><th>Explanation</th></tr>
-                  <tr><td>1</td><td>7</td><td>7</td><td>-</td><td>-</td><td>FAULT</td><td>First page, goes to empty frame 1</td></tr>
-                  <tr><td>2</td><td>0</td><td>7</td><td>0</td><td>-</td><td>FAULT</td><td>Second page, goes to empty frame 2</td></tr>
-                  <tr><td>3</td><td>1</td><td>7</td><td>0</td><td>1</td><td>FAULT</td><td>Third page, goes to empty frame 3</td></tr>
-                  <tr><td>4</td><td>2</td><td>2</td><td>0</td><td>1</td><td>FAULT</td><td>Replace page 7 (never used again) with page 2</td></tr>
-                  <tr><td>5</td><td>0</td><td>2</td><td>0</td><td>1</td><td>HIT</td><td>Page 0 already in memory</td></tr>
-                  <tr><td>6</td><td>3</td><td>2</td><td>0</td><td>3</td><td>FAULT</td><td>Replace page 1 (used furthest in future) with page 3</td></tr>
-                </table>
-              </div>
-            </div>
-
-            <div class="detail-section">
-              <h5>Lookahead Analysis</h5>
-              <p>At step 6, when page 3 needs to be loaded:</p>
-              <ul>
-                <li><strong>Page 2:</strong> Next used at position 8 (distance: 2)</li>
-                <li><strong>Page 0:</strong> Next used at position 7 (distance: 1)</li>
-                <li><strong>Page 1:</strong> Never used again (distance: ∞)</li>
-                <li><strong>Decision:</strong> Replace page 1 as it has the longest future distance</li>
-              </ul>
-            </div>
-
-            <div class="detail-section">
-              <h5>Advantages</h5>
-              <ul>
-                <li>Guarantees minimum number of page faults</li>
-                <li>Provides theoretical benchmark for other algorithms</li>
-                <li>Useful for algorithm analysis and comparison</li>
-                <li>No Belady's Anomaly</li>
-              </ul>
-            </div>
-
-            <div class="detail-section">
-              <h5>Disadvantages</h5>
-              <ul>
-                <li>Impossible to implement in practice (requires future knowledge)</li>
-                <li>Only useful for theoretical analysis and simulation</li>
-                <li>Cannot predict future page references in real systems</li>
-              </ul>
-            </div>
-
-            <div class="detail-section">
-              <h5>Practical Applications</h5>
-              <ul>
-                <li>Benchmark for evaluating other algorithms</li>
-                <li>Theoretical analysis of memory management</li>
-                <li>Algorithm research and development</li>
-                <li>Performance upper bound estimation</li>
-              </ul>
-            </div>
-          </div>
+          <!-- Content will be dynamically generated by JavaScript -->
         </div>
       </div>
     </div>
