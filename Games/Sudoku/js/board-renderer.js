@@ -135,6 +135,15 @@ class BoardRenderer {
     }
 
     highlightConflicts(row, col) {
+        // Add defensive check to ensure currentBoard is properly defined
+        if (!window.gameInstance?.currentBoard || !Array.isArray(window.gameInstance.currentBoard) || window.gameInstance.currentBoard.length !== 9) {
+            return;
+        }
+        
+        if (!Array.isArray(window.gameInstance.currentBoard[row]) || window.gameInstance.currentBoard[row].length !== 9) {
+            return;
+        }
+        
         const value = window.gameInstance.currentBoard[row][col];
         if (!value) return;
 

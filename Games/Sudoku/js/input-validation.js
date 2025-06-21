@@ -78,11 +78,20 @@ class InputValidator {
     }
 
     findConflictsForCell(targetRow, targetCol, value, board = null) {
-        const currentBoard = board || window.gameInstance.currentBoard;
+        const currentBoard = board || window.gameInstance?.currentBoard;
+        
+        // Add defensive check to ensure currentBoard is properly defined
+        if (!currentBoard || !Array.isArray(currentBoard) || currentBoard.length !== 9) {
+            return [];
+        }
+        
         const conflicts = [];
 
         // Check row conflicts
         for (let c = 0; c < 9; c++) {
+            if (!Array.isArray(currentBoard[targetRow]) || currentBoard[targetRow].length !== 9) {
+                continue;
+            }
             if (c !== targetCol && currentBoard[targetRow][c] === value) {
                 conflicts.push({ r: targetRow, c });
             }
@@ -90,6 +99,9 @@ class InputValidator {
 
         // Check column conflicts
         for (let r = 0; r < 9; r++) {
+            if (!Array.isArray(currentBoard[r]) || currentBoard[r].length !== 9) {
+                continue;
+            }
             if (r !== targetRow && currentBoard[r][targetCol] === value) {
                 conflicts.push({ r, c: targetCol });
             }
@@ -101,6 +113,9 @@ class InputValidator {
 
         for (let r = boxRow; r < boxRow + 3; r++) {
             for (let c = boxCol; c < boxCol + 3; c++) {
+                if (!Array.isArray(currentBoard[r]) || currentBoard[r].length !== 9) {
+                    continue;
+                }
                 if ((r !== targetRow || c !== targetCol) && currentBoard[r][c] === value) {
                     conflicts.push({ r, c });
                 }
@@ -111,9 +126,17 @@ class InputValidator {
     }
 
     findErrors() {
+        // Add defensive check to ensure currentBoard is properly defined
+        if (!window.gameInstance?.currentBoard || !Array.isArray(window.gameInstance.currentBoard) || window.gameInstance.currentBoard.length !== 9) {
+            return [];
+        }
+        
         const errors = [];
 
         for (let row = 0; row < 9; row++) {
+            if (!Array.isArray(window.gameInstance.currentBoard[row]) || window.gameInstance.currentBoard[row].length !== 9) {
+                continue;
+            }
             for (let col = 0; col < 9; col++) {
                 const value = window.gameInstance.currentBoard[row][col];
                 if (value !== 0) {
