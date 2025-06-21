@@ -5,17 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sudoku Master - AI-Powered Puzzle Game</title>
     <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/utilities.css">
 </head>
-<body class="dark-theme">
-    <!-- Theme Toggle -->
-    <div class="theme-toggle">
-        <input type="checkbox" id="theme-switch">
-        <label for="theme-switch" class="toggle-label">
-            <span class="toggle-slider"></span>
-            <span class="sun-icon">☀️</span>
-            <span class="moon-icon">🌙</span>
-        </label>
+<body class="theme-dark-default">
+    <!-- Theme Selector -->
+    <div class="theme-selector">
+        <div class="theme-toggle-container">
+            <button id="theme-toggle-btn" class="theme-toggle-btn">
+                <span class="theme-icon">🎨</span>
+                <span class="theme-text">Themes</span>
+            </button>
+            <div id="theme-dropdown" class="theme-dropdown">
+                <div class="theme-category">
+                    <h4>Dark Themes</h4>
+                    <div class="theme-options">
+                        <button class="theme-option active" data-theme="dark-default">
+                            <div class="theme-preview dark-default-preview"></div>
+                            <span>Default Dark</span>
+                        </button>
+                        <button class="theme-option" data-theme="dark-purple">
+                            <div class="theme-preview dark-purple-preview"></div>
+                            <span>Purple Night</span>
+                        </button>
+                        <button class="theme-option" data-theme="dark-blue">
+                            <div class="theme-preview dark-blue-preview"></div>
+                            <span>Ocean Deep</span>
+                        </button>
+                        <button class="theme-option" data-theme="dark-green">
+                            <div class="theme-preview dark-green-preview"></div>
+                            <span>Forest Dark</span>
+                        </button>
+                        <button class="theme-option" data-theme="dark-red">
+                            <div class="theme-preview dark-red-preview"></div>
+                            <span>Crimson Night</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="theme-category">
+                    <h4>Light Themes</h4>
+                    <div class="theme-options">
+                        <button class="theme-option" data-theme="light-default">
+                            <div class="theme-preview light-default-preview"></div>
+                            <span>Default Light</span>
+                        </button>
+                        <button class="theme-option" data-theme="light-blue">
+                            <div class="theme-preview light-blue-preview"></div>
+                            <span>Sky Blue</span>
+                        </button>
+                        <button class="theme-option" data-theme="light-green">
+                            <div class="theme-preview light-green-preview"></div>
+                            <span>Nature Fresh</span>
+                        </button>
+                        <button class="theme-option" data-theme="light-pink">
+                            <div class="theme-preview light-pink-preview"></div>
+                            <span>Rose Garden</span>
+                        </button>
+                        <button class="theme-option" data-theme="light-orange">
+                            <div class="theme-preview light-orange-preview"></div>
+                            <span>Sunset Warm</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Main Container -->
@@ -64,6 +119,11 @@
                         <span id="game-timer">00:00</span>
                         <span id="game-difficulty"></span>
                     </div>
+                </div>
+
+                <!-- Keyboard Instructions -->
+                <div class="keyboard-instructions">
+                    <span>Use arrow keys or WASD to navigate • Numbers 1-9 to fill • Backspace/Delete to clear</span>
                 </div>
 
                 <!-- Bot Toggle -->
@@ -125,7 +185,7 @@
                 </div>
                 
                 <p class="manual-instructions">
-                    Enter your puzzle below. Leave empty cells blank or use 0.
+                    Enter your puzzle below. You need at least 17 clues for a valid Sudoku puzzle.
                 </p>
                 
                 <!-- Validation Status -->
@@ -177,6 +237,10 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="js/board-renderer.js"></script>
+    <script src="js/input-validation.js"></script>
+    <script src="js/game-logic.js"></script>
+    <script src="js/bot-logic.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
