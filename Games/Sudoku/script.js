@@ -1,9 +1,10 @@
-// Advanced Sudoku Web App - Pure JavaScript Implementation
+// Advanced Sudoku Web App - Enhanced with Smart Backtracking
 class SudokuGame {
     constructor() {
         this.currentBoard = Array(9).fill(null).map(() => Array(9).fill(0));
         this.solutionBoard = Array(9).fill(null).map(() => Array(9).fill(0));
-        this.givenCells = new Set();
+        this.givenCells = new Set(); // Immutable initial values
+        this.botEntries = new Set(); // Track bot-entered values
         this.selectedCell = null;
         this.gameMode = null;
         this.difficulty = 'medium';
@@ -12,7 +13,7 @@ class SudokuGame {
         this.botEnabled = false;
         this.highlightedCells = new Set();
         this.solvingInProgress = false;
-        this.solveSteps = [];
+        this.backtrackStack = []; // For smart backtracking
         
         this.init();
     }
@@ -157,14 +158,6 @@ class SudokuGame {
 
                 cell.appendChild(input);
                 container.appendChild(cell);
-
-                // Add visual separators for 3x3 boxes
-                if ((row + 1) % 3 === 0 && row < 8) {
-                    cell.style.borderBottom = '3px solid var(--border)';
-                }
-                if ((col + 1) % 3 === 0 && col < 8) {
-                    cell.style.borderRight = '3px solid var(--border)';
-                }
             }
         }
     }
@@ -178,9 +171,15 @@ class SudokuGame {
             return;
         }
 
+        // Prevent modification of given cells
         if (this.givenCells.has(`${row}-${col}`)) {
             e.target.value = this.currentBoard[row][col] || '';
             return;
+        }
+
+        // Remove from bot entries if user modifies
+        if (this.botEntries.has(`${row}-${col}`)) {
+            this.botEntries.delete(`${row}-${col}`);
         }
 
         this.currentBoard[row][col] = value ? parseInt(value) : 0;
@@ -357,6 +356,12 @@ class SudokuGame {
                 const input = document.querySelector(`#sudoku-board .sudoku-cell[data-row="${row}"][data-col="${col}"] input`);
                 input.value = e.key;
                 this.currentBoard[row][col] = parseInt(e.key);
+                
+                // Remove from bot entries if user modifies
+                if (this.botEntries.has(`${row}-${col}`)) {
+                    this.botEntries.delete(`${row}-${col}`);
+                }
+                
                 this.highlightConflicts(row, col);
             }
         } else if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -429,6 +434,7 @@ class SudokuGame {
         this.startTimer();
         this.resetBotPanel();
         this.clearHighlights();
+        this.backtrackStack = [];
     }
 
     startManualGame() {
@@ -444,6 +450,7 @@ class SudokuGame {
         this.startTimer();
         this.resetBotPanel();
         this.clearHighlights();
+        this.backtrackStack = [];
     }
 
     validateManualInput() {
@@ -494,8 +501,9 @@ class SudokuGame {
         // Create puzzle by removing numbers based on difficulty
         this.currentBoard = this.createPuzzle(this.solutionBoard, this.difficulty);
         
-        // Track given cells
+        // Track given cells (immutable)
         this.givenCells.clear();
+        this.botEntries.clear();
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 if (this.currentBoard[row][col] !== 0) {
@@ -551,6 +559,7 @@ class SudokuGame {
         
         this.currentBoard = Array(9).fill(null).map(() => Array(9).fill(0));
         this.givenCells.clear();
+        this.botEntries.clear();
 
         inputs.forEach((input, index) => {
             const row = Math.floor(index / 9);
@@ -593,6 +602,9 @@ class SudokuGame {
             if (this.givenCells.has(`${row}-${col}`)) {
                 cell.classList.add('given');
                 input.readOnly = true;
+            } else if (this.botEntries.has(`${row}-${col}`)) {
+                cell.classList.add('bot-entry');
+                input.readOnly = false;
             } else {
                 input.readOnly = false;
             }
@@ -618,11 +630,21 @@ class SudokuGame {
     clearSelectedCell() {
         if (this.selectedCell) {
             const { row, col } = this.selectedCell;
-            if (!this.givenCells.has(`${row}-${col}`)) {
+            const cellKey = `${row}-${col}`;
+            
+            // Only allow clearing if not a given cell
+            if (!this.givenCells.has(cellKey)) {
                 const input = document.querySelector(`#sudoku-board .sudoku-cell[data-row="${row}"][data-col="${col}"] input`);
                 input.value = '';
                 this.currentBoard[row][col] = 0;
+                
+                // Remove from bot entries if cleared
+                if (this.botEntries.has(cellKey)) {
+                    this.botEntries.delete(cellKey);
+                }
+                
                 this.clearHighlights();
+                this.updateBoardDisplay();
             }
         }
     }
@@ -634,64 +656,152 @@ class SudokuGame {
         });
     }
 
-    // Advanced Sudoku Solver with Backtracking
+    // Enhanced Sudoku Solver with Smart Heuristics
     solveSudoku(board) {
-        const emptyCell = this.findEmptyCell(board);
+        const emptyCell = this.findMostConstrainedCell(board);
         if (!emptyCell) {
             return true; // Solved
         }
 
         const [row, col] = emptyCell;
+        const possibleValues = this.getPossibleValues(board, row, col);
 
-        // Try numbers 1-9
-        const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-        this.shuffleArray(numbers); // Add randomness
+        for (const num of possibleValues) {
+            board[row][col] = num;
 
-        for (const num of numbers) {
-            if (this.isValidMove(board, row, col, num)) {
-                board[row][col] = num;
-
-                if (this.solveSudoku(board)) {
-                    return true;
-                }
-
-                board[row][col] = 0; // Backtrack
+            if (this.solveSudoku(board)) {
+                return true;
             }
+
+            board[row][col] = 0; // Backtrack
         }
 
         return false;
     }
 
+    // Find the empty cell with the fewest possible values (Most Constrained Variable heuristic)
+    findMostConstrainedCell(board) {
+        let bestCell = null;
+        let minPossibilities = 10;
+
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
+                if (board[row][col] === 0) {
+                    const possibilities = this.getPossibleValues(board, row, col).length;
+                    if (possibilities < minPossibilities) {
+                        minPossibilities = possibilities;
+                        bestCell = [row, col];
+                        
+                        // If we find a cell with only one possibility, use it immediately
+                        if (possibilities === 1) {
+                            return bestCell;
+                        }
+                    }
+                }
+            }
+        }
+
+        return bestCell;
+    }
+
+    // Get possible values for a cell, ordered by least constraining value heuristic
+    getPossibleValues(board, row, col) {
+        const possible = [];
+        
+        for (let num = 1; num <= 9; num++) {
+            if (this.isValidMove(board, row, col, num)) {
+                possible.push(num);
+            }
+        }
+
+        // Sort by least constraining value (values that eliminate fewer options for other cells)
+        return possible.sort((a, b) => {
+            const constraintsA = this.countConstraints(board, row, col, a);
+            const constraintsB = this.countConstraints(board, row, col, b);
+            return constraintsA - constraintsB;
+        });
+    }
+
+    // Count how many constraints a value would add to other empty cells
+    countConstraints(board, row, col, value) {
+        let constraints = 0;
+        
+        // Check row
+        for (let c = 0; c < 9; c++) {
+            if (c !== col && board[row][c] === 0) {
+                if (this.isValidMove(board, row, c, value)) {
+                    constraints++;
+                }
+            }
+        }
+        
+        // Check column
+        for (let r = 0; r < 9; r++) {
+            if (r !== row && board[r][col] === 0) {
+                if (this.isValidMove(board, r, col, value)) {
+                    constraints++;
+                }
+            }
+        }
+        
+        // Check 3x3 box
+        const boxRow = Math.floor(row / 3) * 3;
+        const boxCol = Math.floor(col / 3) * 3;
+        
+        for (let r = boxRow; r < boxRow + 3; r++) {
+            for (let c = boxCol; c < boxCol + 3; c++) {
+                if ((r !== row || c !== col) && board[r][c] === 0) {
+                    if (this.isValidMove(board, r, c, value)) {
+                        constraints++;
+                    }
+                }
+            }
+        }
+        
+        return constraints;
+    }
+
+    // Enhanced solving with backtracking and step tracking
     solveSudokuWithSteps(board) {
         const steps = [];
-        const solve = (currentBoard) => {
-            const emptyCell = this.findEmptyCell(currentBoard);
+        const solve = (currentBoard, depth = 0) => {
+            const emptyCell = this.findMostConstrainedCell(currentBoard);
             if (!emptyCell) {
                 return true; // Solved
             }
 
             const [row, col] = emptyCell;
+            const possibleValues = this.getPossibleValues(currentBoard, row, col);
 
-            for (let num = 1; num <= 9; num++) {
-                if (this.isValidMove(currentBoard, row, col, num)) {
-                    currentBoard[row][col] = num;
-                    steps.push({
-                        row,
-                        col,
-                        value: num,
-                        reason: this.getStepReason(currentBoard, row, col, num)
-                    });
+            if (possibleValues.length === 0) {
+                return false; // No valid moves, need to backtrack
+            }
 
-                    if (solve(currentBoard)) {
-                        return true;
-                    }
+            for (const num of possibleValues) {
+                currentBoard[row][col] = num;
+                steps.push({
+                    row,
+                    col,
+                    value: num,
+                    reason: this.getStepReason(currentBoard, row, col, num, possibleValues),
+                    depth,
+                    isGuess: possibleValues.length > 1
+                });
 
-                    currentBoard[row][col] = 0; // Backtrack
+                if (solve(currentBoard, depth + 1)) {
+                    return true;
+                }
+
+                // Backtrack
+                currentBoard[row][col] = 0;
+                if (possibleValues.length > 1) {
                     steps.push({
                         row,
                         col,
                         value: 0,
-                        reason: `Backtracking: ${num} at (${row + 1}, ${col + 1}) led to no solution`
+                        reason: `Backtracking: ${num} at (${row + 1}, ${col + 1}) led to contradiction`,
+                        depth,
+                        isBacktrack: true
                     });
                 }
             }
@@ -700,19 +810,11 @@ class SudokuGame {
         };
 
         const success = solve(board);
-        return { success, steps };
+        return { success, steps: steps.filter(step => step.value !== 0 || step.isBacktrack) };
     }
 
-    getStepReason(board, row, col, num) {
-        // Check if this is the only possible number for this cell
-        const possibleNumbers = [];
-        for (let n = 1; n <= 9; n++) {
-            if (this.isValidMove(board, row, col, n)) {
-                possibleNumbers.push(n);
-            }
-        }
-
-        if (possibleNumbers.length === 1) {
+    getStepReason(board, row, col, num, possibleValues) {
+        if (possibleValues.length === 1) {
             return `Only possible number for this cell`;
         }
 
@@ -753,18 +855,7 @@ class SudokuGame {
             return `${num} can only go here in this 3×3 box`;
         }
 
-        return `Strategic placement based on elimination`;
-    }
-
-    findEmptyCell(board) {
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
-                if (board[row][col] === 0) {
-                    return [row, col];
-                }
-            }
-        }
-        return null;
+        return `Strategic guess (${possibleValues.length} possibilities)`;
     }
 
     isValidMove(board, row, col, num) {
@@ -789,13 +880,6 @@ class SudokuGame {
         }
 
         return true;
-    }
-
-    shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
     }
 
     // Validation
@@ -889,13 +973,7 @@ class SudokuGame {
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 if (this.currentBoard[row][col] === 0) {
-                    const possibleNumbers = [];
-                    
-                    for (let num = 1; num <= 9; num++) {
-                        if (this.isValidMove(this.currentBoard, row, col, num)) {
-                            possibleNumbers.push(num);
-                        }
-                    }
+                    const possibleNumbers = this.getPossibleValues(this.currentBoard, row, col);
                     
                     if (possibleNumbers.length === 1) {
                         return {
@@ -1045,30 +1123,9 @@ class SudokuGame {
         const logicalMove = this.findLogicalMove();
         if (logicalMove) {
             const { row, col, value, reason } = logicalMove;
-            const cell = document.querySelector(`#sudoku-board .sudoku-cell[data-row="${row}"][data-col="${col}"]`);
-            const input = cell.querySelector('input');
-            
-            input.value = value;
-            this.currentBoard[row][col] = value;
-            cell.classList.add('hint');
-            
-            setTimeout(() => {
-                cell.classList.remove('hint');
-            }, 2000);
-            
-            this.updateBotSuggestion(`
-                <strong>⚡ Step Completed!</strong><br>
-                Placed <strong>${value}</strong> at row ${row + 1}, column ${col + 1}<br>
-                <em>Reason: ${reason}</em>
-            `);
-
-            if (this.isBoardComplete() && this.isBoardValid()) {
-                setTimeout(() => {
-                    this.showSuccessModal();
-                }, 1000);
-            }
+            this.makeBotMove(row, col, value, reason);
         } else {
-            // Use backtracking to find the next valid move
+            // Use smart backtracking to find the next valid move
             const testBoard = this.currentBoard.map(row => [...row]);
             const { success, steps } = this.solveSudokuWithSteps(testBoard);
             
@@ -1076,22 +1133,7 @@ class SudokuGame {
                 const firstStep = steps[0];
                 if (firstStep.value !== 0) {
                     const { row, col, value, reason } = firstStep;
-                    const cell = document.querySelector(`#sudoku-board .sudoku-cell[data-row="${row}"][data-col="${col}"]`);
-                    const input = cell.querySelector('input');
-                    
-                    input.value = value;
-                    this.currentBoard[row][col] = value;
-                    cell.classList.add('hint');
-                    
-                    setTimeout(() => {
-                        cell.classList.remove('hint');
-                    }, 2000);
-                    
-                    this.updateBotSuggestion(`
-                        <strong>🎯 Strategic Move</strong><br>
-                        Placed <strong>${value}</strong> at row ${row + 1}, column ${col + 1}<br>
-                        <em>Reason: ${reason}</em>
-                    `);
+                    this.makeBotMove(row, col, value, reason);
                 }
             } else {
                 this.updateBotSuggestion(`
@@ -1099,6 +1141,45 @@ class SudokuGame {
                     The current board state may have errors. Try checking for mistakes first.
                 `);
             }
+        }
+    }
+
+    makeBotMove(row, col, value, reason) {
+        const cellKey = `${row}-${col}`;
+        
+        // Don't modify given cells
+        if (this.givenCells.has(cellKey)) {
+            this.updateBotSuggestion(`
+                <strong>🚫 Cannot Modify</strong><br>
+                This cell contains an initial value that cannot be changed.
+            `);
+            return;
+        }
+
+        const cell = document.querySelector(`#sudoku-board .sudoku-cell[data-row="${row}"][data-col="${col}"]`);
+        const input = cell.querySelector('input');
+        
+        input.value = value;
+        this.currentBoard[row][col] = value;
+        this.botEntries.add(cellKey);
+        
+        cell.classList.add('hint');
+        
+        setTimeout(() => {
+            cell.classList.remove('hint');
+            this.updateBoardDisplay();
+        }, 2000);
+        
+        this.updateBotSuggestion(`
+            <strong>⚡ Step Completed!</strong><br>
+            Placed <strong>${value}</strong> at row ${row + 1}, column ${col + 1}<br>
+            <em>Reason: ${reason}</em>
+        `);
+
+        if (this.isBoardComplete() && this.isBoardValid()) {
+            setTimeout(() => {
+                this.showSuccessModal();
+            }, 1000);
         }
     }
 
@@ -1122,7 +1203,7 @@ class SudokuGame {
         }
 
         // Filter out backtracking steps for display
-        const validSteps = steps.filter(step => step.value !== 0);
+        const validSteps = steps.filter(step => step.value !== 0 && !step.isBacktrack);
         
         document.getElementById('solve-progress').textContent = `Found solution with ${validSteps.length} steps. Applying...`;
         
@@ -1132,15 +1213,17 @@ class SudokuGame {
             
             const step = validSteps[i];
             const { row, col, value } = step;
+            const cellKey = `${row}-${col}`;
             
-            // Skip if cell is already filled (given cell)
-            if (this.currentBoard[row][col] !== 0) continue;
+            // Skip if cell is already filled or is a given cell
+            if (this.currentBoard[row][col] !== 0 || this.givenCells.has(cellKey)) continue;
             
             const cell = document.querySelector(`#sudoku-board .sudoku-cell[data-row="${row}"][data-col="${col}"]`);
             const input = cell.querySelector('input');
             
             input.value = value;
             this.currentBoard[row][col] = value;
+            this.botEntries.add(cellKey);
             cell.classList.add('hint');
             
             document.getElementById('solve-progress').textContent = 
@@ -1154,11 +1237,12 @@ class SudokuGame {
         
         this.hideSolveModal();
         this.solvingInProgress = false;
+        this.updateBoardDisplay();
         
         if (this.isBoardComplete() && this.isBoardValid()) {
             this.updateBotSuggestion(`
                 <strong>🎉 Puzzle Solved!</strong><br>
-                The entire board has been completed successfully using logical deduction and backtracking.
+                The entire board has been completed successfully using logical deduction and smart backtracking.
             `);
             
             setTimeout(() => {
