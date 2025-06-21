@@ -1,6 +1,7 @@
 // Main Game Controller
 class SudokuGame {
     constructor() {
+        this.manualSelectedCell = { row: 4, col: 4 }; // Track selection in manual mode
         this.init();
     }
 
@@ -187,37 +188,71 @@ class SudokuGame {
     }
 
     handleKeyInput(e) {
-        if (!window.gameLogic.selectedCell || document.getElementById('game-screen').style.display === 'none') {
+        const gameScreenActive = document.getElementById('game-screen').classList.contains('active');
+        const manualScreenActive = document.getElementById('manual-input-screen').classList.contains('active');
+        
+        if (!gameScreenActive && !manualScreenActive) {
             return;
         }
 
-        const { row, col } = window.gameLogic.selectedCell;
+        // Handle navigation keys for both screens
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(e.key)) {
+            e.preventDefault();
+            this.moveSelection(e.key, manualScreenActive);
+            return;
+        }
 
-        if (e.key >= '1' && e.key <= '9') {
-            if (!window.gameLogic.givenCells.has(`${row}-${col}`)) {
-                const input = document.querySelector(`#sudoku-board .sudoku-cell[data-row="${row}"][data-col="${col}"] input`);
-                input.value = e.key;
-                window.gameLogic.currentBoard[row][col] = parseInt(e.key);
-                window.boardRenderer.highlightConflicts(row, col);
-                
-                if (window.gameLogic.isBoardComplete() && window.gameLogic.isBoardValid()) {
-                    setTimeout(() => {
-                        this.showSuccessModal();
-                    }, 100);
+        // Handle number input and deletion
+        if (gameScreenActive && window.gameLogic.selectedCell) {
+            const { row, col } = window.gameLogic.selectedCell;
+
+            if (e.key >= '1' && e.key <= '9') {
+                if (!window.gameLogic.givenCells.has(`${row}-${col}`)) {
+                    const input = document.querySelector(`#sudoku-board .sudoku-cell[data-row="${row}"][data-col="${col}"] input`);
+                    input.value = e.key;
+                    window.gameLogic.currentBoard[row][col] = parseInt(e.key);
+                    window.boardRenderer.highlightConflicts(row, col);
+                    
+                    if (window.gameLogic.isBoardComplete() && window.gameLogic.isBoardValid()) {
+                        setTimeout(() => {
+                            this.showSuccessModal();
+                        }, 100);
+                    }
+                }
+            } else if (e.key === 'Backspace' || e.key === 'Delete') {
+                this.clearSelectedCell();
+            }
+        } else if (manualScreenActive) {
+            const { row, col } = this.manualSelectedCell;
+
+            if (e.key >= '1' && e.key <= '9') {
+                const input = document.querySelector(`#manual-board .sudoku-cell[data-row="${row}"][data-col="${col}"] input`);
+                if (input) {
+                    input.value = e.key;
+                    input.dispatchEvent(new Event('input')); // Trigger validation
+                }
+            } else if (e.key === 'Backspace' || e.key === 'Delete') {
+                const input = document.querySelector(`#manual-board .sudoku-cell[data-row="${row}"][data-col="${col}"] input`);
+                if (input) {
+                    input.value = '';
+                    input.dispatchEvent(new Event('input')); // Trigger validation
                 }
             }
-        } else if (e.key === 'Backspace' || e.key === 'Delete') {
-            this.clearSelectedCell();
-        } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 'a', 's', 'd', 'W', 'A', 'S', 'D'].includes(e.key)) {
-            e.preventDefault();
-            this.moveSelection(e.key);
         }
     }
 
-    moveSelection(key) {
-        if (!window.gameLogic.selectedCell) return;
+    moveSelection(key, isManualMode = false) {
+        let currentSelection;
+        
+        if (isManualMode) {
+            currentSelection = this.manualSelectedCell;
+        } else if (window.gameLogic.selectedCell) {
+            currentSelection = window.gameLogic.selectedCell;
+        } else {
+            return;
+        }
 
-        let { row, col } = window.gameLogic.selectedCell;
+        let { row, col } = currentSelection;
 
         switch (key.toLowerCase()) {
             case 'arrowup':
@@ -238,11 +273,33 @@ class SudokuGame {
                 break;
         }
 
-        this.selectCell(row, col);
+        if (isManualMode) {
+            this.selectManualCell(row, col);
+        } else {
+            this.selectCell(row, col);
+        }
     }
 
     selectCell(row, col) {
         window.gameLogic.selectedCell = window.boardRenderer.selectCell(row, col);
+    }
+
+    selectManualCell(row, col) {
+        // Clear previous selection in manual board
+        document.querySelectorAll('#manual-board .sudoku-cell').forEach(cell => {
+            cell.classList.remove('selected');
+        });
+
+        // Select new cell in manual board
+        const cell = document.querySelector(`#manual-board .sudoku-cell[data-row="${row}"][data-col="${col}"]`);
+        if (cell) {
+            cell.classList.add('selected');
+            const input = cell.querySelector('input');
+            if (input) {
+                input.focus();
+            }
+            this.manualSelectedCell = { row, col };
+        }
     }
 
     clearSelectedCell() {
@@ -276,6 +333,11 @@ class SudokuGame {
         window.boardRenderer.clearManualBoard();
         window.inputValidator.setValidationStatus('', '');
         document.getElementById('start-manual-game-btn').disabled = true;
+        
+        // Set initial selection and focus for manual input
+        setTimeout(() => {
+            this.selectManualCell(4, 4);
+        }, 100);
     }
 
     showGameScreen() {
