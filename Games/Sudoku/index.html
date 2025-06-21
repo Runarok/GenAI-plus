@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Master - AI-Powered Puzzle Game</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <input type="checkbox" id="theme-switch">
+        <label for="theme-switch" class="toggle-label">
+            <span class="toggle-slider"></span>
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </label>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="title">Sudoku Master</h1>
+            <p class="subtitle">AI-Powered Puzzle Experience</p>
+        </header>
+
+        <!-- Menu Screen -->
+        <div id="menu-screen" class="screen active">
+            <div class="menu-container">
+                <div class="menu-options">
+                    <button id="generate-puzzle-btn" class="menu-btn primary">
+                        <span class="btn-icon">🤖</span>
+                        <span class="btn-text">AI Generated Puzzle</span>
+                        <span class="btn-desc">Let AI create a perfect puzzle for you</span>
+                    </button>
+                    
+                    <button id="manual-input-btn" class="menu-btn secondary">
+                        <span class="btn-icon">✏️</span>
+                        <span class="btn-text">Manual Input</span>
+                        <span class="btn-desc">Create your own puzzle to solve</span>
+                    </button>
+                </div>
+
+                <div class="difficulty-selector" id="difficulty-selector" style="display: none;">
+                    <h3>Select Difficulty</h3>
+                    <div class="difficulty-options">
+                        <button class="difficulty-btn" data-difficulty="easy">Easy</button>
+                        <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+                        <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-container">
+                <!-- Game Header -->
+                <div class="game-header">
+                    <button id="back-to-menu" class="back-btn">← Back to Menu</button>
+                    <div class="game-info">
+                        <span id="game-timer">00:00</span>
+                        <span id="game-difficulty"></span>
+                    </div>
+                </div>
+
+                <!-- Bot Toggle -->
+                <div class="bot-toggle-container">
+                    <label class="bot-toggle">
+                        <input type="checkbox" id="bot-toggle">
+                        <span class="bot-slider">
+                            <span class="bot-icon">🤖</span>
+                        </span>
+                        <span class="bot-label">Sudoku Bot Assistant</span>
+                    </label>
+                </div>
+
+                <!-- Main Game Area -->
+                <div class="game-main">
+                    <!-- Sudoku Board -->
+                    <div class="sudoku-container">
+                        <div id="sudoku-board" class="sudoku-board"></div>
+                    </div>
+
+                    <!-- Bot Panel -->
+                    <div id="bot-panel" class="bot-panel">
+                        <div class="bot-header">
+                            <span class="bot-title">🤖 Sudoku Bot</span>
+                            <span class="bot-status" id="bot-status">Ready to help!</span>
+                        </div>
+                        <div class="bot-content">
+                            <div id="bot-suggestion" class="bot-suggestion">
+                                <div class="bot-welcome">
+                                    <p>👋 Hello! I'm your Sudoku assistant.</p>
+                                    <p>Click the buttons below when you need help!</p>
+                                </div>
+                            </div>
+                            <div class="bot-actions">
+                                <button id="get-hint-btn" class="bot-btn">💡 Get Hint</button>
+                                <button id="check-mistakes-btn" class="bot-btn">🔍 Check Board</button>
+                                <button id="solve-step-btn" class="bot-btn">⚡ Next Step</button>
+                                <button id="solve-all-btn" class="bot-btn solve-btn">🎯 Solve All</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Controls -->
+                <div class="game-controls">
+                    <button id="clear-cell-btn" class="control-btn">Clear Cell</button>
+                    <button id="new-game-btn" class="control-btn">New Game</button>
+                    <button id="validate-btn" class="control-btn primary">Validate</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manual Input Screen -->
+        <div id="manual-input-screen" class="screen">
+            <div class="manual-container">
+                <div class="manual-header">
+                    <button id="back-from-manual" class="back-btn">← Back to Menu</button>
+                    <h2>Manual Puzzle Input</h2>
+                </div>
+                
+                <p class="manual-instructions">
+                    Enter your puzzle below. Leave empty cells blank or use 0.
+                </p>
+                
+                <!-- Validation Status -->
+                <div id="validation-status" class="validation-status"></div>
+                
+                <div class="manual-board-container">
+                    <div id="manual-board" class="sudoku-board manual-board"></div>
+                </div>
+                
+                <div class="manual-controls">
+                    <button id="clear-manual-btn" class="control-btn">Clear All</button>
+                    <button id="start-manual-game-btn" class="control-btn primary" disabled>Start Game</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <h2>🎉 Congratulations!</h2>
+            <p>You've successfully solved the puzzle!</p>
+            <div class="modal-stats">
+                <div class="stat">
+                    <span class="stat-label">Time:</span>
+                    <span id="final-time" class="stat-value">00:00</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Difficulty:</span>
+                    <span id="final-difficulty" class="stat-value">Easy</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="play-again-btn" class="modal-btn primary">Play Again</button>
+                <button id="menu-btn" class="modal-btn">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Solve Animation Modal -->
+    <div id="solve-modal" class="modal">
+        <div class="modal-content">
+            <h2>🎯 Solving Puzzle...</h2>
+            <p id="solve-progress">Analyzing board...</p>
+            <div class="solve-animation">
+                <div class="spinner"></div>
+            </div>
+            <button id="cancel-solve-btn" class="modal-btn">Cancel</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
