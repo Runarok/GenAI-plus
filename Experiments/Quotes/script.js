@@ -31,24 +31,22 @@ const toastContent = document.getElementById('toast-content');
 // Load quotes data from remote JS file using CORS proxy
 async function loadQuotes() {
   try {
-    const url = 'https://raw.githubusercontent.com/Runarok/Guides/refs/heads/main/Code%20Reference/GenAI-plus/Experiments-Quotes/quotes-data.js';
+    const url = 'https://raw.githubusercontent.com/Runarok/Guides/refs/heads/main/Code%20Reference/GenAI-plus/Experiments-Quotes/quotes-data.json';
     const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
 
     const response = await fetch(proxyUrl);
-    const text = await response.text();
-
-    // Extract the quotes array from the JS file text using regex
-    const matches = text.match(/quotes\s*=\s*(\[[\s\S]*?\]);/);
-    if (matches && matches[1]) {
-      quotes = JSON.parse(matches[1]);
-    } else {
-      throw new Error('Could not parse quotes data');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
+
+    quotes = await response.json();  // Directly parse JSON
+
   } catch (error) {
     console.error('Error loading quotes:', error);
     showToast('Failed to load quotes data', 'error');
   }
 }
+
 
 // Initialize the app
 async function init() {
@@ -65,9 +63,14 @@ async function init() {
 function loadSettings() {
   const savedSettings = localStorage.getItem('quoteManagerSettings');
   if (savedSettings) {
-    settings = JSON.parse(savedSettings);
-    themeSelect.value = settings.theme;
-    changeTheme(settings.theme);
+    try {
+      settings = JSON.parse(savedSettings);
+      themeSelect.value = settings.theme;
+      changeTheme(settings.theme);
+    } catch {
+      // If corrupted data, fallback
+      settings = { theme: 'dark' };
+    }
   }
 }
 
@@ -80,7 +83,11 @@ function saveSettings() {
 function loadReadQuotes() {
   const savedReadQuotes = localStorage.getItem('quoteManagerReadQuotes');
   if (savedReadQuotes) {
-    readQuotes = new Set(JSON.parse(savedReadQuotes));
+    try {
+      readQuotes = new Set(JSON.parse(savedReadQuotes));
+    } catch {
+      readQuotes = new Set();
+    }
   }
 }
 
@@ -91,6 +98,8 @@ function saveReadQuotes() {
 
 // Populate filter dropdowns
 function populateFilters() {
+  if (!quotes.length) return;
+
   const authors = [...new Set(quotes.map(q => q.author))].sort();
   const sources = [...new Set(quotes.map(q => q.source))].sort();
 
@@ -158,7 +167,7 @@ function renderQuotes() {
           <button class="action-btn mark-read-btn ${isRead ? 'read' : ''}" onclick="toggleReadStatus(${quote.id})">
             ${isRead ? 'Mark Unread' : 'Mark as Read'}
           </button>
-          <a href="${quote.url}" target="_blank" class="action-btn">
+          <a href="${quote.url}" target="_blank" rel="noopener noreferrer" class="action-btn">
             View Source
           </a>
         </div>
