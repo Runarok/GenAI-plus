@@ -7,7 +7,8 @@ const menuData = [
       { label: "Cyper Type", url: "Games/Cyper Type/index.html", desc: "Type Falling text." },
       { label: "Reflex Rush", url: "Games/Reflex Rush/index.html", desc: "Rapid Response Test." },
       { label: "Simon Says", url: "Games/Simon Says/index.html", desc: "Memory pattern light game." },
-      { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." }
+      { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." },
+      { label: "Sudoku", url: "Games/Sudoku/index.html", desc: "Sudoku." }
     ]
   },
   {
