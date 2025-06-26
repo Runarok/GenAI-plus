@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Joiner & Combiner</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png" />
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/themes.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -93,6 +96,15 @@
                                 <i class="fab fa-html5"></i> HTML
                             </button>
                             <div class="input-tab-actions">
+                                <button class="input-tab-action-btn" data-action="upload" data-type="html" title="Upload HTML Files">
+                                    <i class="fas fa-upload"></i>
+                                </button>
+                                <button class="input-tab-action-btn" data-action="download" data-type="html" title="Download HTML">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="input-tab-action-btn" data-action="copy" data-type="html" title="Copy HTML">
+                                    <i class="fas fa-copy"></i>
+                                </button>
                                 <button class="input-tab-action-btn" data-action="clear" data-type="html" title="Clear HTML">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -103,6 +115,15 @@
                                 <i class="fab fa-css3-alt"></i> CSS
                             </button>
                             <div class="input-tab-actions">
+                                <button class="input-tab-action-btn" data-action="upload" data-type="css" title="Upload CSS Files">
+                                    <i class="fas fa-upload"></i>
+                                </button>
+                                <button class="input-tab-action-btn" data-action="download" data-type="css" title="Download CSS">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="input-tab-action-btn" data-action="copy" data-type="css" title="Copy CSS">
+                                    <i class="fas fa-copy"></i>
+                                </button>
                                 <button class="input-tab-action-btn" data-action="clear" data-type="css" title="Clear CSS">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -113,6 +134,15 @@
                                 <i class="fab fa-js-square"></i> JavaScript
                             </button>
                             <div class="input-tab-actions">
+                                <button class="input-tab-action-btn" data-action="upload" data-type="js" title="Upload JS Files">
+                                    <i class="fas fa-upload"></i>
+                                </button>
+                                <button class="input-tab-action-btn" data-action="download" data-type="js" title="Download JavaScript">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="input-tab-action-btn" data-action="copy" data-type="js" title="Copy JavaScript">
+                                    <i class="fas fa-copy"></i>
+                                </button>
                                 <button class="input-tab-action-btn" data-action="clear" data-type="js" title="Clear JavaScript">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -123,31 +153,55 @@
                     <div class="input-tab-content active" id="html-input-tab">
                         <div class="input-tab-header">
                             <h3><i class="fab fa-html5"></i> HTML Input</h3>
+                            <div class="file-info" id="html-file-info"></div>
                         </div>
-                        <textarea 
-                            id="html-input" 
-                            placeholder="Enter your HTML structure here...&#10;&#10;Example:&#10;<!DOCTYPE html>&#10;<html lang=&quot;en&quot;>&#10;<head>&#10;    <meta charset=&quot;UTF-8&quot;>&#10;    <title>My Page</title>&#10;</head>&#10;<body>&#10;    <h1>Hello World</h1>&#10;    <p>Welcome to my website!</p>&#10;</body>&#10;</html>"
-                        ></textarea>
+                        <div class="drop-zone" data-type="html">
+                            <div class="drop-zone-content">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drop HTML files here or click to upload</p>
+                                <span class="drop-zone-hint">Supports multiple .html files</span>
+                            </div>
+                            <textarea 
+                                id="html-input" 
+                                placeholder="Enter your HTML structure here...&#10;&#10;Example:&#10;<!DOCTYPE html>&#10;<html lang=&quot;en&quot;>&#10;<head>&#10;    <meta charset=&quot;UTF-8&quot;>&#10;    <title>My Page</title>&#10;</head>&#10;<body>&#10;    <h1>Hello World</h1>&#10;    <p>Welcome to my website!</p>&#10;</body>&#10;</html>"
+                            ></textarea>
+                        </div>
                     </div>
 
                     <div class="input-tab-content" id="css-input-tab">
                         <div class="input-tab-header">
                             <h3><i class="fab fa-css3-alt"></i> CSS Input</h3>
+                            <div class="file-info" id="css-file-info"></div>
                         </div>
-                        <textarea 
-                            id="css-input" 
-                            placeholder="Enter your CSS styles here...&#10;&#10;Example:&#10;body {&#10;    font-family: Arial, sans-serif;&#10;    background-color: #f0f0f0;&#10;    margin: 0;&#10;    padding: 20px;&#10;}&#10;&#10;h1 {&#10;    color: #333;&#10;    text-align: center;&#10;}"
-                        ></textarea>
+                        <div class="drop-zone" data-type="css">
+                            <div class="drop-zone-content">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drop CSS files here or click to upload</p>
+                                <span class="drop-zone-hint">Supports multiple .css files - they will be merged</span>
+                            </div>
+                            <textarea 
+                                id="css-input" 
+                                placeholder="Enter your CSS styles here...&#10;&#10;Example:&#10;body {&#10;    font-family: Arial, sans-serif;&#10;    background-color: #f0f0f0;&#10;    margin: 0;&#10;    padding: 20px;&#10;}&#10;&#10;h1 {&#10;    color: #333;&#10;    text-align: center;&#10;}"
+                            ></textarea>
+                        </div>
                     </div>
 
                     <div class="input-tab-content" id="js-input-tab">
                         <div class="input-tab-header">
                             <h3><i class="fab fa-js-square"></i> JavaScript Input</h3>
+                            <div class="file-info" id="js-file-info"></div>
                         </div>
-                        <textarea 
-                            id="js-input" 
-                            placeholder="Enter your JavaScript code here...&#10;&#10;Example:&#10;document.addEventListener('DOMContentLoaded', function() {&#10;    console.log('Page loaded!');&#10;    &#10;    const h1 = document.querySelector('h1');&#10;    h1.addEventListener('click', function() {&#10;        alert('Hello from JavaScript!');&#10;    });&#10;});"
-                        ></textarea>
+                        <div class="drop-zone" data-type="js">
+                            <div class="drop-zone-content">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drop JavaScript files here or click to upload</p>
+                                <span class="drop-zone-hint">Supports multiple .js files - they will be merged</span>
+                            </div>
+                            <textarea 
+                                id="js-input" 
+                                placeholder="Enter your JavaScript code here...&#10;&#10;Example:&#10;document.addEventListener('DOMContentLoaded', function() {&#10;    console.log('Page loaded!');&#10;    &#10;    const h1 = document.querySelector('h1');&#10;    h1.addEventListener('click', function() {&#10;        alert('Hello from JavaScript!');&#10;    });&#10;});"
+                            ></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -156,6 +210,14 @@
                 <div class="section-header">
                     <h2><i class="fas fa-file-code"></i> Combined HTML Output</h2>
                     <div class="output-actions">
+                        <div class="preview-mode-toggle">
+                            <button class="preview-mode-btn active" data-mode="desktop" title="Desktop Preview">
+                                <i class="fas fa-desktop"></i>
+                            </button>
+                            <button class="preview-mode-btn" data-mode="mobile" title="Mobile Preview">
+                                <i class="fas fa-mobile-alt"></i>
+                            </button>
+                        </div>
                         <button class="output-action-btn" data-action="copy" title="Copy Combined HTML">
                             <i class="fas fa-copy"></i> Copy
                         </button>
@@ -168,16 +230,42 @@
                     </div>
                 </div>
                 <div class="output-container">
-                    <textarea id="combined-output" readonly></textarea>
+                    <div class="output-tabs">
+                        <button class="output-tab-btn active" data-tab="code">
+                            <i class="fas fa-code"></i> Code
+                        </button>
+                        <button class="output-tab-btn" data-tab="preview">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                    <div class="output-tab-content active" id="code-output-tab">
+                        <textarea id="combined-output" readonly></textarea>
+                    </div>
+                    <div class="output-tab-content" id="preview-output-tab">
+                        <div class="preview-container">
+                            <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
 
         <footer>
-            <p>Combine separate HTML, CSS, and JavaScript files into a single HTML document</p>
+            <p>Combine separate HTML, CSS, and JavaScript files into a single HTML document • Drag & drop files for easy import</p>
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Hidden file inputs -->
+    <input type="file" id="html-file-input" accept=".html,.htm" multiple style="display: none;">
+    <input type="file" id="css-file-input" accept=".css" multiple style="display: none;">
+    <input type="file" id="js-file-input" accept=".js,.mjs" multiple style="display: none;">
+
+    <script src="js/core.js"></script>
+    <script src="js/file-handler.js"></script>
+    <script src="js/theme-manager.js"></script>
+    <script src="js/ui-manager.js"></script>
+    <script src="js/html-combiner.js"></script>
+    <script src="js/preview-manager.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
