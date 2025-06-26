@@ -31,6 +31,7 @@ const menuData = [
       { label: "Calculator", url: "Tools/Calculator/index.html", desc: "Simple math calculator." },
       { label: "Cheat Sheets", url: "Tools/CheatSheets/index.html", desc: "CheatSheets for Remembering." },
       { label: "HTML Editor", url: "Tools/HTML Editor/index.html", desc: "Live HTML editor." },
+      { label: "HTML Merger", url: "Tools/HTML Merger/index.html", desc: "Inline HTML, CSS, JS with preview." },
       { label: "HTML Splitter", url: "Tools/HTML Splitter/index.html", desc: "Splits code into HTML, CSS, and JS." },
       { label: "Markdown Editor", url: "Tools/MarkDown/index.html", desc: "Live Github markdown." },
       { label: "Themes", url: "Tools/Theme/index.html", desc: "Few Themes." }
