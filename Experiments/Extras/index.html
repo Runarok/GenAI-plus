@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub Directory Linker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #181a1b;
+      color: #e4e6e7;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 700px;
+      margin: 2rem auto;
+      background: #26292a;
+      border-radius: 10px;
+      box-shadow: 0 4px 24px #10101070;
+      padding: 2rem 2.5rem;
+    }
+    h1 {
+      color: #71a7ff;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 1rem 0;
+    }
+    a {
+      color: #89d0ff;
+      background: #23272a;
+      text-decoration: none;
+      padding: 0.8em 1.2em;
+      border-radius: 8px;
+      display: inline-block;
+      font-size: 1.1em;
+      transition: background 0.2s, color 0.2s;
+    }
+    a:hover {
+      background: #2c3338;
+      color: #fff;
+    }
+    .error {
+      background: #b00020;
+      color: #fff;
+      padding: 1em;
+      border-radius: 8px;
+      margin-bottom: 1em;
+      text-align: center;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 1rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Folders in Extras</h1>
+    <div id="error" class="error" style="display:none"></div>
+    <ul id="folder-list"></ul>
+  </div>
+  <script>
+    // The given GitHub tree URL
+    const githubUrl = "https://github.com/Runarok/GenAI-plus/tree/main/Experiments/Extras";
+    // Parse to get owner, repo, branch, and path
+    function parseGithubTreeUrl(url) {
+      const match = url.match(/^https:\/\/github\.com\/([^\/]+)\/([^\/]+)\/tree\/([^\/]+)\/(.+)$/);
+      if (!match) return null;
+      return {
+        owner: match[1],
+        repo: match[2],
+        branch: match[3],
+        path: match[4]
+      };
+    }
+
+    // Build the GitHub Contents API endpoint
+    function getContentsApiUrl({owner, repo, branch, path}) {
+      return `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
+    }
+
+    // Create a link to the folder in the repo
+    function getFolderPageUrl({owner, repo, branch, basePath, folderName}) {
+      return `https://github.com/${owner}/${repo}/tree/${branch}/${basePath}/${folderName}`;
+    }
+
+    async function main() {
+      const info = parseGithubTreeUrl(githubUrl);
+      if (!info) {
+        showError("Invalid GitHub tree URL.");
+        return;
+      }
+      const apiUrl = getContentsApiUrl(info);
+      try {
+        const res = await fetch(apiUrl);
+        if (!res.ok) {
+          showError(`Failed to fetch contents.<br>Status: ${res.status}`);
+          return;
+        }
+        const data = await res.json();
+        const folders = data.filter(item => item.type === "dir");
+        if (folders.length === 0) {
+          showError("No folders found in this directory.");
+          return;
+        }
+        const list = document.getElementById("folder-list");
+        list.innerHTML = "";
+        folders.forEach(folder => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = getFolderPageUrl({
+            owner: info.owner,
+            repo: info.repo,
+            branch: info.branch,
+            basePath: info.path,
+            folderName: folder.name
+          });
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.textContent = folder.name;
+          li.appendChild(a);
+          list.appendChild(li);
+        });
+      } catch (e) {
+        showError("An error occurred: " + e.message);
+      }
+    }
+
+    function showError(msg) {
+      const err = document.getElementById("error");
+      err.style.display = "block";
+      err.innerHTML = msg;
+    }
+
+    main();
+  </script>
+</body>
+</html>
