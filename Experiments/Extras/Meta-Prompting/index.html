@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Meta Prompting: Step-by-Step Flow (Sudoku App Example)</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <header>
+            <div class="icon-title">
+                <img src="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" alt="GenAI+">
+                <span>
+                    Meta Prompting
+                    <br class="break-mob">
+                    <span style="font-weight:400;">Step-by-Step Flow</span>
+                </span>
+            </div>
+            <nav>
+                <a href="#about">About</a>
+                <a href="#template">Prompt Template</a>
+                <a href="#example">Sudoku Example</a>
+                <a href="#result">Result</a>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle dark/light mode">
+                <span id="theme-label">🌙 Dark</span>
+            </button>
+        </header>
+        <main>
+            <section class="section" id="about">
+                <h1>What is Meta Prompting?</h1>
+                <p>
+                    <b>Meta prompting</b>
+                    is a workflow where you use AI to first help
+                    <b>refine your prompt</b>
+                    (input), then use that improved prompt in your main AI conversation. You repeat this as many cycles as needed—sometimes 6–8 or more—until your result is robust, clear, and truly fits your requirements. This is perfect for complex apps, designs, or creative projects.
+                </p>
+            </section>
+            <section class="section" id="template">
+                <h2>Prompt Template (for Meta Prompting Startups)</h2>
+                <div class="input-box" style="margin:1.1em 0 0 0;">Act as the best prompt engineer.
+Based solely on the information I provide,
+craft the most effective and optimized prompt possible,
+tailored specifically to my goal, audience, and the intended platform: [Platform].
+
+Do not include code, explanations, or external content—
+only return the final, refined prompt I can use directly.</div>
+                <div class="note-block" style="margin-top:1em;">
+                    <b>Note:</b>
+                    Swap
+                    <b>[Platform]</b>
+                    with "ChatGPT", "Midjourney", "Claude", "Notion AI", or whatever tool you want!
+                </div>
+            </section>
+            <section class="section" id="example">
+                <h2>Meta Prompting in Action: Sudoku App Example</h2>
+                <div class="step-flow" id="step-flow">
+                </div>
+                <div class="note-block">
+                    <b>Why use this iterative approach?</b>
+                    <br>
+                    In a single cycle, I was able to get a huge number of major improvements, and even minor details were easily refined step-by-step. This is the power of meta prompting!
+                </div>
+                <div class="output-box" style="margin-top:1.2em;">Major changes in a single iteration included:
+- Real-Time Input Validation: Instantly highlights conflicting numbers as you type
+- Manual Input Validation: Real-time feedback during puzzle creation with detailed error messages
+- Smart Button States: Start button only enables when puzzle is valid and solvable
+- Visual Feedback: Clear color-coded status messages explaining exactly what's wrong
+- Advanced Backtracking Logic: Sophisticated solver with step-by-step reasoning and solution validation
+- Enhanced Hints & Highlights: Animated highlighting and detailed explanations for every hint
+- "Solve Entire Board" Feature: Animated solving, progress tracking, and user-cancellable
+- Smart Conflict Detection: Instant feedback for invalid numbers, auto-clearing highlights
+- Intelligent Bot Assistance: Strategy adapts to current board, communicates with detailed logic
+- Enhanced Mobile Experience: Better touch controls, responsive animations, accessible controls</div>
+                <div class="note-block" style="background:rgba(59,179,224,0.06); margin-top:1.2em;">
+                    Minor improvements were also made, such as:
+                    <ul style="margin:0.5em 0 0.1em 1.1em;">
+                        <li>Improved button styling and spacing for better usability</li>
+                        <li>Tweaked the board color palette for better contrast in both themes</li>
+                        <li>Optimized touch targets for small screen devices</li>
+                        <li>Added clear/reset board option</li>
+                        <li>Fine-tuned error messages and accessibility labels</li>
+                        <li>Ensured all interactions are keyboard-accessible</li>
+                        <li>Subtle hover effects and reduced unnecessary whitespace</li>
+                    </ul>
+                </div>
+            </section>
+            <section class="section" id="result">
+                <h2>See the Final Output</h2>
+                <p>
+                    The result of this meta-prompting process is a robust, feature-rich Sudoku game created entirely through iterative prompt refinement.
+                    <br>
+                    <a href="https://runarok.github.io/GenAI-plus/Games/Sudoku/index.html" class="output-link" target="_blank" rel="noopener">View the Sudoku Game Output</a>
+                </p>
+            </section>
+        </main>
+        <script src="script.js">
+        </script>
+    </body>
+</html>
