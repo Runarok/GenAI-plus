@@ -1,5 +1,6 @@
 class FileHandler {
     constructor() {
+        this.uploadedFiles = new Map(); // Track uploaded files to prevent duplicates
         this.setupFileInputs();
         this.setupDropZones();
         this.setupDirectInput();
@@ -66,6 +67,11 @@ class FileHandler {
         textareas.forEach(id => {
             const textarea = document.getElementById(id);
             if (textarea) {
+                // Disable autocorrect and spellcheck for code inputs
+                textarea.setAttribute('autocorrect', 'off');
+                textarea.setAttribute('autocapitalize', 'off');
+                textarea.setAttribute('spellcheck', 'false');
+                
                 // Make sure textarea is always accessible for typing
                 textarea.style.pointerEvents = 'auto';
                 textarea.style.zIndex = '20';
@@ -149,17 +155,39 @@ class FileHandler {
             );
         }
 
+        // Check for duplicate files
+        const newFiles = this.filterDuplicateFiles(validFiles, type);
+        
+        if (newFiles.length === 0) {
+            Utils.showNotification('All files have already been uploaded', 'warning');
+            return;
+        }
+
+        if (newFiles.length !== validFiles.length) {
+            const duplicateCount = validFiles.length - newFiles.length;
+            Utils.showNotification(
+                `${duplicateCount} duplicate file(s) were skipped`, 
+                'warning'
+            );
+        }
+
         try {
             const contents = await Promise.all(
-                validFiles.map(file => Utils.readFileAsText(file))
+                newFiles.map(file => Utils.readFileAsText(file))
             );
 
             const mergedContent = this.mergeFileContents(contents, type);
-            this.updateInput(type, mergedContent);
-            this.updateFileInfo(type, validFiles);
+            this.updateInput(type, mergedContent, newFiles);
+            this.updateFileInfo(type, newFiles);
+
+            // Track uploaded files
+            newFiles.forEach(file => {
+                const fileKey = `${type}-${file.name}-${file.size}-${file.lastModified}`;
+                this.uploadedFiles.set(fileKey, true);
+            });
 
             Utils.showNotification(
-                `${validFiles.length} ${type.toUpperCase()} file(s) loaded successfully`, 
+                `${newFiles.length} ${type.toUpperCase()} file(s) loaded successfully`, 
                 'success'
             );
 
@@ -172,6 +200,13 @@ class FileHandler {
             console.error('Error processing files:', error);
             Utils.showNotification('Error reading files', 'error');
         }
+    }
+
+    filterDuplicateFiles(files, type) {
+        return files.filter(file => {
+            const fileKey = `${type}-${file.name}-${file.size}-${file.lastModified}`;
+            return !this.uploadedFiles.has(fileKey);
+        });
     }
 
     mergeFileContents(contents, type) {
@@ -187,18 +222,22 @@ class FileHandler {
         return contents.join(separator);
     }
 
-    updateInput(type, content) {
+    updateInput(type, content, files) {
         const textarea = document.getElementById(`${type}-input`);
         const currentContent = textarea.value.trim();
         
-        if (currentContent) {
-            // Merge with existing content
-            const separator = type === 'css' ? '\n\n/* ===== Uploaded Files ===== */\n\n' :
-                             type === 'js' ? '\n\n// ===== Uploaded Files =====\n\n' :
-                             '\n\n<!-- ===== Uploaded Files ===== -->\n\n';
-            textarea.value = currentContent + separator + content;
-        } else {
+        if (type === 'html') {
+            // For HTML, replace content instead of merging
             textarea.value = content;
+        } else {
+            // For CSS and JS, merge with existing content
+            if (currentContent) {
+                const separator = type === 'css' ? '\n\n/* ===== Uploaded Files ===== */\n\n' :
+                                 '\n\n// ===== Uploaded Files =====\n\n';
+                textarea.value = currentContent + separator + content;
+            } else {
+                textarea.value = content;
+            }
         }
 
         // Update drop zone state
@@ -226,5 +265,14 @@ class FileHandler {
     clearFileInfo(type) {
         const fileInfo = document.getElementById(`${type}-file-info`);
         fileInfo.innerHTML = '';
+        
+        // Clear tracked files for this type
+        const keysToDelete = [];
+        for (const key of this.uploadedFiles.keys()) {
+            if (key.startsWith(`${type}-`)) {
+                keysToDelete.push(key);
+            }
+        }
+        keysToDelete.forEach(key => this.uploadedFiles.delete(key));
     }
 }

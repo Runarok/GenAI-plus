@@ -581,6 +581,7 @@
   justify-content: center;
   align-items: flex-start;
   padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .preview-container.mobile-mode iframe {
@@ -589,6 +590,7 @@
   border: 8px solid #333;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  background: white;
 }
 
 #preview-frame {

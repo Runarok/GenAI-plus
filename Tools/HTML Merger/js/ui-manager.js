@@ -242,12 +242,21 @@ class UIManager {
                 }
                 
                 try {
+                    // Get current preview mode
+                    const previewMode = window.previewManager ? window.previewManager.getCurrentMode() : 'desktop';
+                    
                     const blob = new Blob([content], { type: MIME_TYPES.HTML });
                     const url = URL.createObjectURL(blob);
-                    const newWindow = window.open(url, '_blank');
+                    
+                    // Open in new window with appropriate size based on preview mode
+                    const windowFeatures = previewMode === 'mobile' 
+                        ? 'width=375,height=667,scrollbars=yes,resizable=yes'
+                        : 'width=1200,height=800,scrollbars=yes,resizable=yes';
+                    
+                    const newWindow = window.open(url, '_blank', windowFeatures);
                     
                     if (newWindow) {
-                        Utils.showNotification('Preview opened in new tab!', 'success');
+                        Utils.showNotification(`Preview opened in new ${previewMode} window!`, 'success');
                         setTimeout(() => URL.revokeObjectURL(url), 1000);
                     } else {
                         Utils.showNotification('Please allow popups to preview the HTML', 'warning');
