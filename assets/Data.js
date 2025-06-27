@@ -46,8 +46,7 @@ const menuData = [
     { "label": "Sandbox", "url": "Experiments/Sandbox/Sandbox.html", "desc": "Try out ideas in the sandbox." },
     { "label": "SnarkBot", "url": "Experiments/AI Chat/SnarkBot/index.html", "desc": "Snarky AI bot." },
     { "label": "Bin", "url": "Experiments/Bin/index.html", "desc": "Trash/projects that failed or were ditched." },
-    { "label": "Extras", "url": "Experiments/Extras/index.html", "desc": "Useful/specific projects that don't fit elsewhere." },
-    { "label": "Anime Merch", "url": "Experiments/AnimeMerch/index.html", "desc": "Just front end." }
+    { "label": "Extras", "url": "Experiments/Extras/index.html", "desc": "Useful/specific projects that don't fit elsewhere." }
   ]
 },
   {
