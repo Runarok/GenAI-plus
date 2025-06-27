@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Card</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+  <style>
+    :root {
+      --primary-pink: #ff4081;
+      --card-radius: 20px;
+      --shadow-dark: 0 10px 50px rgba(0,0,0,0.8);
+      --shadow-light: 0 8px 32px rgba(255,64,129,0.10);
+      --color-red: #ff5252;
+      --color-orange: #ffb74d;
+      --color-yellow: #ffee58;
+      --color-green: #00b894;
+      --color-blue: #6c63ff;
+      --color-indigo: #536dfe;
+      --color-purple: #a29bfe;
+      --color-pink: #f06292;
+      --color-teal: #1de9b6;
+      --color-brown: #8d6e63;
+      --color-gray: #bdbdbd;
+      --color-cyan: #4dd0e1;
+      --color-lime: #d4e157;
+      --color-deeporange: #ff7043;
+      --color-deeppurple: #7c4dff;
+      --color-lightblue: #4fc3f7;
+      --color-lightgreen: #81c784;
+    }
+    html, body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #232526 0%, #1c1c1c 100%);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: background 0.6s, color 0.6s;
+    }
+    body.light {
+      background: linear-gradient(135deg, #fffbe6 0%, #f2f2f2 100%);
+      color: #2b2b2b;
+    }
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 460px;
+      padding: 1em 0.7em;
+    }
+    .input-section, .card-section {
+      display: none;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 420px;
+    }
+    .input-section {
+      display: block;
+      background: rgba(30,30,30,0.87);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow-dark);
+      padding: 2em 1.2em 1.6em 1.2em;
+      margin-bottom: 1em;
+      transition: background 0.5s, box-shadow 0.5s;
+    }
+    body.light .input-section {
+      background: #fff;
+      box-shadow: var(--shadow-light);
+    }
+    .input-section h1 {
+      font-size: 2.2em;
+      margin-bottom: 22px;
+      letter-spacing: 0.01em;
+      color: var(--primary-pink);
+      font-family: 'Pacifico', cursive, 'Comic Sans MS', cursive;
+    }
+    .input-section .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7em;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .input-section .row.centered {
+      justify-content: center;
+    }
+    .input-section label {
+      font-size: 1.1em;
+      min-width: 75px;
+      text-align: left;
+      margin-right: 0.8em;
+    }
+    .input-section input {
+      padding: 13px;
+      font-size: 19px;
+      border: 2px solid #c0c0c0;
+      background: #292929;
+      color: #fff;
+      border-radius: 7px;
+      width: 100%;
+      min-width: 0;
+      text-align: center;
+      outline: none;
+      transition: border 0.3s, background 0.4s, color 0.4s;
+      appearance: none;
+      flex: 1 1 auto;
+    }
+    .input-section select {
+      padding: 13px;
+      font-size: 19px;
+      border: 2px solid #c0c0c0;
+      background: #292929;
+      color: #fff;
+      border-radius: 7px;
+      width: 100%;
+      min-width: 0;
+      outline: none;
+      transition: border 0.3s, background 0.4s, color 0.4s;
+      appearance: none;
+      flex: 2 1 0px;
+    }
+    .input-section input:focus, .input-section select:focus {
+      border: 2px solid var(--primary-pink);
+    }
+    body.light .input-section input,
+    body.light .input-section select {
+      background: #fffbe6;
+      color: #222;
+      border-color: #eee;
+    }
+    .input-section button {
+      padding: 12px 32px;
+      font-size: 20px;
+      background-color: var(--primary-pink);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      margin-top: 11px;
+      margin-right: 0.8em;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      transition: background 0.3s;
+      box-shadow: 0 2px 16px rgba(255,64,129,0.10);
+      display: inline-block;
+    }
+    .input-section button:last-child {
+      margin-right: 0;
+    }
+    .input-section button:hover {
+      background-color: #ff85b3;
+    }
+    .theme-popup-btn {
+      background: #222;
+      color: var(--primary-pink);
+      border: 2px solid var(--primary-pink);
+      padding: 10px 18px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      margin-left: 0.5em;
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s;
+    }
+    body.light .theme-popup-btn {
+      background: #fffbe6;
+      color: var(--primary-pink);
+      border: 2px solid var(--primary-pink);
+    }
+    .theme-popup-btn:hover {
+      background: var(--primary-pink);
+      color: #fff;
+    }
+    #themePreview {
+      margin-left: 0.8em;
+      font-size: 1.05em;
+      min-width: 110px;
+      display:inline-block;
+      vertical-align:middle;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    /* Toast Notification Styles */
+    .toast {
+      visibility: hidden;
+      position: fixed;
+      z-index: 9999;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #232323;
+      color: #fff;
+      text-align: center;
+      border-radius: 7px;
+      padding: 12px 26px;
+      font-size: 20px;
+      line-height: 1.5;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: opacity 0.6s, visibility 0.6s;
+      width: auto;
+      max-width: 80vw;
+    }
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+    body.light .toast {
+      background: #fffbe6;
+      color: #222;
+      box-shadow: 0 4px 12px rgba(255,64,129,0.07);
+    }
+    /* Birthday Card Design */
+    .card {
+      background-color: #1e1e1e;
+      padding: 38px 25px 30px 25px;
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow-dark);
+      text-align: center;
+      animation: cardAnimation 0.8s cubic-bezier(0.22,1,0.36,1);
+      max-width: 99vw;
+      margin: 0 auto;
+      position: relative;
+      transition: background 0.5s, box-shadow 0.5s;
+    }
+    body.light .card {
+      background-color: #fff;
+      box-shadow: var(--shadow-light);
+    }
+    .card h1 {
+      font-size: 2.2em;
+      margin-bottom: 15px;
+      color: var(--primary-pink);
+      animation: fadeInTitle 0.8s cubic-bezier(0.22,1,0.36,1);
+      font-family: 'Pacifico', cursive, 'Comic Sans MS', cursive;
+      letter-spacing: 0.03em;
+    }
+    .card p {
+      font-size: 1.35em;
+      margin-top: 10px;
+      color: #e0e0e0;
+      animation: fadeInText 1.1s cubic-bezier(0.22,1,0.36,1);
+      transition: color 0.5s;
+    }
+    body.light .card p {
+      color: #3c3c3c;
+    }
+    .card img {
+      width: 266px;
+      margin-top: 22px;
+      border-radius: 13px;
+      animation: bounceIn 1s cubic-bezier(0.22,1,0.36,1);
+      box-shadow: 0 2px 16px rgba(255,64,129,0.15);
+      background: #fff1;
+      max-width: 95vw;
+      display: block;
+    }
+    /* Keyframe Animations */
+    @keyframes cardAnimation {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeInTitle {
+      0% { opacity: 0; transform: translateY(-24px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInText {
+      0% { opacity: 0; transform: translateY(20px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0.7) translateY(35px); opacity: 0; }
+      80% { transform: scale(1.08) translateY(-10px); opacity: 0.95; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    @media (max-width: 600px) {
+      .card img { width: 97vw; max-width: 320px;}
+      .card { padding: 18px 3vw 16px 3vw;}
+      .input-section input, .input-section select { width: 99%; }
+      .container { padding: 0.7em 0.1em; }
+    }
+    /* Theme Popup Modal */
+    .theme-modal-bg {
+      position: fixed;
+      z-index: 10000;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .theme-modal-bg.active {
+      display: flex;
+    }
+    .theme-modal {
+      background: #222;
+      padding: 2em 2em 1.3em 2em;
+      border-radius: 18px;
+      min-width: 265px;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 4px 32px #0007;
+      position: relative;
+      transition: background 0.4s, color 0.4s;
+    }
+    .theme-modal.light {
+      background: #fff;
+      color: #232526;
+    }
+    .theme-modal .modal-title {
+      font-size: 1.35em;
+      font-weight: bold;
+      margin-bottom: 0.9em;
+      letter-spacing: 0.03em;
+      color: var(--primary-pink);
+    }
+    .theme-modal .modal-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.1em;
+      gap: 1em;
+    }
+    .theme-modal .modal-row:last-child {
+      margin-bottom: 0.3em;
+    }
+    .theme-modal .theme-btn {
+      border: 2px solid #fff2;
+      border-radius: 7px;
+      background: #181818;
+      color: #fff;
+      padding: 7px 18px;
+      cursor: pointer;
+      font-size: 1.08em;
+      min-width: 80px;
+      margin: 0 0.4em;
+      transition: background 0.22s, color 0.22s, border 0.22s;
+    }
+    .theme-modal.light .theme-btn {
+      background: #f7f7f7;
+      color: #232526;
+      border: 2px solid #ddd;
+    }
+    .theme-modal .theme-btn.selected {
+      border: 2px solid var(--primary-pink);
+      background: #2b2b2b;
+      color: var(--primary-pink);
+    }
+    .theme-modal.light .theme-btn.selected {
+      background: #fbeafd;
+      color: var(--primary-pink);
+    }
+    .theme-modal .color-palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55em;
+      justify-content: center;
+      align-items: center;
+      margin: 0.7em 0 0.2em 0;
+    }
+    .theme-modal .color-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2.5px solid #fff8;
+      cursor: pointer;
+      transition: border 0.19s;
+      box-sizing: border-box;
+      outline: none;
+      display: inline-block;
+    }
+    .theme-modal.light .color-circle {
+      border: 2.5px solid #ddd;
+    }
+    .theme-modal .color-circle.selected {
+      border: 3px solid var(--primary-pink);
+      outline: 2.5px solid #ffbebe;
+    }
+    .theme-modal .modal-actions {
+      margin-top: 1.5em;
+      display: flex;
+      gap: 1em;
+      justify-content: center;
+    }
+    .theme-modal .modal-close {
+      position: absolute;
+      top: 0.8em;
+      right: 1em;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5em;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.19s;
+    }
+    .theme-modal.light .modal-close {
+      color: #232526;
+    }
+    .theme-modal .modal-close:hover {
+      opacity: 1;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Input Section (for name, quote, theme) -->
+    <div class="input-section" id="inputSection">
+      <h1>Birthday Card Generator</h1>
+      <div class="row">
+        <label for="nameInput">Name</label>
+        <input type="text" id="nameInput" maxlength="36" placeholder="Your Name">
+      </div>
+      <div class="row centered">
+        <label for="quoteSelect">Quote</label>
+        <select id="quoteSelect"></select>
+      </div>
+      <div class="row centered">
+        <label for="themePopupBtn">Theme</label>
+        <button class="theme-popup-btn" id="themePopupBtn" type="button">🎨 Choose Theme</button>
+        <span id="themePreview"></span>
+      </div>
+      <div class="row centered" style="margin-bottom: 0;">
+        <button id="generateBtn">Copy Link</button>
+        <button class="preview-btn" id="previewBtn">Preview</button>
+      </div>
+    </div>
+  </div>
+  <div id="themeModalBg" class="theme-modal-bg">
+    <div class="theme-modal" id="themeModal">
+      <button class="modal-close" id="closeThemeModal">&times;</button>
+      <div class="modal-title">Choose Card Theme</div>
+      <div class="modal-row">
+        <button class="theme-btn" data-base="dark">Dark</button>
+        <button class="theme-btn" data-base="light">Light</button>
+      </div>
+      <div style="font-size:1.05em;margin-bottom:0.4em;">Accent Color:</div>
+      <div class="color-palette" id="colorPalette"></div>
+      <div class="modal-actions">
+        <button class="theme-btn" id="themeModalApply">Apply</button>
+      </div>
+    </div>
+  </div>
+  <div id="toast" class="toast">Link copied!</div>
+  <script>
+    // Quotes for the card
+    const quotes = [
+      "Wishing you a day filled with happiness and a year filled with joy!",
+      "May your birthday be the start of a year filled with good luck, good health, and much happiness.",
+      "Happy Birthday! May your day be filled with love, laughter, and joy!",
+      "On your special day, may you be surrounded by love and happiness! Enjoy every moment!",
+      "Sending you smiles for every moment of your special day… Have a wonderful time and a very happy birthday!",
+      "Cheers to you and your incredible journey ahead. Have a fantastic birthday!",
+      "Here's to another year of making beautiful memories! Happy Birthday!",
+      "May your heart be filled with joy and laughter on your special day. Happy Birthday!",
+      "On your birthday, may the sun shine as brightly as your spirit. Enjoy every moment!",
+      "Wishing you a year full of love, adventure, and endless possibilities. Happy Birthday!",
+      "Birthdays are nature’s way of telling us to eat more cake! Have a sweet and delightful day!",
+      "Your birthday is the perfect time to remind you how much you are loved. Have a wonderful day!",
+      "Wishing you a lifetime of happiness, peace, and prosperity. Happy Birthday!",
+      "May your birthday be filled with all your favorite things and surrounded by the ones you love. Enjoy!",
+      "Blow out the candles and make a wish. Happy Birthday!"
+    ];
+
+    // Birthday-related, stock-free images (Unsplash, Pixabay, Pexels, PNGs)
+    const images = [
+      "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=640&q=80",
+      "https://cdn.pixabay.com/photo/2017/01/31/13/14/birthday-2028658_1280.png",
+      "https://cdn.pixabay.com/photo/2014/12/21/23/50/birthday-579520_1280.png",
+      "https://cdn.pixabay.com/photo/2016/03/23/17/33/birthday-1276269_1280.png",
+      "https://images.pexels.com/photos/2072181/pexels-photo-2072181.jpeg?auto=compress&w=640&h=427&fit=crop",
+      "https://images.pexels.com/photos/796602/pexels-photo-796602.jpeg?auto=compress&w=640&h=427&fit=crop",
+      "https://images.pexels.com/photos/1721938/pexels-photo-1721938.jpeg?auto=compress&w=640&h=427&fit=crop",
+      "https://images.pexels.com/photos/2072169/pexels-photo-2072169.jpeg?auto=compress&w=640&h=427&fit=crop",
+      "https://images.pexels.com/photos/2072182/pexels-photo-2072182.jpeg?auto=compress&w=640&h=427&fit=crop"
+    ];
+
+    // 8 color accents (css var name, display, hex)
+    const colorAccents = [
+      {var: 'pink', name: 'Pink', hex: '#ff4081'},
+      {var: 'blue', name: 'Blue', hex: '#6c63ff'},
+      {var: 'green', name: 'Green', hex: '#00b894'},
+      {var: 'yellow', name: 'Yellow', hex: '#ffee58'},
+      {var: 'orange', name: 'Orange', hex: '#ffb74d'},
+      {var: 'purple', name: 'Purple', hex: '#a29bfe'},
+      {var: 'red', name: 'Red', hex: '#ff5252'},
+      {var: 'teal', name: 'Teal', hex: '#1de9b6'}
+    ];
+
+    // THEME: { base: 'dark'|'light', accent: idx }
+    let currentTheme = { base: 'dark', accent: 0 };
+
+    // DOM Elements
+    const nameInput = document.getElementById('nameInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const toast = document.getElementById('toast');
+    const quoteSelect = document.getElementById('quoteSelect');
+    const themePopupBtn = document.getElementById('themePopupBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const themeModalBg = document.getElementById('themeModalBg');
+    const themeModal = document.getElementById('themeModal');
+    const colorPalette = document.getElementById('colorPalette');
+    const themePreview = document.getElementById('themePreview');
+    const themeModalApply = document.getElementById('themeModalApply');
+    const closeThemeModal = document.getElementById('closeThemeModal');
+
+    // Fill quote select menu
+    function populateQuotesMenu() {
+      quoteSelect.innerHTML = "";
+      let optRandom = document.createElement("option");
+      optRandom.value = "r";
+      optRandom.textContent = "🎲 Random Quote";
+      quoteSelect.appendChild(optRandom);
+      quotes.forEach((q, i) => {
+        let opt = document.createElement("option");
+        opt.value = i.toString(36); // short base36 index
+        opt.textContent = (i+1) + ". " + q;
+        quoteSelect.appendChild(opt);
+      });
+    }
+
+    // Show toast notification
+    function showToast(msg="Link copied!") {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(()=>{ toast.classList.remove('show'); }, 1700);
+    }
+
+    // Helper: base64url encode/decode for short names
+    function base64urlEncode(str) {
+      return btoa(unescape(encodeURIComponent(str)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+    function base64urlDecode(str) {
+      str = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (str.length % 4) str += '=';
+      return decodeURIComponent(escape(atob(str)));
+    }
+
+    // Helper: encode all params compactly ("name;quote;theme")
+    function encodeParams(name, quoteIdx, themeObj) {
+      let encoded = base64urlEncode(name) + ";";
+      encoded += (quoteIdx !== null && typeof quoteIdx === "number")
+        ? quoteIdx.toString(36) : "r";
+      encoded += ";" + (themeObj.base === "light" ? "l" : "d") + themeObj.accent.toString(16);
+      return encoded;
+    }
+    // Helper: decode params from hash ("name;quote;theme")
+    function decodeParams(hash) {
+      let parts = hash.split(";");
+      if (parts.length < 3) return null;
+      let name = "";
+      try { name = base64urlDecode(parts[0]); } catch(e) { name = ""; }
+      let quoteIdx = null;
+      if (parts[1] !== "r") {
+        let idx = parseInt(parts[1], 36);
+        if (!isNaN(idx) && idx >= 0 && idx < quotes.length) quoteIdx = idx;
+      }
+      let themeBase = (parts[2][0] === "l") ? "light" : "dark";
+      let accentIdx = parseInt(parts[2][1], 16);
+      if (!(accentIdx >= 0 && accentIdx < colorAccents.length)) accentIdx = 0;
+      if (!name) return null;
+      return { name, quoteIdx, theme: {base: themeBase, accent: accentIdx} };
+    }
+
+    // Set the theme on <body> and update CSS vars & modal
+    function setTheme(themeObj) {
+      document.body.className = themeObj.base;
+      document.documentElement.style.setProperty('--primary-pink', colorAccents[themeObj.accent].hex);
+      themePreview.textContent = (themeObj.base === "light" ? "Light" : "Dark") + " / " + colorAccents[themeObj.accent].name;
+      themePreview.style.color = colorAccents[themeObj.accent].hex;
+
+      // Modal theme
+      if (themeObj.base === "light") {
+        themeModal.classList.add("light");
+      } else {
+        themeModal.classList.remove("light");
+      }
+    }
+
+    // Theme modal logic
+    function openThemeModal() {
+      // Set initial selection
+      let btns = themeModal.querySelectorAll(".theme-btn[data-base]");
+      btns.forEach(btn => {
+        btn.classList.toggle('selected', btn.getAttribute("data-base") === currentTheme.base);
+      });
+      let circles = colorPalette.querySelectorAll(".color-circle");
+      circles.forEach((c, idx) => {
+        c.classList.toggle('selected', idx === currentTheme.accent);
+      });
+      themeModalBg.classList.add("active");
+      setTheme(currentTheme);
+    }
+    function closeThemePopup() {
+      themeModalBg.classList.remove("active");
+    }
+    // Modal events
+    themePopupBtn.onclick = openThemeModal;
+    closeThemeModal.onclick = closeThemePopup;
+    themeModalBg.onclick = function(e) {
+      if (e.target === themeModalBg) closeThemePopup();
+    };
+    // Build palette
+    function buildPalette() {
+      colorPalette.innerHTML = "";
+      colorAccents.forEach((accent, idx) => {
+        let div = document.createElement("div");
+        div.className = "color-circle";
+        div.style.background = accent.hex;
+        div.title = accent.name;
+        div.tabIndex = 0;
+        if(idx === currentTheme.accent) div.classList.add("selected");
+        div.onclick = () => {
+          colorPalette.querySelectorAll(".color-circle").forEach(c => c.classList.remove("selected"));
+          div.classList.add("selected");
+          currentTheme.accent = idx;
+        };
+        div.onkeydown = (e) => { if (e.key === " " || e.key === "Enter") div.click(); };
+        colorPalette.appendChild(div);
+      });
+    }
+    buildPalette();
+
+    // Dark/Light buttons in modal
+    themeModal.querySelectorAll(".theme-btn[data-base]").forEach(btn => {
+      btn.onclick = function() {
+        themeModal.querySelectorAll(".theme-btn[data-base]").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        currentTheme.base = btn.getAttribute("data-base");
+        setTheme(currentTheme);
+      };
+    });
+    themeModalApply.onclick = function() {
+      setTheme(currentTheme);
+      closeThemePopup();
+    };
+
+    // "Copy Link"
+    generateBtn.onclick = function() {
+      let name = nameInput.value.trim();
+      if (!name) {
+        nameInput.focus();
+        showToast("Please enter a name!");
+        return;
+      }
+      let quoteRaw = quoteSelect.value;
+      let quoteIdx = quoteRaw === "r" ? null : parseInt(quoteRaw, 36);
+      let hash = encodeParams(name, quoteIdx, currentTheme);
+      let url = window.location.origin + window.location.pathname + "#" + hash;
+      navigator.clipboard.writeText(url).then(function() {
+        showToast("Link copied!");
+      });
+    };
+
+    // "Preview" in new tab
+    previewBtn.onclick = function() {
+      let name = nameInput.value.trim();
+      if (!name) {
+        nameInput.focus();
+        showToast("Please enter a name!");
+        return;
+      }
+      let quoteRaw = quoteSelect.value;
+      let quoteIdx = quoteRaw === "r" ? null : parseInt(quoteRaw, 36);
+      let hash = encodeParams(name, quoteIdx, currentTheme);
+      let url = window.location.origin + window.location.pathname + "?" + Date.now() + "#" + hash;
+      window.open(url, "_blank", "noopener");
+    };
+
+    // On load: populate quote menu & theme
+    window.onload = function() {
+      populateQuotesMenu();
+      setTheme(currentTheme);
+    };
+
+    // Card preview: if loaded as preview (with hash and search param), show only the card
+    if (window.location.hash && window.location.search) {
+      document.body.innerHTML = `
+        <div class="container">
+          <div class="card-section" id="cardSection">
+            <div class="card" id="birthdayCard">
+              <h1 id="cardTitle"></h1>
+              <p id="cardMessage"></p>
+              <img id="birthdayImage" src="" alt="Birthday Celebration" style="display:none;">
+            </div>
+          </div>
+        </div>
+      `;
+      const params = decodeParams(window.location.hash.replace(/^#/, ""));
+      if (params) {
+        document.body.className = params.theme.base;
+        document.documentElement.style.setProperty('--primary-pink', colorAccents[params.theme.accent].hex);
+        let cardTitle = document.getElementById('cardTitle');
+        let cardMessage = document.getElementById('cardMessage');
+        cardTitle.textContent = `Happy Birthday, ${params.name}!`;
+        let quote;
+        if (typeof params.quoteIdx === "number" && params.quoteIdx >= 0 && params.quoteIdx < quotes.length) {
+          quote = quotes[params.quoteIdx];
+        } else {
+          quote = quotes[Math.floor(Math.random()*quotes.length)];
+        }
+        cardMessage.textContent = quote;
+        let img = document.getElementById('birthdayImage');
+        let src = images[Math.floor(Math.random()*images.length)];
+        img.onload = function(){ img.style.display = "block"; };
+        img.onerror = function(){ img.style.display = "none"; };
+        img.src = src;
+      } else {
+        document.getElementById('birthdayCard').innerHTML = "<h1>Invalid Card Link</h1>";
+      }
+    }
+  </script>
+</body>
+</html>
