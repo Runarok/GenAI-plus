@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Runarok - Gitinfo</title>
+        <script src="https://cdn.tailwindcss.com">
+        </script>
+        <!-- Favicon and icon for 'Add to Home Screen' -->
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/Runarok/main/Logo.png" type="image/png">
+        <!-- Link to manifest.json (for better compatibility with 'Add to Home Screen') -->
+        <link rel="manifest" href="manifest.json">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body class="bg-secondary text-gray-100 min-h-screen">
+        <nav class="fixed w-full bg-secondary/90 backdrop-blur-sm z-50">
+            <div class="container mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <a href="https://github.com/Runarok" class="text-2xl font-['Pacifico'] text-primary">Runarok</a>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#about" class="hover:text-primary transition-colors cursor-pointer">About</a>
+                        <a href="#projects" class="hover:text-primary transition-colors cursor-pointer">Projects</a>
+                        <a href="#skills" class="hover:text-primary transition-colors cursor-pointer">Skills</a>
+                    </div>
+                    <button class="md:hidden w-10 h-10 flex items-center justify-center cursor-pointer">
+                        <i class="ri-menu-line text-2xl">
+                        </i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <section id="about" class="min-h-screen flex items-center pt-20">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h1 class="text-4xl md:text-6xl font-bold mb-4 animate-typing">Hi, I'm Runarok</h1>
+                        <h2 class="text-xl md:text-2xl text-primary mb-6">Adept Web Developer</h2>
+                        <p class="text-gray-300 mb-8">Driven by a strong interest in solving complex problems, I am a student eager to learn and apply my skills in web development. I specialize in HTML5, CSS3, JavaScript, and Python...</p>
+                        <div class="flex space-x-4">
+                            <a href="https://github.com/RUNAROK" target="_blank" class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full hover:bg-primary/20 transition-colors cursor-pointer">
+                                <i class="ri-github-line text-2xl">
+                                </i>
+                            </a>
+                            <a href="https://linkedin.com/in/RUNAROK" target="_blank" class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full hover:bg-primary/20 transition-colors cursor-pointer">
+                                <i class="ri-linkedin-line text-2xl">
+                                </i>
+                            </a>
+                            <a href="https://runarok.github.io/OLD/first.html" target="_blank" class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full hover:bg-primary/20 transition-colors cursor-pointer">
+                                <i class="ri-twitter-line text-2xl">
+                                </i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <img src="https://avatars.githubusercontent.com/u/191216225?v=4" alt="Runarok" class="rounded-2xl shadow-2xl object-cover">
+                        <div class="absolute inset-0 bg-primary/20 rounded-2xl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="projects" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="flex justify-between items-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">Featured Projects</h2>
+                    <div class="flex items-center space-x-4">
+                        <select id="sort-projects" class="bg-secondary/50 text-gray-100 px-4 py-2 rounded-button border-none focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="updated">Last Updated</option>
+                            <option value="created">Created Date</option>
+                            <option value="stars">Most Stars</option>
+                            <option value="name">Name</option>
+                        </select>
+                        <div class="relative">
+                            <input type="text" id="search-projects" placeholder="Search projects..." class="bg-secondary/50 text-gray-100 px-4 py-2 rounded-button border-none focus:outline-none focus:ring-2 focus:ring-primary pr-10">
+                            <i class="ri-search-line absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            </i>
+                        </div>
+                    </div>
+                </div>
+                <div class="max-h-[800px] overflow-y-auto pr-4 custom-scrollbar">
+                    <div id="github-projects" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="flex items-center justify-center col-span-full">
+                            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="skills" class="py-20 bg-secondary/30">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">Skills & Expertise</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="p-6 bg-secondary/50 rounded-xl">
+                        <h3 class="text-xl font-semibold mb-6 flex items-center">
+                            <i class="ri-code-line text-2xl text-primary mr-2">
+                            </i>
+                            Web Development
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- HTML5, CSS3, JS -->
+                            <div class="flex items-center p-4 bg-primary/10 rounded-xl hover:bg-primary/20 transition-colors">
+                                <i class="ri-html5-line text-2xl mr-3 text-primary">
+                                </i>
+                                <div>
+                                    <div class="font-medium">HTML5</div>
+                                    <div class="text-sm text-gray-400">Competent</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-4 bg-primary/10 rounded-xl hover:bg-primary/20 transition-colors">
+                                <i class="ri-css3-line text-2xl mr-3 text-primary">
+                                </i>
+                                <div>
+                                    <div class="font-medium">CSS3</div>
+                                    <div class="text-sm text-gray-400">Competent</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-4 bg-primary/10 rounded-xl hover:bg-primary/20 transition-colors">
+                                <i class="ri-javascript-line text-2xl mr-3 text-primary">
+                                </i>
+                                <div>
+                                    <div class="font-medium">JavaScript</div>
+                                    <div class="text-sm text-gray-400">Competent</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-4 bg-primary/10 rounded-xl hover:bg-primary/20 transition-colors">
+                                <i class="ri-python-line text-2xl mr-3 text-primary">
+                                </i>
+                                <div>
+                                    <div class="font-medium">Python</div>
+                                    <div class="text-sm text-gray-400">Competent</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-secondary/50 rounded-xl">
+                        <h3 class="text-xl font-semibold mb-6 flex items-center">
+                            <i class="ri-github-line text-2xl text-primary mr-2">
+                            </i>
+                            Version Control & Platforms
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center p-4 bg-primary/10 rounded-xl hover:bg-primary/20 transition-colors">
+                                <i class="ri-github-line text-2xl mr-3 text-primary">
+                                </i>
+                                <div>
+                                    <div class="font-medium">GitHub</div>
+                                    <div class="text-sm text-gray-400">Expert</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-secondary/50 rounded-xl">
+                        <h3 class="text-xl font-semibold mb-6 flex items-center">
+                            <i class="ri-code-s-slash-line text-2xl text-primary mr-2">
+                            </i>
+                            Other Technologies
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center p-4 bg-primary/10 rounded-xl hover:bg-primary/20 transition-colors">
+                                <i class="ri-cplusplus-line text-2xl mr-3 text-primary">
+                                </i>
+                                <div>
+                                    <div class="font-medium">C++</div>
+                                    <div class="text-sm text-gray-400">Occasional</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-4 bg-primary/10 rounded-xl hover:bg-primary/20 transition-colors">
+                                <i class="ri-terminal-line text-2xl mr-3 text-primary">
+                                </i>
+                                <div>
+                                    <div class="font-medium">Assembly</div>
+                                    <div class="text-sm text-gray-400">Occasional</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-4 bg-primary/10 rounded-xl hover:bg-primary/20 transition-colors">
+                                <i class="ri-java-line text-2xl mr-3 text-primary">
+                                </i>
+                                <div>
+                                    <div class="font-medium">Java</div>
+                                    <div class="text-sm text-gray-400">Occasional</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script src="script.js">
+        </script>
+    </body>
+</html>
