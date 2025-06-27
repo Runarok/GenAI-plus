@@ -111,73 +111,88 @@
     <h1>Sandbox Programs</h1>
     <div class="container" id="container"></div>
 
-    <script>
-        // Data for the sandbox prototypes
-        const sandboxData = [
-            {
-                category: 'Sandbox Prototypes',
-                items: [
-                    {
-                        name: 'Prototype1',
-                        description: 'Basic function implemented',
-                        link: 'https://runarok.github.io/ArbitraryWorks/Files/Sandbox/Prototype1.html'
-                    },
-                    {
-                        name: 'Prototype2',
-                        description: 'Colors added',
-                        link: 'https://runarok.github.io/ArbitraryWorks/Files/Sandbox/Prototype1.html'
-                    }
-                ]
-            }
-        ];
-
-        // Get the container div
-        const container = document.getElementById('container');
-
-        // Function to create a sandbox category
-        function createSandboxCategory(categoryData) {
-            const categoryDiv = document.createElement('div');
-            categoryDiv.classList.add('sandbox-category');
-
-            const categoryTitle = document.createElement('div');
-            categoryTitle.classList.add('category-title');
-            categoryTitle.textContent = categoryData.category;
-            categoryDiv.appendChild(categoryTitle);
-
-            const sandboxList = document.createElement('ul');
-            sandboxList.classList.add('sandbox-list');
-
-            categoryData.items.forEach(item => {
-                const sandboxItem = document.createElement('li');
-                sandboxItem.classList.add('sandbox-item');
-                
-                const description = document.createElement('div');
-                description.classList.add('description');
-                description.textContent = `${item.name}: ${item.description}`;
-                
-                const buttonContainer = document.createElement('div');
-                buttonContainer.classList.add('button-container');
-
-                const tryButton = document.createElement('a');
-                tryButton.href = item.link;
-                tryButton.classList.add('try-button');
-                tryButton.textContent = 'Try';
-                
-                buttonContainer.appendChild(tryButton);
-                sandboxItem.appendChild(description);
-                sandboxItem.appendChild(buttonContainer);
-                sandboxList.appendChild(sandboxItem);
-            });
-
-            categoryDiv.appendChild(sandboxList);
-            return categoryDiv;
+<script>
+    // Data for the sandbox prototypes
+    const sandboxData = [
+        {
+            category: 'Sandbox Prototypes',
+            items: [
+                {
+                    name: 'Prototype1',
+                    description: 'Basic function implemented',
+                    link: 'https://runarok.github.io/ArbitraryWorks/Files/Sandbox/Prototype1.html'
+                },
+                {
+                    name: 'Prototype2',
+                    description: 'Colors added',
+                    link: 'https://runarok.github.io/ArbitraryWorks/Files/Sandbox/Prototype1.html'
+                },
+                {
+                    name: 'Prototype3',
+                    description: 'Quality of life but left and down gravity',
+                    link: 'https://runarok.github.io/ArbitraryWorks/Files/Sandbox/Prototype3.html'
+                },
+                {
+                    name: 'Prototype4',
+                    description: 'Working properly',
+                    link: 'https://runarok.github.io/ArbitraryWorks/Files/Sandbox/Prototype4.html'
+                },
+                {
+                    name: 'Prototype5',
+                    description: 'Has theme toggle and looks good',
+                    link: 'https://runarok.github.io/ArbitraryWorks/Files/Sandbox/Prototype5.html'
+                }
+            ]
         }
+    ];
 
-        // Create the entire body content dynamically
-        sandboxData.forEach(categoryData => {
-            const categoryDiv = createSandboxCategory(categoryData);
-            container.appendChild(categoryDiv);
+    // Get the container div
+    const container = document.getElementById('container');
+
+    // Function to create a sandbox category
+    function createSandboxCategory(categoryData) {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.classList.add('sandbox-category');
+
+        const categoryTitle = document.createElement('div');
+        categoryTitle.classList.add('category-title');
+        categoryTitle.textContent = categoryData.category;
+        categoryDiv.appendChild(categoryTitle);
+
+        const sandboxList = document.createElement('ul');
+        sandboxList.classList.add('sandbox-list');
+
+        categoryData.items.forEach(item => {
+            const sandboxItem = document.createElement('li');
+            sandboxItem.classList.add('sandbox-item');
+            
+            const description = document.createElement('div');
+            description.classList.add('description');
+            description.textContent = `${item.name}: ${item.description}`;
+            
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+
+            const tryButton = document.createElement('a');
+            tryButton.href = item.link;
+            tryButton.classList.add('try-button');
+            tryButton.textContent = 'Try';
+            
+            buttonContainer.appendChild(tryButton);
+            sandboxItem.appendChild(description);
+            sandboxItem.appendChild(buttonContainer);
+            sandboxList.appendChild(sandboxItem);
         });
-    </script>
+
+        categoryDiv.appendChild(sandboxList);
+        return categoryDiv;
+    }
+
+    // Create the entire body content dynamically
+    sandboxData.forEach(categoryData => {
+        const categoryDiv = createSandboxCategory(categoryData);
+        container.appendChild(categoryDiv);
+    });
+</script>
 </body>
 </html>

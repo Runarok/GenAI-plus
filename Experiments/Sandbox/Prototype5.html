@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sand Pixel Art Drawer</title>
+  <style>
+    :root {
+      --toolbar-bg-light: #f2f2f2e6;
+      --toolbar-bg-dark: #12191fe6;
+      --toolbar-shadow: 0 2px 8px 0 #0003;
+      --toolbar-blur: blur(6px);
+      --toolbar-border: 1px solid #0002;
+      --toolbar-radius: 12px;
+      --font-main: 'Segoe UI', 'Cantarell', 'Lato', 'sans-serif';
+
+      /* Theme colors */
+      --main-bg-light: #f6fafb;
+      --main-bg-dark: #19222a;
+      --canvas-bg-light: #e9f1fa;
+      --canvas-bg-dark: #19222a;
+      --text-light: #1b2c34;
+      --text-dark: #e1ecf5;
+      --primary: #00b4b6;
+      --primary-dark: #0fe4dc;
+      --button-bg-light: #e4f0ee;
+      --button-bg-dark: #2b3a44;
+      --button-hover-light: #cfe4e1;
+      --button-hover-dark: #1f5667;
+
+      --toolbar-height: 58px;
+      --canvas-top: 58px;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--main-bg-dark);
+      font-family: var(--font-main);
+      transition: background 0.2s;
+      height: 100vh;
+      min-height: 100%;
+    }
+    body.light {
+      background: var(--main-bg-light);
+    }
+
+    #toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      height: var(--toolbar-height);
+      z-index: 1000;
+      color: var(--text-dark);
+      background: var(--toolbar-bg-dark);
+      box-shadow: var(--toolbar-shadow);
+      border-bottom: var(--toolbar-border);
+      backdrop-filter: var(--toolbar-blur);
+      border-radius: 0 0 var(--toolbar-radius) var(--toolbar-radius);
+      font-size: 1em;
+      user-select: none;
+      padding: 0 28px;
+      transition: background 0.2s, color 0.2s;
+    }
+    body.light #toolbar {
+      color: var(--text-light);
+      background: var(--toolbar-bg-light);
+      border-bottom: 1px solid #c4e5e7bb;
+    }
+
+    #toolbar label, #toolbar select, #toolbar input, #toolbar span, #toolbar button {
+      font-family: inherit;
+      font-size: 1em;
+    }
+
+    #tool-selector label, #tool-selector select {
+      margin-right: 8px;
+    }
+    #brush-size, #zoom {
+      width: 65px;
+    }
+    #clear-btn, #save-btn, #theme-btn {
+      background: var(--button-bg-dark);
+      color: var(--text-dark);
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 6px;
+      transition: background 0.16s, color 0.16s;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    #clear-btn:hover, #save-btn:hover, #theme-btn:hover {
+      background: var(--button-hover-dark);
+      color: var(--primary-dark);
+    }
+    body.light #clear-btn, body.light #save-btn, body.light #theme-btn {
+      background: var(--button-bg-light);
+      color: var(--text-light);
+    }
+    body.light #clear-btn:hover, body.light #save-btn:hover, body.light #theme-btn:hover {
+      background: var(--button-hover-light);
+      color: var(--primary);
+    }
+    #theme-btn {
+      margin-left: auto;
+      font-size: 1.15em;
+      padding: 7px 15px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 50px;
+    }
+
+    #instructions {
+      color: var(--text-dark);
+      margin-left: 28px;
+      opacity: 0.7;
+      font-size: 0.97em;
+      white-space: pre-line;
+      transition: color 0.2s;
+    }
+    body.light #instructions {
+      color: var(--text-light);
+    }
+
+    canvas {
+      position: absolute;
+      top: var(--canvas-top);
+      left: 0;
+      background: var(--canvas-bg-dark);
+      width: 100vw;
+      height: calc(100vh - var(--canvas-top));
+      image-rendering: pixelated;
+      cursor: crosshair;
+      transition: background 0.2s;
+      outline: none;
+      display: block;
+    }
+    body.light canvas {
+      background: var(--canvas-bg-light);
+    }
+    #color-picker {
+      border: none;
+      outline: 2px solid var(--primary);
+      border-radius: 4px;
+      width: 34px;
+      height: 32px;
+      vertical-align: middle;
+      background: none;
+      margin-right: 2px;
+      cursor: pointer;
+      transition: outline 0.2s;
+    }
+
+    @media (max-width: 600px) {
+      #toolbar { flex-wrap: wrap; font-size: 0.96em; padding: 0 6px; gap: 8px; }
+      #instructions { display: none; }
+      #theme-btn { padding: 7px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="toolbar">
+    <div id="tool-selector">
+      <label for="tool">Tool:</label>
+      <select id="tool">
+        <option value="sand">Sand</option>
+        <option value="erase">Eraser</option>
+        <option value="color">Color Brush</option>
+      </select>
+    </div>
+    <label for="color-picker">Color:</label>
+    <input type="color" id="color-picker" value="#11d0ba" />
+    <label for="brush-size">Brush:</label>
+    <input type="range" id="brush-size" min="1" max="12" value="2" />
+    <span id="brush-size-label">2</span>
+    <label for="zoom">Zoom:</label>
+    <input type="range" id="zoom" min="1" max="4" step="1" value="1"/>
+    <span id="zoom-label">1x</span>
+    <button id="clear-btn" title="Clear the canvas">Clear</button>
+    <button id="save-btn" title="Save as PNG">Save</button>
+    <span id="instructions">
+      🖱️ Draw or erase with mouse.  
+      [Space] Pause/Resume | [C] Clear | [S] Save | Tool/color/zoom above
+    </span>
+    <button id="theme-btn" title="Toggle theme">
+      <span id="theme-icon" aria-hidden="true">🌙</span>
+    </button>
+  </div>
+  <canvas id="sandbox" tabindex="0"></canvas>
+  <script>
+    // --- Variables and Setup ---
+    const canvas = document.getElementById("sandbox");
+    const ctx = canvas.getContext("2d");
+    const toolSelect = document.getElementById('tool');
+    const colorPicker = document.getElementById('color-picker');
+    const brushSizeInput = document.getElementById('brush-size');
+    const brushSizeLabel = document.getElementById('brush-size-label');
+    const clearBtn = document.getElementById('clear-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const zoomInput = document.getElementById('zoom');
+    const zoomLabel = document.getElementById('zoom-label');
+    const themeBtn = document.getElementById('theme-btn');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // --- Settings ---
+    const BASE_PARTICLE_SIZE = 7; // px, logical grid size
+    let zoom = parseInt(zoomInput.value); // 1x, 2x, etc.
+
+    // --- State ---
+    let brushSize = parseInt(brushSizeInput.value);
+    let selectedColor = colorPicker.value;
+    let tool = toolSelect.value; // 'sand', 'erase', 'color'
+    let paused = false, isMousePressed = false;
+    let grid = [], gridWidth, gridHeight, particleColors = [];
+    let needsResize = false;
+    let isDark = true; // default theme
+
+    // --- THEME ---
+    function setTheme(dark) {
+      isDark = dark;
+      document.body.classList.toggle('light', !dark);
+      themeIcon.textContent = dark ? "🌙" : "🌞";
+      // set sand default for theme if needed
+    }
+    // Try to use system theme preference
+    const savedTheme = localStorage.getItem('sand-theme');
+    if (savedTheme === 'dark') setTheme(true);
+    else if (savedTheme === 'light') setTheme(false);
+    else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) setTheme(false);
+
+    themeBtn.addEventListener('click', () => {
+      setTheme(!isDark);
+      localStorage.setItem('sand-theme', isDark ? 'dark' : 'light');
+      draw();
+    });
+
+    // --- Resize and Grid ---
+    function resizeCanvas(keepData = false) {
+      // Logical grid size is always the same, only particle size changes
+      const particleSize = BASE_PARTICLE_SIZE * zoom;
+      gridWidth = Math.floor(window.innerWidth / particleSize);
+      gridHeight = Math.floor((window.innerHeight - 58) / particleSize);
+      // Resize canvas to fit the grid exactly, scaling up
+      canvas.width = gridWidth * particleSize;
+      canvas.height = gridHeight * particleSize;
+      if (keepData && grid.length && particleColors.length) {
+        // Keep sand and colors; shrink/grow with cropping or filling as needed
+        grid.length = gridHeight;
+        particleColors.length = gridHeight;
+        for (let y = 0; y < gridHeight; y++) {
+          if (!grid[y]) grid[y] = Array(gridWidth).fill(0);
+          else grid[y].length = gridWidth;
+          if (!particleColors[y]) particleColors[y] = Array(gridWidth).fill(null);
+          else particleColors[y].length = gridWidth;
+        }
+      } else {
+        grid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(0));
+        particleColors = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+      }
+      needsResize = false;
+      draw();
+    }
+
+    window.addEventListener("resize", () => { needsResize = true; });
+
+    // --- Sand Simulation ---
+    function updateSand() {
+      // Traverse bottom-up and randomize direction for each row
+      for (let y = gridHeight - 2; y >= 0; y--) {
+        let xOrder = [];
+        for (let x = 0; x < gridWidth; x++) xOrder.push(x);
+        if (Math.random() < 0.5) xOrder.reverse();
+        for (const x of xOrder) {
+          if (grid[y][x] === 1) {
+            // Down
+            if (y + 1 < gridHeight && grid[y + 1][x] === 0) {
+              grid[y + 1][x] = 1; grid[y][x] = 0;
+              particleColors[y + 1][x] = particleColors[y][x]; particleColors[y][x] = null;
+            } else {
+              // Diagonals (random order to avoid bias)
+              let dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
+              let moved = false;
+              for (const dx of dirs) {
+                if (
+                  x + dx >= 0 && x + dx < gridWidth &&
+                  y + 1 < gridHeight && grid[y + 1][x + dx] === 0
+                ) {
+                  grid[y + 1][x + dx] = 1;
+                  grid[y][x] = 0;
+                  particleColors[y + 1][x + dx] = particleColors[y][x];
+                  particleColors[y][x] = null;
+                  moved = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // --- Drawing ---
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Fill canvas background to match theme for saving
+      ctx.fillStyle = isDark ? getComputedStyle(document.body).getPropertyValue('--canvas-bg-dark')?.trim() || "#19222a"
+                            : getComputedStyle(document.body).getPropertyValue('--canvas-bg-light')?.trim() || "#e9f1fa";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const particleSize = BASE_PARTICLE_SIZE * zoom;
+      for (let y = 0; y < gridHeight; y++) {
+        for (let x = 0; x < gridWidth; x++) {
+          if (grid[y][x] === 1) {
+            ctx.fillStyle = particleColors[y][x] || selectedColor;
+            ctx.fillRect(x * particleSize, y * particleSize, particleSize, particleSize);
+          }
+        }
+      }
+    }
+
+    // --- Sand Placement/Brushes ---
+    function canvasToGrid(e) {
+      const rect = canvas.getBoundingClientRect();
+      const particleSize = BASE_PARTICLE_SIZE * zoom;
+      const x = Math.floor((e.clientX - rect.left) / particleSize);
+      const y = Math.floor((e.clientY - rect.top) / particleSize);
+      return { x, y };
+    }
+
+    function paintAt(x, y) {
+      for (let dy = -brushSize + 1; dy < brushSize; dy++) {
+        for (let dx = -brushSize + 1; dx < brushSize; dx++) {
+          if (dx * dx + dy * dy <= brushSize * brushSize) {
+            let nx = x + dx, ny = y + dy;
+            if (nx >= 0 && nx < gridWidth && ny >= 0 && ny < gridHeight) {
+              if (tool === 'sand') {
+                grid[ny][nx] = 1;
+                particleColors[ny][nx] = selectedColor;
+              } else if (tool === 'erase') {
+                grid[ny][nx] = 0;
+                particleColors[ny][nx] = null;
+              } else if (tool === 'color' && grid[ny][nx] === 1) {
+                particleColors[ny][nx] = selectedColor;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    canvas.addEventListener("mousedown", (e) => {
+      isMousePressed = true;
+      const {x, y} = canvasToGrid(e);
+      paintAt(x, y);
+      draw();
+    });
+    document.addEventListener("mouseup", () => { isMousePressed = false; });
+    canvas.addEventListener("mousemove", (e) => {
+      if (!isMousePressed) return;
+      const {x, y} = canvasToGrid(e);
+      paintAt(x, y);
+      draw();
+    });
+
+    // Support touch events for mobile
+    canvas.addEventListener('touchstart', function(e) {
+      isMousePressed = true;
+      const touch = e.touches[0];
+      const {x, y} = canvasToGrid(touch);
+      paintAt(x, y);
+      draw();
+      e.preventDefault();
+    }, {passive: false});
+    canvas.addEventListener('touchmove', function(e) {
+      if (!isMousePressed) return;
+      const touch = e.touches[0];
+      const {x, y} = canvasToGrid(touch);
+      paintAt(x, y);
+      draw();
+      e.preventDefault();
+    }, {passive: false});
+    document.addEventListener('touchend', () => { isMousePressed = false; });
+
+    // --- Controls ---
+    toolSelect.addEventListener('change', e => { tool = e.target.value; });
+    colorPicker.addEventListener('input', e => { selectedColor = e.target.value; });
+    brushSizeInput.addEventListener('input', e => {
+      brushSize = parseInt(e.target.value);
+      brushSizeLabel.textContent = brushSize;
+    });
+
+    clearBtn.addEventListener('click', () => {
+      grid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(0));
+      particleColors = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+      draw();
+    });
+
+    saveBtn.addEventListener('click', () => {
+      // Fill in background for the theme, then save
+      draw();
+      canvas.toBlob(blob => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'sand_pixel_art.png';
+        a.click();
+      });
+    });
+
+    zoomInput.addEventListener('input', e => {
+      zoom = parseInt(e.target.value);
+      zoomLabel.textContent = zoom + 'x';
+      resizeCanvas(true);
+      draw();
+    });
+
+    // --- Keyboard Shortcuts ---
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space') {
+        paused = !paused;
+        e.preventDefault();
+      }
+      else if (e.key.toLowerCase() === 'c') {
+        grid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(0));
+        particleColors = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+        draw();
+      } else if (e.key.toLowerCase() === 's') {
+        saveBtn.click();
+      } else if (e.key.toLowerCase() === 't') {
+        // quick theme toggle
+        themeBtn.click();
+      }
+    });
+
+    // --- Default to teal sand ---
+    colorPicker.value = "#11d0ba";
+    selectedColor = "#11d0ba";
+
+    // --- Main Loop ---
+    function step() {
+      if (needsResize) resizeCanvas(true);
+      if (!paused) updateSand();
+      draw();
+      requestAnimationFrame(step);
+    }
+
+    // --- Initialize ---
+    brushSizeLabel.textContent = brushSize;
+    zoomLabel.textContent = zoom + 'x';
+    resizeCanvas();
+    step();
+  </script>
+</body>
+</html>

@@ -77,25 +77,29 @@ function renderFolders(folder, subfolders) {
     const grid = document.getElementById("folder-cards");
     grid.innerHTML = "";
 
-    subfolders.forEach(sub => {
-        const card = document.createElement("a");
-        card.href = getFolderGhPagesUrl(folder, sub);
-        card.className = "folder-card";
-        card.title = sub;
-        card.style.width = `calc(${sub.length}ch + 3.2em)`;
-        card.innerHTML = `
-            <span class="folder-icon"><i class="bi bi-folder-symlink"></i></span>
-            <span>${sub}</span>
-        `;
+	subfolders.forEach(sub => {
+	    // Remove numeric prefix from the displayed name (e.g. "1_Folder" → "Folder")
+	    const displayName = sub.replace(/^\d+_/, '');
+	
+	    const card = document.createElement("a");
+	    card.href = getFolderGhPagesUrl(folder, sub);
+	    card.className = "folder-card";
+	    card.title = displayName;  // Optionally update title too
+	    card.style.width = `calc(${displayName.length}ch + 3.2em)`;
+	    card.innerHTML = `
+	        <span class="folder-icon"><i class="bi bi-folder-symlink"></i></span>
+	        <span>${displayName}</span>
+	    `;
+	
+	    // Open link in same tab
+	    card.addEventListener("click", function (e) {
+	        e.preventDefault();
+	        window.location.href = card.href;
+	    });
+	
+	    grid.appendChild(card);
+	});
 
-        // Open link in same tab
-        card.addEventListener("click", function (e) {
-            e.preventDefault();
-            window.location.href = card.href;
-        });
-
-        grid.appendChild(card);
-    });
 }
 
 function showError(msg) {

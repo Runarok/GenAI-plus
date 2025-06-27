@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap');
+
+/* Apply Poppins font globally to everything */
+*,
+*::before,
+*::after {
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  font-smooth: antialiased !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  box-sizing: border-box;
+}
+
+/* Base body styles */
+body {
+  background: linear-gradient(135deg, #121212 0%, #1c1c1c 100%);
+  color: #e8e8e8;
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  user-select: none;
+}
+
+/* Container */
+.container {
+  background: #222235;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  max-width: 460px;
+  width: 100%;
+  padding: 36px 28px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Headings */
+h1 {
+  font-weight: 900;
+  font-size: 2.8rem; /* ~50px */
+  letter-spacing: -1px;
+  color: #bb86fc;
+  margin: 0 0 1.6rem 0;
+  text-align: center;
+  text-shadow: 0 0 8px #bb86fc99;
+  line-height: 1.1;
+}
+
+/* Labels */
+label {
+  font-weight: 600;
+  font-size: 1.15rem; /* ~21px */
+  color: #ccc;
+  margin-bottom: 0.7em;
+  letter-spacing: 0.03em;
+  display: block;
+}
+
+/* Inputs */
+input[type="text"] {
+  font-size: 1.15rem; /* ~21px */
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  background: #2c2c46;
+  color: #f5f5f5;
+  border: 2px solid #444466;
+  border-radius: 8px;
+  padding: 12px 16px;
+  width: 100%;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  outline: none;
+}
+
+input[type="text"]::placeholder {
+  color: #999;
+  font-weight: 400;
+}
+
+input[type="text"]:focus {
+  border-color: #bb86fc;
+  box-shadow: 0 0 8px #bb86fc88;
+}
+
+/* Output area */
+.output {
+  margin-top: 1.2em;
+  padding-top: 0.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+  border-top: 1px solid #44446688;
+}
+
+.output-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  text-align: center;
+}
+
+.output-label {
+  font-weight: 700;
+  font-size: 1.2rem; /* ~19.2px */
+  color: #bb86fc;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 5px #bb86fc44;
+}
+
+/* Button row */
+.button-row {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Buttons and links styled as buttons */
+.action-btn,
+.action-btn:visited {
+  font-weight: 700;
+  font-size: 1.15rem; /* ~21px */
+  letter-spacing: 0.04em;
+  padding: 12px 28px;
+  border-radius: 12px;
+  background: #2c2c46;
+  color: #bb86fc;
+  border: 2px solid #55557a;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 110px;
+  text-align: center;
+  user-select: none;
+  box-shadow: 0 2px 8px #00000033;
+  text-decoration: none;
+}
+
+.action-btn:hover,
+.action-btn:focus {
+  background: #bb86fc;
+  color: #222;
+  border-color: #bb86fc;
+  box-shadow: 0 0 12px #bb86fccc;
+  outline: none;
+}
+
+/* Error message */
+.error {
+  font-weight: 700;
+  font-size: 1.2rem; /* ~19.2px */
+  color: #ff5e7e;
+  text-shadow: 0 0 6px #ff5e7e99;
+  margin-top: 0.6em;
+  text-align: center;
+  min-height: 1.2em;
+  padding-left: 0.1em;
+}
+
+/* Toast */
+#toast {
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 18px 40px;
+  border-radius: 14px;
+  text-shadow: 0 0 8px #000000aa;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  z-index: 99;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  box-shadow: 0 6px 30px #000a;
+  pointer-events: none;
+  user-select: none;
+}
+
+#toast.show {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  body {
+    font-size: 16px;
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 2.1rem; /* ~34px */
+  }
+  label {
+    font-size: 1rem;
+  }
+  input[type="text"] {
+    font-size: 1rem;
+    padding: 10px 14px;
+  }
+  .output-label {
+    font-size: 1rem;
+  }
+  .action-btn {
+    font-size: 1rem;
+    padding: 10px 22px;
+    min-width: 90px;
+  }
+  #toast {
+    font-size: 1rem;
+    padding: 12px 20px;
+  }
+}

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Falling Sand Simulator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #111;
+      font-family: sans-serif;
+    }
+
+    canvas {
+      display: block;
+      position: absolute;
+      top: 60px; /* Add space for the toolbar */
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 60px);
+      cursor: crosshair;
+      image-rendering: pixelated;
+    }
+
+    #toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(0,0,0,0.7);
+      padding: 12px 18px;
+      box-sizing: border-box;
+    }
+    #toolbar label {
+      color: #fff;
+      margin-right: 4px;
+    }
+    #brush-size {
+      width: 60px;
+    }
+    #clear-btn {
+      background: #e63946;
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 3px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-left: 4px;
+      transition: background 0.2s;
+    }
+    #clear-btn:hover {
+      background: #b81b32;
+    }
+    #instructions {
+      color: #fff;
+      margin-left: 20px;
+      font-size: 0.95em;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+  <div id="toolbar">
+    <label for="color-picker">Sand Color:</label>
+    <input type="color" id="color-picker" value="#f4a261" />
+    <label for="brush-size">Brush:</label>
+    <input type="range" id="brush-size" min="1" max="8" value="2" />
+    <span id="brush-size-label">2</span>
+    <button id="clear-btn" title="Clear the canvas">Clear</button>
+    <span id="instructions">
+      🖱️ Hold and drag mouse to draw sand. Change color or brush above.<br>
+      Press <b>spacebar</b> to pause/resume simulation. Press <b>C</b> to clear.
+    </span>
+  </div>
+  <canvas id="sandbox"></canvas>
+  <script>
+    // -- Setup and Variables --
+    const canvas = document.getElementById("sandbox");
+    const ctx = canvas.getContext("2d");
+    const colorPicker = document.getElementById('color-picker');
+    const brushSizeInput = document.getElementById('brush-size');
+    const brushSizeLabel = document.getElementById('brush-size-label');
+    const clearBtn = document.getElementById('clear-btn');
+
+    // -- Constants --
+    const PARTICLE_SIZE = 7; // px
+    let brushSize = parseInt(brushSizeInput.value);
+    let selectedColor = colorPicker.value;
+
+    // -- Dynamic Canvas Sizing --
+    function resizeCanvas() {
+      // Make grid size match the number of particles, not raw pixel size
+      canvas.width = Math.floor(window.innerWidth / PARTICLE_SIZE) * PARTICLE_SIZE;
+      canvas.height = Math.floor((window.innerHeight - 60) / PARTICLE_SIZE) * PARTICLE_SIZE;
+      gridWidth = Math.floor(canvas.width / PARTICLE_SIZE);
+      gridHeight = Math.floor(canvas.height / PARTICLE_SIZE);
+      // If grid exists, preserve sand (optional: could implement, but for now reset)
+      initGrid();
+    }
+    window.addEventListener("resize", resizeCanvas);
+
+    // -- Grid Setup --
+    let grid = [], particleColors = [];
+    let gridWidth, gridHeight;
+    function initGrid() {
+      gridWidth = Math.floor(canvas.width / PARTICLE_SIZE);
+      gridHeight = Math.floor(canvas.height / PARTICLE_SIZE);
+      grid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(0));
+      particleColors = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+    }
+
+    // -- Sand Simulation --
+    function updateSand() {
+      // Traverse bottom-up for proper falling
+      for (let y = gridHeight - 2; y >= 0; y--) {
+        for (let x = 0; x < gridWidth; x++) {
+          if (grid[y][x] === 1) {
+            // Try to move sand down, or diagonally
+            if (y+1 < gridHeight && grid[y+1][x] === 0) {
+              grid[y+1][x] = 1; grid[y][x] = 0;
+              particleColors[y+1][x] = particleColors[y][x]; particleColors[y][x] = null;
+            } else {
+              // Randomize left/right to avoid bias
+              const dirs = Math.random() < 0.5 ? [-1,1] : [1,-1];
+              let moved = false;
+              for (const dx of dirs) {
+                if (
+                  x+dx >= 0 && x+dx < gridWidth &&
+                  y+1 < gridHeight && grid[y+1][x+dx] === 0
+                ) {
+                  grid[y+1][x+dx] = 1; grid[y][x] = 0;
+                  particleColors[y+1][x+dx] = particleColors[y][x]; particleColors[y][x] = null;
+                  moved = true;
+                  break;
+                }
+              }
+              // Optionally: allow sand to "slide" left/right if stuck
+              if (!moved) {
+                for (const dx of [-1, 1]) {
+                  if (
+                    x+dx >= 0 && x+dx < gridWidth &&
+                    grid[y][x+dx] === 0
+                  ) {
+                    grid[y][x+dx] = 1; grid[y][x] = 0;
+                    particleColors[y][x+dx] = particleColors[y][x]; particleColors[y][x] = null;
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // -- Drawing --
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let y = 0; y < gridHeight; y++) {
+        for (let x = 0; x < gridWidth; x++) {
+          if (grid[y][x] === 1) {
+            ctx.fillStyle = particleColors[y][x] || selectedColor;
+            ctx.fillRect(x * PARTICLE_SIZE, y * PARTICLE_SIZE, PARTICLE_SIZE, PARTICLE_SIZE);
+          }
+        }
+      }
+    }
+
+    // -- Sand Placement --
+    let isMousePressed = false;
+    canvas.addEventListener("mousedown", (e) => {
+      isMousePressed = true;
+      addSand(e);
+    });
+    document.addEventListener("mouseup", () => { isMousePressed = false; });
+    canvas.addEventListener("mousemove", (e) => {
+      if (isMousePressed) addSand(e);
+    });
+    canvas.addEventListener("mouseleave", () => { isMousePressed = false; });
+
+    function addSand(e) {
+      const rect = canvas.getBoundingClientRect();
+      // Find grid position
+      const x = Math.floor((e.clientX - rect.left) / PARTICLE_SIZE);
+      const y = Math.floor((e.clientY - rect.top) / PARTICLE_SIZE);
+      // Draw a filled circle (brush) of sand particles
+      for (let dy = -brushSize + 1; dy < brushSize; dy++) {
+        for (let dx = -brushSize + 1; dx < brushSize; dx++) {
+          if (dx*dx + dy*dy <= brushSize*brushSize) {
+            let nx = x+dx, ny = y+dy;
+            if (nx >= 0 && nx < gridWidth && ny >= 0 && ny < gridHeight) {
+              grid[ny][nx] = 1;
+              particleColors[ny][nx] = selectedColor;
+            }
+          }
+        }
+      }
+    }
+
+    // -- Brush and Color Controls --
+    brushSizeInput.addEventListener('input', e => {
+      brushSize = parseInt(e.target.value);
+      brushSizeLabel.textContent = brushSize;
+    });
+    colorPicker.addEventListener('input', e => {
+      selectedColor = e.target.value;
+    });
+
+    // -- Clear Button --
+    clearBtn.addEventListener('click', () => {
+      initGrid();
+      draw();
+    });
+
+    // -- Keyboard Shortcuts --
+    let paused = false;
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space') {
+        paused = !paused;
+      }
+      if (e.key.toLowerCase() === 'c') {
+        initGrid();
+        draw();
+      }
+    });
+
+    // -- Simulation Main Loop --
+    function step() {
+      if (!paused) updateSand();
+      draw();
+      requestAnimationFrame(step);
+    }
+
+    // -- Initialization --
+    resizeCanvas();
+    brushSizeLabel.textContent = brushSize;
+    step();
+  </script>
+</body>
+</html>
