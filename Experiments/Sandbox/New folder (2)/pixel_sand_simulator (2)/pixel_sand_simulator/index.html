@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel Sand Simulator</title>
+    <link rel="stylesheet" href="css/main.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+        
+        .loader-container {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(17, 208, 186, 0.2);
+            border-top: 3px solid #11d0ba;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #11d0ba;
+        }
+        
+        .loading-subtitle {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            opacity: 0.8;
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(30, 41, 59, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fpixelsand1533back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.5"></script>
+</head>
+<body>
+    <div class="loader-container glass-effect">
+        <div class="loader"></div>
+        <div class="loading-text">Pixel Sand Simulator</div>
+        <div class="loading-subtitle">Initializing physics engine...</div>
+    </div>
+
+    <script>
+        // Redirect to the main application page after a brief loading animation
+        setTimeout(() => {
+            window.location.href = 'pages/pixel_art_physics_sandbox.html';
+        }, 2000);
+    </script>
+<script id="dhws-dataInjector" src="/public/dhws-data-injector.js"></script>
+</body>
+</html>

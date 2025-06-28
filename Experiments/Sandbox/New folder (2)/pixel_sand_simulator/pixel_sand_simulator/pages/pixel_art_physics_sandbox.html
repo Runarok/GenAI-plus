@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel Art Physics Sandbox</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="icon" href="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=64&auto=format&fit=crop" type="image/x-icon" />
+    <style>
+        /* Custom styles for canvas and physics simulation */
+        #canvas {
+            cursor: crosshair;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
+        .tool-active {
+            background: var(--color-primary) !important;
+            color: #0f172a !important;
+        }
+        
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 150ms ease-out;
+        }
+        
+        .color-swatch:hover {
+            transform: scale(1.1);
+            border-color: var(--color-primary);
+        }
+        
+        .color-swatch.active {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(17, 208, 186, 0.3);
+        }
+        
+        .toolbar-mobile {
+            transform: translateY(0);
+            transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .toolbar-mobile.hidden {
+            transform: translateY(100%);
+        }
+        
+        .light-theme {
+            --color-background: #f8fafc;
+            --color-surface: #e2e8f0;
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #475569;
+            --glass-border: rgba(71, 85, 105, 0.2);
+        }
+        
+        .light-theme #canvas {
+            background-color: #ffffff;
+        }
+        
+        .dark-theme #canvas {
+            background-color: #0f172a;
+        }
+        
+        .instructions-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(30, 41, 59, 0.95);
+        }
+        
+        .light-theme .instructions-panel {
+            background: rgba(248, 250, 252, 0.95);
+        }
+    </style>
+<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fpixelsand1533back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.5"></script>
+</head>
+<body class="dark-theme overflow-hidden">
+    <!-- Main Canvas Container -->
+    <div id="canvasContainer" class="relative w-full h-screen bg-background">
+        <canvas id="canvas" class="w-full h-full block dark-theme"></canvas>
+        
+        <!-- Desktop Toolbar (Top) -->
+        <div id="desktopToolbar" class="hidden lg:flex absolute top-4 left-1/2 transform -translate-x-1/2 glass-surface rounded-2xl p-4 gap-4 items-center z-20">
+            <!-- Tool Buttons -->
+            <div class="flex gap-2">
+                <button id="sandTool" class="tool-active touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback" title="Sand Tool (Default)">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="8" cy="8" r="1"/>
+                        <circle cx="12" cy="6" r="1"/>
+                        <circle cx="16" cy="8" r="1"/>
+                        <circle cx="6" cy="12" r="1"/>
+                        <circle cx="10" cy="10" r="1"/>
+                        <circle cx="14" cy="12" r="1"/>
+                        <circle cx="18" cy="14" r="1"/>
+                        <circle cx="8" cy="16" r="1"/>
+                        <circle cx="12" cy="14" r="1"/>
+                        <circle cx="16" cy="16" r="1"/>
+                        <circle cx="10" cy="18" r="1"/>
+                        <circle cx="14" cy="18" r="1"/>
+                    </svg>
+                </button>
+                <button id="eraserTool" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback" title="Eraser Tool">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </button>
+                <button id="brushTool" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback" title="Color Brush Tool">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 5H3m4 6H3m4 6H3m10-9a3 3 0 00-3-3H7"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Color Picker -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-secondary">Color:</span>
+                    <div id="currentColor" class="color-swatch active" style="background-color: #11d0ba;" title="Current Color"></div>
+                </div>
+                <div id="colorPalette" class="flex gap-1">
+                    <div class="color-swatch" style="background-color: #11d0ba;" data-color="#11d0ba"></div>
+                    <div class="color-swatch" style="background-color: #ef4444;" data-color="#ef4444"></div>
+                    <div class="color-swatch" style="background-color: #10b981;" data-color="#10b981"></div>
+                    <div class="color-swatch" style="background-color: #f59e0b;" data-color="#f59e0b"></div>
+                    <div class="color-swatch" style="background-color: #8b5cf6;" data-color="#8b5cf6"></div>
+                    <div class="color-swatch" style="background-color: #06b6d4;" data-color="#06b6d4"></div>
+                    <div class="color-swatch" style="background-color: #f97316;" data-color="#f97316"></div>
+                    <div class="color-swatch" style="background-color: #84cc16;" data-color="#84cc16"></div>
+                </div>
+            </div>
+            
+            <!-- Brush Size -->
+            <div class="flex items-center gap-3">
+                <span class="text-sm text-secondary">Size:</span>
+                <input type="range" id="brushSize" min="1" max="10" value="3" class="w-20 accent-primary" />
+                <span id="brushSizeValue" class="text-sm text-primary font-mono w-6">3</span>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex gap-2 border-l border-glass-border pl-4">
+                <button id="themeToggle" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback" title="Toggle Theme (T)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                </button>
+                <button id="clearCanvas" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback" title="Clear Canvas (C)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </button>
+                <button id="exportCanvas" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback" title="Export PNG (S)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </button>
+                <button id="pauseToggle" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback" title="Pause/Resume (Space)">
+                    <svg id="pauseIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                    </svg>
+                    <svg id="playIcon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+                <button id="showInstructions" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback" title="Instructions">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Toolbar (Bottom) -->
+        <div id="mobileToolbar" class="lg:hidden toolbar-mobile fixed bottom-4 left-4 right-4 glass-surface rounded-2xl p-4 z-20">
+            <div class="flex items-center justify-between">
+                <!-- Tool Buttons -->
+                <div class="flex gap-2">
+                    <button id="sandToolMobile" class="tool-active touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <circle cx="8" cy="8" r="1"/>
+                            <circle cx="12" cy="6" r="1"/>
+                            <circle cx="16" cy="8" r="1"/>
+                            <circle cx="6" cy="12" r="1"/>
+                            <circle cx="10" cy="10" r="1"/>
+                            <circle cx="14" cy="12" r="1"/>
+                            <circle cx="18" cy="14" r="1"/>
+                            <circle cx="8" cy="16" r="1"/>
+                            <circle cx="12" cy="14" r="1"/>
+                            <circle cx="16" cy="16" r="1"/>
+                            <circle cx="10" cy="18" r="1"/>
+                            <circle cx="14" cy="18" r="1"/>
+                        </svg>
+                    </button>
+                    <button id="eraserToolMobile" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </button>
+                    <button id="brushToolMobile" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 5H3m4 6H3m4 6H3m10-9a3 3 0 00-3-3H7"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Color and Size -->
+                <div class="flex items-center gap-3">
+                    <div id="currentColorMobile" class="color-swatch active" style="background-color: #11d0ba;"></div>
+                    <input type="range" id="brushSizeMobile" min="1" max="10" value="3" class="w-16 accent-primary" />
+                </div>
+                
+                <!-- Menu Toggle -->
+                <button id="menuToggle" class="bg-surface text-primary touch-target rounded-xl flex items-center justify-center micro-interaction haptic-feedback">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Expandable Menu -->
+            <div id="expandedMenu" class="hidden mt-4 pt-4 border-t border-glass-border">
+                <div class="grid grid-cols-4 gap-2 mb-4">
+                    <div class="color-swatch" style="background-color: #11d0ba;" data-color="#11d0ba"></div>
+                    <div class="color-swatch" style="background-color: #ef4444;" data-color="#ef4444"></div>
+                    <div class="color-swatch" style="background-color: #10b981;" data-color="#10b981"></div>
+                    <div class="color-swatch" style="background-color: #f59e0b;" data-color="#f59e0b"></div>
+                    <div class="color-swatch" style="background-color: #8b5cf6;" data-color="#8b5cf6"></div>
+                    <div class="color-swatch" style="background-color: #06b6d4;" data-color="#06b6d4"></div>
+                    <div class="color-swatch" style="background-color: #f97316;" data-color="#f97316"></div>
+                    <div class="color-swatch" style="background-color: #84cc16;" data-color="#84cc16"></div>
+                </div>
+                <div class="flex gap-2">
+                    <button id="themeToggleMobile" class="flex-1 bg-surface text-primary touch-target rounded-xl flex items-center justify-center gap-2 micro-interaction haptic-feedback">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                        <span class="text-sm">Theme</span>
+                    </button>
+                    <button id="clearCanvasMobile" class="flex-1 bg-surface text-primary touch-target rounded-xl flex items-center justify-center gap-2 micro-interaction haptic-feedback">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                        <span class="text-sm">Clear</span>
+                    </button>
+                    <button id="exportCanvasMobile" class="flex-1 bg-surface text-primary touch-target rounded-xl flex items-center justify-center gap-2 micro-interaction haptic-feedback">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span class="text-sm">Export</span>
+                    </button>
+                    <button id="pauseToggleMobile" class="flex-1 bg-surface text-primary touch-target rounded-xl flex items-center justify-center gap-2 micro-interaction haptic-feedback">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                        </svg>
+                        <span class="text-sm">Pause</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Instructions Panel -->
+        <div id="instructionsPanel" class="hidden fixed inset-0 instructions-panel z-30 flex items-center justify-center p-4">
+            <div class="glass-surface rounded-2xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-semibold text-primary">Instructions</h2>
+                    <button id="closeInstructions" class="text-secondary hover:text-primary micro-interaction">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-4 text-sm text-secondary">
+                    <div>
+                        <h3 class="font-medium text-primary mb-2">Tools</h3>
+                        <ul class="space-y-1">
+                            <li><strong>Sand Tool:</strong> Place sand particles that fall with gravity</li>
+                            <li><strong>Eraser:</strong> Remove pixels from the canvas</li>
+                            <li><strong>Color Brush:</strong> Draw with selected color</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-primary mb-2">Controls</h3>
+                        <ul class="space-y-1">
+                            <li><strong>Brush Size:</strong> Adjust with slider (1-10 pixels)</li>
+                            <li><strong>Color Picker:</strong> Tap color swatches to change</li>
+                            <li><strong>Theme Toggle:</strong> Switch between dark/light modes</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-primary mb-2">Keyboard Shortcuts</h3>
+                        <ul class="space-y-1">
+                            <li><strong>Space:</strong> Pause/Resume physics simulation</li>
+                            <li><strong>C:</strong> Clear canvas</li>
+                            <li><strong>S:</strong> Save/Export as PNG</li>
+                            <li><strong>T:</strong> Toggle theme</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-primary mb-2">Physics</h3>
+                        <p>Sand particles fall naturally with gravity and interact with drawn elements. Physics runs at 60fps for smooth simulation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Canvas and context setup
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Physics and drawing state
+        let particles = [];
+        let isDrawing = false;
+        let currentTool = 'sand';
+        let currentColor = '#11d0ba';
+        let brushSize = 3;
+        let isPaused = false;
+        let isLightTheme = false;
+        
+        // Canvas dimensions
+        let canvasWidth, canvasHeight;
+        
+        // Initialize canvas
+        function initCanvas() {
+            const container = document.getElementById('canvasContainer');
+            canvasWidth = container.clientWidth;
+            canvasHeight = container.clientHeight;
+            
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+            
+            // Set initial background
+            updateCanvasBackground();
+        }
+        
+        // Update canvas background based on theme
+        function updateCanvasBackground() {
+            if (isLightTheme) {
+                canvas.style.backgroundColor = '#ffffff';
+            } else {
+                canvas.style.backgroundColor = '#0f172a';
+            }
+        }
+        
+        // Particle class for sand physics
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.vx = (Math.random() - 0.5) * 0.5; // Random horizontal velocity
+                this.vy = 0;
+                this.settled = false;
+            }
+            
+            update() {
+                if (this.settled) return;
+                
+                // Apply gravity
+                this.vy += 0.2;
+                
+                // Update position
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Check boundaries
+                if (this.x < 0 || this.x >= canvasWidth) {
+                    this.vx *= -0.5;
+                    this.x = Math.max(0, Math.min(canvasWidth - 1, this.x));
+                }
+                
+                if (this.y >= canvasHeight - 1) {
+                    this.y = canvasHeight - 1;
+                    this.settled = true;
+                    this.vy = 0;
+                    this.vx *= 0.8; // Friction
+                }
+                
+                // Check collision with other particles
+                const pixelData = ctx.getImageData(Math.floor(this.x), Math.floor(this.y + 1), 1, 1).data;
+                if (pixelData[3] > 0 && this.y < canvasHeight - 1) { // Hit something
+                    // Try to move sideways
+                    const direction = Math.random() > 0.5 ? 1 : -1;
+                    const sideX = this.x + direction;
+                    
+                    if (sideX >= 0 && sideX < canvasWidth) {
+                        const sidePixel = ctx.getImageData(Math.floor(sideX), Math.floor(this.y + 1), 1, 1).data;
+                        if (sidePixel[3] === 0) {
+                            this.x = sideX;
+                            this.vx = direction * 0.5;
+                        } else {
+                            this.settled = true;
+                            this.vy = 0;
+                            this.vx = 0;
+                        }
+                    } else {
+                        this.settled = true;
+                        this.vy = 0;
+                        this.vx = 0;
+                    }
+                }
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(Math.floor(this.x), Math.floor(this.y), 1, 1);
+            }
+        }
+        
+        // Drawing functions
+        function drawPixel(x, y, color, size = 1) {
+            ctx.fillStyle = color;
+            const halfSize = Math.floor(size / 2);
+            
+            for (let dx = -halfSize; dx <= halfSize; dx++) {
+                for (let dy = -halfSize; dy <= halfSize; dy++) {
+                    const px = x + dx;
+                    const py = y + dy;
+                    
+                    if (px >= 0 && px < canvasWidth && py >= 0 && py < canvasHeight) {
+                        if (currentTool === 'eraser') {
+                            ctx.clearRect(px, py, 1, 1);
+                        } else {
+                            ctx.fillRect(px, py, 1, 1);
+                        }
+                    }
+                }
+            }
+        }
+        
+        function addSandParticles(x, y, count = 5) {
+            for (let i = 0; i < count; i++) {
+                const offsetX = (Math.random() - 0.5) * brushSize;
+                const offsetY = (Math.random() - 0.5) * brushSize;
+                particles.push(new Particle(x + offsetX, y + offsetY, currentColor));
+            }
+        }
+        
+        // Event handlers
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left) * (canvas.width / rect.width),
+                y: (e.clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+        
+        function getTouchPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            return {
+                x: (touch.clientX - rect.left) * (canvas.width / rect.width),
+                y: (touch.clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+        
+        function startDrawing(pos) {
+            isDrawing = true;
+            draw(pos);
+        }
+        
+        function draw(pos) {
+            if (!isDrawing) return;
+            
+            if (currentTool === 'sand') {
+                addSandParticles(pos.x, pos.y, brushSize);
+            } else {
+                drawPixel(pos.x, pos.y, currentColor, brushSize);
+            }
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+        }
+        
+        // Mouse events
+        canvas.addEventListener('mousedown', (e) => {
+            startDrawing(getMousePos(e));
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDrawing) {
+                draw(getMousePos(e));
+            }
+        });
+        
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+        
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startDrawing(getTouchPos(e));
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (isDrawing) {
+                draw(getTouchPos(e));
+            }
+        });
+        
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            stopDrawing();
+        });
+        
+        // Tool selection
+        function selectTool(tool) {
+            currentTool = tool;
+            
+            // Update desktop buttons
+            document.querySelectorAll('#desktopToolbar button[id$="Tool"]').forEach(btn => {
+                btn.classList.remove('tool-active');
+                btn.classList.add('bg-surface', 'text-primary');
+            });
+            
+            // Update mobile buttons
+            document.querySelectorAll('#mobileToolbar button[id$="ToolMobile"]').forEach(btn => {
+                btn.classList.remove('tool-active');
+                btn.classList.add('bg-surface', 'text-primary');
+            });
+            
+            // Activate selected tool
+            const desktopBtn = document.getElementById(tool + 'Tool');
+            const mobileBtn = document.getElementById(tool + 'ToolMobile');
+            
+            if (desktopBtn) {
+                desktopBtn.classList.add('tool-active');
+                desktopBtn.classList.remove('bg-surface', 'text-primary');
+            }
+            
+            if (mobileBtn) {
+                mobileBtn.classList.add('tool-active');
+                mobileBtn.classList.remove('bg-surface', 'text-primary');
+            }
+        }
+        
+        // Color selection
+        function selectColor(color) {
+            currentColor = color;
+            
+            // Update color swatches
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.classList.remove('active');
+            });
+            
+            document.querySelectorAll(`[data-color="${color}"]`).forEach(swatch => {
+                swatch.classList.add('active');
+            });
+            
+            // Update current color displays
+            document.getElementById('currentColor').style.backgroundColor = color;
+            document.getElementById('currentColorMobile').style.backgroundColor = color;
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            isLightTheme = !isLightTheme;
+            
+            if (isLightTheme) {
+                document.body.classList.remove('dark-theme');
+                document.body.classList.add('light-theme');
+            } else {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+            }
+            
+            updateCanvasBackground();
+        }
+        
+        // Clear canvas
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            particles = [];
+        }
+        
+        // Export canvas
+        function exportCanvas() {
+            const link = document.createElement('a');
+            link.download = `pixel-art-${Date.now()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Pause toggle
+        function togglePause() {
+            isPaused = !isPaused;
+            
+            const pauseIcons = document.querySelectorAll('#pauseIcon');
+            const playIcons = document.querySelectorAll('#playIcon');
+            
+            if (isPaused) {
+                pauseIcons.forEach(icon => icon.classList.add('hidden'));
+                playIcons.forEach(icon => icon.classList.remove('hidden'));
+            } else {
+                pauseIcons.forEach(icon => icon.classList.remove('hidden'));
+                playIcons.forEach(icon => icon.classList.add('hidden'));
+            }
+        }
+        
+        // Animation loop
+        function animate() {
+            if (!isPaused) {
+                // Update particles
+                particles.forEach(particle => particle.update());
+                
+                // Draw particles
+                particles.forEach(particle => particle.draw());
+                
+                // Remove settled particles that are too old (optional optimization)
+                if (particles.length > 5000) {
+                    particles = particles.slice(-3000);
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            initCanvas();
+            
+            // Tool buttons
+            document.getElementById('sandTool').addEventListener('click', () => selectTool('sand'));
+            document.getElementById('eraserTool').addEventListener('click', () => selectTool('eraser'));
+            document.getElementById('brushTool').addEventListener('click', () => selectTool('brush'));
+            document.getElementById('sandToolMobile').addEventListener('click', () => selectTool('sand'));
+            document.getElementById('eraserToolMobile').addEventListener('click', () => selectTool('eraser'));
+            document.getElementById('brushToolMobile').addEventListener('click', () => selectTool('brush'));
+            
+            // Color swatches
+            document.querySelectorAll('.color-swatch[data-color]').forEach(swatch => {
+                swatch.addEventListener('click', () => {
+                    selectColor(swatch.dataset.color);
+                });
+            });
+            
+            // Brush size
+            const brushSizeSlider = document.getElementById('brushSize');
+            const brushSizeMobile = document.getElementById('brushSizeMobile');
+            const brushSizeValue = document.getElementById('brushSizeValue');
+            
+            brushSizeSlider.addEventListener('input', (e) => {
+                brushSize = parseInt(e.target.value);
+                brushSizeMobile.value = brushSize;
+                if (brushSizeValue) brushSizeValue.textContent = brushSize;
+            });
+            
+            brushSizeMobile.addEventListener('input', (e) => {
+                brushSize = parseInt(e.target.value);
+                brushSizeSlider.value = brushSize;
+                if (brushSizeValue) brushSizeValue.textContent = brushSize;
+            });
+            
+            // Action buttons
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('themeToggleMobile').addEventListener('click', toggleTheme);
+            document.getElementById('clearCanvas').addEventListener('click', clearCanvas);
+            document.getElementById('clearCanvasMobile').addEventListener('click', clearCanvas);
+            document.getElementById('exportCanvas').addEventListener('click', exportCanvas);
+            document.getElementById('exportCanvasMobile').addEventListener('click', exportCanvas);
+            document.getElementById('pauseToggle').addEventListener('click', togglePause);
+            document.getElementById('pauseToggleMobile').addEventListener('click', togglePause);
+            
+            // Menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const expandedMenu = document.getElementById('expandedMenu');
+            
+            menuToggle.addEventListener('click', () => {
+                expandedMenu.classList.toggle('hidden');
+            });
+            
+            // Instructions
+            const showInstructions = document.getElementById('showInstructions');
+            const instructionsPanel = document.getElementById('instructionsPanel');
+            const closeInstructions = document.getElementById('closeInstructions');
+            
+            showInstructions.addEventListener('click', () => {
+                instructionsPanel.classList.remove('hidden');
+            });
+            
+            closeInstructions.addEventListener('click', () => {
+                instructionsPanel.classList.add('hidden');
+            });
+            
+            instructionsPanel.addEventListener('click', (e) => {
+                if (e.target === instructionsPanel) {
+                    instructionsPanel.classList.add('hidden');
+                }
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                switch(e.code) {
+                    case 'Space':
+                        e.preventDefault();
+                        togglePause();
+                        break;
+                    case 'KeyC':
+                        clearCanvas();
+                        break;
+                    case 'KeyS':
+                        e.preventDefault();
+                        exportCanvas();
+                        break;
+                    case 'KeyT':
+                        toggleTheme();
+                        break;
+                }
+            });
+            
+            // Resize handler
+            window.addEventListener('resize', () => {
+                initCanvas();
+            });
+            
+            // Start animation
+            animate();
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>

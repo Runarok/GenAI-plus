@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Sand Pixel Art Creator</title>
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    :root {
+      --toolbar-bg-light: #f2f2f2e6;
+      --toolbar-bg-dark: #12191fe6;
+      --toolbar-shadow: 0 2px 8px 0 #0003;
+      --toolbar-blur: blur(6px);
+      --toolbar-border: 1px solid #0002;
+      --toolbar-radius: 12px;
+      --font-main: 'Inter', 'Cantarell', 'Lato', 'sans-serif';
+
+      /* Enhanced theme colors */
+      --main-bg-light: #f6fafb;
+      --main-bg-dark: #0f172a;
+      --canvas-bg-light: #ffffff;
+      --canvas-bg-dark: #1e293b;
+      --text-light: #1b2c34;
+      --text-dark: #f8fafc;
+      --primary: #11d0ba;
+      --primary-dark: #0fe4dc;
+      --button-bg-light: #e4f0ee;
+      --button-bg-dark: #2b3a44;
+      --button-hover-light: #cfe4e1;
+      --button-hover-dark: #1f5667;
+
+      --toolbar-height: 80px;
+      --canvas-top: 80px;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--main-bg-dark);
+      font-family: var(--font-main);
+      transition: background 0.2s;
+      height: 100vh;
+      min-height: 100%;
+      overflow: hidden;
+    }
+    body.light {
+      background: var(--main-bg-light);
+    }
+
+    #toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      height: var(--toolbar-height);
+      z-index: 1000;
+      color: var(--text-dark);
+      background: var(--toolbar-bg-dark);
+      box-shadow: var(--toolbar-shadow);
+      border-bottom: var(--toolbar-border);
+      backdrop-filter: var(--toolbar-blur);
+      font-size: 1em;
+      user-select: none;
+      padding: 0 28px;
+      transition: background 0.2s, color 0.2s;
+      flex-wrap: wrap;
+    }
+    body.light #toolbar {
+      color: var(--text-light);
+      background: var(--toolbar-bg-light);
+      border-bottom: 1px solid #c4e5e7bb;
+    }
+
+    #toolbar label, #toolbar select, #toolbar input, #toolbar span, #toolbar button {
+      font-family: inherit;
+      font-size: 0.9em;
+    }
+
+    .toolbar-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    body.light .toolbar-section {
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .tool-button {
+      background: var(--button-bg-dark);
+      color: var(--text-dark);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.16s;
+      font-weight: 500;
+      min-width: 60px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tool-button.active {
+      background: var(--primary);
+      color: var(--main-bg-dark);
+      box-shadow: 0 0 12px rgba(17, 208, 186, 0.4);
+    }
+
+    .tool-button:hover {
+      background: var(--button-hover-dark);
+      color: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    body.light .tool-button {
+      background: var(--button-bg-light);
+      color: var(--text-light);
+    }
+
+    body.light .tool-button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    body.light .tool-button:hover {
+      background: var(--button-hover-light);
+      color: var(--primary);
+    }
+
+    .particle-type-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .particle-button {
+      width: 40px;
+      height: 40px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .particle-button.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 8px rgba(17, 208, 186, 0.6);
+      transform: scale(1.05);
+    }
+
+    .particle-button:hover {
+      transform: scale(1.1);
+      border-color: var(--primary);
+    }
+
+    .brush-preview {
+      width: 60px;
+      height: 60px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    canvas {
+      position: absolute;
+      top: var(--canvas-top);
+      left: 0;
+      background: var(--canvas-bg-dark);
+      width: 100vw;
+      height: calc(100vh - var(--canvas-top));
+      image-rendering: pixelated;
+      cursor: crosshair;
+      transition: background 0.2s;
+      outline: none;
+      display: block;
+    }
+    body.light canvas {
+      background: var(--canvas-bg-light);
+    }
+
+    .performance-monitor {
+      position: fixed;
+      top: 90px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 12px;
+      z-index: 1001;
+    }
+
+    .status-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--toolbar-bg-dark);
+      backdrop-filter: var(--toolbar-blur);
+      color: var(--text-dark);
+      padding: 8px 20px;
+      font-size: 0.8em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    body.light .status-bar {
+      background: var(--toolbar-bg-light);
+      color: var(--text-light);
+    }
+
+    .quick-save-panel {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--toolbar-bg-dark);
+      backdrop-filter: var(--toolbar-blur);
+      border-radius: 12px;
+      padding: 16px;
+      z-index: 1001;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 200px;
+    }
+
+    body.light .quick-save-panel {
+      background: var(--toolbar-bg-light);
+    }
+
+    .save-slot {
+      width: 80px;
+      height: 60px;
+      border: 2px solid var(--primary);
+      border-radius: 4px;
+      cursor: pointer;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .save-slot:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(17, 208, 186, 0.6);
+    }
+
+    .save-slot.empty {
+      border-style: dashed;
+      opacity: 0.6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+      #toolbar {
+        padding: 0 8px;
+        gap: 8px;
+        font-size: 0.8em;
+        height: 60px;
+      }
+      --canvas-top: 60px;
+      canvas {
+        height: calc(100vh - 60px);
+      }
+      .toolbar-section {
+        padding: 4px 8px;
+        gap: 6px;
+      }
+      .particle-type-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+      .particle-button {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+      }
+    }
+
+    .tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      pointer-events: none;
+      z-index: 2000;
+      transform: translate(-50%, -100%);
+      margin-top: -8px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .tooltip.show {
+      opacity: 1;
+    }
+  </style>
+<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fpixelsand1533back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.5"></script>
+</head>
+<body>
+  <div id="toolbar">
+    <!-- Particle Types Section -->
+    <div class="toolbar-section">
+      <label>Particles:</label>
+      <div class="particle-type-grid">
+        <button class="particle-button active" data-particle="sand" title="Sand - Falls with gravity" style="background: linear-gradient(45deg, #f4e4a1, #d4af37);">🏜️</button>
+        <button class="particle-button" data-particle="water" title="Water - Flows and spreads" style="background: linear-gradient(45deg, #87ceeb, #4682b4);">💧</button>
+        <button class="particle-button" data-particle="fire" title="Fire - Burns upward" style="background: linear-gradient(45deg, #ff6b35, #dc143c);">🔥</button>
+        <button class="particle-button" data-particle="stone" title="Stone - Static solid" style="background: linear-gradient(45deg, #808080, #404040);">🪨</button>
+        <button class="particle-button" data-particle="plant" title="Plant - Grows when watered" style="background: linear-gradient(45deg, #90ee90, #228b22);">🌱</button>
+        <button class="particle-button" data-particle="ice" title="Ice - Melts to water" style="background: linear-gradient(45deg, #e0ffff, #87ceeb);">🧊</button>
+        <button class="particle-button" data-particle="steam" title="Steam - Rises and condenses" style="background: linear-gradient(45deg, #f0f8ff, #b0c4de);">💨</button>
+        <button class="particle-button" data-particle="oil" title="Oil - Floats on water" style="background: linear-gradient(45deg, #2f2f2f, #1a1a1a);">🛢️</button>
+      </div>
+    </div>
+
+    <!-- Tools Section -->
+    <div class="toolbar-section">
+      <label>Tools:</label>
+      <button class="tool-button active" id="brush-tool" title="Brush - Draw particles">🖌️ Brush</button>
+      <button class="tool-button" id="eraser-tool" title="Eraser - Remove particles">🧹 Erase</button>
+      <button class="tool-button" id="pipette-tool" title="Pipette - Sample particle type">💉 Sample</button>
+      <button class="tool-button" id="spray-tool" title="Spray - Scatter particles">💨 Spray</button>
+    </div>
+
+    <!-- Brush Settings -->
+    <div class="toolbar-section">
+      <label>Size:</label>
+      <input type="range" id="brush-size" min="1" max="20" value="3" />
+      <div class="brush-preview" id="brush-preview">3</div>
+      <label>Intensity:</label>
+      <input type="range" id="brush-intensity" min="1" max="10" value="5" />
+      <span id="intensity-label">5</span>
+    </div>
+
+    <!-- Physics Controls -->
+    <div class="toolbar-section">
+      <button class="tool-button" id="gravity-toggle" title="Toggle gravity">🌍 Gravity</button>
+      <button class="tool-button" id="wind-toggle" title="Toggle wind">💨 Wind</button>
+      <label>Speed:</label>
+      <input type="range" id="sim-speed" min="0.1" max="3" step="0.1" value="1" />
+      <span id="speed-label">1x</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="toolbar-section">
+      <button class="tool-button" id="clear-btn" title="Clear canvas">🗑️ Clear</button>
+      <button class="tool-button" id="save-btn" title="Save image">💾 Save</button>
+      <button class="tool-button" id="quick-save-btn" title="Quick save/load">📁 Slots</button>
+      <button class="tool-button" id="pause-btn" title="Pause simulation">⏸️ Pause</button>
+      <button class="tool-button" id="theme-btn" title="Toggle theme">🌙 Theme</button>
+    </div>
+  </div>
+
+  <canvas id="sandbox" tabindex="0"></canvas>
+
+  <!-- Performance Monitor -->
+  <div class="performance-monitor" id="performance-monitor">
+    FPS: <span id="fps">60</span> | 
+    Particles: <span id="particle-count">0</span> | 
+    Memory: <span id="memory-usage">0MB</span>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span id="status-text">Advanced Sand Pixel Art Creator - Select a particle type and start drawing!</span>
+    <span id="coordinates">X: 0, Y: 0</span>
+  </div>
+
+  <!-- Quick Save Panel -->
+  <div class="quick-save-panel" id="quick-save-panel">
+    <h4 style="margin: 0 0 8px 0; color: var(--primary);">Quick Save Slots</h4>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+      <div class="save-slot empty" data-slot="1">+</div>
+      <div class="save-slot empty" data-slot="2">+</div>
+      <div class="save-slot empty" data-slot="3">+</div>
+      <div class="save-slot empty" data-slot="4">+</div>
+    </div>
+    <button class="tool-button" id="close-save-panel" style="margin-top: 8px;">Close</button>
+  </div>
+
+  <script>
+    // --- Enhanced Variables and Setup ---
+    const canvas = document.getElementById("sandbox");
+    const ctx = canvas.getContext("2d");
+    
+    // Particle system configuration
+    const PARTICLE_TYPES = {
+      sand: { color: '#f4e4a1', density: 1.5, physics: 'falling', symbol: '🏜️' },
+      water: { color: '#4682b4', density: 1.0, physics: 'liquid', symbol: '💧' },
+      fire: { color: '#ff4500', density: 0.3, physics: 'rising', symbol: '🔥' },
+      stone: { color: '#696969', density: 2.5, physics: 'static', symbol: '🪨' },
+      plant: { color: '#228b22', density: 0.8, physics: 'growing', symbol: '🌱' },
+      ice: { color: '#87ceeb', density: 0.9, physics: 'melting', symbol: '🧊' },
+      steam: { color: '#f0f8ff', density: 0.1, physics: 'rising', symbol: '💨' },
+      oil: { color: '#2f2f2f', density: 0.8, physics: 'floating', symbol: '🛢️' }
+    };
+
+    // Enhanced settings
+    const BASE_PARTICLE_SIZE = 4;
+    let zoom = 1;
+    
+    // Enhanced state
+    let brushSize = 3;
+    let brushIntensity = 5;
+    let selectedParticle = 'sand';
+    let currentTool = 'brush';
+    let paused = false;
+    let isMousePressed = false;
+    let simulationSpeed = 1.0;
+    let gravityEnabled = true;
+    let windEnabled = false;
+    let windStrength = 0.1;
+    
+    // Grid and physics
+    let grid = [], gridWidth, gridHeight;
+    let particleGrid = [], colorGrid = [];
+    let needsResize = false;
+    let isDark = true;
+    
+    // Performance tracking
+    let frameCount = 0;
+    let lastTime = performance.now();
+    let fps = 60;
+    let particleCount = 0;
+    
+    // Quick save system
+    let saveSlots = {};
+    
+    // --- Enhanced Theme System ---
+    function setTheme(dark) {
+      isDark = dark;
+      document.body.classList.toggle('light', !dark);
+      updateStatus(`Theme switched to ${dark ? 'dark' : 'light'} mode`);
+      draw();
+    }
+
+    // Initialize theme from system preference
+    const savedTheme = localStorage.getItem('advanced-sand-theme');
+    if (savedTheme === 'dark') setTheme(true);
+    else if (savedTheme === 'light') setTheme(false);
+    else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) setTheme(false);
+
+    // --- Enhanced Grid System ---
+    function resizeCanvas(keepData = false) {
+      const particleSize = BASE_PARTICLE_SIZE * zoom;
+      gridWidth = Math.floor(window.innerWidth / particleSize);
+      gridHeight = Math.floor((window.innerHeight - (window.innerWidth <= 768 ? 60 : 80)) / particleSize);
+      
+      canvas.width = gridWidth * particleSize;
+      canvas.height = gridHeight * particleSize;
+      
+      if (keepData && grid.length) {
+        // Preserve existing data when resizing
+        const newGrid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(0));
+        const newParticleGrid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+        const newColorGrid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+        
+        for (let y = 0; y < Math.min(gridHeight, grid.length); y++) {
+          for (let x = 0; x < Math.min(gridWidth, grid[y] ? grid[y].length : 0); x++) {
+            newGrid[y][x] = grid[y][x];
+            newParticleGrid[y][x] = particleGrid[y][x];
+            newColorGrid[y][x] = colorGrid[y][x];
+          }
+        }
+        
+        grid = newGrid;
+        particleGrid = newParticleGrid;
+        colorGrid = newColorGrid;
+      } else {
+        grid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(0));
+        particleGrid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+        colorGrid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+      }
+      
+      needsResize = false;
+      draw();
+    }
+
+    // --- Advanced Physics Simulation ---
+    function updatePhysics() {
+      if (paused || simulationSpeed === 0) return;
+      
+      const iterations = Math.ceil(simulationSpeed);
+      
+      for (let iter = 0; iter < iterations; iter++) {
+        // Process particles based on their physics type
+        for (let y = gridHeight - 2; y >= 0; y--) {
+          const xOrder = Array.from({ length: gridWidth }, (_, i) => i);
+          if (Math.random() < 0.5) xOrder.reverse();
+          
+          for (const x of xOrder) {
+            if (grid[y][x] === 1) {
+              const particleType = particleGrid[y][x];
+              const physics = PARTICLE_TYPES[particleType]?.physics || 'falling';
+              
+              updateParticlePhysics(x, y, particleType, physics);
+            }
+          }
+        }
+        
+        // Update particle count
+        particleCount = grid.flat().reduce((sum, cell) => sum + cell, 0);
+      }
+    }
+
+    function updateParticlePhysics(x, y, particleType, physics) {
+      switch (physics) {
+        case 'falling':
+          updateFallingParticle(x, y, particleType);
+          break;
+        case 'liquid':
+          updateLiquidParticle(x, y, particleType);
+          break;
+        case 'rising':
+          updateRisingParticle(x, y, particleType);
+          break;
+        case 'floating':
+          updateFloatingParticle(x, y, particleType);
+          break;
+        case 'melting':
+          updateMeltingParticle(x, y, particleType);
+          break;
+        case 'growing':
+          updateGrowingParticle(x, y, particleType);
+          break;
+        case 'static':
+          // Static particles don't move
+          break;
+      }
+    }
+
+    function updateFallingParticle(x, y, particleType) {
+      if (!gravityEnabled) return;
+      
+      // Try to fall down
+      if (y + 1 < gridHeight && grid[y + 1][x] === 0) {
+        moveParticle(x, y, x, y + 1);
+      } else {
+        // Try diagonals
+        const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
+        for (const dx of dirs) {
+          if (x + dx >= 0 && x + dx < gridWidth && y + 1 < gridHeight && grid[y + 1][x + dx] === 0) {
+            moveParticle(x, y, x + dx, y + 1);
+            break;
+          }
+        }
+      }
+      
+      // Apply wind effect
+      if (windEnabled && Math.random() < 0.1) {
+        const windDir = windStrength > 0 ? 1 : -1;
+        const newX = x + windDir;
+        if (newX >= 0 && newX < gridWidth && grid[y][newX] === 0) {
+          moveParticle(x, y, newX, y);
+        }
+      }
+    }
+
+    function updateLiquidParticle(x, y, particleType) {
+      if (!gravityEnabled) return;
+      
+      // Try to fall down first
+      if (y + 1 < gridHeight && grid[y + 1][x] === 0) {
+        moveParticle(x, y, x, y + 1);
+        return;
+      }
+      
+      // Try to flow sideways
+      const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
+      for (const dx of dirs) {
+        if (x + dx >= 0 && x + dx < gridWidth && grid[y][x + dx] === 0) {
+          moveParticle(x, y, x + dx, y);
+          break;
+        }
+      }
+    }
+
+    function updateRisingParticle(x, y, particleType) {
+      // Fire and steam rise
+      if (y - 1 >= 0 && grid[y - 1][x] === 0) {
+        moveParticle(x, y, x, y - 1);
+      } else {
+        // Try diagonals upward
+        const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
+        for (const dx of dirs) {
+          if (x + dx >= 0 && x + dx < gridWidth && y - 1 >= 0 && grid[y - 1][x + dx] === 0) {
+            moveParticle(x, y, x + dx, y - 1);
+            break;
+          }
+        }
+      }
+      
+      // Fire particles have a chance to disappear
+      if (particleType === 'fire' && Math.random() < 0.01) {
+        removeParticle(x, y);
+      }
+    }
+
+    function updateFloatingParticle(x, y, particleType) {
+      // Oil floats on water
+      if (y + 1 < gridHeight && particleGrid[y + 1][x] === 'water') {
+        // Swap with water below
+        swapParticles(x, y, x, y + 1);
+      } else {
+        // Behave like liquid otherwise
+        updateLiquidParticle(x, y, particleType);
+      }
+    }
+
+    function updateMeltingParticle(x, y, particleType) {
+      // Ice melts when near fire
+      const neighbors = getNeighbors(x, y);
+      const hasFireNeighbor = neighbors.some(([nx, ny]) => 
+        nx >= 0 && nx < gridWidth && ny >= 0 && ny < gridHeight && 
+        particleGrid[ny] && particleGrid[ny][nx] === 'fire'
+      );
+      
+      if (hasFireNeighbor && Math.random() < 0.1) {
+        // Melt to water
+        particleGrid[y][x] = 'water';
+        colorGrid[y][x] = PARTICLE_TYPES.water.color;
+      } else {
+        // Otherwise behave like falling particle
+        updateFallingParticle(x, y, particleType);
+      }
+    }
+
+    function updateGrowingParticle(x, y, particleType) {
+      // Plants grow when touching water
+      const neighbors = getNeighbors(x, y);
+      const hasWaterNeighbor = neighbors.some(([nx, ny]) => 
+        nx >= 0 && nx < gridWidth && ny >= 0 && ny < gridHeight && 
+        particleGrid[ny] && particleGrid[ny][nx] === 'water'
+      );
+      
+      if (hasWaterNeighbor && Math.random() < 0.05) {
+        // Try to grow upward
+        if (y - 1 >= 0 && grid[y - 1][x] === 0) {
+          addParticle(x, y - 1, 'plant');
+        }
+      }
+    }
+
+    function moveParticle(fromX, fromY, toX, toY) {
+      if (toX < 0 || toX >= gridWidth || toY < 0 || toY >= gridHeight) return false;
+      if (grid[toY][toX] !== 0) return false;
+      
+      grid[toY][toX] = grid[fromY][fromX];
+      particleGrid[toY][toX] = particleGrid[fromY][fromX];
+      colorGrid[toY][toX] = colorGrid[fromY][fromX];
+      
+      grid[fromY][fromX] = 0;
+      particleGrid[fromY][fromX] = null;
+      colorGrid[fromY][fromX] = null;
+      
+      return true;
+    }
+
+    function swapParticles(x1, y1, x2, y2) {
+      if (x2 < 0 || x2 >= gridWidth || y2 < 0 || y2 >= gridHeight) return false;
+      
+      const tempGrid = grid[y1][x1];
+      const tempParticle = particleGrid[y1][x1];
+      const tempColor = colorGrid[y1][x1];
+      
+      grid[y1][x1] = grid[y2][x2];
+      particleGrid[y1][x1] = particleGrid[y2][x2];
+      colorGrid[y1][x1] = colorGrid[y2][x2];
+      
+      grid[y2][x2] = tempGrid;
+      particleGrid[y2][x2] = tempParticle;
+      colorGrid[y2][x2] = tempColor;
+      
+      return true;
+    }
+
+    function addParticle(x, y, type) {
+      if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) return false;
+      if (grid[y][x] !== 0) return false;
+      
+      grid[y][x] = 1;
+      particleGrid[y][x] = type;
+      colorGrid[y][x] = PARTICLE_TYPES[type].color;
+      return true;
+    }
+
+    function removeParticle(x, y) {
+      if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) return false;
+      
+      grid[y][x] = 0;
+      particleGrid[y][x] = null;
+      colorGrid[y][x] = null;
+      return true;
+    }
+
+    function getNeighbors(x, y) {
+      return [
+        [x-1, y-1], [x, y-1], [x+1, y-1],
+        [x-1, y], [x+1, y],
+        [x-1, y+1], [x, y+1], [x+1, y+1]
+      ];
+    }
+
+    // --- Enhanced Drawing System ---
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Fill background
+      ctx.fillStyle = isDark ? 
+        getComputedStyle(document.body).getPropertyValue('--canvas-bg-dark')?.trim() || "#1e293b" :
+        getComputedStyle(document.body).getPropertyValue('--canvas-bg-light')?.trim() || "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const particleSize = BASE_PARTICLE_SIZE * zoom;
+      
+      // Draw particles with enhanced visuals
+      for (let y = 0; y < gridHeight; y++) {
+        for (let x = 0; x < gridWidth; x++) {
+          if (grid[y][x] === 1) {
+            const particleType = particleGrid[y][x];
+            const color = colorGrid[y][x] || PARTICLE_TYPES[particleType]?.color || '#ffffff';
+            
+            ctx.fillStyle = color;
+            
+            // Add particle-specific effects
+            if (particleType === 'fire') {
+              // Fire particles with glow effect
+              ctx.shadowColor = color;
+              ctx.shadowBlur = 2;
+            } else if (particleType === 'water') {
+              // Water with transparency
+              ctx.globalAlpha = 0.8;
+            } else {
+              ctx.shadowBlur = 0;
+              ctx.globalAlpha = 1;
+            }
+            
+            ctx.fillRect(x * particleSize, y * particleSize, particleSize, particleSize);
+            
+            // Reset effects
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = 1;
+          }
+        }
+      }
+    }
+
+    // --- Enhanced Input System ---
+    function canvasToGrid(e) {
+      const rect = canvas.getBoundingClientRect();
+      const particleSize = BASE_PARTICLE_SIZE * zoom;
+      const x = Math.floor((e.clientX - rect.left) / particleSize);
+      const y = Math.floor((e.clientY - rect.top) / particleSize);
+      return { x, y };
+    }
+
+    function paintAt(x, y) {
+      const radius = brushSize;
+      const intensity = brushIntensity;
+      
+      for (let dy = -radius; dy <= radius; dy++) {
+        for (let dx = -radius; dx <= radius; dx++) {
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance <= radius) {
+            const nx = x + dx;
+            const ny = y + dy;
+            
+            if (nx >= 0 && nx < gridWidth && ny >= 0 && ny < gridHeight) {
+              const chance = 1 - (distance / radius);
+              if (Math.random() < chance * (intensity / 10)) {
+                if (currentTool === 'brush' || currentTool === 'spray') {
+                  addParticle(nx, ny, selectedParticle);
+                } else if (currentTool === 'eraser') {
+                  removeParticle(nx, ny);
+                } else if (currentTool === 'pipette' && grid[ny][nx] === 1) {
+                  selectParticleType(particleGrid[ny][nx]);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // --- Tool System ---
+    function selectTool(tool) {
+      currentTool = tool;
+      document.querySelectorAll('.tool-button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tool + '-tool').classList.add('active');
+      
+      // Update cursor
+      if (tool === 'pipette') {
+        canvas.style.cursor = 'crosshair';
+      } else if (tool === 'eraser') {
+        canvas.style.cursor = 'cell';
+      } else {
+        canvas.style.cursor = 'crosshair';
+      }
+      
+      updateStatus(`Selected tool: ${tool}`);
+    }
+
+    function selectParticleType(type) {
+      selectedParticle = type;
+      document.querySelectorAll('.particle-button').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`[data-particle="${type}"]`).classList.add('active');
+      updateStatus(`Selected particle: ${type} ${PARTICLE_TYPES[type].symbol}`);
+    }
+
+    // --- UI Event Handlers ---
+    function updateBrushPreview() {
+      const preview = document.getElementById('brush-preview');
+      preview.textContent = brushSize;
+      preview.style.transform = `scale(${0.5 + (brushSize / 20)})`;
+    }
+
+    function updateStatus(message) {
+      document.getElementById('status-text').textContent = message;
+    }
+
+    function updatePerformance() {
+      frameCount++;
+      const currentTime = performance.now();
+      if (currentTime - lastTime >= 1000) {
+        fps = Math.round(frameCount * 1000 / (currentTime - lastTime));
+        document.getElementById('fps').textContent = fps;
+        document.getElementById('particle-count').textContent = particleCount;
+        
+        // Memory usage (approximate)
+        const memoryMB = Math.round((gridWidth * gridHeight * 12) / (1024 * 1024));
+        document.getElementById('memory-usage').textContent = memoryMB + 'MB';
+        
+        frameCount = 0;
+        lastTime = currentTime;
+      }
+    }
+
+    // --- Quick Save System ---
+    function quickSave(slot) {
+      const imageData = canvas.toDataURL();
+      saveSlots[slot] = {
+        image: imageData,
+        grid: JSON.parse(JSON.stringify(grid)),
+        particleGrid: JSON.parse(JSON.stringify(particleGrid)),
+        colorGrid: JSON.parse(JSON.stringify(colorGrid))
+      };
+      
+      const slotElement = document.querySelector(`[data-slot="${slot}"]`);
+      slotElement.classList.remove('empty');
+      slotElement.style.backgroundImage = `url(${imageData})`;
+      slotElement.textContent = '';
+      
+      updateStatus(`Saved to slot ${slot}`);
+      localStorage.setItem('advanced-sand-saves', JSON.stringify(saveSlots));
+    }
+
+    function quickLoad(slot) {
+      const save = saveSlots[slot];
+      if (save) {
+        grid = save.grid;
+        particleGrid = save.particleGrid;
+        colorGrid = save.colorGrid;
+        draw();
+        updateStatus(`Loaded from slot ${slot}`);
+      }
+    }
+
+    // --- Main Loop ---
+    function step() {
+      if (needsResize) resizeCanvas(true);
+      updatePhysics();
+      draw();
+      updatePerformance();
+      requestAnimationFrame(step);
+    }
+
+    // --- Event Listeners ---
+    window.addEventListener("resize", () => { needsResize = true; });
+
+    // Canvas events
+    canvas.addEventListener("mousedown", (e) => {
+      isMousePressed = true;
+      const {x, y} = canvasToGrid(e);
+      paintAt(x, y);
+    });
+    
+    canvas.addEventListener("mousemove", (e) => {
+      const {x, y} = canvasToGrid(e);
+      document.getElementById('coordinates').textContent = `X: ${x}, Y: ${y}`;
+      
+      if (isMousePressed) {
+        paintAt(x, y);
+      }
+    });
+    
+    document.addEventListener("mouseup", () => { isMousePressed = false; });
+
+    // Touch events
+    canvas.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      isMousePressed = true;
+      const touch = e.touches[0];
+      const {x, y} = canvasToGrid(touch);
+      paintAt(x, y);
+    }, {passive: false});
+
+    canvas.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+      if (isMousePressed) {
+        const touch = e.touches[0];
+        const {x, y} = canvasToGrid(touch);
+        paintAt(x, y);
+      }
+    }, {passive: false});
+
+    document.addEventListener('touchend', () => { isMousePressed = false; });
+
+    // Tool selection
+    document.querySelectorAll('.tool-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const toolName = btn.id.replace('-tool', '');
+        selectTool(toolName);
+      });
+    });
+
+    // Particle selection
+    document.querySelectorAll('.particle-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectParticleType(btn.dataset.particle);
+      });
+    });
+
+    // Control inputs
+    document.getElementById('brush-size').addEventListener('input', (e) => {
+      brushSize = parseInt(e.target.value);
+      updateBrushPreview();
+    });
+
+    document.getElementById('brush-intensity').addEventListener('input', (e) => {
+      brushIntensity = parseInt(e.target.value);
+      document.getElementById('intensity-label').textContent = e.target.value;
+    });
+
+    document.getElementById('sim-speed').addEventListener('input', (e) => {
+      simulationSpeed = parseFloat(e.target.value);
+      document.getElementById('speed-label').textContent = e.target.value + 'x';
+    });
+
+    // Action buttons
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      grid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(0));
+      particleGrid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+      colorGrid = Array.from({ length: gridHeight }, () => Array(gridWidth).fill(null));
+      draw();
+      updateStatus('Canvas cleared');
+    });
+
+    document.getElementById('save-btn').addEventListener('click', () => {
+      canvas.toBlob(blob => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `advanced_sand_art_${Date.now()}.png`;
+        a.click();
+        updateStatus('Image saved');
+      });
+    });
+
+    document.getElementById('pause-btn').addEventListener('click', () => {
+      paused = !paused;
+      const btn = document.getElementById('pause-btn');
+      btn.textContent = paused ? '▶️ Resume' : '⏸️ Pause';
+      updateStatus(paused ? 'Simulation paused' : 'Simulation resumed');
+    });
+
+    document.getElementById('gravity-toggle').addEventListener('click', () => {
+      gravityEnabled = !gravityEnabled;
+      const btn = document.getElementById('gravity-toggle');
+      btn.classList.toggle('active', gravityEnabled);
+      updateStatus(`Gravity ${gravityEnabled ? 'enabled' : 'disabled'}`);
+    });
+
+    document.getElementById('wind-toggle').addEventListener('click', () => {
+      windEnabled = !windEnabled;
+      const btn = document.getElementById('wind-toggle');
+      btn.classList.toggle('active', windEnabled);
+      if (windEnabled) {
+        windStrength = Math.random() > 0.5 ? 0.1 : -0.1;
+      }
+      updateStatus(`Wind ${windEnabled ? 'enabled' : 'disabled'}`);
+    });
+
+    document.getElementById('theme-btn').addEventListener('click', () => {
+      setTheme(!isDark);
+      localStorage.setItem('advanced-sand-theme', isDark ? 'dark' : 'light');
+    });
+
+    // Quick save panel
+    document.getElementById('quick-save-btn').addEventListener('click', () => {
+      const panel = document.getElementById('quick-save-panel');
+      panel.style.display = panel.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.getElementById('close-save-panel').addEventListener('click', () => {
+      document.getElementById('quick-save-panel').style.display = 'none';
+    });
+
+    document.querySelectorAll('.save-slot').forEach(slot => {
+      slot.addEventListener('click', () => {
+        const slotNum = slot.dataset.slot;
+        if (slot.classList.contains('empty')) {
+          quickSave(slotNum);
+        } else {
+          quickLoad(slotNum);
+        }
+      });
+      
+      slot.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const slotNum = slot.dataset.slot;
+        if (!slot.classList.contains('empty')) {
+          delete saveSlots[slotNum];
+          slot.classList.add('empty');
+          slot.style.backgroundImage = '';
+          slot.textContent = '+';
+          updateStatus(`Cleared slot ${slotNum}`);
+          localStorage.setItem('advanced-sand-saves', JSON.stringify(saveSlots));
+        }
+      });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      switch(e.code) {
+        case 'Space':
+          e.preventDefault();
+          document.getElementById('pause-btn').click();
+          break;
+        case 'KeyC':
+          if (e.ctrlKey || e.metaKey) return;
+          document.getElementById('clear-btn').click();
+          break;
+        case 'KeyS':
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            document.getElementById('save-btn').click();
+          }
+          break;
+        case 'KeyT':
+          document.getElementById('theme-btn').click();
+          break;
+        case 'KeyG':
+          document.getElementById('gravity-toggle').click();
+          break;
+        case 'KeyW':
+          document.getElementById('wind-toggle').click();
+          break;
+        case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
+          const slotNum = e.code.replace('Digit', '');
+          const slot = document.querySelector(`[data-slot="${slotNum}"]`);
+          if (slot) slot.click();
+          break;
+      }
+    });
+
+    // Initialize
+    function init() {
+      // Load saved slots
+      const savedSlots = localStorage.getItem('advanced-sand-saves');
+      if (savedSlots) {
+        saveSlots = JSON.parse(savedSlots);
+        Object.keys(saveSlots).forEach(slot => {
+          const slotElement = document.querySelector(`[data-slot="${slot}"]`);
+          if (slotElement && saveSlots[slot]) {
+            slotElement.classList.remove('empty');
+            slotElement.style.backgroundImage = `url(${saveSlots[slot].image})`;
+            slotElement.textContent = '';
+          }
+        });
+      }
+      
+      updateBrushPreview();
+      resizeCanvas();
+      updateStatus('Advanced Sand Pixel Art Creator loaded - Start creating!');
+      step();
+    }
+
+    // Start the application
+    init();
+  </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
