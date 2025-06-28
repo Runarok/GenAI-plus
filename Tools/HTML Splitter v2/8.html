@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="blue" data-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML Splitter - JS, CSS, HTML Extractor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+  <style>
+body {
+  background: #181f24;
+  color: #e6f1ff;
+  font-family: 'Segoe UI', 'Fira Mono', 'Consolas', monospace;
+  margin: 0;
+  min-height: 100vh;
+}
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  background: #20272f;
+  border-bottom: 1px solid #21313b;
+  padding: 1.4rem 2.4rem 0.6rem 2.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+}
+.header img {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #222;
+  border: 2px solid #374151;
+}
+.header-title {
+  color: #aeeaff;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.subtitle {
+  color: #aeeaff;
+  padding-left: 2.4rem;
+  padding-bottom: 0.7rem;
+}
+.app-content {
+  flex: 1 1 0;
+  display: flex;
+  gap: 1.7rem;
+  padding: 1.2rem 2.5vw 1.5rem 2.5vw;
+  background: #181f24;
+}
+@media (max-width: 900px) {
+  .app-content {
+    flex-direction: column;
+    padding: 1.2rem 1vw;
+    gap: 1.3rem;
+  }
+}
+.panel {
+  background: #12181f;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(18,24,31,0.14);
+  border: 1.5px solid #1e2c37;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+}
+.panel.input-panel {
+  max-width: 52vw;
+  min-width: 330px;
+  padding: 1.3rem 1.1rem 1.4rem 1.2rem;
+  margin-bottom: 0.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.panel.output-panel {
+  max-width: 52vw;
+  min-width: 330px;
+  padding: 1.3rem 1.1rem 1.2rem 1.2rem;
+}
+@media (max-width: 1200px) {
+  .panel.input-panel, .panel.output-panel { max-width: 100vw; }
+}
+.panel-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.08rem;
+  color: #49eaff;
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.panel-title-row i {
+  color: #49eaff;
+  font-size: 1.13em;
+}
+.button-row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.7rem;
+  margin-bottom: 0.3rem;
+  margin-top: 0.2rem;
+  justify-content: flex-end;
+}
+.clear-btn, .split-btn, .download-all-btn {
+  box-shadow: none;
+  font-weight: 600;
+  font-size: 0.99rem;
+  border-radius: 7px;
+  padding: 0.32em 1.1em;
+  border: none;
+  cursor: pointer;
+  transition: background 0.17s;
+}
+.clear-btn {
+  background: #212d39;
+  color: #ff6868;
+}
+.clear-btn:hover {
+  background: #2e4053;
+  color: #fff;
+}
+.split-btn {
+  background: #49eaff;
+  color: #181f24;
+}
+.split-btn:hover { background: #ffe36e; color: #181f24;}
+.download-all-btn {
+  background: #21313b;
+  color: #ffe36e;
+}
+.download-all-btn:hover { background: #ffe36e; color: #181f24;}
+.droparea {
+  border: 2px dashed #49eaff;
+  border-radius: 8px;
+  background: #151e25;
+  min-height: 54px;
+  text-align: center;
+  color: #49eaff;
+  margin-bottom: 9px;
+  padding: 15px 9px;
+  font-size: 1em;
+  transition: background 0.2s, border 0.2s;
+  cursor: pointer;
+  user-select: none;
+}
+.droparea.dragover {
+  background: #202e3b;
+  border-color: #ffe36e;
+  color: #ffe36e;
+}
+.input-area-wrap {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.code-input-area {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1 1 0;
+  background: #151e25;
+  color: #d6f3ff;
+  border: 1.5px solid #1e2c37;
+  border-radius: 8px;
+  padding: 16px 16px 12px 14px;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-size: 1.04em;
+  line-height: 1.55;
+  resize: none;
+  margin-bottom: 0.3em;
+  box-sizing: border-box;
+  overflow: auto;
+}
+.code-input-area:focus {
+  outline: none;
+  border: 2px solid #49eaff;
+  background: #19232c;
+}
+.tabs-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  background: transparent;
+}
+.tabs-header {
+  display: flex;
+  background: #19232c;
+  border-bottom: 2px solid #1e2c37;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  margin-bottom: 0.7em;
+}
+.tab-btn {
+  flex: 1 1 0;
+  background: none;
+  border: none;
+  color: #87eaff;
+  font-size: 1.01em;
+  font-weight: 600;
+  padding: 0.8rem 0.5rem;
+  cursor: pointer;
+  border-bottom: 4px solid transparent;
+  transition: color 0.16s, border-bottom 0.17s, background 0.16s;
+  border-radius: 0;
+}
+.tab-btn.active {
+  color: #49eaff;
+  border-bottom: 4px solid #49eaff;
+  background: #151e25;
+}
+.tab-content {
+  display: none;
+  flex: 1 1 0;
+  min-height: 320px;
+  height: 100%;
+  flex-direction: column;
+  padding: 0.4em 0 0 0;
+  animation: fade-in 0.25s;
+}
+.tab-content.active {
+  display: flex;
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px);}
+  to { opacity: 1; transform: none;}
+}
+.output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.15em;
+  padding-left: 3px;
+}
+.output-header span {
+  font-size: 1.09em;
+  font-weight: 600;
+  color: #ffe36e;
+  letter-spacing: 0.01em;
+}
+.download-btn {
+  background: #151e25;
+  color: #6ac8ff;
+  border: 1.5px solid #49eaff;
+  padding: 0.32em 1.04em;
+  border-radius: 5px;
+  font-size: 0.98em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border 0.15s;
+}
+.download-btn:hover {
+  background: #49eaff;
+  color: #181f24;
+}
+.code-output-area {
+  width: 100%;
+  min-height: 320px;
+  background: #151e25;
+  color: #d6f3ff;
+  border: 1.5px solid #1e2c37;
+  border-radius: 8px;
+  padding: 16px 16px 12px 14px;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-size: 1.04em;
+  line-height: 1.55;
+  resize: none;
+  box-sizing: border-box;
+  overflow: auto;
+  margin-bottom: 0.3em;
+  flex: 1 1 0;
+}
+.code-output-area:focus {
+  outline: none;
+  border: 2px solid #49eaff;
+  background: #19232c;
+}
+footer {
+  background: #20272f;
+  border-top: 1px solid #21313b;
+  padding: 0.82rem 0 0.82rem 0;
+  color: #7aa3cc;
+  font-size: 0.98rem;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: #22344c; border-radius: 4px;}
+::-webkit-scrollbar-thumb:hover { background: #49eaff; }
+::-webkit-scrollbar-track { background: #151e25; border-radius: 4px;}
+::selection { background: #49eaff; color: #181f24; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" alt="GenAI+ Logo">
+      <span class="header-title">HTML Splitter: Extract JS &amp; CSS</span>
+    </div>
+    <div class="subtitle">
+      Paste or drag &amp; drop your HTML. Output is prettified &amp; tabbed. Download any file.
+    </div>
+    <div class="app-content">
+      <div class="panel input-panel">
+        <div class="panel-title-row">
+          <i>&lt;/&gt;</i> Input HTML Document
+        </div>
+        <div id="droparea" class="droparea">Drag &amp; Drop HTML file here, or click to select</div>
+        <div class="input-area-wrap">
+          <textarea id="input-html" class="code-input-area" placeholder="Paste your HTML document with &lt;script&gt; and &lt;style&gt; tags..."></textarea>
+        </div>
+        <div class="button-row">
+          <button class="clear-btn" id="clear-btn">Clear</button>
+          <button class="split-btn" id="split-btn">Split</button>
+          <button class="download-all-btn" id="download-all-btn">Download All</button>
+        </div>
+      </div>
+      <div class="panel output-panel">
+        <div class="tabs-container">
+          <div class="tabs-header">
+            <button class="tab-btn active" data-tab="html">HTML</button>
+            <button class="tab-btn" data-tab="css">CSS</button>
+            <button class="tab-btn" data-tab="js">JS</button>
+          </div>
+          <div class="tab-content active" id="tab-html">
+            <div class="output-header">
+              <span>HTML Output</span>
+              <button class="download-btn" id="download-html">Download</button>
+            </div>
+            <textarea class="code-output-area" id="html-output" readonly spellcheck="false"></textarea>
+          </div>
+          <div class="tab-content" id="tab-css">
+            <div class="output-header">
+              <span>CSS Output</span>
+              <button class="download-btn" id="download-css">Download</button>
+            </div>
+            <textarea class="code-output-area" id="css-output" readonly spellcheck="false"></textarea>
+          </div>
+          <div class="tab-content" id="tab-js">
+            <div class="output-header">
+              <span>JavaScript Output</span>
+              <button class="download-btn" id="download-js">Download</button>
+            </div>
+            <textarea class="code-output-area" id="js-output" readonly spellcheck="false"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    Parse and extract HTML, CSS, and JavaScript from complete HTML documents
+  </footer>
+<script>
+function formatHTML(html, tab = '  ') {
+  html = html.replace(/>\s+</g, '>\n<').replace(/^\s+|\s+$/gm, '');
+  const lines = html.split('\n');
+  let indent = '';
+  let result = '';
+  const voidTags = [
+    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link',
+    'meta', 'source', 'track', 'wbr'
+  ];
+  const isVoid = tag =>
+    voidTags.includes(tag.replace(/^<\/*|\s.*$/g, '').replace('/', '').toLowerCase());
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i].trim();
+    if (!line) continue;
+    if (/^<\/\w/.test(line)) {
+      indent = indent.slice(tab.length);
+    }
+    result += indent + line + '\n';
+    if (
+      /^<\w/.test(line) &&            // opening tag
+      !/^<.*\/>$/.test(line) &&       // not self-closing like <meta .../>
+      !isVoid(line) &&                // not a void tag
+      !/^<!/.test(line) &&            // not doctype
+      !/<script\b|<style\b/i.test(line) // not script/style inline
+    ) {
+      indent += tab;
+    }
+    if (/^<\/(script|style)>/i.test(line)) {
+      indent = indent.slice(tab.length);
+    }
+  }
+  return result.trim();
+}
+function formatCSS(css) {
+  if (!css) return '';
+  try {
+    let formatted = css
+      .replace(/([{}])/g, '\n$1\n')
+      .replace(/;/g, ';\n')
+      .replace(/\n\s*\n/g, '\n')
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line)
+      .map(line => {
+        if (line === '{' || line === '}') return line;
+        return '  ' + line;
+      })
+      .join('\n');
+    let out = '';
+    let indent = '';
+    for (let line of formatted.split('\n')) {
+      if (line === '}') indent = indent.slice(2);
+      out += indent + line + '\n';
+      if (line === '{') indent += '  ';
+    }
+    return out.trim();
+  } catch { return css; }
+}
+function formatJS(js) {
+  if (!js) return '';
+  try {
+    let formatted = js
+      .replace(/([{}])/g, '\n$1\n')
+      .replace(/;/g, ';\n')
+      .replace(/\n\s*\n/g, '\n')
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line)
+      .join('\n');
+    let out = '';
+    let indent = '';
+    for (let line of formatted.split('\n')) {
+      if (line === '}') indent = indent.slice(2);
+      out += indent + line + '\n';
+      if (line === '{') indent += '  ';
+    }
+    return out.trim();
+  } catch { return js; }
+}
+function extractParts(htmlString) {
+  let jsParts = [], cssParts = [];
+  htmlString = htmlString.replace(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi, function(match, attrs, content) {
+    if (attrs && /\bsrc\s*=/.test(attrs)) return match;
+    jsParts.push(content.trim());
+    return '';
+  });
+  htmlString = htmlString.replace(/<style\b([^>]*)>([\s\S]*?)<\/style>/gi, function(match, attrs, content) {
+    cssParts.push(content.trim());
+    return '';
+  });
+  htmlString = htmlString.replace(/^\s*[\r\n]/gm, '');
+  return {
+    html: htmlString.trim(),
+    js: jsParts.join('\n\n').trim(),
+    css: cssParts.join('\n\n').trim()
+  };
+}
+function injectLinks(html, jsFile, cssFile) {
+  let doc = document.implementation.createHTMLDocument('');
+  doc.documentElement.innerHTML = html;
+  let head = doc.querySelector('head');
+  if (!head) {
+    head = doc.createElement('head');
+    if (doc.documentElement.firstChild) {
+      doc.documentElement.insertBefore(head, doc.documentElement.firstChild);
+    } else {
+      doc.documentElement.appendChild(head);
+    }
+  }
+  let faviconUrl = "https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png";
+  if (!head.querySelector('link[rel="icon"]')) {
+    let icon = doc.createElement('link');
+    icon.rel = "icon";
+    icon.href = faviconUrl;
+    icon.type = "image/png";
+    head.appendChild(icon);
+  }
+  if (!head.querySelector(`link[rel="stylesheet"][href="${cssFile}"]`)) {
+    let cssLink = doc.createElement('link');
+    cssLink.rel = "stylesheet";
+    cssLink.type = "text/css";
+    cssLink.href = cssFile;
+    head.appendChild(cssLink);
+  }
+  let script = doc.createElement('script');
+  script.src = jsFile;
+  let body = doc.querySelector('body');
+  if (body) {
+    body.appendChild(script);
+  } else {
+    doc.documentElement.appendChild(script);
+  }
+  let raw = "<!DOCTYPE html>\n" + doc.documentElement.outerHTML.replace(/^\s+|\s+$/g, '');
+  return formatHTML(raw);
+}
+function downloadFile(filename, content) {
+  const blob = new Blob([content], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  let a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 200);
+}
+function downloadAll() {
+  const html = document.getElementById('html-output').value;
+  const css = document.getElementById('css-output').value;
+  const js = document.getElementById('js-output').value;
+  if (!html && !css && !js) return;
+  const zipScriptUrl = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+  function doZip() {
+    const zip = new JSZip();
+    if (html) zip.file('index.html', html);
+    if (css) zip.file('style.css', css);
+    if (js) zip.file('script.js', js);
+    zip.generateAsync({ type: "blob" }).then(function (blob) {
+      let a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'html-extract.zip';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+      }, 200);
+    });
+  }
+  if (!window.JSZip) {
+    let script = document.createElement('script');
+    script.src = zipScriptUrl;
+    script.onload = doZip;
+    document.body.appendChild(script);
+  } else {
+    doZip();
+  }
+}
+// --- Drag and Drop Area ---
+const droparea = document.getElementById('droparea');
+droparea.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  droparea.classList.add('dragover');
+  droparea.textContent = "Drop your HTML file here";
+});
+droparea.addEventListener('dragleave', (e) => {
+  droparea.classList.remove('dragover');
+  droparea.textContent = "Drag & Drop HTML file here, or click to select";
+});
+droparea.addEventListener('drop', (e) => {
+  e.preventDefault();
+  droparea.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (!file || !file.name.match(/\.html?$/i)) {
+    droparea.textContent = "Please drop a valid .html file!";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    document.getElementById('input-html').value = evt.target.result;
+    droparea.textContent = "Loaded: " + file.name;
+  };
+  reader.readAsText(file);
+});
+droparea.addEventListener('click', () => {
+  let input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.htm,.html,text/html';
+  input.onchange = function(e) {
+    let file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      document.getElementById('input-html').value = evt.target.result;
+      droparea.textContent = "Loaded: " + file.name;
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+});
+// Tab logic
+const tabBtns = Array.from(document.querySelectorAll('.tab-btn'));
+const tabContents = {
+  html: document.getElementById('tab-html'),
+  css: document.getElementById('tab-css'),
+  js: document.getElementById('tab-js')
+};
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    Object.keys(tabContents).forEach(k => tabContents[k].classList.remove('active'));
+    tabContents[btn.dataset.tab].classList.add('active');
+  });
+});
+document.getElementById('split-btn').onclick = function() {
+  const input = document.getElementById('input-html').value.trim();
+  if (!input) {
+    alert('Please paste valid HTML code or load a file!');
+    return;
+  }
+  const parts = extractParts(input);
+  const cssFile = "style.css";
+  const jsFile = "script.js";
+  const htmlFile = "index.html";
+  const linkedHtml = injectLinks(parts.html, jsFile, cssFile);
+  document.getElementById('html-output').value = linkedHtml;
+  document.getElementById('css-output').value = formatCSS(parts.css);
+  document.getElementById('js-output').value = formatJS(parts.js);
+};
+document.getElementById('clear-btn').onclick = function() {
+  document.getElementById('input-html').value = '';
+  document.getElementById('html-output').value = '';
+  document.getElementById('css-output').value = '';
+  document.getElementById('js-output').value = '';
+  droparea.textContent = "Drag & Drop HTML file here, or click to select";
+};
+document.getElementById('download-html').onclick = function() {
+  downloadFile('index.html', document.getElementById('html-output').value);
+};
+document.getElementById('download-css').onclick = function() {
+  downloadFile('style.css', document.getElementById('css-output').value);
+};
+document.getElementById('download-js').onclick = function() {
+  downloadFile('script.js', document.getElementById('js-output').value);
+};
+document.getElementById('download-all-btn').onclick = function() {
+  downloadAll();
+};
+</script>
+</body>
+</html>

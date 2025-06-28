@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML Splitter - JS, CSS, HTML Extractor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #181a1b;
+      color: #eaeaea;
+      font-family: 'Segoe UI', 'Fira Mono', 'Consolas', monospace;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 32px auto;
+      padding: 24px;
+      background: #23272e;
+      border-radius: 10px;
+      box-shadow: 0 3px 16px #0007;
+    }
+    h1 {
+      color: #80cbc4;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    label {
+      font-weight: bold;
+      color: #b0bec5;
+      margin-bottom: 8px;
+      display: block;
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      background: #14161a;
+      color: #e0e0e0;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      margin-bottom: 18px;
+      padding: 12px;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: 1rem;
+      resize: vertical;
+      transition: border 0.2s;
+    }
+    textarea:focus {
+      border: 1.5px solid #80cbc4;
+      outline: none;
+    }
+    .button-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+      justify-content: center;
+    }
+    button {
+      background: #263238;
+      color: #80cbc4;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    button:hover, button:focus {
+      background: #37474f;
+      color: #ffd54f;
+    }
+    .output-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 10px;
+      margin-bottom: 8px;
+    }
+    .output-block {
+      flex: 1 1 260px;
+      min-width: 240px;
+      background: #111317;
+      border-radius: 7px;
+      padding: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      border: 1px solid #28343d;
+      box-shadow: 0 1px 5px #0004;
+    }
+    .output-block label {
+      color: #ffd54f;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+    .download-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #212c34;
+      color: #b2dfdb;
+      border: none;
+      border-radius: 4px;
+      padding: 2px 10px;
+      font-size: 0.95em;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+      z-index: 1;
+    }
+    .download-btn:hover {
+      background: #263238;
+      color: #ffd54f;
+    }
+    @media (max-width: 700px) {
+      .output-group {
+        flex-direction: column;
+      }
+      .output-block {
+        min-width: unset;
+      }
+    }
+    .footer {
+      margin-top: 32px;
+      text-align: center;
+      color: #546e7a;
+      font-size: 0.98em;
+      letter-spacing: 0.02em;
+    }
+    ::selection {
+      background: #263238;
+      color: #ffd54f;
+    }
+    .droparea {
+      border: 2px dashed #80cbc4;
+      border-radius: 8px;
+      background: #20242a;
+      min-height: 60px;
+      text-align: center;
+      color: #80cbc4;
+      margin-bottom: 14px;
+      padding: 20px 10px;
+      font-size: 1.08em;
+      transition: background 0.2s, border 0.2s;
+      cursor: pointer;
+      user-select: none;
+    }
+    .droparea.dragover {
+      background: #263238;
+      border-color: #ffd54f;
+      color: #ffd54f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>HTML Splitter: Extract JS &amp; CSS</h1>
+    <label for="input-html">Paste your HTML code below or drag &amp; drop an HTML file:</label>
+    <div id="droparea" class="droparea">Drag &amp; Drop HTML file here, or click to select</div>
+    <textarea id="input-html" placeholder="Paste here your HTML code with &lt;script&gt; and &lt;style&gt; tags..."></textarea>
+    <div class="button-row">
+      <button id="split-btn">Split &amp; Generate Files</button>
+      <button id="clear-btn" style="background:#1c2329;color:#f44336;">Clear</button>
+    </div>
+    <div id="outputs" style="display:none;">
+      <div class="output-group">
+        <div class="output-block">
+          <label>HTML Output</label>
+          <button class="download-btn" id="download-html">Download</button>
+          <textarea id="html-output" readonly></textarea>
+        </div>
+        <div class="output-block">
+          <label>CSS Output</label>
+          <button class="download-btn" id="download-css">Download</button>
+          <textarea id="css-output" readonly></textarea>
+        </div>
+        <div class="output-block">
+          <label>JS Output</label>
+          <button class="download-btn" id="download-js">Download</button>
+          <textarea id="js-output" readonly></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    &copy; 2025 | Standalone HTML Splitter | Dark Mode Design
+  </div>
+  <script>
+    // --- Indentation Helpers ---
+    function formatHTML(html, tab='  ') {
+      // Very basic HTML pretty print
+      let formatted = '';
+      let indent = '';
+      html = html.replace(/>\s+</g, '>\n<');
+      let lines = html.split('\n');
+      let voidTags = /^(area|base|br|col|embed|hr|img|input|link|meta|source|track|wbr)$/i;
+
+      for (let line of lines) {
+        let l = line.trim();
+        if (!l) continue;
+        if (l.match(/^<\/\w/)) indent = indent.slice(tab.length);
+        formatted += indent + l + '\n';
+        if (l.match(/^<\w/) && !l.match(new RegExp('^<\\/?(?:' + voidTags.source + ')[ >\/]')) && !l.endsWith('/>') && !l.match(/^<\w[^>]*\/>/) && !l.match(/^<!/)) indent += tab;
+      }
+      return formatted.trim();
+    }
+    function formatCSS(css) {
+      // Simple beautifier for CSS, keeps selectors and blocks on their lines
+      if (!css) return '';
+      try {
+        // Add newlines after { and }
+        let formatted = css
+          .replace(/([{}])/g, '\n$1\n')
+          .replace(/;/g, ';\n')
+          .replace(/\n\s*\n/g, '\n')
+          .split('\n')
+          .map(line => line.trim())
+          .filter(line => line)
+          .map(line => {
+            if (line === '{' || line === '}') return line;
+            return '  ' + line;
+          })
+          .join('\n');
+        // Indent blocks
+        let out = '';
+        let indent = '';
+        for (let line of formatted.split('\n')) {
+          if (line === '}') indent = indent.slice(2);
+          out += indent + line + '\n';
+          if (line === '{') indent += '  ';
+        }
+        return out.trim();
+      } catch { return css; }
+    }
+    function formatJS(js) {
+      // Simple beautifier for JS (not perfect)
+      if (!js) return '';
+      try {
+        let formatted = js
+          .replace(/([{}])/g, '\n$1\n')
+          .replace(/;/g, ';\n')
+          .replace(/\n\s*\n/g, '\n')
+          .split('\n')
+          .map(line => line.trim())
+          .filter(line => line)
+          .join('\n');
+        // Indent blocks
+        let out = '';
+        let indent = '';
+        for (let line of formatted.split('\n')) {
+          if (line === '}') indent = indent.slice(2);
+          out += indent + line + '\n';
+          if (line === '{') indent += '  ';
+        }
+        return out.trim();
+      } catch { return js; }
+    }
+
+    // --- Extraction and Linking ---
+    function extractParts(htmlString) {
+      let jsParts = [];
+      let cssParts = [];
+      // Remove <script> tags and store content
+      htmlString = htmlString.replace(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi, function(match, attrs, content) {
+        if (attrs && /\bsrc\s*=/.test(attrs)) return match;
+        jsParts.push(content.trim());
+        return '';
+      });
+      // Remove <style> tags and store content
+      htmlString = htmlString.replace(/<style\b([^>]*)>([\s\S]*?)<\/style>/gi, function(match, attrs, content) {
+        cssParts.push(content.trim());
+        return '';
+      });
+      htmlString = htmlString.replace(/^\s*[\r\n]/gm, '');
+      return {
+        html: htmlString.trim(),
+        js: jsParts.join('\n\n').trim(),
+        css: cssParts.join('\n\n').trim()
+      };
+    }
+
+    function injectLinks(html, jsFile, cssFile) {
+      let doc = document.implementation.createHTMLDocument('');
+      doc.documentElement.innerHTML = html;
+
+      // Insert CSS link in <head>, or create <head> if missing
+      let head = doc.querySelector('head');
+      if (!head) {
+        head = doc.createElement('head');
+        if (doc.documentElement.firstChild) {
+          doc.documentElement.insertBefore(head, doc.documentElement.firstChild);
+        } else {
+          doc.documentElement.appendChild(head);
+        }
+      }
+      // Add favicon if not present
+      let faviconUrl = "https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png";
+      if (!head.querySelector('link[rel="icon"]')) {
+        let icon = doc.createElement('link');
+        icon.rel = "icon";
+        icon.href = faviconUrl;
+        icon.type = "image/png";
+        head.appendChild(icon);
+      }
+      // Add CSS link if not present
+      if (!head.querySelector(`link[rel="stylesheet"][href="${cssFile}"]`)) {
+        let cssLink = doc.createElement('link');
+        cssLink.rel = "stylesheet";
+        cssLink.type = "text/css";
+        cssLink.href = cssFile;
+        head.appendChild(cssLink);
+      }
+
+      // Insert JS script before </body>, or at end of <html> if body missing
+      let script = doc.createElement('script');
+      script.src = jsFile;
+      let body = doc.querySelector('body');
+      if (body) {
+        body.appendChild(script);
+      } else {
+        doc.documentElement.appendChild(script);
+      }
+      // Return formatted HTML string
+      let raw = "<!DOCTYPE html>\n" + doc.documentElement.outerHTML.replace(/^\s+|\s+$/g, '');
+      return formatHTML(raw);
+    }
+
+    function downloadFile(filename, content) {
+      const blob = new Blob([content], {type: 'text/plain'});
+      const url = URL.createObjectURL(blob);
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 200);
+    }
+
+    // --- Drag and Drop Area ---
+    const droparea = document.getElementById('droparea');
+    droparea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      droparea.classList.add('dragover');
+      droparea.textContent = "Drop your HTML file here";
+    });
+    droparea.addEventListener('dragleave', (e) => {
+      droparea.classList.remove('dragover');
+      droparea.textContent = "Drag & Drop HTML file here, or click to select";
+    });
+    droparea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      droparea.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (!file || !file.name.match(/\.html?$/i)) {
+        droparea.textContent = "Please drop a valid .html file!";
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        document.getElementById('input-html').value = evt.target.result;
+        droparea.textContent = "Loaded: " + file.name;
+      };
+      reader.readAsText(file);
+    });
+    droparea.addEventListener('click', () => {
+      let input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.htm,.html,text/html';
+      input.onchange = function(e) {
+        let file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('input-html').value = evt.target.result;
+          droparea.textContent = "Loaded: " + file.name;
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    });
+
+    // --- Main Logic ---
+    document.getElementById('split-btn').onclick = function() {
+      const input = document.getElementById('input-html').value.trim();
+      if (!input) {
+        alert('Please paste valid HTML code or load a file!');
+        return;
+      }
+      const parts = extractParts(input);
+
+      // File names
+      const cssFile = "style.css";
+      const jsFile = "script.js";
+      const htmlFile = "index.html";
+
+      // Inject <link> and <script> in HTML, and favicon
+      const linkedHtml = injectLinks(parts.html, jsFile, cssFile);
+
+      document.getElementById('html-output').value = linkedHtml;
+      document.getElementById('css-output').value = formatCSS(parts.css);
+      document.getElementById('js-output').value = formatJS(parts.js);
+
+      document.getElementById('outputs').style.display = 'block';
+    };
+
+    document.getElementById('clear-btn').onclick = function() {
+      document.getElementById('input-html').value = '';
+      document.getElementById('outputs').style.display = 'none';
+      droparea.textContent = "Drag & Drop HTML file here, or click to select";
+    };
+
+    document.getElementById('download-html').onclick = function() {
+      downloadFile('index.html', document.getElementById('html-output').value);
+    };
+    document.getElementById('download-css').onclick = function() {
+      downloadFile('style.css', document.getElementById('css-output').value);
+    };
+    document.getElementById('download-js').onclick = function() {
+      downloadFile('script.js', document.getElementById('js-output').value);
+    };
+  </script>
+</body>
+</html>

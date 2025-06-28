@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML Splitter - JS, CSS, HTML Extractor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #181a1b;
+      color: #eaeaea;
+      font-family: 'Segoe UI', 'Fira Mono', 'Consolas', monospace;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 32px auto;
+      padding: 24px;
+      background: #23272e;
+      border-radius: 10px;
+      box-shadow: 0 3px 16px #0007;
+    }
+    h1 {
+      color: #80cbc4;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    label {
+      font-weight: bold;
+      color: #b0bec5;
+      margin-bottom: 8px;
+      display: block;
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      background: #14161a;
+      color: #e0e0e0;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      margin-bottom: 18px;
+      padding: 12px;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: 1rem;
+      resize: vertical;
+      transition: border 0.2s;
+    }
+    textarea:focus {
+      border: 1.5px solid #80cbc4;
+      outline: none;
+    }
+    .button-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+      justify-content: center;
+    }
+    button {
+      background: #263238;
+      color: #80cbc4;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    button:hover, button:focus {
+      background: #37474f;
+      color: #ffd54f;
+    }
+    .output-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 10px;
+      margin-bottom: 8px;
+    }
+    .output-block {
+      flex: 1 1 260px;
+      min-width: 240px;
+      background: #111317;
+      border-radius: 7px;
+      padding: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      border: 1px solid #28343d;
+      box-shadow: 0 1px 5px #0004;
+    }
+    .output-block label {
+      color: #ffd54f;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+    .download-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #212c34;
+      color: #b2dfdb;
+      border: none;
+      border-radius: 4px;
+      padding: 2px 10px;
+      font-size: 0.95em;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+      z-index: 1;
+    }
+    .download-btn:hover {
+      background: #263238;
+      color: #ffd54f;
+    }
+    @media (max-width: 700px) {
+      .output-group {
+        flex-direction: column;
+      }
+      .output-block {
+        min-width: unset;
+      }
+    }
+    .footer {
+      margin-top: 32px;
+      text-align: center;
+      color: #546e7a;
+      font-size: 0.98em;
+      letter-spacing: 0.02em;
+    }
+    ::selection {
+      background: #263238;
+      color: #ffd54f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>HTML Splitter: Extract JS &amp; CSS</h1>
+    <label for="input-html">Paste your HTML code below:</label>
+    <textarea id="input-html" placeholder="Paste here your HTML code with &lt;script&gt; and &lt;style&gt; tags..."></textarea>
+    <div class="button-row">
+      <button id="split-btn">Split &amp; Generate Files</button>
+      <button id="clear-btn" style="background:#1c2329;color:#f44336;">Clear</button>
+    </div>
+    <div id="outputs" style="display:none;">
+      <div class="output-group">
+        <div class="output-block">
+          <label>HTML Output</label>
+          <button class="download-btn" id="download-html">Download</button>
+          <textarea id="html-output" readonly></textarea>
+        </div>
+        <div class="output-block">
+          <label>CSS Output</label>
+          <button class="download-btn" id="download-css">Download</button>
+          <textarea id="css-output" readonly></textarea>
+        </div>
+        <div class="output-block">
+          <label>JS Output</label>
+          <button class="download-btn" id="download-js">Download</button>
+          <textarea id="js-output" readonly></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    &copy; 2025 | Standalone HTML Splitter | Dark Mode Design
+  </div>
+  <script>
+    function extractParts(htmlString) {
+      // Extract all <script>...</script> and <style>...</style> contents
+      let jsParts = [];
+      let cssParts = [];
+
+      // Remove <script> tags and store content
+      htmlString = htmlString.replace(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi, function(match, attrs, content) {
+        // Ignore external src scripts
+        if (attrs && /\bsrc\s*=/.test(attrs)) return match;
+        jsParts.push(content.trim());
+        return '';
+      });
+
+      // Remove <style> tags and store content
+      htmlString = htmlString.replace(/<style\b([^>]*)>([\s\S]*?)<\/style>/gi, function(match, attrs, content) {
+        cssParts.push(content.trim());
+        return '';
+      });
+
+      // Remove extra whitespace from removed tags
+      htmlString = htmlString.replace(/^\s*[\r\n]/gm, '');
+
+      return {
+        html: htmlString.trim(),
+        js: jsParts.join('\n\n').trim(),
+        css: cssParts.join('\n\n').trim()
+      };
+    }
+
+    function injectLinks(html, jsFile, cssFile) {
+      let doc = document.implementation.createHTMLDocument('');
+      doc.documentElement.innerHTML = html;
+
+      // Insert CSS link in <head>, or create <head> if missing
+      let head = doc.querySelector('head');
+      if (!head) {
+        head = doc.createElement('head');
+        if (doc.documentElement.firstChild) {
+          doc.documentElement.insertBefore(head, doc.documentElement.firstChild);
+        } else {
+          doc.documentElement.appendChild(head);
+        }
+      }
+      let cssLink = doc.createElement('link');
+      cssLink.rel = "stylesheet";
+      cssLink.type = "text/css";
+      cssLink.href = cssFile;
+      head.appendChild(cssLink);
+
+      // Insert JS script before </body>, or at end of <html> if body missing
+      let script = doc.createElement('script');
+      script.src = jsFile;
+      let body = doc.querySelector('body');
+      if (body) {
+        body.appendChild(script);
+      } else {
+        doc.documentElement.appendChild(script);
+      }
+      // Return formatted HTML string
+      return "<!DOCTYPE html>\n" + doc.documentElement.outerHTML.replace(/^\s+|\s+$/g, '');
+    }
+
+    function downloadFile(filename, content) {
+      const blob = new Blob([content], {type: 'text/plain'});
+      const url = URL.createObjectURL(blob);
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 200);
+    }
+
+    document.getElementById('split-btn').onclick = function() {
+      const input = document.getElementById('input-html').value.trim();
+      if (!input) {
+        alert('Please paste valid HTML code!');
+        return;
+      }
+      const parts = extractParts(input);
+
+      // File names
+      const cssFile = "style.css";
+      const jsFile = "script.js";
+      const htmlFile = "index.html";
+
+      // Inject <link> and <script> in HTML
+      const linkedHtml = injectLinks(parts.html, jsFile, cssFile);
+
+      document.getElementById('html-output').value = linkedHtml;
+      document.getElementById('css-output').value = parts.css;
+      document.getElementById('js-output').value = parts.js;
+
+      document.getElementById('outputs').style.display = 'block';
+    };
+
+    document.getElementById('clear-btn').onclick = function() {
+      document.getElementById('input-html').value = '';
+      document.getElementById('outputs').style.display = 'none';
+    };
+
+    // Download buttons
+    document.getElementById('download-html').onclick = function() {
+      downloadFile('index.html', document.getElementById('html-output').value);
+    };
+    document.getElementById('download-css').onclick = function() {
+      downloadFile('style.css', document.getElementById('css-output').value);
+    };
+    document.getElementById('download-js').onclick = function() {
+      downloadFile('script.js', document.getElementById('js-output').value);
+    };
+  </script>
+</body>
+</html>
