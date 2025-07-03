@@ -6,7 +6,6 @@
   --glow: 0 0 12px var(--brand-accent, #4fc3f7);
   --brand-accent: #4fc3f7;
   --font-main: 'Inter', system-ui, sans-serif;
-  /* Default theme (Blue gradient) */
   --bg: linear-gradient(135deg, #181f2a 0%, #24375d 100%);
   --bg-panel: rgba(34,45,70,0.79);
   --text-main: #f4f8fb;
@@ -148,11 +147,44 @@ header {
   font-weight: 600;
   opacity: 0.97;
 }
-.quote-rotator {
+.quote-rotator-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  position: relative;
   width: 100%;
   max-width: 550px;
-  min-height: 2.2em;
   margin: 0.6rem auto 0;
+}
+.quote-arrow {
+  background: none;
+  border: none;
+  color: var(--brand-accent);
+  opacity: 0.13;
+  font-size: 1.6rem;
+  padding: 0.15em 0.45em 0.15em 0.25em;
+  border-radius: 50%;
+  transition: opacity 0.25s, background 0.22s, box-shadow 0.22s;
+  cursor: pointer;
+  outline: none;
+  z-index: 3;
+  position: relative;
+  min-width: 2.2em;
+  min-height: 2.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.quote-arrow:hover, .quote-arrow:focus-visible {
+  opacity: 1;
+  background: rgba(76,195,247,0.10);
+  box-shadow: 0 0 0 2px var(--brand-accent);
+}
+.quote-arrow-left { margin-right: -0.4em; }
+.quote-arrow-right { margin-left: -0.4em; }
+.quote-rotator {
+  flex: 1 1 auto;
   text-align: center;
   font-size: 1.13rem;
   font-weight: 500;
@@ -161,6 +193,7 @@ header {
   background: var(--quote);
   border-radius: 1rem;
   padding: 0.7em 1.2em;
+  min-height: 2.2em;
   box-shadow: 0 3px 18px 0 rgba(0,0,0,0.13);
   transition: background 0.6s, color 0.6s;
   opacity: 0.98;
@@ -246,82 +279,15 @@ header {
   border-left: 3.5px solid var(--brand-accent);
   transition: background 0.6s, color 0.6s;
 }
-.repo-panel {
+.beyond-code-panel {
   background: var(--bg-panel);
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
-  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
+  padding: 1.15em 1.2em 0.8em;
+  margin-top: 2.2em;
 }
-.repo-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.62em 0.86em;
-  margin: 0.2em 0 1em 0;
-}
-.repo-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.42em;
-  background: var(--quote);
-  color: var(--brand-accent);
-  font-size: 1.03rem;
-  font-weight: 600;
-  padding: 0.31em 0.85em;
-  border-radius: 1.2em;
-  box-shadow: 0 2px 9px 0 rgba(0,0,0,0.08);
-  border: 1.5px solid var(--brand-accent);
-  opacity: 0.98;
-}
-.repo-readme {
-  margin-top: 0.2em;
-  line-height: 1.65;
-  font-size: 1.07rem;
-  color: var(--text-main);
-  background: var(--quote);
-  border-radius: 1em;
-  padding: 1.15em 1.3em 1em;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.11);
-  border-left: 3px solid var(--brand-accent);
-  margin-bottom: 0.5em;
-  transition: background 0.7s, color 0.7s;
-}
-.timeline {
-  margin: 1.2em 0 1em 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  border-left: 3px solid var(--brand-accent);
-  padding-left: 1.1em;
-  background: transparent;
-}
-.timeline-point {
-  margin: 0.1em 0;
-  font-size: 1.07rem;
-  color: var(--highlight);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  position: relative;
-}
-.timeline-point::before {
-  content: '';
-  display: inline-block;
-  width: 0.65em;
-  height: 0.65em;
-  border-radius: 50%;
-  background: var(--brand-accent);
-  position: absolute;
-  left: -1.45em;
-  top: 0.38em;
-  box-shadow: 0 0 9px 1px var(--brand-accent);
-}
-.timeline-desc {
-  font-size: 1.03rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.2em;
-  margin-left: 0.1em;
+.beyond-code-panel ul li {
+  margin-bottom: 0.1em;
 }
 .contact-panel {
   background: var(--bg-panel);
@@ -332,6 +298,35 @@ header {
   flex-direction: column;
   gap: 1.05rem;
   align-items: flex-start;
+}
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65em;
+}
+.contact-label {
+  font-weight: 600;
+  color: var(--brand-accent);
+  margin-right: 0.5em;
+  font-size: 1.09em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.contact-link {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.22s;
+  border-bottom: 1px dashed var(--brand-accent);
+  padding-bottom: 1px;
+}
+.contact-link:hover, .contact-link:focus {
+  color: var(--brand-accent);
+  border-bottom: 1.5px solid var(--brand-accent);
 }
 .social-links {
   display: flex;
@@ -397,7 +392,7 @@ header {
     grid-template-columns: 1fr;
     gap: 0.7rem;
   }
-  .repo-panel, .about-panel, .contact-panel {
+  .repo-panel, .about-panel, .contact-panel, .beyond-code-panel {
     padding: 0.92rem 0.5rem 0.7rem;
   }
   .repo-readme, .philosophy-block {

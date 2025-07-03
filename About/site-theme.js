@@ -1,7 +1,5 @@
-// Console easter egg
 console.log("Loyalty is sacred.");
 
-// Theme system
 const THEMES = [
   {cls: '',           label: "Blue Gradient", icon: "fa-droplet"},
   {cls: 'theme-teal', label: "Teal/Sea",      icon: "fa-water"},
@@ -13,7 +11,6 @@ function setTheme(idx, save=true) {
   document.body.className = THEMES[idx].cls;
   themeIdx = idx;
   if(save) localStorage.setItem('themeIdx', ''+idx);
-  // Change icon
   const ic = document.querySelector('#themeBtn i');
   if (ic) {
     ic.className = "fas " + THEMES[idx].icon;
@@ -34,7 +31,7 @@ window.addEventListener('keydown', e => {
   }
 });
 
-// Quote rotator
+// Quote rotator with arrows
 const QUOTES = [
   "Clarity is the real elegance.",
   "Discipline is a form of self-respect.",
@@ -45,6 +42,8 @@ const QUOTES = [
   "Consistency is underrated. But never irrelevant."
 ];
 let quoteIdx = 0;
+let quoteAuto = true, quoteTimer = null;
+
 function showQuote(idx) {
   const rotator = document.getElementById('quoteRotator');
   if (rotator) {
@@ -55,11 +54,47 @@ function showQuote(idx) {
     }, 240);
   }
 }
-showQuote(0);
-setInterval(() => {
+
+function nextQuote() {
   quoteIdx = (quoteIdx + 1) % QUOTES.length;
   showQuote(quoteIdx);
-}, 4000);
+}
+function prevQuote() {
+  quoteIdx = (quoteIdx - 1 + QUOTES.length) % QUOTES.length;
+  showQuote(quoteIdx);
+}
+
+showQuote(quoteIdx);
+
+function startQuoteAuto() {
+  quoteAuto = true;
+  if (quoteTimer) clearInterval(quoteTimer);
+  quoteTimer = setInterval(() => {
+    if (quoteAuto) nextQuote();
+  }, 4000);
+}
+function stopQuoteAuto() {
+  quoteAuto = false;
+  if (quoteTimer) clearInterval(quoteTimer);
+}
+
+startQuoteAuto();
+
+document.getElementById('quoteNext').onclick = () => {
+  stopQuoteAuto();
+  nextQuote();
+};
+document.getElementById('quotePrev').onclick = () => {
+  stopQuoteAuto();
+  prevQuote();
+};
+let quoteNavTimeout;
+['quoteNext', 'quotePrev'].forEach(id => {
+  document.getElementById(id).addEventListener('click', () => {
+    if (quoteNavTimeout) clearTimeout(quoteNavTimeout);
+    quoteNavTimeout = setTimeout(startQuoteAuto, 10000);
+  });
+});
 
 // Cursor trail / glow effect (neon style on hover)
 (function cursorTrail(){
