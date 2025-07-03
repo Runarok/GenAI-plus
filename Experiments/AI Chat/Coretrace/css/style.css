@@ -40,12 +40,29 @@ body {
     align-items: center;
 }
 
+.title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
 .title {
-    font-size: 1.25rem;
-    font-weight: 500;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: var(--text-primary);
     letter-spacing: 0.5px;
     margin: 0;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    font-style: italic;
+    letter-spacing: 0.25px;
+    opacity: 0.8;
 }
 
 .header-controls {
@@ -291,6 +308,14 @@ body {
     .send-btn {
         width: 100%;
     }
+
+    .title {
+        font-size: 1.25rem;
+    }
+
+    .subtitle {
+        font-size: 0.8rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -308,5 +333,13 @@ body {
 
     .api-key-input {
         width: auto;
+    }
+
+    .title {
+        font-size: 1.125rem;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
     }
 }
