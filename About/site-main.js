@@ -1,17 +1,49 @@
-// SECTION SWITCHING
-document.querySelectorAll('.nav-link').forEach(link => {
-  link.addEventListener('click', function (e) {
-    e.preventDefault();
-    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    this.classList.add('active');
-    const section = this.getAttribute('data-section');
-    document.querySelectorAll('.main-section').forEach(sec => sec.classList.remove('active'));
-    if (section === 'about') document.getElementById('aboutSection').classList.add('active');
-    if (section === 'hub') document.getElementById('hubSection').classList.add('active');
-    if (section === 'contact') document.getElementById('contactSection').classList.add('active');
+// --- Routing Logic ---
+function getPageParam() {
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get('page');
+  return page && ['about','hub','contact'].includes(page) ? page : 'about';
+}
+function switchSection(page) {
+  const sectionMap = {
+    about: document.getElementById('aboutSection'),
+    hub: document.getElementById('hubSection'),
+    contact: document.getElementById('contactSection')
+  };
+  for (const key in sectionMap) {
+    if (sectionMap[key]) sectionMap[key].style.display = (key === page) ? 'block' : 'none';
+  }
+  document.querySelectorAll('.site-nav .nav-link').forEach(a => {
+    a.classList.toggle('selected', a.getAttribute('data-nav') === page);
   });
+  let t = '';
+  if(page==='about') t='About Runarok Hrafn';
+  else if(page==='hub') t='GenAI-plus Repository Hub';
+  else t='Contact & Social – Runarok Hrafn';
+  document.title = t;
+  document.getElementById('pageTitle').textContent = t;
+}
+function setNavHandlers() {
+  document.querySelectorAll('.site-nav .nav-link').forEach(a => {
+    a.onclick = function(e){
+      e.preventDefault();
+      const page = a.getAttribute('data-nav');
+      if(page) {
+        history.pushState({page}, '', '?page='+page);
+        switchSection(page);
+      }
+      window.scrollTo(0,0);
+    };
+  });
+}
+window.addEventListener('popstate', function(e) {
+  switchSection(getPageParam());
 });
-// THEME DROPDOWN
+// On load, show only the correct section
+switchSection(getPageParam());
+setNavHandlers();
+
+// --- Theme Dropdown Logic --- (unchanged, keep your existing logic)
 const THEMES = [
   {cls: '',           label: "Blue Gradient", icon: "fa-droplet"},
   {cls: 'theme-teal', label: "Teal/Sea",      icon: "fa-water"},
@@ -30,6 +62,7 @@ function setTheme(idx, save=true) {
   Array.from(themeDropdown.children).forEach((el, i) => {
     el.classList.toggle('selected', i === idx);
   });
+  document.dispatchEvent(new Event('themeChange'));
 }
 function fillThemeDropdown() {
   themeDropdown.innerHTML = '';
@@ -77,7 +110,8 @@ document.addEventListener('keydown', function(e){
   const saved = localStorage.getItem('themeIdx');
   setTheme(saved && !isNaN(parseInt(saved,10)) ? parseInt(saved,10) : 0, false);
 })();
-// QUOTE ROTATOR
+
+// --- Quote Rotator + Arrows ---
 const QUOTES = [
   "Clarity is the real elegance.",
   "Discipline is a form of self-respect.",
@@ -135,7 +169,8 @@ let quoteNavTimeout;
     quoteNavTimeout = setTimeout(startQuoteAuto, 10000);
   });
 });
-// CURSOR TRAIL
+
+// --- Cursor Trail / Glow effect ---
 (function cursorTrail(){
   const trail = [];
   const N = 8;
