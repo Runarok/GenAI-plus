@@ -6,38 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="site-theme.css">
-  <style>
-    /* Hide all sections by default, will show via JS */
-    .main-section { display: none; }
-    .main-section.active { display: block; }
-    .nav-link.selected {
-      background: rgba(76,195,247,0.20);
-      color: var(--highlight);
-      box-shadow: 0 2px 18px 0 var(--brand-accent);
-    }
-    /* Breadcrumb style nav for contact */
-    .breadcrumb-nav {
-      text-align: left;
-      margin-bottom: 1.2em;
-    }
-    .breadcrumb-nav .nav-link {
-      font-size: 1.03rem;
-      padding: 0.25em 0.85em;
-      margin-right: 0.3em;
-    }
-    @media (max-width: 600px) {
-      .breadcrumb-nav { margin-bottom: .6em; }
-      .breadcrumb-nav .nav-link { font-size: 0.93rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
   <header>
-    <button class="theme-toggle-btn" id="themeBtn" title="Toggle theme (T)">
+    <button class="theme-toggle-btn" id="themeBtn" title="Toggle theme (T)" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-palette"></i>
     </button>
+    <div class="theme-dropdown" id="themeDropdown" role="menu" aria-label="Theme selection"></div>
     <div class="header-top">
       <img class="avatar glow-hovered" src="https://avatars.githubusercontent.com/u/191216225" alt="Runarok's avatar">
       <div class="header-info">
@@ -56,9 +33,9 @@
       </button>
     </div>
     <nav class="site-nav" id="mainNav">
-      <a href="?page=about" class="nav-link glow-hovered" data-nav="about"><i class="fas fa-user"></i> About Me</a>
-      <a href="?page=hub" class="nav-link glow-hovered" data-nav="hub"><i class="fas fa-robot"></i> GenAI-plus Hub</a>
-      <a href="?page=contact" class="nav-link glow-hovered" data-nav="contact"><i class="fas fa-link"></i> Contact & Social</a>
+      <a href="?page=about" class="nav-link" data-nav="about"><i class="fas fa-user"></i> About Me</a>
+      <a href="?page=hub" class="nav-link" data-nav="hub"><i class="fas fa-robot"></i> GenAI-plus Hub</a>
+      <a href="?page=contact" class="nav-link" data-nav="contact"><i class="fas fa-link"></i> Contact & Social</a>
     </nav>
   </header>
   <main>
@@ -98,29 +75,28 @@
         <span class="about-label">Vision:</span>
         <span class="about-value">AI-personal productivity OS — calm, human-aligned</span>
       </div>
-      <section class="beyond-code-panel" style="margin-top:2.2em;">
-        <div class="section-title" style="margin-bottom:0.6em;"><i class="fas fa-infinity"></i> Beyond the Code</div>
-        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.15em;">
+      <section class="beyond-code-panel">
+        <div class="section-title"><i class="fas fa-infinity"></i> Beyond the Code</div>
+        <ul class="beyond-list">
           <li>
             <b>I pick things up because they make me feel something — a spark, a pull, a bit of peace.</b>
-            If it clicks, it stays. That’s how it’s always been.<br>
-            I don’t drop interests easily — not because I can’t, but because I don’t want to.
+            If it clicks, it stays. That’s how it’s always been. I don’t drop interests easily — not because I can’t, but because I don’t want to.
           </li>
           <li>
             <b>Anime & manga? Mostly manga, let’s be honest.</b>
-            My <a href="https://www.anime-planet.com/users/TempestAethel" target="_blank" rel="noopener" style="color:var(--brand-accent);text-decoration:underline;">AnimePlanet</a> page is… let’s say outdated on purpose.
+            My <a href="https://www.anime-planet.com/users/TempestAethel" target="_blank" rel="noopener">AnimePlanet</a> page is… let’s say outdated on purpose.
             I read more than I track, and updating it all? That’s a task I’ll always postpone. Feels like trying to log a feeling.
           </li>
           <li>
             <b>Gaming’s my reset button.</b>
-            Puzzles. Sandboxes. Clicker loops. Not for escape — for rhythm.<br>
-            Sometimes I drift through <a href="https://www.crazygames.com/u/NyxHelious" target="_blank" rel="noopener" style="color:var(--brand-accent);text-decoration:underline;">CrazyGames</a>, sometimes I just break stuff inside <a href="https://github.com/TempestAethel/PlayGrounds" target="_blank" rel="noopener" style="color:var(--brand-accent);text-decoration:underline;">PlayGrounds</a>.
+            Puzzles. Sandboxes. Clicker loops. Not for escape — for rhythm.
+            Sometimes I drift through <a href="https://www.crazygames.com/u/NyxHelious" target="_blank" rel="noopener">CrazyGames</a>, sometimes I just break stuff inside <a href="https://github.com/TempestAethel/PlayGrounds" target="_blank" rel="noopener">PlayGrounds</a>.
             It’s messy. But it’s mine.
           </li>
           <li>
             <b>I like streaks. Not for validation — for momentum.</b>
-            That’s why I made <a href="https://github.com/Runarok/Auto-Commiter" target="_blank" rel="noopener" style="color:var(--brand-accent);text-decoration:underline;">Auto-Commiter</a>.<br>
-            It started with seeing a repo that had 3 million commits — and something in me just said: “I want to outlast that.”<br>
+            That’s why I made <a href="https://github.com/Runarok/Auto-Commiter" target="_blank" rel="noopener">Auto-Commiter</a>.
+            It started with seeing a repo that had 3 million commits — and something in me just said: “I want to outlast that.”
             Even if it’s quiet. Even if no one sees it. Sometimes showing up is the whole point.
           </li>
           <li>
@@ -129,22 +105,22 @@
           </li>
           <li>
             <b>I burn out sometimes.</b>
-            A lot of interests means a lot of open tabs in the brain.<br>
+            A lot of interests means a lot of open tabs in the brain.
             But I always come back. Maybe a little quieter. But always.
           </li>
           <li>
             <b>Bonus round: Clean code, my style.</b>
-            I went through GeeksForGeeks and LeetCode — not for the syllabus, but for the structure.<br>
-            I used AI when it helped. Refined what didn’t sit right. Didn’t study every problem — I just wanted to clean it all up, make it mine.<br>
-            Not every line was handwritten. But every solution was checked, shaped, and understood my way.<br>
-            It wasn’t about mastering the theory — it was about seeing a whole list turn green. That 100%? That’s what I was chasing.<br>
+            I went through GeeksForGeeks and LeetCode — not for the syllabus, but for the structure.
+            I used AI when it helped. Refined what didn’t sit right. Didn’t study every problem — I just wanted to clean it all up, make it mine.
+            Not every line was handwritten. But every solution was checked, shaped, and understood my way.
+            It wasn’t about mastering the theory — it was about seeing a whole list turn green. That 100%? That’s what I was chasing.
             It wasn’t learning vs. solving — it was both, layered. Quietly.
           </li>
         </ul>
       </section>
     </section>
     <!-- HUB SECTION -->
-    <section class="main-section repo-panel" id="hubSection">
+    <section class="main-section about-panel" id="hubSection">
       <div class="section-title"><i class="fas fa-robot"></i> The GenAI-plus Repository 🌟</div>
       <div class="repo-badges">
         <span class="repo-badge"><i class="fab fa-github"></i> Copilot</span>
@@ -164,7 +140,7 @@
         <div>
           GenAI-plus exists to explore practical AI augmentation. Every release is an experiment in clarity, feedback, and personal OS productivity — not tool chaos.
         </div>
-        <ul style="margin:1em 0 0 0.5em;padding-left:1.1em;line-height:1.7;">
+        <ul class="repo-goals">
           <li>🛠 <b>Goals:</b> Iterative releases, learning-centric, progressive versioning</li>
           <li>🤝 <b>Spirit:</b> AI as a transparent, loyal ally; less noise, more signal</li>
         </ul>
@@ -172,10 +148,6 @@
     </section>
     <!-- CONTACT SECTION -->
     <section class="main-section contact-panel" id="contactSection">
-      <div class="breadcrumb-nav">
-        <a href="?page=about" class="nav-link glow-hovered" data-nav="about"><i class="fas fa-user"></i> About Me</a>
-        <a href="?page=hub" class="nav-link glow-hovered" data-nav="hub"><i class="fas fa-robot"></i> GenAI-plus Hub</a>
-      </div>
       <div class="section-title"><i class="fas fa-link"></i> Contact & Social</div>
       <ul class="contact-list">
         <li>
@@ -194,57 +166,6 @@
     </section>
   </main>
   <script src="site-theme.js"></script>
-  <script>
-    // Routing logic
-    function getPageParam() {
-      const params = new URLSearchParams(window.location.search);
-      const page = params.get('page');
-      return page && ['about','hub','contact'].includes(page) ? page : 'about';
-    }
-    function switchSection(page) {
-      // Set active section
-      ['about','hub','contact'].forEach(id => {
-        document.getElementById(id+'Section').classList.remove('active');
-      });
-      document.getElementById(page+'Section').classList.add('active');
-      // Set nav highlight
-      document.querySelectorAll('.site-nav .nav-link').forEach(a => {
-        a.classList.toggle('selected', a.getAttribute('data-nav') === page);
-      });
-      // Set page title
-      let t = '';
-      if(page==='about') t='About Runarok Hrafn';
-      else if(page==='hub') t='GenAI-plus Repository Hub';
-      else t='Contact & Social – Runarok Hrafn';
-      document.title = t;
-      document.getElementById('pageTitle').textContent = t;
-    }
-    function setNavHandlers() {
-      // Internal nav links
-      document.querySelectorAll('.site-nav .nav-link, .breadcrumb-nav .nav-link').forEach(a => {
-        a.addEventListener('click', function(e){
-          e.preventDefault();
-          const url = new URL(a.href, window.location.origin);
-          const page = url.searchParams.get('page');
-          if(page) {
-            history.pushState({page}, '', '?page='+page);
-            switchSection(page);
-          }
-          window.scrollTo(0,0);
-        });
-      });
-    }
-    window.addEventListener('popstate', function(e) {
-      switchSection(getPageParam());
-    });
-    // Init
-    switchSection(getPageParam());
-    setNavHandlers();
-
-    // Also update on theme toggle (for nav color)
-    document.addEventListener('themeChange', () => {
-      switchSection(getPageParam());
-    });
-  </script>
+  <script src="site-main.js"></script>
 </body>
 </html>
