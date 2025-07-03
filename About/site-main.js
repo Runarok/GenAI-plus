@@ -1,63 +1,17 @@
-// --- Routing Logic ---
-function getPageParam() {
-  const params = new URLSearchParams(window.location.search);
-  const page = params.get('page');
-  if (page && ['about','hub','contact'].includes(page)) return page;
-  return null;
-}
-
-function switchSection(page) {
-  const allSections = ['about','hub','contact'];
-  if (!page) {
-    // No ?page param: show ALL sections
-    allSections.forEach(id => {
-      document.getElementById(id+'Section').classList.add('active');
-    });
-    document.querySelectorAll('.site-nav .nav-link').forEach(a => {
-      a.classList.remove('selected');
-    });
-    document.title = "Runarok Hrafn – All";
-    document.getElementById('pageTitle').textContent = "Runarok Hrafn – All";
-  } else {
-    // Show ONLY requested section
-    allSections.forEach(id => {
-      document.getElementById(id+'Section').classList.toggle('active', id === page);
-    });
-    document.querySelectorAll('.site-nav .nav-link').forEach(a => {
-      a.classList.toggle('selected', a.getAttribute('data-nav') === page);
-    });
-    let t = '';
-    if(page==='about') t='About Runarok Hrafn';
-    else if(page==='hub') t='GenAI-plus Repository Hub';
-    else t='Contact & Social – Runarok Hrafn';
-    document.title = t;
-    document.getElementById('pageTitle').textContent = t;
-  }
-}
-
-function setNavHandlers() {
-  document.querySelectorAll('.site-nav .nav-link').forEach(a => {
-    a.onclick = function(e){
-      e.preventDefault();
-      const page = a.getAttribute('data-nav');
-      if(page) {
-        history.pushState({page}, '', '?page='+page);
-        switchSection(page);
-      }
-      window.scrollTo(0,0);
-    };
+// SECTION SWITCHING
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+    const section = this.getAttribute('data-section');
+    document.querySelectorAll('.main-section').forEach(sec => sec.classList.remove('active'));
+    if (section === 'about') document.getElementById('aboutSection').classList.add('active');
+    if (section === 'hub') document.getElementById('hubSection').classList.add('active');
+    if (section === 'contact') document.getElementById('contactSection').classList.add('active');
   });
-}
-
-window.addEventListener('popstate', function(e) {
-  switchSection(getPageParam());
 });
-
-// On page load
-switchSection(getPageParam());
-setNavHandlers();
-
-// --- Theme Dropdown Logic ---
+// THEME DROPDOWN
 const THEMES = [
   {cls: '',           label: "Blue Gradient", icon: "fa-droplet"},
   {cls: 'theme-teal', label: "Teal/Sea",      icon: "fa-water"},
@@ -76,7 +30,6 @@ function setTheme(idx, save=true) {
   Array.from(themeDropdown.children).forEach((el, i) => {
     el.classList.toggle('selected', i === idx);
   });
-  document.dispatchEvent(new Event('themeChange'));
 }
 function fillThemeDropdown() {
   themeDropdown.innerHTML = '';
@@ -124,8 +77,7 @@ document.addEventListener('keydown', function(e){
   const saved = localStorage.getItem('themeIdx');
   setTheme(saved && !isNaN(parseInt(saved,10)) ? parseInt(saved,10) : 0, false);
 })();
-
-// --- Quote Rotator + Arrows ---
+// QUOTE ROTATOR
 const QUOTES = [
   "Clarity is the real elegance.",
   "Discipline is a form of self-respect.",
@@ -183,8 +135,7 @@ let quoteNavTimeout;
     quoteNavTimeout = setTimeout(startQuoteAuto, 10000);
   });
 });
-
-// --- Cursor Trail / Glow effect ---
+// CURSOR TRAIL
 (function cursorTrail(){
   const trail = [];
   const N = 8;

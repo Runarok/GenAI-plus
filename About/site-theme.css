@@ -1,32 +1,25 @@
 html {
   font-size: 17px;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  text-size-adjust: 100%;
 }
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 1rem;
-  line-height: 1.7;
-  background: var(--bg, linear-gradient(135deg, #181f2a 0%, #24375d 100%));
-  color: var(--text-main, #f4f8fb);
-  min-height: 100vh;
+  background: #19202a;
+  color: #e6ecf3;
+  margin: 0;
+  padding: 0;
 }
 :root {
   --radius: 1.1rem;
   --shadow-soft: 0 6px 32px 0 rgba(0,0,0,0.13), 0 1.5px 6px 0 rgba(0,0,0,0.08);
   --brand-accent: #6bbefc;
-  --brand-accent-dark: #4fc3f7;
   --highlight: #93e1ff;
   --text-main: #f5f9fa;
   --text-secondary: #b7cae0;
   --divider: rgba(120,170,255,0.12);
   --quote: #1d2637;
-  --bg: linear-gradient(135deg, #181f2a 0%, #24375d 100%);
   --bg-panel: rgba(34,45,70,0.96);
 }
 body.theme-teal {
-  --bg: linear-gradient(135deg, #153e44 0%, #1c726d 100%);
   --bg-panel: rgba(21,62,68,0.93);
   --brand-accent: #24e0b6;
   --highlight: #24e0b6;
@@ -36,7 +29,6 @@ body.theme-teal {
   --quote: #17484b;
 }
 body.theme-coldgray {
-  --bg: linear-gradient(120deg, #15191d 0%, #24272b 100%);
   --bg-panel: rgba(30,34,39,0.97);
   --brand-accent: #b7c7d6;
   --highlight: #8eb2d3;
@@ -46,7 +38,6 @@ body.theme-coldgray {
   --quote: #23272b;
 }
 body.theme-contrast {
-  --bg: linear-gradient(120deg, #101213 0%, #232426 100%);
   --bg-panel: rgba(33,34,36,0.96);
   --brand-accent: #f3ff44;
   --highlight: #f3ff44;
@@ -54,26 +45,6 @@ body.theme-contrast {
   --text-secondary: #f1f7b0;
   --divider: rgba(243,255,68,0.13);
   --quote: #22231d;
-}
-main {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 2.2rem 1.1rem 3.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2.1rem;
-}
-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.1rem;
-  background: var(--bg-panel);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-soft);
-  padding: 2.2rem 1.2rem 1.6rem;
-  margin-top: 2.1rem;
-  position: relative;
 }
 .theme-toggle-btn {
   position: absolute;
@@ -89,10 +60,6 @@ header {
   transition: background 0.19s;
   z-index: 11;
 }
-.theme-toggle-btn:focus, .theme-toggle-btn:hover {
-  background: rgba(100,180,255,0.10);
-  box-shadow: 0 0 0 2px var(--brand-accent);
-}
 .theme-dropdown {
   position: absolute;
   right: 1.2rem;
@@ -107,7 +74,6 @@ header {
   flex-direction: column;
   gap: 0;
   border: 1px solid var(--divider);
-  animation: fadeInNav .17s;
   font-size: 1.03em;
 }
 .theme-dropdown.show { display: flex; }
@@ -137,9 +103,17 @@ header {
   background: rgba(76,195,247,0.18);
   color: var(--brand-accent);
 }
-@keyframes fadeInNav {
-  from { opacity: 0; transform: translateY(-7px);}
-  to   { opacity: 1; transform: translateY(0);}
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  background: var(--bg-panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: 2.2rem 1.2rem 1.6rem;
+  margin-top: 2.1rem;
+  position: relative;
 }
 .avatar {
   width: 104px;
@@ -263,76 +237,52 @@ header {
   align-items: center;
   gap: 0.48em;
 }
-.site-nav .nav-link:focus, .site-nav .nav-link:hover, .site-nav .nav-link.selected {
+.site-nav .nav-link:focus, .site-nav .nav-link:hover, .site-nav .nav-link.active {
   background: rgba(76,195,247,0.11);
   color: var(--highlight);
   text-decoration: underline;
   outline: none;
 }
-a, .about-block a, .beyond-code-panel a, .repo-readme a {
-  color: var(--brand-accent);
-  text-decoration: none;
-  border-bottom: 1px dotted var(--brand-accent);
-  transition: color 0.17s, border-bottom 0.18s;
-  font-weight: 500;
-}
-a:hover, .about-block a:hover, .beyond-code-panel a:hover, .repo-readme a:hover {
-  color: var(--highlight);
-  border-bottom: 1.5px solid var(--brand-accent);
-  text-decoration: underline;
-}
-a:visited {
-  color: var(--brand-accent);
-}
-a:active {
-  color: var(--highlight);
-}
-.section-title {
-  font-size: 1.21rem;
-  font-weight: 700;
-  color: var(--brand-accent);
-  margin-bottom: 0.4em;
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-.about-panel {
+.main-section {
+  display: none;
   background: var(--bg-panel);
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
-  padding: 1.18rem 1rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.08rem;
+  padding: 2em 1.5em 1.7em;
+  margin-bottom: 1.2em;
+}
+.main-section.active { display: block; }
+.section-title {
+  font-size: 1.35em;
+  font-weight: 700;
+  color: var(--brand-accent);
+  margin-bottom: 0.8em;
+  letter-spacing: 0.01em;
 }
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem 1.7rem;
-  margin-bottom: 1rem;
+  gap: 1.2em;
 }
 .about-block {
   display: flex;
   flex-direction: column;
-  gap: 0.22em;
+  gap: 0.18em;
 }
 .about-label {
-  font-size: 1.01rem;
+  font-size: 1.01em;
   color: var(--text-secondary);
   font-weight: 600;
-  letter-spacing: 0.02em;
-  margin-bottom: 0.03em;
 }
 .about-value {
-  font-size: 1.09rem;
+  font-size: 1.09em;
   color: var(--text-main);
   font-weight: 500;
-  letter-spacing: 0.01em;
 }
 .philosophy-block {
   background: var(--quote);
   border-radius: 0.93em;
-  font-size: 1.05rem;
+  font-size: 1.05em;
   font-style: italic;
   color: var(--highlight);
   padding: 0.76em 1.15em;
@@ -430,16 +380,6 @@ a:active {
   margin-bottom: 0.13em;
   margin-left: 0.08em;
 }
-.contact-panel {
-  background: var(--bg-panel);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-soft);
-  padding: 1.18rem 1.1rem 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.92rem;
-  align-items: flex-start;
-}
 .contact-list {
   list-style: none;
   padding: 0;
@@ -478,40 +418,15 @@ a:active {
   box-shadow: 0 0 0 4px var(--brand-accent), 0 0 18px 2px var(--brand-accent);
   outline: none;
 }
-.main-section { display: none; }
-.main-section.active { display: block; }
 @media (max-width: 600px) {
   main {
     padding: 0.7rem 0.18rem 1.3rem;
-    gap: 1.3rem;
-  }
-  header {
-    margin-top: 0.7rem;
-    padding: 1.2rem 0.3rem 1.1rem;
-  }
-  .header-top {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-  .avatar {
-    width: 68px;
-    height: 68px;
-  }
-  .name {
-    font-size: 1.18rem;
-  }
-  .section-title {
-    font-size: 1.02rem;
   }
   .about-grid {
     grid-template-columns: 1fr;
     gap: 0.6rem;
   }
-  .about-panel, .contact-panel, .beyond-code-panel {
-    padding: 0.85rem 0.45rem 0.55rem;
+  .main-section {
+    padding: 1.18rem 0.45rem 0.75rem;
   }
-}
-::selection {
-  background: var(--brand-accent);
-  color: #222;
 }
