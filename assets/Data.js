@@ -53,8 +53,8 @@ const menuData = [
     id: "about",
     title: "About",
     links: [
-      { label: "Project Info", url: "About/project.html", desc: "Learn more about this hub." },
-      { label: "Contact", url: "contact.html", desc: "Get in touch." }
+      { label: "Project Info", url: "About/index.html?page=hub", desc: "Learn more about this hub." },
+      { label: "Contact", url: "About/index.html?page=contact", desc: "Get in touch." }
     ]
   }
 ];
