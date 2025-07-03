@@ -2,12 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>About Runarok Hrafn</title>
+  <title id="pageTitle">About Runarok Hrafn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="site-theme.css">
+  <style>
+    /* Hide all sections by default, will show via JS */
+    .main-section { display: none; }
+    .main-section.active { display: block; }
+    .nav-link.selected {
+      background: rgba(76,195,247,0.20);
+      color: var(--highlight);
+      box-shadow: 0 2px 18px 0 var(--brand-accent);
+    }
+    /* Breadcrumb style nav for contact */
+    .breadcrumb-nav {
+      text-align: left;
+      margin-bottom: 1.2em;
+    }
+    .breadcrumb-nav .nav-link {
+      font-size: 1.03rem;
+      padding: 0.25em 0.85em;
+      margin-right: 0.3em;
+    }
+    @media (max-width: 600px) {
+      .breadcrumb-nav { margin-bottom: .6em; }
+      .breadcrumb-nav .nav-link { font-size: 0.93rem; }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -31,12 +55,15 @@
         <i class="fas fa-chevron-right"></i>
       </button>
     </div>
-    <nav class="site-nav">
-      <a href="project.html" class="nav-link glow-hovered"><i class="fas fa-robot"></i> GenAI-plus Hub</a>
+    <nav class="site-nav" id="mainNav">
+      <a href="?page=about" class="nav-link glow-hovered" data-nav="about"><i class="fas fa-user"></i> About Me</a>
+      <a href="?page=hub" class="nav-link glow-hovered" data-nav="hub"><i class="fas fa-robot"></i> GenAI-plus Hub</a>
+      <a href="?page=contact" class="nav-link glow-hovered" data-nav="contact"><i class="fas fa-link"></i> Contact & Social</a>
     </nav>
   </header>
   <main>
-    <section class="about-panel" id="about">
+    <!-- ABOUT ME SECTION -->
+    <section class="main-section about-panel" id="aboutSection">
       <div class="section-title"><i class="fas fa-user-astronaut"></i> About Myself</div>
       <div class="about-grid">
         <div class="about-block">
@@ -71,7 +98,6 @@
         <span class="about-label">Vision:</span>
         <span class="about-value">AI-personal productivity OS — calm, human-aligned</span>
       </div>
-
       <section class="beyond-code-panel" style="margin-top:2.2em;">
         <div class="section-title" style="margin-bottom:0.6em;"><i class="fas fa-infinity"></i> Beyond the Code</div>
         <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.15em;">
@@ -117,7 +143,39 @@
         </ul>
       </section>
     </section>
-    <section class="contact-panel" id="contact">
+    <!-- HUB SECTION -->
+    <section class="main-section repo-panel" id="hubSection">
+      <div class="section-title"><i class="fas fa-robot"></i> The GenAI-plus Repository 🌟</div>
+      <div class="repo-badges">
+        <span class="repo-badge"><i class="fab fa-github"></i> Copilot</span>
+        <span class="repo-badge"><i class="fas fa-bolt"></i> Bolt.ai</span>
+        <span class="repo-badge"><i class="fas fa-wind"></i> Windsurf</span>
+        <span class="repo-badge"><i class="fas fa-comments"></i> ChatGPT</span>
+        <span class="repo-badge"><i class="fas fa-mouse-pointer"></i> Cursor</span>
+      </div>
+      <div class="repo-readme">
+        <strong>GenAI-plus is a spiritual sequel to GenAI, driven by AI-human synergy.</strong>
+        <div class="timeline">
+          <div class="timeline-point">Origins</div>
+          <div class="timeline-desc">Born from GenAI, reimagined for hands-on, learning-focused workflows.</div>
+          <div class="timeline-point">Now</div>
+          <div class="timeline-desc">Iterative releases, versioned milestones (v0, v1, ...), and a focus on calm, human-aligned productivity.</div>
+        </div>
+        <div>
+          GenAI-plus exists to explore practical AI augmentation. Every release is an experiment in clarity, feedback, and personal OS productivity — not tool chaos.
+        </div>
+        <ul style="margin:1em 0 0 0.5em;padding-left:1.1em;line-height:1.7;">
+          <li>🛠 <b>Goals:</b> Iterative releases, learning-centric, progressive versioning</li>
+          <li>🤝 <b>Spirit:</b> AI as a transparent, loyal ally; less noise, more signal</li>
+        </ul>
+      </div>
+    </section>
+    <!-- CONTACT SECTION -->
+    <section class="main-section contact-panel" id="contactSection">
+      <div class="breadcrumb-nav">
+        <a href="?page=about" class="nav-link glow-hovered" data-nav="about"><i class="fas fa-user"></i> About Me</a>
+        <a href="?page=hub" class="nav-link glow-hovered" data-nav="hub"><i class="fas fa-robot"></i> GenAI-plus Hub</a>
+      </div>
       <div class="section-title"><i class="fas fa-link"></i> Contact & Social</div>
       <ul class="contact-list">
         <li>
@@ -136,5 +194,57 @@
     </section>
   </main>
   <script src="site-theme.js"></script>
+  <script>
+    // Routing logic
+    function getPageParam() {
+      const params = new URLSearchParams(window.location.search);
+      const page = params.get('page');
+      return page && ['about','hub','contact'].includes(page) ? page : 'about';
+    }
+    function switchSection(page) {
+      // Set active section
+      ['about','hub','contact'].forEach(id => {
+        document.getElementById(id+'Section').classList.remove('active');
+      });
+      document.getElementById(page+'Section').classList.add('active');
+      // Set nav highlight
+      document.querySelectorAll('.site-nav .nav-link').forEach(a => {
+        a.classList.toggle('selected', a.getAttribute('data-nav') === page);
+      });
+      // Set page title
+      let t = '';
+      if(page==='about') t='About Runarok Hrafn';
+      else if(page==='hub') t='GenAI-plus Repository Hub';
+      else t='Contact & Social – Runarok Hrafn';
+      document.title = t;
+      document.getElementById('pageTitle').textContent = t;
+    }
+    function setNavHandlers() {
+      // Internal nav links
+      document.querySelectorAll('.site-nav .nav-link, .breadcrumb-nav .nav-link').forEach(a => {
+        a.addEventListener('click', function(e){
+          e.preventDefault();
+          const url = new URL(a.href, window.location.origin);
+          const page = url.searchParams.get('page');
+          if(page) {
+            history.pushState({page}, '', '?page='+page);
+            switchSection(page);
+          }
+          window.scrollTo(0,0);
+        });
+      });
+    }
+    window.addEventListener('popstate', function(e) {
+      switchSection(getPageParam());
+    });
+    // Init
+    switchSection(getPageParam());
+    setNavHandlers();
+
+    // Also update on theme toggle (for nav color)
+    document.addEventListener('themeChange', () => {
+      switchSection(getPageParam());
+    });
+  </script>
 </body>
 </html>
