@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Runarok - GitHub Profile</title>
+    <link rel="icon" href="https://github.com/Runarok/Runarok.github.io/blob/main/Logo.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="theme-dark">
+    <!-- Navigation -->
+    <nav class="nav-glass">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fab fa-github"></i>
+                <span>Runarok</span>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="#about-bottom" class="nav-link">About</a>
+                <a href="https://github.com/Runarok" target="_blank" class="nav-link external">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with About Me -->
+    <section class="hero" id="about-top">
+        <div class="hero-background">
+            <div class="glass-orb orb-1"></div>
+            <div class="glass-orb orb-2"></div>
+            <div class="glass-orb orb-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="avatar-container">
+                <img src="https://avatars.githubusercontent.com/u/Runarok?v=4" alt="Runarok" class="avatar" id="userAvatar">
+            </div>
+            <h1 class="hero-title">
+                <span class="gradient-text">Runarok</span>
+            </h1>
+            <p class="hero-subtitle" id="userBio">
+                Passionate developer crafting innovative solutions
+            </p>
+            <div class="hero-stats" id="userStats">
+                <div class="stat-item">
+                    <span class="stat-number" id="publicRepos">0</span>
+                    <span class="stat-label">Repositories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="followers">0</span>
+                    <span class="stat-label">Followers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="following">0</span>
+                    <span class="stat-label">Following</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Repository Section -->
+    <section class="repos-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-code-branch"></i>
+                    Repositories
+                </h2>
+                <div class="controls-container">
+                    <!-- Search -->
+                    <div class="search-container">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search repositories...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    
+                    <!-- Filters -->
+                    <div class="filter-container">
+                        <select id="languageFilter" class="filter-select">
+                            <option value="">All Languages</option>
+                        </select>
+                        <select id="sortBy" class="filter-select">
+                            <option value="updated">Last Updated</option>
+                            <option value="name">Name</option>
+                            <option value="stars">Stars</option>
+                            <option value="created">Created Date</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Repository Grid -->
+            <div class="repos-grid" id="reposGrid">
+                <!-- Loading State -->
+                <div class="loading-container" id="loadingContainer">
+                    <div class="loading-spinner"></div>
+                    <p>Loading repositories...</p>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    <span>Load More</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Bottom Section -->
+    <section class="about-section" id="about-bottom">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="about-title">About Me</h2>
+                <div class="about-grid">
+                    <div class="about-text">
+                        <p class="about-description" id="aboutDescription">
+                            Welcome to my GitHub profile! I'm passionate about creating innovative software solutions and contributing to the open-source community. 
+                            Here you'll find a collection of my projects, ranging from experimental ideas to production-ready applications.
+                        </p>
+                        <div class="about-links">
+                            <a href="#about-top" class="about-link">
+                                <i class="fas fa-arrow-up"></i>
+                                Back to Top
+                            </a>
+                            <a href="https://github.com/Runarok" target="_blank" class="about-link external">
+                                <i class="fab fa-github"></i>
+                                View on GitHub
+                            </a>
+                        </div>
+                    </div>
+                    <div class="about-visual">
+                        <div class="code-preview">
+                            <div class="code-header">
+                                <div class="code-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <span class="code-title">profile.js</span>
+                            </div>
+                            <div class="code-content">
+                                <div class="code-line">
+                                    <span class="code-keyword">const</span> 
+                                    <span class="code-variable">developer</span> 
+                                    <span class="code-operator">=</span> 
+                                    <span class="code-punctuation">{</span>
+                                </div>
+                                <div class="code-line code-indent">
+                                    <span class="code-property">name</span><span class="code-punctuation">:</span> 
+                                    <span class="code-string">'Runarok'</span><span class="code-punctuation">,</span>
+                                </div>
+                                <div class="code-line code-indent">
+                                    <span class="code-property">passion</span><span class="code-punctuation">:</span> 
+                                    <span class="code-string">'coding'</span><span class="code-punctuation">,</span>
+                                </div>
+                                <div class="code-line code-indent">
+                                    <span class="code-property">goal</span><span class="code-punctuation">:</span> 
+                                    <span class="code-string">'innovation'</span>
+                                </div>
+                                <div class="code-line">
+                                    <span class="code-punctuation">};</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Runarok. Built with ❤️ and GitHub API</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
