@@ -4,7 +4,7 @@ const CONFIG = {
   GITHUB_REPO: "GenAI-plus",
   GITHUB_BRANCH: "main",
   MAIN_PATH_PREFIX: "Experiments",
-  MAIN_FOLDER: "Bin", // <- Change this to switch sections (e.g., "Bin")
+  MAIN_FOLDER: "AI Chat", // <- Change this to switch sections (e.g., "Bin")
   IGNORED_FOLDERS: ["src"],
   CACHE_HOURS: 12
 };
