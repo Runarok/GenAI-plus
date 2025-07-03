@@ -1,6 +1,5 @@
 html {
   font-size: 17px;
-  /* Prevent unwanted mobile zoom/scaling */
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -26,8 +25,6 @@ body {
   --bg: linear-gradient(135deg, #181f2a 0%, #24375d 100%);
   --bg-panel: rgba(34,45,70,0.96);
 }
-
-/* Theming overrides */
 body.theme-teal {
   --bg: linear-gradient(135deg, #153e44 0%, #1c726d 100%);
   --bg-panel: rgba(21,62,68,0.93);
@@ -58,8 +55,6 @@ body.theme-contrast {
   --divider: rgba(243,255,68,0.13);
   --quote: #22231d;
 }
-
-/* Layout */
 main {
   max-width: 760px;
   margin: 0 auto;
@@ -146,8 +141,6 @@ header {
   from { opacity: 0; transform: translateY(-7px);}
   to   { opacity: 1; transform: translateY(0);}
 }
-
-/* Avatar & Header */
 .avatar {
   width: 104px;
   height: 104px;
@@ -195,8 +188,6 @@ header {
   font-weight: 600;
   opacity: 0.97;
 }
-
-/* Quote Rotator */
 .quote-rotator-wrap {
   display: flex;
   align-items: center;
@@ -247,8 +238,6 @@ header {
   opacity: 0.98;
   user-select: none;
 }
-
-/* Navigation Bar */
 .site-nav {
   position: relative;
   margin: 1.1rem 0 0 0;
@@ -280,8 +269,6 @@ header {
   text-decoration: underline;
   outline: none;
 }
-
-/* General Link Styling - subtle, not over-blue */
 a, .about-block a, .beyond-code-panel a, .repo-readme a {
   color: var(--brand-accent);
   text-decoration: none;
@@ -300,8 +287,6 @@ a:visited {
 a:active {
   color: var(--highlight);
 }
-
-/* About Panels */
 .section-title {
   font-size: 1.21rem;
   font-weight: 700;
@@ -344,8 +329,6 @@ a:active {
   font-weight: 500;
   letter-spacing: 0.01em;
 }
-
-/* Philosophy */
 .philosophy-block {
   background: var(--quote);
   border-radius: 0.93em;
@@ -357,8 +340,6 @@ a:active {
   box-shadow: 0 2px 10px 0 rgba(0,0,0,0.07);
   border-left: 3px solid var(--brand-accent);
 }
-
-/* Beyond the Code */
 .beyond-code-panel {
   background: var(--bg-panel);
   border-radius: var(--radius);
@@ -378,8 +359,6 @@ a:active {
   font-size: 1.01rem;
   margin-bottom: 0.11em;
 }
-
-/* Hub/Repo Section */
 .repo-badges {
   display: flex;
   flex-wrap: wrap;
@@ -451,8 +430,6 @@ a:active {
   margin-bottom: 0.13em;
   margin-left: 0.08em;
 }
-
-/* Contact & Social */
 .contact-panel {
   background: var(--bg-panel);
   border-radius: var(--radius);
@@ -492,8 +469,6 @@ a:active {
   color: var(--highlight);
   border-bottom: 1.4px solid var(--brand-accent);
 }
-
-/* Glow/Avatar Hover */
 .glow-hovered {
   position: relative;
   z-index: 1;
@@ -503,8 +478,8 @@ a:active {
   box-shadow: 0 0 0 4px var(--brand-accent), 0 0 18px 2px var(--brand-accent);
   outline: none;
 }
-
-/* Responsive */
+.main-section { display: none; }
+.main-section.active { display: block; }
 @media (max-width: 600px) {
   main {
     padding: 0.7rem 0.18rem 1.3rem;

@@ -2,23 +2,39 @@
 function getPageParam() {
   const params = new URLSearchParams(window.location.search);
   const page = params.get('page');
-  return page && ['about','hub','contact'].includes(page) ? page : 'about';
+  if (page && ['about','hub','contact'].includes(page)) return page;
+  return null;
 }
+
 function switchSection(page) {
-  ['about','hub','contact'].forEach(id => {
-    document.getElementById(id+'Section').classList.remove('active');
-  });
-  document.getElementById(page+'Section').classList.add('active');
-  document.querySelectorAll('.site-nav .nav-link').forEach(a => {
-    a.classList.toggle('selected', a.getAttribute('data-nav') === page);
-  });
-  let t = '';
-  if(page==='about') t='About Runarok Hrafn';
-  else if(page==='hub') t='GenAI-plus Repository Hub';
-  else t='Contact & Social – Runarok Hrafn';
-  document.title = t;
-  document.getElementById('pageTitle').textContent = t;
+  const allSections = ['about','hub','contact'];
+  if (!page) {
+    // No ?page param: show ALL sections
+    allSections.forEach(id => {
+      document.getElementById(id+'Section').classList.add('active');
+    });
+    document.querySelectorAll('.site-nav .nav-link').forEach(a => {
+      a.classList.remove('selected');
+    });
+    document.title = "Runarok Hrafn – All";
+    document.getElementById('pageTitle').textContent = "Runarok Hrafn – All";
+  } else {
+    // Show ONLY requested section
+    allSections.forEach(id => {
+      document.getElementById(id+'Section').classList.toggle('active', id === page);
+    });
+    document.querySelectorAll('.site-nav .nav-link').forEach(a => {
+      a.classList.toggle('selected', a.getAttribute('data-nav') === page);
+    });
+    let t = '';
+    if(page==='about') t='About Runarok Hrafn';
+    else if(page==='hub') t='GenAI-plus Repository Hub';
+    else t='Contact & Social – Runarok Hrafn';
+    document.title = t;
+    document.getElementById('pageTitle').textContent = t;
+  }
 }
+
 function setNavHandlers() {
   document.querySelectorAll('.site-nav .nav-link').forEach(a => {
     a.onclick = function(e){
@@ -32,9 +48,12 @@ function setNavHandlers() {
     };
   });
 }
+
 window.addEventListener('popstate', function(e) {
   switchSection(getPageParam());
 });
+
+// On page load
 switchSection(getPageParam());
 setNavHandlers();
 
@@ -54,11 +73,9 @@ function setTheme(idx, save=true) {
   if(save) localStorage.setItem('themeIdx', ''+idx);
   const ic = themeBtn.querySelector('i');
   if (ic) ic.className = "fas " + THEMES[idx].icon;
-  // Update dropdown options visually
   Array.from(themeDropdown.children).forEach((el, i) => {
     el.classList.toggle('selected', i === idx);
   });
-  // For nav color update
   document.dispatchEvent(new Event('themeChange'));
 }
 function fillThemeDropdown() {
@@ -86,28 +103,23 @@ function closeThemeDropdown() {
   themeBtn.setAttribute('aria-expanded', 'false');
 }
 themeBtn.addEventListener('click', function(e){
-  // Left click toggles dropdown
   if(themeDropdown.classList.contains('show')) closeThemeDropdown();
   else openThemeDropdown();
   e.stopPropagation();
 });
 themeBtn.addEventListener('contextmenu', function(e){
-  // Right click: always open dropdown
   e.preventDefault();
   openThemeDropdown();
   e.stopPropagation();
 });
-// Hide on click outside
 document.addEventListener('mousedown', function(e){
   if(themeDropdown.classList.contains('show') && !themeDropdown.contains(e.target) && e.target !== themeBtn) {
     closeThemeDropdown();
   }
 });
-// Keyboard ESC closes dropdown
 document.addEventListener('keydown', function(e){
   if(themeDropdown.classList.contains('show') && e.key === 'Escape') closeThemeDropdown();
 });
-// Initial theme from storage
 (function(){
   const saved = localStorage.getItem('themeIdx');
   setTheme(saved && !isNaN(parseInt(saved,10)) ? parseInt(saved,10) : 0, false);
