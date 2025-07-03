@@ -1,4 +1,4 @@
-// UI Management and Interactions
+// Enhanced UI Management with Markdown Rendering and Context Awareness
 class UI {
     constructor() {
         this.config = window.silentMendConfig;
@@ -50,7 +50,7 @@ class UI {
 
     handleInputResize(e) {
         e.target.style.height = 'auto';
-        e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+        e.target.style.height = Math.min(e.target.scrollHeight, 140) + 'px';
     }
 
     handleKeyDown(e) {
@@ -119,8 +119,11 @@ class UI {
         this.elements.messageInput.value = '';
         this.elements.messageInput.style.height = 'auto';
 
+        // Check if this message references previous context
+        const isContextRef = this.memory.isContextReference(message);
+
         // Add user message
-        this.addMessage(message, 'user');
+        this.addMessage(message, 'user', false, isContextRef);
         this.memory.addMessage('user', message);
 
         // Show typing indicator
@@ -143,13 +146,15 @@ class UI {
                 errorMessage = 'Invalid API key. Please verify your credentials.';
             } else if (error.message.includes('quota') || error.message.includes('billing')) {
                 errorMessage = 'API quota exceeded. Check your account status.';
+            } else if (error.message.includes('safety') || error.message.includes('blocked')) {
+                errorMessage = 'Message blocked by safety filters. Rephrase your request.';
             }
             
             this.addMessage(errorMessage, 'bot', true);
         }
     }
 
-    addMessage(content, sender, isError = false) {
+    addMessage(content, sender, isError = false, isContextRef = false) {
         const chatContainer = this.elements.chatContainer;
         const initialMessage = chatContainer.querySelector('.initial-message');
         
@@ -160,6 +165,7 @@ class UI {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}`;
         if (isError) messageDiv.classList.add('error');
+        if (isContextRef) messageDiv.classList.add('context-reference');
 
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
@@ -174,19 +180,59 @@ class UI {
     }
 
     formatContent(content) {
-        const lines = content.split('\n');
-        let formatted = '';
+        // Enhanced markdown-style formatting with safety
+        let formatted = this.escapeHtml(content);
         
-        for (let line of lines) {
-            line = line.trim();
-            if (line.startsWith('"') && line.endsWith('"') && line.length > 2) {
-                formatted += `<div class="quote">${line.slice(1, -1)}</div>`;
-            } else if (line) {
-                formatted += `<p>${this.escapeHtml(line)}</p>`;
+        // Convert **bold** to <strong>
+        formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        
+        // Convert *italic* to <em>
+        formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        
+        // Convert line breaks
+        formatted = formatted.replace(/\n/g, '<br>');
+        
+        // Handle bullet points
+        const lines = formatted.split('<br>');
+        let inList = false;
+        let result = '';
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            
+            if (line.match(/^[-*]\s+/)) {
+                if (!inList) {
+                    result += '<ul>';
+                    inList = true;
+                }
+                const listItem = line.replace(/^[-*]\s+/, '');
+                result += `<li>${listItem}</li>`;
+            } else {
+                if (inList) {
+                    result += '</ul>';
+                    inList = false;
+                }
+                if (line) {
+                    result += `<p>${line}</p>`;
+                } else if (i < lines.length - 1) {
+                    result += '<br>';
+                }
             }
         }
         
-        return formatted || `<p>${this.escapeHtml(content)}</p>`;
+        if (inList) {
+            result += '</ul>';
+        }
+        
+        // Handle quotes with more flexible detection
+        // Match quotes that are standalone sentences or paragraphs
+        result = result.replace(/<p>"([^"]+)"<\/p>/g, '<div class="quote">$1</div>');
+        result = result.replace(/^"([^"]+)"$/gm, '<div class="quote">$1</div>');
+        
+        // Also handle quotes that span multiple lines or are part of larger text
+        result = result.replace(/"([^"]{20,}?)"/g, '<div class="quote">$1</div>');
+        
+        return result || `<p>${this.escapeHtml(content)}</p>`;
     }
 
     escapeHtml(text) {
@@ -228,7 +274,10 @@ class UI {
             if (!chatContainer.querySelector('.initial-message')) {
                 const initialDiv = document.createElement('div');
                 initialDiv.className = 'initial-message';
-                initialDiv.innerHTML = '<p>Conversations are not connections. Insight over performance.</p>';
+                initialDiv.innerHTML = `
+                    <p>Conversations are not connections. Insight over performance.</p>
+                    <p class="context-note">I maintain conversational context. Reference earlier topics naturally.</p>
+                `;
                 chatContainer.appendChild(initialDiv);
             }
         } else {
@@ -241,20 +290,30 @@ class UI {
             // Rebuild conversation
             for (let msg of conversation) {
                 const sender = msg.role === 'user' ? 'user' : 'bot';
-                this.addMessage(msg.content, sender);
+                const isContextRef = sender === 'user' && this.memory.isContextReference(msg.content);
+                this.addMessage(msg.content, sender, false, isContextRef);
             }
         }
     }
 
     clearMemory() {
         this.memory.clearConversation();
+        this.config.clearSettings();
         
         const chatContainer = this.elements.chatContainer;
-        chatContainer.innerHTML = '<div class="initial-message"><p>Conversations are not connections. Insight over performance.</p></div>';
+        chatContainer.innerHTML = `
+            <div class="initial-message">
+                <p>Conversations are not connections. Insight over performance.</p>
+                <p class="context-note">I maintain conversational context. Reference earlier topics naturally.</p>
+            </div>
+        `;
         
-        // Optional: Clear API key as well
-        // this.elements.apiKeyInput.value = '';
-        // this.config.updateSetting('apiKey', '');
+        // Reset form fields
+        this.elements.apiKeyInput.value = '';
+        this.elements.themeSelector.value = 'graphite';
+        this.elements.modelSelector.value = 'gemini';
+        this.applyTheme();
+        this.updateApiKeyPlaceholder();
     }
 }
 
