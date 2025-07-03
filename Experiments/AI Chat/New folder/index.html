@@ -11,29 +11,35 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/chat.css">
 </head>
-<body>
+<body data-theme="graphite">
     <div class="app-container">
         <!-- Header -->
         <header class="header">
             <div class="header-left">
                 <h1 class="title">Silent Mend</h1>
+                <span class="subtitle">Insight over performance</span>
             </div>
             <div class="header-controls">
-                <select id="themeSelector" class="theme-selector">
-                    <option value="graphite">Graphite</option>
-                    <option value="navy">Deep Navy</option>
-                    <option value="violet">Muted Violet</option>
-                    <option value="ash">Soft Ash</option>
-                </select>
-                
                 <select id="modelSelector" class="model-selector">
                     <option value="gemini">Gemini</option>
+                    <option value="openai">OpenAI</option>
+                </select>
+                
+                <select id="themeSelector" class="theme-selector">
+                    <option value="graphite">Graphite Black</option>
+                    <option value="obsidian">Obsidian Gray</option>
+                    <option value="navy">Deep Navy</option>
+                    <option value="ash">Fog Ash</option>
+                    <option value="violet">Muted Violet</option>
+                    <option value="charcoal">Charcoal Blue</option>
+                    <option value="rust">Ink Rust</option>
+                    <option value="iron">Cold Iron</option>
                 </select>
                 
                 <input type="password" 
                        id="apiKeyInput" 
                        class="api-key-input" 
-                       placeholder="Enter API Key">
+                       placeholder="Enter Gemini API Key">
                 
                 <button id="clearMemoryBtn" class="clear-btn">Clear Memory</button>
             </div>
@@ -43,6 +49,7 @@
         <main class="chat-container" id="chatContainer">
             <div class="initial-message">
                 <p>Conversations are not connections. Insight over performance.</p>
+                <p class="context-note">I maintain conversational context. Reference earlier topics naturally.</p>
             </div>
         </main>
 
