@@ -1,0 +1,596 @@
+/* UI Component Styles */
+
+/* Typography */
+.game-title {
+    font-size: clamp(2rem, 8vw, 4rem);
+    font-weight: 800;
+    margin-bottom: clamp(1rem, 4vw, 2rem);
+    background: linear-gradient(45deg, var(--accent-color), var(--warning-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px var(--accent-color);
+    animation: titlePulse 3s ease-in-out infinite;
+    line-height: 1.1;
+}
+
+@keyframes titlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.settings-title,
+.instructions-title,
+.game-over-title,
+.shop-title,
+.data-title {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: clamp(1rem, 4vw, 2rem);
+    text-shadow: 0 0 20px var(--accent-color);
+    line-height: 1.2;
+}
+
+.pause-title {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: clamp(0.75rem, 3vw, 1.5rem);
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(0.75rem, 2.5vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+    font-size: clamp(0.9rem, 2.8vw, 1.1rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    user-select: none;
+    min-width: clamp(100px, 25vw, 120px);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left var(--transition-normal);
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: var(--accent-color);
+    color: var(--bg-primary);
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
+}
+
+.btn-secondary:hover {
+    background: var(--accent-color);
+    color: var(--bg-primary);
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    width: clamp(40px, 10vw, 48px);
+    height: clamp(40px, 10vw, 48px);
+    padding: 0;
+    border-radius: 50%;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
+    backdrop-filter: blur(10px);
+    min-width: auto;
+}
+
+.btn-icon:hover {
+    background: var(--accent-color);
+    color: var(--bg-primary);
+    transform: scale(1.1);
+}
+
+.btn-toggle {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 2px solid var(--bg-tertiary);
+}
+
+.btn-toggle.active {
+    background: var(--accent-color);
+    color: var(--bg-primary);
+    border-color: var(--accent-color);
+}
+
+/* Navigation */
+.main-nav,
+.settings-nav,
+.instructions-nav,
+.game-over-nav,
+.pause-nav,
+.shop-nav,
+.data-nav {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.75rem, 2.5vw, 1rem);
+    align-items: center;
+    width: 100%;
+}
+
+/* Coins Display */
+.coins-display {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    font-weight: 600;
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    color: var(--text-primary);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+    min-width: 0;
+}
+
+.coins-display .label {
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+}
+
+.coins-display .value {
+    color: #fbbf24;
+    font-weight: 700;
+    min-width: clamp(30px, 8vw, 50px);
+    text-align: right;
+}
+
+.coins-display-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-xl);
+    border: 2px solid #fbbf24;
+    margin-bottom: var(--spacing-xl);
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    font-weight: 700;
+    color: #fbbf24;
+    text-shadow: 0 0 10px #fbbf24;
+}
+
+.coins-icon {
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+}
+
+.coins-amount {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+}
+
+/* Shop Styles */
+.shop-content,
+.data-content {
+    max-width: clamp(300px, 90vw, 800px);
+    width: 100%;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    z-index: 1;
+}
+
+.shop-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(140px, 35vw, 180px), 1fr));
+    gap: clamp(0.75rem, 2.5vw, 1rem);
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+}
+
+.shop-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(0.5rem, 1.5vw, 0.75rem);
+    padding: clamp(0.75rem, 2.5vw, 1rem);
+    border: 2px solid transparent;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.05);
+    transition: all var(--transition-normal);
+}
+
+.shop-item:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-lg);
+}
+
+.shop-item.owned {
+    border-color: var(--success-color);
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.shop-item.active {
+    border-color: var(--accent-color);
+    background: rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.shop-item-preview {
+    width: clamp(60px, 15vw, 80px);
+    height: clamp(40px, 10vw, 50px);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-item-name {
+    font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+    color: var(--text-primary);
+    text-align: center;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.shop-item-cost {
+    font-size: clamp(0.7rem, 2vw, 0.8rem);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.shop-item .btn {
+    padding: clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.8rem, 2.5vw, 1rem);
+    font-size: clamp(0.7rem, 2vw, 0.8rem);
+    min-width: auto;
+    width: 100%;
+}
+
+/* Data Management */
+.data-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: var(--spacing-md);
+    border: 2px solid var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+    resize: vertical;
+    margin-bottom: var(--spacing-md);
+}
+
+.data-textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+/* Theme Selector */
+.setting-group {
+    margin-bottom: clamp(1.5rem, 4vw, 2rem);
+}
+
+.setting-label {
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: clamp(0.75rem, 2.5vw, 1rem);
+}
+
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(120px, 30vw, 140px), 1fr));
+    gap: clamp(0.75rem, 2.5vw, 1rem);
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(0.5rem, 1.5vw, 0.75rem);
+    padding: clamp(0.75rem, 2.5vw, 1rem);
+    border: 2px solid transparent;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.theme-option:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-lg);
+}
+
+.theme-option.active {
+    border-color: var(--accent-color);
+    background: rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.theme-preview {
+    width: clamp(60px, 15vw, 80px);
+    height: clamp(40px, 10vw, 50px);
+    border-radius: var(--radius-md);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-preview::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(8px, 2vw, 10px);
+    height: clamp(8px, 2vw, 10px);
+    border-radius: 50%;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.theme-name {
+    font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+    color: var(--text-secondary);
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.theme-option.active .theme-name {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+/* Audio Controls */
+.audio-controls {
+    display: flex;
+    justify-content: center;
+}
+
+/* Instructions */
+.instruction-section {
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+    text-align: left;
+}
+
+.instruction-section h3 {
+    color: var(--text-primary);
+    font-size: clamp(1rem, 2.8vw, 1.2rem);
+    font-weight: 600;
+    margin-bottom: clamp(0.5rem, 1.5vw, 0.75rem);
+}
+
+.instruction-section p,
+.instruction-section li {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+.controls-grid {
+    display: grid;
+    gap: clamp(0.5rem, 1.5vw, 0.75rem);
+}
+
+.control-item {
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: clamp(0.85rem, 2.3vw, 0.95rem);
+}
+
+.dot-types {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.5rem, 1.5vw, 0.75rem);
+}
+
+.dot-type {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+}
+
+.dot-example {
+    width: clamp(14px, 3.5vw, 16px);
+    height: clamp(14px, 3.5vw, 16px);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.normal-dot {
+    background: var(--dot-normal);
+    box-shadow: 0 0 10px var(--dot-normal);
+}
+
+.cracking-dot {
+    background: var(--dot-cracking);
+    box-shadow: 0 0 10px var(--dot-cracking);
+}
+
+.moving-dot {
+    background: var(--dot-moving);
+    box-shadow: 0 0 10px var(--dot-moving);
+    animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.dot-info {
+    color: var(--text-secondary);
+    line-height: 1.4;
+    font-size: clamp(0.85rem, 2.3vw, 0.95rem);
+}
+
+.tips-list {
+    list-style: none;
+    padding-left: clamp(0.75rem, 2vw, 1rem);
+}
+
+.tips-list li {
+    position: relative;
+    padding-left: clamp(0.75rem, 2vw, 1rem);
+}
+
+.tips-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* Game Over Stats */
+.final-stats {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.75rem, 2.5vw, 1rem);
+    margin-bottom: clamp(1.5rem, 4vw, 2rem);
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(0.75rem, 2.5vw, 1rem);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    gap: clamp(0.5rem, 2vw, 1rem);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+.stat-value {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: clamp(1rem, 2.8vw, 1.1rem);
+    text-align: right;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .theme-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .shop-items-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .btn {
+        padding: clamp(0.6rem, 2vw, 0.8rem) clamp(1.2rem, 3vw, 1.5rem);
+        font-size: clamp(0.85rem, 2.5vw, 1rem);
+    }
+    
+    .main-nav,
+    .settings-nav,
+    .instructions-nav,
+    .game-over-nav,
+    .pause-nav,
+    .shop-nav,
+    .data-nav {
+        gap: clamp(0.6rem, 2vw, 0.8rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .theme-grid {
+        grid-template-columns: 1fr;
+        gap: clamp(0.5rem, 2vw, 0.75rem);
+    }
+    
+    .shop-items-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dot-type {
+        flex-direction: column;
+        text-align: center;
+        gap: clamp(0.4rem, 1.5vw, 0.6rem);
+    }
+    
+    .controls-grid {
+        gap: clamp(0.4rem, 1.2vw, 0.6rem);
+    }
+    
+    .stat-item {
+        flex-direction: column;
+        text-align: center;
+        gap: clamp(0.25rem, 1vw, 0.5rem);
+    }
+    
+    .stat-value {
+        text-align: center;
+    }
+}
+
+/* Very Small Screens */
+@media (max-width: 320px) {
+    .theme-preview {
+        width: 50px;
+        height: 35px;
+    }
+    
+    .theme-name {
+        font-size: 0.75rem;
+    }
+    
+    .btn {
+        min-width: 80px;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+}

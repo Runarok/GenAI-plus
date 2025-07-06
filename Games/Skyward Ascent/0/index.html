@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peak Climber</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --accent-primary: #58a6ff;
+            --accent-secondary: #7c3aed;
+            --success: #238636;
+            --warning: #f85149;
+            --dot-color: #ffa500;
+            --dot-glow: rgba(255, 165, 0, 0.6);
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --border-radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        /* Menu Screen */
+        .menu-screen {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+            z-index: 100;
+        }
+
+        .menu-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><path d="M0,600 L200,400 L400,500 L600,300 L800,400 L1000,200 L1000,600 Z" fill="%23161b22" opacity="0.3"/><path d="M0,600 L150,450 L350,520 L550,350 L750,420 L950,250 L1000,600 Z" fill="%2321262d" opacity="0.5"/></svg>') no-repeat center center;
+            background-size: cover;
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .menu-content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .game-title {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: var(--spacing-xl);
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(88, 166, 255, 0.3);
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .btn {
+            padding: var(--spacing-md) var(--spacing-xl);
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: 2px solid var(--accent-primary);
+            border-radius: var(--border-radius);
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 166, 255, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Game Screen */
+        .game-screen {
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            overflow: hidden;
+        }
+
+        .game-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: transparent;
+        }
+
+        .game-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .score-display {
+            position: absolute;
+            top: var(--spacing-lg);
+            left: var(--spacing-lg);
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .height-display {
+            position: absolute;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .pause-btn {
+            position: absolute;
+            top: var(--spacing-lg);
+            right: 50%;
+            transform: translateX(50%);
+            pointer-events: auto;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(33, 38, 45, 0.8);
+            border: 1px solid var(--accent-primary);
+            border-radius: var(--border-radius);
+            color: var(--accent-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pause-btn:hover {
+            background: rgba(88, 166, 255, 0.2);
+        }
+
+        /* Mobile Controls */
+        .mobile-controls {
+            position: absolute;
+            bottom: var(--spacing-lg);
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            gap: var(--spacing-md);
+            pointer-events: auto;
+        }
+
+        .mobile-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(33, 38, 45, 0.8);
+            border: 2px solid var(--accent-primary);
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-btn:hover {
+            background: rgba(88, 166, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .mobile-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Game Over Screen */
+        .game-over-screen {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+            z-index: 100;
+        }
+
+        .game-over-content {
+            text-align: center;
+            padding: var(--spacing-xl);
+            background: rgba(33, 38, 45, 0.8);
+            border-radius: var(--border-radius);
+            border: 2px solid var(--warning);
+            box-shadow: 0 10px 50px rgba(248, 81, 73, 0.3);
+        }
+
+        .game-over-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--warning);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .final-score {
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+        }
+
+        /* Instructions Modal */
+        .instructions-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .instructions-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .instructions-content {
+            background: var(--bg-tertiary);
+            padding: var(--spacing-xl);
+            border-radius: var(--border-radius);
+            border: 2px solid var(--accent-primary);
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .instructions-title {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-lg);
+            color: var(--accent-primary);
+        }
+
+        .instructions-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-secondary);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: 2.5rem;
+            }
+            
+            .mobile-controls {
+                display: flex;
+            }
+            
+            .instructions-content {
+                margin: var(--spacing-lg);
+                max-width: none;
+            }
+        }
+
+        /* Pause Menu */
+        .pause-menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(33, 38, 45, 0.95);
+            padding: var(--spacing-xl);
+            border-radius: var(--border-radius);
+            border: 2px solid var(--accent-primary);
+            text-align: center;
+            display: none;
+            z-index: 20;
+        }
+
+        .pause-menu.show {
+            display: block;
+        }
+
+        .pause-title {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-lg);
+            color: var(--accent-primary);
+        }
+
+        .pause-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Menu Screen -->
+        <div class="screen menu-screen" id="menuScreen">
+            <div class="menu-bg"></div>
+            <div class="menu-content">
+                <h1 class="game-title">Peak Climber</h1>
+                <div class="menu-buttons">
+                    <button class="btn" onclick="startGame()">Play</button>
+                    <button class="btn" onclick="showInstructions()">Instructions</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen game-screen hidden" id="gameScreen">
+            <canvas class="game-canvas" id="gameCanvas"></canvas>
+            <div class="game-ui">
+                <div class="score-display">Score: <span id="score">0</span></div>
+                <div class="height-display">Height: <span id="height">0</span>m</div>
+                <button class="pause-btn" onclick="togglePause()">⏸️</button>
+                <div class="mobile-controls">
+                    <button class="mobile-btn" onmousedown="handleMobileInput('left')" onmouseup="handleMobileInput('stop')">◀</button>
+                    <button class="mobile-btn" onmousedown="handleMobileInput('jump')" onmouseup="handleMobileInput('stop')">⬆</button>
+                    <button class="mobile-btn" onmousedown="handleMobileInput('right')" onmouseup="handleMobileInput('stop')">▶</button>
+                </div>
+            </div>
+            <div class="pause-menu" id="pauseMenu">
+                <h2 class="pause-title">Paused</h2>
+                <div class="pause-buttons">
+                    <button class="btn" onclick="togglePause()">Resume</button>
+                    <button class="btn" onclick="restartGame()">Restart</button>
+                    <button class="btn" onclick="backToMenu()">Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div class="screen game-over-screen hidden" id="gameOverScreen">
+            <div class="game-over-content">
+                <h2 class="game-over-title">Game Over!</h2>
+                <div class="final-score">Final Score: <span id="finalScore">0</span></div>
+                <div class="final-score">Height Reached: <span id="finalHeight">0</span>m</div>
+                <div class="menu-buttons">
+                    <button class="btn" onclick="restartGame()">Play Again</button>
+                    <button class="btn" onclick="backToMenu()">Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions Modal -->
+        <div class="instructions-modal" id="instructionsModal">
+            <div class="instructions-content">
+                <button class="close-btn" onclick="hideInstructions()">×</button>
+                <h2 class="instructions-title">How to Play</h2>
+                <div class="instructions-text">
+                    <p><strong>Objective:</strong> Climb as high as possible by jumping between handholds!</p>
+                    <br>
+                    <p><strong>Controls:</strong></p>
+                    <p>• Use WASD or Arrow Keys to move</p>
+                    <p>• Jump towards orange dots (handholds)</p>
+                    <p>• Don't fall or you'll lose!</p>
+                    <br>
+                    <p><strong>Tips:</strong></p>
+                    <p>• Plan your jumps carefully</p>
+                    <p>• The higher you climb, the harder it gets</p>
+                    <p>• Score increases with height!</p>
+                </div>
+                <button class="btn" onclick="hideInstructions()">Got It!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="jumpSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaCDuAzvLIayIGHm2++OKaShEOVqzn8bZkG"> </audio>
+    <audio id="landSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaCDuAzvLIayIGHm2++OKaShEOVqzn8bZkG"> </audio>
+    <audio id="fallSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaCDuAzvLIayIGHm2++OKaShEOVqzn8bZkG"> </audio>
+
+    <script>
+        // Game State
+        let gameState = {
+            currentScreen: 'menu',
+            isPlaying: false,
+            isPaused: false,
+            score: 0,
+            height: 0,
+            camera: { x: 0, y: 0 },
+            player: { x: 400, y: 500, vx: 0, vy: 0, onGround: false, radius: 15 },
+            dots: [],
+            keys: {},
+            mobileInput: null,
+            lastDotId: 0,
+            difficulty: 1
+        };
+
+        // Game Constants
+        const GRAVITY = 0.5;
+        const JUMP_FORCE = 15;
+        const MOVE_SPEED = 8;
+        const DOT_RADIUS = 8;
+        const JUMP_DISTANCE = 120;
+        const LEVEL_HEIGHT = 100;
+
+        // Canvas Setup
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Screen Management
+        function showScreen(screenName) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            document.getElementById(screenName + 'Screen').classList.remove('hidden');
+            gameState.currentScreen = screenName;
+        }
+
+        function startGame() {
+            showScreen('game');
+            initGame();
+            gameState.isPlaying = true;
+            gameLoop();
+        }
+
+        function backToMenu() {
+            showScreen('menu');
+            gameState.isPlaying = false;
+            gameState.isPaused = false;
+            document.getElementById('pauseMenu').classList.remove('show');
+        }
+
+        function restartGame() {
+            gameState.isPaused = false;
+            document.getElementById('pauseMenu').classList.remove('show');
+            initGame();
+            if (gameState.currentScreen !== 'game') {
+                showScreen('game');
+            }
+            gameState.isPlaying = true;
+            gameLoop();
+        }
+
+        function gameOver() {
+            gameState.isPlaying = false;
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalHeight').textContent = gameState.height;
+            playSound('fallSound');
+            setTimeout(() => showScreen('gameOver'), 500);
+        }
+
+        function togglePause() {
+            gameState.isPaused = !gameState.isPaused;
+            document.getElementById('pauseMenu').classList.toggle('show', gameState.isPaused);
+        }
+
+        // Instructions Modal
+        function showInstructions() {
+            document.getElementById('instructionsModal').classList.add('show');
+        }
+
+        function hideInstructions() {
+            document.getElementById('instructionsModal').classList.remove('show');
+        }
+
+        // Sound Management
+        function playSound(soundId) {
+            const audio = document.getElementById(soundId);
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log('Audio play failed:', e));
+            }
+        }
+
+        // Input Handling
+        document.addEventListener('keydown', (e) => {
+            gameState.keys[e.key.toLowerCase()] = true;
+            if (e.key === ' ') e.preventDefault();
+        });
+
+        document.addEventListener('keyup', (e) => {
+            gameState.keys[e.key.toLowerCase()] = false;
+        });
+
+        function handleMobileInput(action) {
+            gameState.mobileInput = action;
+        }
+
+        // Game Initialization
+        function initGame() {
+            gameState.score = 0;
+            gameState.height = 0;
+            gameState.camera = { x: 0, y: 0 };
+            gameState.player = { x: 400, y: 500, vx: 0, vy: 0, onGround: false, radius: 15 };
+            gameState.dots = [];
+            gameState.lastDotId = 0;
+            gameState.difficulty = 1;
+            
+            // Generate initial dots
+            generateDots();
+        }
+
+        function generateDots() {
+            const startY = 600;
+            const endY = -2000;
+            
+            // Starting platform
+            gameState.dots.push({ x: 400, y: startY, id: gameState.lastDotId++ });
+            
+            let currentY = startY - 80;
+            let currentX = 400;
+            
+            while (currentY > endY) {
+                // Increase difficulty as we go higher
+                const level = Math.floor((startY - currentY) / LEVEL_HEIGHT);
+                gameState.difficulty = Math.min(level * 0.1 + 1, 3);
+                
+                // Generate 1-3 dots per level
+                const dotsThisLevel = Math.floor(Math.random() * 3) + 1;
+                
+                for (let i = 0; i < dotsThisLevel; i++) {
+                    const minDistance = 60 / gameState.difficulty;
+                    const maxDistance = 100 / gameState.difficulty;
+                    const distance = Math.random() * (maxDistance - minDistance) + minDistance;
+                    
+                    const angle = (Math.random() - 0.5) * Math.PI * 0.8; // Limit angle
+                    const nextX = currentX + Math.sin(angle) * distance;
+                    const nextY = currentY - Math.cos(angle) * distance;
+                    
+                    // Keep dots within reasonable bounds
+                    if (nextX > 50 && nextX < canvas.width - 50) {
+                        gameState.dots.push({ x: nextX, y: nextY, id: gameState.lastDotId++ });
+                        currentX = nextX;
+                        currentY = nextY;
+                    }
+                }
+                
+                currentY -= 60;
+            }
+        }
+
+        // Game Physics
+        function updatePlayer() {
+            if (gameState.isPaused) return;
+            
+            const player = gameState.player;
+            
+            // Input handling
+            let moveX = 0;
+            if (gameState.keys['a'] || gameState.keys['arrowleft'] || gameState.mobileInput === 'left') {
+                moveX = -MOVE_SPEED;
+            }
+            if (gameState.keys['d'] || gameState.keys['arrowright'] || gameState.mobileInput === 'right') {
+                moveX = MOVE_SPEED;
+            }
+            
+            // Jump handling
+            if ((gameState.keys['w'] || gameState.keys['arrowup'] || gameState.keys[' '] || gameState.mobileInput === 'jump') && player.onGround) {
+                player.vy = -JUMP_FORCE;
+                player.onGround = false;
+                playSound('jumpSound');
+            }
+            
+            // Apply horizontal movement
+            player.vx = moveX;
+            
+            // Apply gravity
+            player.vy += GRAVITY;
+            
+            // Update position
+            player.x += player.vx;
+            player.y += player.vy;
+            
+            // Check collision with dots
+            player.onGround = false;
+            for (let dot of gameState.dots) {
+                const distance = Math.sqrt((player.x - dot.x) ** 2 + (player.y - dot.y) ** 2);
+                if (distance < player.radius + DOT_RADIUS && player.vy > 0) {
+                    player.y = dot.y - player.radius - DOT_RADIUS;
+                    player.vy = 0;
+                    player.onGround = true;
+                    playSound('landSound');
+                    
+                    // Update score and height
+                    const currentHeight = Math.max(0, Math.floor((600 - player.y) / 10));
+                    if (currentHeight > gameState.height) {
+                        gameState.height = currentHeight;
+                        gameState.score = gameState.height * 10;
+                        updateUI();
+                    }
+                    break;
+                }
+            }
+            
+            // Check if player fell off screen
+            if (player.y > 800) {
+                gameOver();
+            }
+            
+            // Update camera to follow player
+            gameState.camera.x = player.x - canvas.width / 2;
+            gameState.camera.y = player.y - canvas.height / 2;
+        }
+
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('height').textContent = gameState.height;
+        }
+
+        // Rendering
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#0d1117');
+            gradient.addColorStop(1, '#161b22');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw stars in background
+            drawStars();
+            
+            ctx.save();
+            ctx.translate(-gameState.camera.x, -gameState.camera.y);
+            
+            // Draw dots
+            for (let dot of gameState.dots) {
+                if (dot.y > gameState.camera.y - 100 && dot.y < gameState.camera.y + canvas.height + 100) {
+                    ctx.beginPath();
+                    ctx.arc(dot.x, dot.y, DOT_RADIUS, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffa500';
+                    ctx.fill();
+                    
+                    // Add glow effect
+                    ctx.beginPath();
+                    ctx.arc(dot.x, dot.y, DOT_RADIUS * 1.5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 165, 0, 0.3)';
+                    ctx.fill();
+                }
+            }
+            
+            // Draw player
+            const player = gameState.player;
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#58a6ff';
+            ctx.fill();
+            
+            // Player glow
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius * 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(88, 166, 255, 0.3)';
+            ctx.fill();
+            
+            // Draw trajectory hint
+            if (player.onGround) {
+                drawTrajectoryHint();
+            }
+            
+            ctx.restore();
+        }
+
+        function drawStars() {
+            const starCount = 100;
+            for (let i = 0; i < starCount; i++) {
+                const x = (i * 137.5) % canvas.width;
+                const y = (i * 123.7 + gameState.camera.y * 0.1) % canvas.height;
+                const alpha = Math.sin(i + Date.now() * 0.001) * 0.5 + 0.5;
+                
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.3})`;
+                ctx.fillRect(x, y, 1, 1);
+            }
+        }
+
+        function drawTrajectoryHint() {
+            const player = gameState.player;
+            const nearestDot = findNearestReachableDot();
+            
+            if (nearestDot) {
+                ctx.strokeStyle = 'rgba(255, 165, 0, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(player.x, player.y);
+                ctx.lineTo(nearestDot.x, nearestDot.y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+        }
+
+        function findNearestReachableDot() {
+            const player = gameState.player;
+            let nearest = null;
+            let nearestDistance = Infinity;
+            
+            for (let dot of gameState.dots) {
+                const distance = Math.sqrt((player.x - dot.x) ** 2 + (player.y - dot.y) ** 2);
+                if (distance < JUMP_DISTANCE && distance < nearestDistance && dot.y < player.y) {
+                    nearest = dot;
+                    nearestDistance = distance;
+                }
+            }
+            
+            return nearest;
+        }
+
+        // Game Loop
+        function gameLoop() {
+            if (!gameState.isPlaying) return;
+            
+            updatePlayer();
+            render();
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            showScreen('menu');
+        });
+    </script>
+</body>
+</html>

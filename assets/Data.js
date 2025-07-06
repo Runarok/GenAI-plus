@@ -8,6 +8,7 @@ const menuData = [
       { label: "Reflex Rush", url: "Games/Reflex Rush/index.html", desc: "Rapid Response Test." },
       { label: "Simon Says", url: "Games/Simon Says/index.html", desc: "Memory pattern light game." },
       { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." },
+      { label: "Skyward Ascent", url: "Games/Skyward Ascent/index.html", desc: "Fancy Doodle Jump." },
       { label: "Sudoku", url: "Games/Sudoku/index.html", desc: "Sudoku." }
     ]
   },

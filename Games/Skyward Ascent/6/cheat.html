@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyward Ascent - Cheat Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .cheat-container {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .cheat-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-shadow: 0 0 20px #3b82f6;
+        }
+
+        .cheat-description {
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #f8fafc;
+            margin-bottom: 0.5rem;
+        }
+
+        .cheat-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid #334155;
+            border-radius: 0.5rem;
+            background: #1e293b;
+            color: #f8fafc;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .cheat-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .cheat-textarea::placeholder {
+            color: #64748b;
+        }
+
+        .cheat-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+            border-radius: 0.75rem;
+            background: #3b82f6;
+            color: #0f172a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cheat-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .cheat-btn:active {
+            transform: translateY(0);
+        }
+
+        .cheat-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.3s ease;
+        }
+
+        .cheat-btn:hover::before {
+            left: 100%;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: #fecaca;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 0.5rem;
+        }
+
+        .success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            color: #bbf7d0;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            color: #fecaca;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .cheat-container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .cheat-title {
+                font-size: 1.5rem;
+            }
+
+            .cheat-textarea {
+                min-height: 120px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cheat-container">
+        <h1 class="cheat-title">🚀 Skyward Ascent Cheat Tool</h1>
+        
+        <p class="cheat-description">
+            Use this tool to modify your game progress. Paste your exported game data below and apply changes directly to your browser's storage.
+        </p>
+
+        <div class="warning">
+            <div class="warning-title">⚠️ Warning</div>
+            <p>This tool directly modifies your game data. Make sure to backup your current progress by exporting it from the game first. Invalid data may corrupt your save file.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="cheatDataTextarea" class="form-label">Game Data (Base64 Encoded)</label>
+            <textarea 
+                id="cheatDataTextarea" 
+                class="cheat-textarea" 
+                placeholder="Paste your exported game data here...&#10;&#10;Example format:&#10;eyJ0aGVtZSI6ImRhcmstbW91bnRhaW5zIiwiYXVkaW8iOnRydWUsImhpZ2hTY29yZSI6MTAwMCwiY29pbnMiOjk5OTk5LCJvd25lZFNraW5zIjpbImRlZmF1bHQiLCJyZWQiLCJncmVlbiJdLCJvd25lZFRoZW1lcyI6WyJkYXJrLW1vdW50YWlucyIsInNub3ctcGVhayJdLCJjdXJyZW50U2tpbiI6ImRlZmF1bHQiLCJ2ZXJzaW9uIjoiMS4wIn0="></textarea>
+        </div>
+
+        <button id="applyCheatBtn" class="cheat-btn">Apply Cheat Data</button>
+
+        <div id="successMessage" class="success">
+            ✅ Game data applied successfully! Refresh the game to see changes.
+        </div>
+
+        <div id="errorMessage" class="error">
+            ❌ Failed to apply cheat data. Please check the format and try again.
+        </div>
+
+        <div class="footer">
+            <p>Skyward Ascent Cheat Tool v1.0</p>
+            <p>Use responsibly and have fun climbing! 🏔️</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const applyCheatBtn = document.getElementById('applyCheatBtn');
+            const cheatDataTextarea = document.getElementById('cheatDataTextarea');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Storage keys (must match the game's storage keys)
+            const STORAGE_KEYS = {
+                THEME: 'skywardAscent_theme',
+                AUDIO: 'skywardAscent_audio',
+                HIGH_SCORE: 'skywardAscent_highScore',
+                COINS: 'skywardAscent_coins',
+                OWNED_SKINS: 'skywardAscent_ownedSkins',
+                OWNED_THEMES: 'skywardAscent_ownedThemes',
+                CURRENT_SKIN: 'skywardAscent_currentSkin'
+            };
+
+            applyCheatBtn.addEventListener('click', function() {
+                const encodedData = cheatDataTextarea.value.trim();
+                
+                // Hide previous messages
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+
+                if (!encodedData) {
+                    showError('Please paste your game data first.');
+                    return;
+                }
+
+                try {
+                    // Decode and parse the data
+                    const jsonString = atob(encodedData);
+                    const gameData = JSON.parse(jsonString);
+
+                    // Validate data structure
+                    if (!gameData.version) {
+                        throw new Error('Invalid data format - missing version');
+                    }
+
+                    // Apply all data to localStorage
+                    if (gameData.theme) {
+                        localStorage.setItem(STORAGE_KEYS.THEME, gameData.theme);
+                    }
+                    
+                    if (typeof gameData.audio === 'boolean') {
+                        localStorage.setItem(STORAGE_KEYS.AUDIO, gameData.audio.toString());
+                    }
+                    
+                    if (typeof gameData.highScore === 'number') {
+                        localStorage.setItem(STORAGE_KEYS.HIGH_SCORE, gameData.highScore.toString());
+                    }
+                    
+                    if (typeof gameData.coins === 'number') {
+                        localStorage.setItem(STORAGE_KEYS.COINS, gameData.coins.toString());
+                    }
+                    
+                    if (Array.isArray(gameData.ownedSkins)) {
+                        localStorage.setItem(STORAGE_KEYS.OWNED_SKINS, JSON.stringify(gameData.ownedSkins));
+                    }
+                    
+                    if (Array.isArray(gameData.ownedThemes)) {
+                        localStorage.setItem(STORAGE_KEYS.OWNED_THEMES, JSON.stringify(gameData.ownedThemes));
+                    }
+                    
+                    if (gameData.currentSkin) {
+                        localStorage.setItem(STORAGE_KEYS.CURRENT_SKIN, gameData.currentSkin);
+                    }
+
+                    showSuccess('Game data applied successfully! Refresh the game to see changes.');
+                    
+                    // Clear the textarea
+                    cheatDataTextarea.value = '';
+
+                } catch (error) {
+                    console.error('Cheat application error:', error);
+                    showError('Failed to apply cheat data: ' + error.message);
+                }
+            });
+
+            function showSuccess(message) {
+                successMessage.textContent = '✅ ' + message;
+                successMessage.style.display = 'block';
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            }
+
+            function showError(message) {
+                errorMessage.textContent = '❌ ' + message;
+                errorMessage.style.display = 'block';
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+
+            // Add some example data for demonstration
+            const exampleData = {
+                theme: 'dark-mountains',
+                audio: true,
+                highScore: 10000,
+                coins: 99999,
+                ownedSkins: ['default', 'red', 'green', 'purple', 'orange', 'pink', 'gold', 'rainbow'],
+                ownedThemes: ['dark-mountains', 'snow-peak', 'sunset-cliff', 'alien-rock'],
+                currentSkin: 'rainbow',
+                version: '1.0'
+            };
+
+            // Add a button to generate example data
+            const generateExampleBtn = document.createElement('button');
+            generateExampleBtn.textContent = 'Generate Example Data';
+            generateExampleBtn.className = 'cheat-btn';
+            generateExampleBtn.style.marginTop = '1rem';
+            generateExampleBtn.style.background = '#059669';
+            generateExampleBtn.addEventListener('click', function() {
+                const encodedExample = btoa(JSON.stringify(exampleData));
+                cheatDataTextarea.value = encodedExample;
+            });
+
+            // Insert the button after the main button
+            applyCheatBtn.parentNode.insertBefore(generateExampleBtn, applyCheatBtn.nextSibling);
+        });
+    </script>
+</body>
+</html>
