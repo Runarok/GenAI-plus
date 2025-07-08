@@ -18,7 +18,6 @@ class NotePadApp {
         this.setupEventListeners();
         this.createNewTab();
         this.loadAutoSaveData();
-        this.autoResizeEditor();
     }
 
     setupEventListeners() {
@@ -52,7 +51,6 @@ class NotePadApp {
         
         editor.addEventListener('input', () => {
             this.updateStats();
-            this.autoResizeEditor();
             this.autoSave();
         });
 
@@ -206,7 +204,6 @@ class NotePadApp {
             document.getElementById('editor').value = tab.content;
             document.getElementById('fileName').value = tab.fileName;
             this.updateStats();
-            this.autoResizeEditor();
             this.renderTabs();
         }
     }
@@ -220,7 +217,6 @@ class NotePadApp {
             document.getElementById('editor').value = '';
             document.getElementById('fileName').value = 'untitled.txt';
             this.updateStats();
-            this.autoResizeEditor();
             this.renderTabs();
             return;
         }
@@ -258,17 +254,6 @@ class NotePadApp {
         
         document.getElementById('wordCount').textContent = `${words} word${words !== 1 ? 's' : ''}`;
         document.getElementById('charCount').textContent = `${chars} character${chars !== 1 ? 's' : ''}`;
-    }
-
-    autoResizeEditor() {
-        const editor = document.getElementById('editor');
-        if (editor) {
-            // Reset height to auto to get the correct scrollHeight
-            editor.style.height = 'auto';
-            // Set height to scrollHeight, but maintain minimum height
-            const newHeight = Math.max(400, editor.scrollHeight);
-            editor.style.height = newHeight + 'px';
-        }
     }
 
     downloadFile() {
