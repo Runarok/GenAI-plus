@@ -11,18 +11,18 @@
 /* Dark Theme (Default) */
 :root,
 [data-theme="dark"] {
-  --bg-primary: #0f0f0f;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #2a2a2a;
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-tertiary: #2d2d2d;
   --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --text-muted: #666666;
-  --border-color: #333333;
+  --text-secondary: #b3b3b3;
+  --text-muted: #737373;
+  --border-color: #404040;
   --accent-color: var(--primary-color);
-  --tab-active-bg: #2a2a2a;
-  --tab-hover-bg: #222222;
-  --editor-bg: #1a1a1a;
-  --modal-bg: #1a1a1a;
+  --tab-active-bg: #2d2d2d;
+  --tab-hover-bg: #262626;
+  --editor-bg: #1e1e1e;
+  --modal-bg: #1e1e1e;
   --modal-overlay: rgba(0, 0, 0, 0.8);
 }
 
@@ -268,13 +268,10 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow: hidden;
-  min-height: 400px;
-  resize: vertical;
 }
 
 #editor {
   width: 100%;
-  height: 100%;
   min-height: 400px;
   background-color: var(--editor-bg);
   color: var(--text-primary);
@@ -284,28 +281,12 @@ body {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 14px;
   line-height: 1.6;
-  resize: none;
+  overflow-y: auto;
   transition: background-color 0.3s ease;
 }
 
 #editor::placeholder {
   color: var(--text-muted);
-}
-
-.resize-handle {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(-45deg, transparent 0%, transparent 40%, var(--border-color) 50%, transparent 60%, transparent 100%);
-  cursor: se-resize;
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
-}
-
-.resize-handle:hover {
-  opacity: 1;
 }
 
 /* Buttons */
