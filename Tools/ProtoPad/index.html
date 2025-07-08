@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lightweight Notepad</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="app-title">
+                    <i class="fas fa-edit"></i>
+                    Notepad
+                </h1>
+            </div>
+            <div class="header-right">
+                <button id="themeToggle" class="btn btn-icon" title="Switch Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="settingsBtn" class="btn btn-icon" title="Settings (Ctrl+Shift+P)">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+            <div class="tabs-container" id="tabsContainer">
+                <!-- Tabs will be dynamically added here -->
+            </div>
+            <button id="newTabBtn" class="btn btn-sm new-tab-btn" title="New File (Ctrl+N)">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="editor-container">
+                <div class="file-info">
+                    <div class="file-name-container">
+                        <label for="fileName">File Name:</label>
+                        <input type="text" id="fileName" placeholder="untitled.txt" />
+                        <button id="downloadBtn" class="btn btn-primary" title="Download (Ctrl+S)">
+                            <i class="fas fa-download"></i>
+                            Download
+                        </button>
+                    </div>
+                    <div class="file-stats">
+                        <span id="wordCount">0 words</span>
+                        <span class="separator">•</span>
+                        <span id="charCount">0 characters</span>
+                    </div>
+                </div>
+                
+                <div class="editor-wrapper">
+                    <textarea 
+                        id="editor" 
+                        placeholder="Start typing your notes here..."
+                        spellcheck="true"
+                    ></textarea>
+                    <div class="resize-handle" id="resizeHandle"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button class="btn btn-icon close-modal" id="closeSettings">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-group">
+                        <h3>Theme</h3>
+                        <div class="theme-options">
+                            <button class="theme-btn" data-theme="dark">
+                                <div class="theme-preview dark-preview"></div>
+                                <span>Dark</span>
+                            </button>
+                            <button class="theme-btn" data-theme="light">
+                                <div class="theme-preview light-preview"></div>
+                                <span>Light</span>
+                            </button>
+                            <button class="theme-btn" data-theme="blue">
+                                <div class="theme-preview blue-preview"></div>
+                                <span>Ocean</span>
+                            </button>
+                            <button class="theme-btn" data-theme="purple">
+                                <div class="theme-preview purple-preview"></div>
+                                <span>Purple</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h3>File Metadata</h3>
+                        <div class="input-group">
+                            <label for="authorName">Author Name:</label>
+                            <input type="text" id="authorName" value="Runarok" />
+                        </div>
+                        <div class="input-group">
+                            <label for="includeWatermark">Include watermark in downloads:</label>
+                            <input type="checkbox" id="includeWatermark" checked />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <span>Made with ♥ by Runarok</span>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
