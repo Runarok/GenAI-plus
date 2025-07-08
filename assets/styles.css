@@ -257,10 +257,13 @@ main {
     padding: 0.55rem 0;
   }
   .footer-content {
-    flex-direction: column;
-    gap: 0.18em;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.25em;
+    justify-content: center;
+    text-align: center;
   }
   .footer-sep {
-    display: none;
+    display: inline;
   }
 }
