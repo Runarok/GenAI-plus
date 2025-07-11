@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symbolic Language Interpreter</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #7c3aed 100%);
+            color: #e2e8f0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .left-panel {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: #e879f9;
+            background: rgba(124, 58, 237, 0.2);
+            border-bottom: 2px solid #e879f9;
+        }
+
+        .tab:hover {
+            color: #e879f9;
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .tab-content {
+            flex: 1;
+            display: none;
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .code-editor, .css-editor {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            color: #e2e8f0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+        }
+
+        .code-editor:focus, .css-editor:focus {
+            border-color: #e879f9;
+            box-shadow: 0 0 0 2px rgba(232, 121, 249, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #e879f9, #7c3aed);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(232, 121, 249, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .right-panel {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .preview-header {
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.7);
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            font-weight: 600;
+            color: #e879f9;
+        }
+
+        .preview-content {
+            flex: 1;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #0ea5e9;
+            padding: 1rem;
+            overflow: auto;
+            position: relative;
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .pixel {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #0ea5e9;
+            box-shadow: 0 0 4px rgba(14, 165, 233, 0.5);
+        }
+
+        .output-text {
+            color: #0ea5e9;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            white-space: pre-wrap;
+            margin-bottom: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #e2e8f0;
+        }
+
+        .close {
+            color: #94a3b8;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #e879f9;
+        }
+
+        .info-section {
+            margin-bottom: 2rem;
+        }
+
+        .info-section h3 {
+            color: #e879f9;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .symbol-table {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .symbol {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #0ea5e9;
+        }
+
+        .symbol-desc {
+            background: rgba(30, 41, 59, 0.3);
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .settings {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 8px;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .setting-item input[type="checkbox"] {
+            accent-color: #e879f9;
+        }
+
+        .cursor-indicator {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #e879f9;
+            border: 2px solid #f3e8ff;
+            border-radius: 50%;
+            z-index: 10;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .stack-display {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            min-width: 150px;
+        }
+
+        .stack-title {
+            color: #e879f9;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stack-item {
+            background: rgba(124, 58, 237, 0.2);
+            padding: 0.25rem 0.5rem;
+            margin-bottom: 0.25rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            color: #f87171;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .line-numbers {
+            display: flex;
+            flex-direction: column;
+            background: rgba(30, 41, 59, 0.7);
+            padding: 1rem 0.5rem;
+            border-right: 1px solid rgba(124, 58, 237, 0.3);
+            color: #64748b;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .code-container {
+            display: flex;
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        .code-editor-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .current-line {
+            background: rgba(232, 121, 249, 0.1) !important;
+            color: #e879f9 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="tabs">
+                <button class="tab active" data-tab="code">Code</button>
+                <button class="tab" data-tab="css">CSS</button>
+            </div>
+            
+            <div class="tab-content active" id="code-tab">
+                <div class="code-container">
+                    <div class="line-numbers" id="line-numbers">1</div>
+                    <div class="code-editor-wrapper">
+                        <textarea class="code-editor" id="code-editor" placeholder="Enter your Symbolic code here...">># >>>>>>#
+#.#.#.#.#.#
+>.>.>.>.>v
+#.#.#.#.#.#
+v<<<<<<#
+#.#.#.#.#.#
+>.>.>.>.>v
+#.#.#.#.#.#</textarea>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn" id="run-btn">Run</button>
+                    <button class="btn btn-secondary" id="step-btn">Step</button>
+                    <button class="btn btn-secondary" id="stop-btn">Stop</button>
+                    <button class="btn btn-secondary" id="info-btn">Info</button>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="css-tab">
+                <textarea class="css-editor" id="css-editor" placeholder="Enter custom CSS to style the preview...">/* Custom CSS for preview */
+.pixel {
+    background: #00ff88;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+    border-radius: 2px;
+}
+
+.output-text {
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}</textarea>
+                
+                <div class="controls">
+                    <button class="btn" id="apply-css-btn">Apply CSS</button>
+                    <button class="btn btn-secondary" id="clear-css-btn">Clear CSS</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="preview-header">
+                Preview Output
+            </div>
+            <div class="preview-content" id="preview-content">
+                <div class="canvas-container" id="canvas-container">
+                    <div class="stack-display" id="stack-display">
+                        <div class="stack-title">Stack</div>
+                        <div id="stack-items"></div>
+                    </div>
+                    <div class="cursor-indicator" id="cursor-indicator"></div>
+                </div>
+                <div class="output-text" id="output-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">&times;</span>
+            <h2 style="color: #e879f9; margin-bottom: 2rem;">Symbolic Language Interpreter</h2>
+            
+            <div class="info-section">
+                <h3>What is Symbolic?</h3>
+                <p>Symbolic is an esoteric programming language that uses only symbolic characters (no letters, numbers, or emojis). It operates on a stack-based system with a 2D memory grid and supports drawing, movement, input/output, and control flow.</p>
+            </div>
+            
+            <div class="info-section">
+                <h3>Execution Model</h3>
+                <p>• <strong>Stack:</strong> A last-in-first-out data structure for temporary values</p>
+                <p>• <strong>2D Memory Grid:</strong> Infinite grid for placing blocks and data</p>
+                <p>• <strong>Cursor:</strong> Current position pointer starting at (0,0)</p>
+                <p>• <strong>Execution:</strong> Left-to-right, line-by-line processing</p>
+            </div>
+            
+            <div class="info-section">
+                <h3>Symbol Table</h3>
+                <div class="symbol-table">
+                    <div class="symbol">&gt;</div><div class="symbol-desc">Move cursor right</div>
+                    <div class="symbol">&lt;</div><div class="symbol-desc">Move cursor left</div>
+                    <div class="symbol">^</div><div class="symbol-desc">Move cursor up</div>
+                    <div class="symbol">v</div><div class="symbol-desc">Move cursor down</div>
+                    <div class="symbol">#</div><div class="symbol-desc">Draw block at cursor</div>
+                    <div class="symbol">.</div><div class="symbol-desc">Advance frame / tick</div>
+                    <div class="symbol">:</div><div class="symbol-desc">Duplicate top of stack</div>
+                    <div class="symbol">~</div><div class="symbol-desc">Negate top of stack</div>
+                    <div class="symbol">+</div><div class="symbol-desc">Push virtual 1 to stack</div>
+                    <div class="symbol">-</div><div class="symbol-desc">Pop top of stack</div>
+                    <div class="symbol">[ ]</div><div class="symbol-desc">Begin / end loop</div>
+                    <div class="symbol">/</div><div class="symbol-desc">Check input (←)</div>
+                    <div class="symbol">\</div><div class="symbol-desc">Check input (→)</div>
+                    <div class="symbol">!^</div><div class="symbol-desc">Bind button ↑</div>
+                    <div class="symbol">!v</div><div class="symbol-desc">Bind button ↓</div>
+                    <div class="symbol">!&lt;</div><div class="symbol-desc">Bind button ←</div>
+                    <div class="symbol">!&gt;</div><div class="symbol-desc">Bind button →</div>
+                    <div class="symbol">@</div><div class="symbol-desc">Output character at top of stack</div>
+                    <div class="symbol">$</div><div class="symbol-desc">Output numeric value</div>
+                    <div class="symbol">{ }</div><div class="symbol-desc">Set / get memory cell</div>
+                    <div class="symbol">_</div><div class="symbol-desc">Horizontal bar</div>
+                    <div class="symbol">=</div><div class="symbol-desc">Conditional jump</div>
+                    <div class="symbol">%</div><div class="symbol-desc">Random or chaos operation</div>
+                    <div class="symbol">&</div><div class="symbol-desc">Swap top two stack values</div>
+                    <div class="symbol">;</div><div class="symbol-desc">End of command / instruction</div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h3>Sample "Hello World" Program</h3>
+                <pre style="background: rgba(30, 41, 59, 0.5); padding: 1rem; border-radius: 8px; overflow-x: auto;">++++++++++[&gt;+++++++&gt;++++++++++&gt;+++&gt;+&lt;&lt;&lt;&lt;-]&gt;++.&gt;+.+++++++..+++.&gt;++.&lt;&lt;+++++++++++++++.&gt;.+++.------.--------.&gt;+.</pre>
+                <p style="margin-top: 1rem; color: #94a3b8;">This example demonstrates stack manipulation and character output.</p>
+            </div>
+            
+            <div class="info-section">
+                <h3>CSS Customization</h3>
+                <p>Use the CSS tab to customize the appearance of:</p>
+                <p>• <strong>.pixel</strong> - Drawn blocks in the grid</p>
+                <p>• <strong>.output-text</strong> - Text output styling</p>
+                <p>• <strong>.cursor-indicator</strong> - Cursor appearance</p>
+                <p>• <strong>.stack-display</strong> - Stack visualization</p>
+                <p>CSS changes are applied live to the preview panel.</p>
+            </div>
+            
+            <div class="settings">
+                <h3 style="color: #e879f9; margin-bottom: 1rem;">Settings</h3>
+                <div class="setting-item">
+                    <input type="checkbox" id="show-line-execution">
+                    <label for="show-line-execution">Show current execution line</label>
+                </div>
+                <div class="setting-item">
+                    <input type="checkbox" id="auto-step" checked>
+                    <label for="auto-step">Auto-step execution</label>
+                </div>
+                <div class="setting-item">
+                    <input type="checkbox" id="show-stack" checked>
+                    <label for="show-stack">Show stack display</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SymbolicInterpreter {
+            constructor() {
+                this.stack = [];
+                this.memory = new Map();
+                this.cursor = { x: 0, y: 0 };
+                this.programCounter = { x: 0, y: 0 };
+                this.code = [];
+                this.running = false;
+                this.output = '';
+                this.pixels = new Map();
+                this.inputBuffer = '';
+                this.buttonStates = { up: false, down: false, left: false, right: false };
+                this.loopStack = [];
+                this.executionSpeed = 100;
+                this.currentLine = 0;
+                this.showLineExecution = false;
+                this.autoStep = true;
+                this.showStack = true;
+                
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case 'ArrowUp': this.buttonStates.up = true; break;
+                        case 'ArrowDown': this.buttonStates.down = true; break;
+                        case 'ArrowLeft': this.buttonStates.left = true; break;
+                        case 'ArrowRight': this.buttonStates.right = true; break;
+                    }
+                });
+
+                document.addEventListener('keyup', (e) => {
+                    switch(e.key) {
+                        case 'ArrowUp': this.buttonStates.up = false; break;
+                        case 'ArrowDown': this.buttonStates.down = false; break;
+                        case 'ArrowLeft': this.buttonStates.left = false; break;
+                        case 'ArrowRight': this.buttonStates.right = false; break;
+                    }
+                });
+            }
+
+            reset() {
+                this.stack = [];
+                this.memory.clear();
+                this.cursor = { x: 0, y: 0 };
+                this.programCounter = { x: 0, y: 0 };
+                this.running = false;
+                this.output = '';
+                this.pixels.clear();
+                this.loopStack = [];
+                this.currentLine = 0;
+                this.updateDisplay();
+            }
+
+            parseCode(code) {
+                this.code = code.split('\n').map(line => line.split(''));
+                this.reset();
+            }
+
+            executeSymbol(symbol) {
+                switch(symbol) {
+                    case '>': this.cursor.x++; break;
+                    case '<': this.cursor.x--; break;
+                    case '^': this.cursor.y--; break;
+                    case 'v': this.cursor.y++; break;
+                    case '#': this.drawBlock(); break;
+                    case '.': this.tick(); break;
+                    case ':': this.duplicate(); break;
+                    case '~': this.negate(); break;
+                    case '+': this.push(1); break;
+                    case '-': this.pop(); break;
+                    case '[': this.beginLoop(); break;
+                    case ']': this.endLoop(); break;
+                    case '/': this.checkInputLeft(); break;
+                    case '\\': this.checkInputRight(); break;
+                    case '@': this.outputChar(); break;
+                    case '$': this.outputNum(); break;
+                    case '{': this.setMemory(); break;
+                    case '}': this.getMemory(); break;
+                    case '_': this.horizontalBar(); break;
+                    case '=': this.conditionalJump(); break;
+                    case '%': this.randomOp(); break;
+                    case '&': this.swap(); break;
+                    case ';': this.endInstruction(); break;
+                    case '!': this.handleBind(); break;
+                }
+            }
+
+            drawBlock() {
+                const key = `${this.cursor.x},${this.cursor.y}`;
+                this.pixels.set(key, { x: this.cursor.x, y: this.cursor.y });
+                this.renderPixel(this.cursor.x, this.cursor.y);
+            }
+
+            tick() {
+                this.updateDisplay();
+                if (this.autoStep) {
+                    setTimeout(() => this.step(), this.executionSpeed);
+                }
+            }
+
+            duplicate() {
+                if (this.stack.length > 0) {
+                    this.stack.push(this.stack[this.stack.length - 1]);
+                }
+            }
+
+            negate() {
+                if (this.stack.length > 0) {
+                    this.stack[this.stack.length - 1] = -this.stack[this.stack.length - 1];
+                }
+            }
+
+            push(value) {
+                this.stack.push(value);
+            }
+
+            pop() {
+                return this.stack.pop() || 0;
+            }
+
+            beginLoop() {
+                this.loopStack.push({
+                    x: this.programCounter.x,
+                    y: this.programCounter.y,
+                    condition: this.stack.length > 0 ? this.stack[this.stack.length - 1] : 0
+                });
+            }
+
+            endLoop() {
+                if (this.loopStack.length > 0) {
+                    const loop = this.loopStack[this.loopStack.length - 1];
+                    if (this.stack.length > 0 && this.stack[this.stack.length - 1] !== 0) {
+                        this.programCounter.x = loop.x;
+                        this.programCounter.y = loop.y;
+                    } else {
+                        this.loopStack.pop();
+                    }
+                }
+            }
+
+            checkInputLeft() {
+                this.push(this.buttonStates.left ? 1 : 0);
+            }
+
+            checkInputRight() {
+                this.push(this.buttonStates.right ? 1 : 0);
+            }
+
+            outputChar() {
+                const value = this.pop();
+                this.output += String.fromCharCode(value);
+                this.updateOutput();
+            }
+
+            outputNum() {
+                const value = this.pop();
+                this.output += value.toString();
+                this.updateOutput();
+            }
+
+            setMemory() {
+                const value = this.pop();
+                const key = `${this.cursor.x},${this.cursor.y}`;
+                this.memory.set(key, value);
+            }
+
+            getMemory() {
+                const key = `${this.cursor.x},${this.cursor.y}`;
+                this.push(this.memory.get(key) || 0);
+            }
+
+            horizontalBar() {
+                // Draw horizontal line
+                for (let i = 0; i < 10; i++) {
+                    const key = `${this.cursor.x + i},${this.cursor.y}`;
+                    this.pixels.set(key, { x: this.cursor.x + i, y: this.cursor.y });
+                    this.renderPixel(this.cursor.x + i, this.cursor.y);
+                }
+            }
+
+            conditionalJump() {
+                const condition = this.pop();
+                if (condition === 0) {
+                    this.programCounter.x += 2; // Skip next instruction
+                }
+            }
+
+            randomOp() {
+                this.push(Math.floor(Math.random() * 100));
+            }
+
+            swap() {
+                if (this.stack.length >= 2) {
+                    const a = this.stack.pop();
+                    const b = this.stack.pop();
+                    this.stack.push(a);
+                    this.stack.push(b);
+                }
+            }
+
+            endInstruction() {
+                // No operation - just a separator
+            }
+
+            handleBind() {
+                // Move to next character to get the direction
+                this.programCounter.x++;
+                if (this.programCounter.x >= this.code[this.programCounter.y].length) {
+                    this.programCounter.x = 0;
+                    this.programCounter.y++;
+                }
+                
+                if (this.programCounter.y < this.code.length) {
+                    const direction = this.code[this.programCounter.y][this.programCounter.x];
+                    switch(direction) {
+                        case '^': this.push(this.buttonStates.up ? 1 : 0); break;
+                        case 'v': this.push(this.buttonStates.down ? 1 : 0); break;
+                        case '<': this.push(this.buttonStates.left ? 1 : 0); break;
+                        case '>': this.push(this.buttonStates.right ? 1 : 0); break;
+                    }
+                }
+            }
+
+            step() {
+                if (!this.running || this.programCounter.y >= this.code.length) {
+                    this.running = false;
+                    return;
+                }
+
+                const line = this.code[this.programCounter.y];
+                if (this.programCounter.x >= line.length) {
+                    this.programCounter.x = 0;
+                    this.programCounter.y++;
+                    this.currentLine = this.programCounter.y;
+                    this.updateLineHighlight();
+                    if (this.programCounter.y >= this.code.length) {
+                        this.running = false;
+                        return;
+                    }
+                }
+
+                const symbol = line[this.programCounter.x];
+                this.executeSymbol(symbol);
+                
+                this.programCounter.x++;
+                this.updateDisplay();
+                
+                if (this.running && this.autoStep) {
+                    setTimeout(() => this.step(), this.executionSpeed);
+                }
+            }
+
+            run() {
+                this.running = true;
+                if (this.autoStep) {
+                    this.step();
+                }
+            }
+
+            stop() {
+                this.running = false;
+            }
+
+            renderPixel(x, y) {
+                const container = document.getElementById('canvas-container');
+                const pixel = document.createElement('div');
+                pixel.className = 'pixel';
+                pixel.style.left = `${50 + x * 10}px`;
+                pixel.style.top = `${50 + y * 10}px`;
+                pixel.id = `pixel-${x}-${y}`;
+                
+                // Remove existing pixel at this position
+                const existing = document.getElementById(`pixel-${x}-${y}`);
+                if (existing) {
+                    existing.remove();
+                }
+                
+                container.appendChild(pixel);
+            }
+
+            updateDisplay() {
+                // Update cursor position
+                const cursorIndicator = document.getElementById('cursor-indicator');
+                cursorIndicator.style.left = `${50 + this.cursor.x * 10}px`;
+                cursorIndicator.style.top = `${50 + this.cursor.y * 10}px`;
+                
+                // Update stack display
+                if (this.showStack) {
+                    this.updateStackDisplay();
+                }
+            }
+
+            updateStackDisplay() {
+                const stackItems = document.getElementById('stack-items');
+                stackItems.innerHTML = '';
+                
+                for (let i = this.stack.length - 1; i >= 0; i--) {
+                    const item = document.createElement('div');
+                    item.className = 'stack-item';
+                    item.textContent = this.stack[i];
+                    stackItems.appendChild(item);
+                }
+            }
+
+            updateOutput() {
+                const outputElement = document.getElementById('output-text');
+                outputElement.textContent = this.output;
+            }
+
+            updateLineHighlight() {
+                if (!this.showLineExecution) return;
+                
+                const lineNumbers = document.getElementById('line-numbers');
+                const children = lineNumbers.children;
+                
+                // Remove previous highlights
+                for (let child of children) {
+                    child.classList.remove('current-line');
+                }
+                
+                // Add highlight to current line
+                if (children[this.currentLine]) {
+                    children[this.currentLine].classList.add('current-line');
+                }
+            }
+
+            clearCanvas() {
+                const container = document.getElementById('canvas-container');
+                const pixels = container.querySelectorAll('.pixel');
+                pixels.forEach(pixel => pixel.remove());
+                this.pixels.clear();
+            }
+        }
+
+        // Initialize the interpreter
+        const interpreter = new SymbolicInterpreter();
+        let customStyle = null;
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+                
+                // Update tab buttons
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            });
+        });
+
+        // Update line numbers
+        function updateLineNumbers() {
+            const codeEditor = document.getElementById('code-editor');
+            const lineNumbers = document.getElementById('line-numbers');
+            const lines = codeEditor.value.split('\n');
+            
+            lineNumbers.innerHTML = '';
+            for (let i = 0; i < lines.length; i++) {
+                const lineNumber = document.createElement('div');
+                lineNumber.textContent = i + 1;
+                lineNumbers.appendChild(lineNumber);
+            }
+        }
+
+        // Control buttons
+        document.getElementById('run-btn').addEventListener('click', () => {
+            const code = document.getElementById('code-editor').value;
+            interpreter.parseCode(code);
+            interpreter.clearCanvas();
+            interpreter.run();
+        });
+
+        document.getElementById('step-btn').addEventListener('click', () => {
+            if (!interpreter.running) {
+                const code = document.getElementById('code-editor').value;
+                interpreter.parseCode(code);
+                interpreter.clearCanvas();
+                interpreter.running = true;
+            }
+            interpreter.step();
+        });
+
+        document.getElementById('stop-btn').addEventListener('click', () => {
+            interpreter.stop();
+        });
+
+        // CSS controls
+        document.getElementById('apply-css-btn').addEventListener('click', () => {
+            const cssCode = document.getElementById('css-editor').value;
+            
+            // Remove existing custom style
+            if (customStyle) {
+                customStyle.remove();
+            }
+            
+            // Add new custom style
+            customStyle = document.createElement('style');
+            customStyle.textContent = cssCode;
+            document.head.appendChild(customStyle);
+        });
+
+        document.getElementById('clear-css-btn').addEventListener('click', () => {
+            if (customStyle) {
+                customStyle.remove();
+                customStyle = null;
+            }
+        });
+
+        // Info modal
+        const modal = document.getElementById('info-modal');
+        const infoBtn = document.getElementById('info-btn');
+        const closeBtn = document.getElementById('close-modal');
+
+        infoBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Settings
+        document.getElementById('show-line-execution').addEventListener('change', (e) => {
+            interpreter.showLineExecution = e.target.checked;
+        });
+
+        document.getElementById('auto-step').addEventListener('change', (e) => {
+            interpreter.autoStep = e.target.checked;
+        });
+
+        document.getElementById('show-stack').addEventListener('change', (e) => {
+            interpreter.showStack = e.target.checked;
+            const stackDisplay = document.getElementById('stack-display');
+            stackDisplay.style.display = e.target.checked ? 'block' : 'none';
+        });
+
+        // Code editor events
+        document.getElementById('code-editor').addEventListener('input', updateLineNumbers);
+        document.getElementById('code-editor').addEventListener('scroll', () => {
+            const codeEditor = document.getElementById('code-editor');
+            const lineNumbers = document.getElementById('line-numbers');
+            lineNumbers.scrollTop = codeEditor.scrollTop;
+        });
+
+        // Initialize line numbers
+        updateLineNumbers();
+
+        // Initialize stack display
+        interpreter.updateStackDisplay();
+    </script>
+</body>
+</html>

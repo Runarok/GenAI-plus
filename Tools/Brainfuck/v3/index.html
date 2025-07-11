@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainFuck Interpreter</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">BrainFuck Programming Language</h1>
+        <div class="controls">
+            <button class="btn" id="run-btn">Run</button>
+            <button class="btn btn-secondary" id="step-btn">Step</button>
+            <button class="btn btn-secondary" id="stop-btn">Stop</button>
+            <button class="btn btn-info" id="info-btn">Info</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="left-panel">
+            <div class="panel-header">
+                Code Editor
+            </div>
+            <div class="code-container">
+                <div class="line-numbers" id="line-numbers">1</div>
+                <div class="code-editor-wrapper">
+                    <textarea class="code-editor" id="code-editor" placeholder="Enter your BrainFuck code here...">++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.</textarea>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="panel-header">
+                Output
+            </div>
+            <div class="preview-content" id="preview-content">
+                <div class="output-text" id="output-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">&times;</span>
+            <h2>BrainFuck Programming Language</h2>
+            
+            <div>
+                <h3>What is BrainFuck?</h3>
+                <p>BrainFuck is an esoteric programming language created in 1993 by Urban Müller. It is notable for its extreme minimalism, consisting of only eight simple commands. Despite its simplicity, it is Turing complete, meaning it can theoretically compute anything that is computable.</p>
+            </div>
+            
+            <div>
+                <h3>Execution Model</h3>
+                <p><strong>Memory Tape:</strong> An array of 30,000 byte cells, each initially set to zero</p>
+                <p><strong>Data Pointer:</strong> Points to the current cell in the memory tape, initially at position 0</p>
+                <p><strong>Execution:</strong> Commands are executed sequentially from left to right</p>
+            </div>
+            
+            <div>
+                <h3>Commands</h3>
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <tr><th>Command</th><th>Description</th></tr>
+                    <tr><td>&gt;</td><td>Move the data pointer to the right</td></tr>
+                    <tr><td>&lt;</td><td>Move the data pointer to the left</td></tr>
+                    <tr><td>+</td><td>Increment the byte at the data pointer</td></tr>
+                    <tr><td>-</td><td>Decrement the byte at the data pointer</td></tr>
+                    <tr><td>.</td><td>Output the byte at the data pointer as an ASCII character</td></tr>
+                    <tr><td>,</td><td>Input a byte and store it at the data pointer</td></tr>
+                    <tr><td>[</td><td>If the byte at the data pointer is zero, jump forward to the command after the matching ]</td></tr>
+                    <tr><td>]</td><td>If the byte at the data pointer is nonzero, jump back to the command after the matching [</td></tr>
+                </table>
+            </div>
+            
+            <div>
+                <h3>Sample "Hello World" Program</h3>
+                <pre>++++++++++[&gt;+++++++&gt;++++++++++&gt;+++&gt;+&lt;&lt;&lt;&lt;-]&gt;++.&gt;+.+++++++..+++.&gt;++.&lt;&lt;+++++++++++++++.&gt;.+++.------.--------.&gt;+.</pre>
+                <p>This program outputs "Hello World!" by manipulating memory cells and using loops to build the ASCII values for each character.</p>
+            </div>
+            
+            <div>
+                <h3>How to Program in BrainFuck</h3>
+                <h4>Basic Concepts:</h4>
+                <p>1. <strong>Memory Management:</strong> Use &gt; and &lt; to move between cells</p>
+                <p>2. <strong>Value Manipulation:</strong> Use + and - to change cell values</p>
+                <p>3. <strong>Loops:</strong> Use [ and ] to create loops that continue while the current cell is non-zero</p>
+                <p>4. <strong>Input/Output:</strong> Use . to output and , to input</p>
+                
+                <h4>Simple Examples:</h4>
+                <pre>+++++++++.    // Set cell to 9 and output (tab character)
++++++[&gt;+++++&lt;-]&gt;.    // Set cell to 25 and output
+&gt;++++++[&lt;++++++++&gt;-]&lt;.    // Set cell to 48 and output ('0')</pre>
+            </div>
+            
+            <div class="settings">
+                <h3>Settings</h3>
+                <div class="setting-item">
+                    <input type="checkbox" id="show-line-execution">
+                    <label for="show-line-execution">Show current execution line</label>
+                </div>
+                <div class="setting-item">
+                    <input type="checkbox" id="auto-step" checked>
+                    <label for="auto-step">Auto-step execution</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
