@@ -4,31 +4,39 @@ class BrainFuckInterpreter {
         this.pointer = 0;
         this.programCounter = 0;
         this.code = '';
+        this.bfCharToOriginalPosMap = [];
         this.running = false;
         this.stepping = false;
         this.output = '';
         this.executionSpeed = 200;
-        this.currentLine = 0;
+        this.currentLine = -1;
         this.showLineExecution = false;
         this.autoStep = true;
+        this.showMemory = true;
+        this.tapeDisplaySize = 20;
         this.stepTimeout = null;
         this.bracketMap = {};
+        this.isPaused = false;
     }
 
     reset() {
         this.tape = new Uint8Array(30000);
         this.pointer = 0;
         this.programCounter = 0;
+        this.bfCharToOriginalPosMap = [];
         this.running = false;
         this.stepping = false;
         this.output = '';
-        this.currentLine = 0;
+        this.currentLine = -1;
         this.bracketMap = {};
+        this.isPaused = false;
         if (this.stepTimeout) {
             clearTimeout(this.stepTimeout);
             this.stepTimeout = null;
         }
         this.updateOutput();
+        this.updateMemoryDisplay();
+        this.updateLineHighlight();
     }
 
     parseCode(code) {
@@ -37,7 +45,22 @@ class BrainFuckInterpreter {
         textarea.innerHTML = code;
         const decodedCode = textarea.value;
         
-        this.code = decodedCode.replace(/[^><+\-.,\[\]]/g, ''); // Keep only valid BrainFuck commands
+        this.code = '';
+        this.bfCharToOriginalPosMap = [];
+        
+        // Parse code and build mapping
+        const lines = decodedCode.split('\n');
+        for (let lineNum = 0; lineNum < lines.length; lineNum++) {
+            const line = lines[lineNum];
+            for (let charPos = 0; charPos < line.length; charPos++) {
+                const char = line[charPos];
+                if ('><+-.,[]'.includes(char)) {
+                    this.code += char;
+                    this.bfCharToOriginalPosMap.push(lineNum);
+                }
+            }
+        }
+        
         this.reset();
         this.buildBracketMap();
     }
@@ -100,14 +123,25 @@ class BrainFuckInterpreter {
         if (!this.running || this.programCounter >= this.code.length) {
             this.running = false;
             this.stepping = false;
+            this.isPaused = false;
+            this.currentLine = -1;
+            this.updateLineHighlight();
+            this.updateMemoryDisplay();
             return;
         }
 
         const symbol = this.code[this.programCounter];
         this.executeSymbol(symbol);
+        
+        // Update current line based on mapping
+        if (this.programCounter < this.bfCharToOriginalPosMap.length) {
+            this.currentLine = this.bfCharToOriginalPosMap[this.programCounter];
+        }
+        
         this.programCounter++;
         
         this.updateLineHighlight();
+        this.updateMemoryDisplay();
         
         if (this.running && this.autoStep && !this.stepping) {
             this.stepTimeout = setTimeout(() => this.step(), this.executionSpeed);
@@ -115,26 +149,45 @@ class BrainFuckInterpreter {
     }
 
     run() {
-        this.running = true;
-        this.stepping = false;
-        if (this.autoStep) {
-            this.step();
+        if (this.isPaused) {
+            // Continue from where we left off
+            this.running = true;
+            this.isPaused = false;
+            if (this.autoStep) {
+                this.step();
+            }
+        } else {
+            // Fresh start
+            const code = document.getElementById('code-editor').value;
+            this.parseCode(code);
+            this.running = true;
+            if (this.autoStep) {
+                this.step();
+            }
         }
     }
 
     singleStep() {
-        if (!this.running) {
+        // Stop any auto-stepping
+        this.stop();
+        
+        if (!this.code || this.programCounter >= this.code.length) {
             const code = document.getElementById('code-editor').value;
             this.parseCode(code);
             this.running = true;
+        } else if (!this.running) {
+            this.running = true;
         }
+        
         this.stepping = true;
         this.step();
+        this.isPaused = true;
     }
 
     stop() {
         this.running = false;
         this.stepping = false;
+        this.isPaused = true;
         if (this.stepTimeout) {
             clearTimeout(this.stepTimeout);
             this.stepTimeout = null;
@@ -143,39 +196,69 @@ class BrainFuckInterpreter {
 
     updateOutput() {
         const outputElement = document.getElementById('output-text');
-        outputElement.textContent = this.output;
-        outputElement.style.display = this.output ? 'block' : 'none';
+        outputElement.textContent = this.output || '';
     }
 
     updateLineHighlight() {
-        if (!this.showLineExecution) return;
-        
-        const codeEditor = document.getElementById('code-editor');
-        const code = codeEditor.value;
-        let lineNumber = 0;
-        let charCount = 0;
-        
-        for (let i = 0; i < this.programCounter && i < code.length; i++) {
-            if (code[i] === '\n') {
-                lineNumber++;
+        if (!this.showLineExecution || this.currentLine === -1) {
+            // Clear all highlights
+            const lineNumbers = document.getElementById('line-numbers');
+            const children = lineNumbers.children;
+            for (let child of children) {
+                child.classList.remove('current-line');
             }
+            return;
         }
-        
-        this.currentLine = lineNumber;
         
         const lineNumbers = document.getElementById('line-numbers');
         const children = lineNumbers.children;
         
         // Remove previous highlights
         for (let child of children) {
-            child.style.backgroundColor = '';
-            child.style.color = '';
+            child.classList.remove('current-line');
         }
         
         // Add highlight to current line
         if (children[this.currentLine]) {
-            children[this.currentLine].style.backgroundColor = '#ffff00';
-            children[this.currentLine].style.color = '#000000';
+            children[this.currentLine].classList.add('current-line');
+        }
+    }
+
+    updateMemoryDisplay() {
+        const memorySection = document.getElementById('memory-section');
+        
+        if (!this.showMemory) {
+            memorySection.classList.add('hidden');
+            return;
+        }
+
+        memorySection.classList.remove('hidden');
+        const memoryDisplay = document.getElementById('memory-display');
+        memoryDisplay.innerHTML = '';
+
+        // Calculate range to display
+        const halfSize = Math.floor(this.tapeDisplaySize / 2);
+        const start = Math.max(0, this.pointer - halfSize);
+        const end = Math.min(30000, start + this.tapeDisplaySize);
+
+        // Create memory cells
+        for (let i = start; i < end; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'memory-cell';
+            if (i === this.pointer) {
+                cell.classList.add('active-cell');
+            }
+            cell.innerHTML = `
+                <div class="cell-index">${i}</div>
+                <div class="cell-value">${this.tape[i]}</div>
+            `;
+            memoryDisplay.appendChild(cell);
+        }
+
+        // Update pointer indicator
+        const pointerIndicator = document.getElementById('pointer-indicator');
+        if (pointerIndicator) {
+            pointerIndicator.textContent = `Pointer: ${this.pointer}, Value: ${this.tape[this.pointer]}`;
         }
     }
 }
@@ -199,8 +282,6 @@ function updateLineNumbers() {
 
 // Control buttons
 document.getElementById('run-btn').addEventListener('click', () => {
-    const code = document.getElementById('code-editor').value;
-    interpreter.parseCode(code);
     interpreter.run();
 });
 
@@ -210,6 +291,16 @@ document.getElementById('step-btn').addEventListener('click', () => {
 
 document.getElementById('stop-btn').addEventListener('click', () => {
     interpreter.stop();
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+    interpreter.reset();
+});
+
+// Settings toggle
+document.getElementById('toggle-settings').addEventListener('click', () => {
+    const settingsPanel = document.getElementById('settings-panel');
+    settingsPanel.classList.toggle('show');
 });
 
 // Info modal
@@ -234,10 +325,21 @@ window.addEventListener('click', (e) => {
 // Settings
 document.getElementById('show-line-execution').addEventListener('change', (e) => {
     interpreter.showLineExecution = e.target.checked;
+    interpreter.updateLineHighlight();
 });
 
 document.getElementById('auto-step').addEventListener('change', (e) => {
     interpreter.autoStep = e.target.checked;
+});
+
+document.getElementById('show-memory').addEventListener('change', (e) => {
+    interpreter.showMemory = e.target.checked;
+    interpreter.updateMemoryDisplay();
+});
+
+document.getElementById('execution-speed').addEventListener('input', (e) => {
+    interpreter.executionSpeed = parseInt(e.target.value);
+    document.getElementById('speed-value').textContent = e.target.value + 'ms';
 });
 
 // Code editor events
@@ -248,8 +350,7 @@ document.getElementById('code-editor').addEventListener('scroll', () => {
     lineNumbers.scrollTop = codeEditor.scrollTop;
 });
 
-// Initialize line numbers
+// Initialize line numbers and displays
 updateLineNumbers();
-
-// Initialize output display
 interpreter.updateOutput();
+interpreter.updateMemoryDisplay();
