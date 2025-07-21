@@ -1,0 +1,36 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #0c0c0c;
+  color: #e0f7f4;
+  margin: 2rem;
+}
+
+h1, h2 {
+  color: #00ffd5;
+  margin-bottom: 1rem;
+}
+
+.achievement, .countdown {
+  background: #161616;
+  padding: 1rem;
+  border-left: 4px solid #00ffd5;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 255, 213, 0.1);
+}
+
+.achievement strong, .countdown strong {
+  font-size: 1.2rem;
+  color: #afffea;
+}
+
+.achievement span, .countdown span {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.95rem;
+  color: #c0ffef;
+}
+
+#countdowns {
+  margin-top: 2rem;
+}
