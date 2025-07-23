@@ -22,7 +22,8 @@ const menuData = [
   { label: "Bankers Algorithm", url: "College/Bankers Algorithm/index.html", desc: "Simulate Banker's deadlock avoidance." },
   { label: "Cipher Programs", url: "College/Cipher Programs/index.html", desc: "Demo classical cryptographic ciphers." },
   { label: "Internet of Things", url: "College/LABS/Internet of Things/index.html", desc: "Hands-on IoT projects and demos." },
-  { label: "Embedded Systems", url: "College/LABS/Embedded Systems/index.html", desc: "Explore embedded system projects." }
+  { label: "Embedded Systems", url: "College/LABS/Embedded Systems/index.html", desc: "Explore embedded system projects." },
+  { label: "Python Projects", url: "College/Python/index.html", desc: "Explore Simple Python projects." }
 ]
   },
   {

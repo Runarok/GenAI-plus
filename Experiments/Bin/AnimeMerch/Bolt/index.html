@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>E-Commerce Cart System</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body data-theme="dark">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shopping-bag">
+                    </i>
+                    E-Commerce Store
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon">
+                        </i>
+                    </button>
+                    <button class="cart-toggle" onclick="toggleCart()">
+                        <i class="fas fa-shopping-cart">
+                        </i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <!-- Main Container -->
+        <div class="main-container">
+            <!-- Controls -->
+            <div class="controls">
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label for="search">Search Products</label>
+                        <input type="text" id="search" placeholder="Search by name or description...">
+                    </div>
+                    <div class="control-group">
+                        <label for="category-filter">Filter by Category</label>
+                        <select id="category-filter">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="price-range">Max Price</label>
+                        <input type="range" id="price-range" min="0" max="2000" value="2000">
+                        <span id="price-display">$2000</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="sort-by">Sort By</label>
+                        <select id="sort-by">
+                            <option value="name">Name (A-Z)</option>
+                            <option value="name-desc">Name (Z-A)</option>
+                            <option value="price">Price (Low to High)</option>
+                            <option value="price-desc">Price (High to Low)</option>
+                            <option value="rating">Rating (Low to High)</option>
+                            <option value="rating-desc">Rating (High to Low)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- Products Section -->
+            <div class="products-section">
+                <div class="section-title">Products</div>
+                <div class="products-grid" id="products-grid">
+                    <div class="loading">
+                        <i class="fas fa-spinner">
+                        </i>
+                        Loading products...
+                    </div>
+                </div>
+            </div>
+            <!-- Order History -->
+            <div class="order-history" id="order-history" style="display: none;">
+                <div class="section-title">Order History</div>
+                <div id="orders-list">
+                </div>
+            </div>
+        </div>
+        <!-- Cart Sidebar -->
+        <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()">
+        </div>
+        <div class="cart-sidebar" id="cart-sidebar">
+            <div class="cart-header">
+                <div class="cart-title">Shopping Cart</div>
+                <button class="cart-close" onclick="toggleCart()">
+                    <i class="fas fa-times">
+                    </i>
+                </button>
+            </div>
+            <div class="cart-content" id="cart-content">
+                <div class="cart-empty">
+                    <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 1rem; color: var(--text-secondary);">
+                    </i>
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total" id="cart-total">Total: $0.00</div>
+                <div class="cart-actions">
+                    <button class="btn btn-warning btn-sm" onclick="undoLastAction()" id="undo-btn" disabled="">
+                        <i class="fas fa-undo">
+                        </i>
+                        Undo Last Action
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="clearCart()">
+                        <i class="fas fa-trash">
+                        </i>
+                        Clear Cart
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="exportCart()">
+                        <i class="fas fa-download">
+                        </i>
+                        Export Cart
+                    </button>
+                    <label for="import-cart" class="file-label">
+                        <i class="fas fa-upload">
+                        </i>
+                        Import Cart
+                    </label>
+                    <input type="file" id="import-cart" class="file-input" accept=".json" onchange="importCart(event)">
+                    <button class="btn btn-success" onclick="checkout()">
+                        <i class="fas fa-credit-card">
+                        </i>
+                        Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script src="script.js">
+        </script>
+    </body>
+</html>

@@ -1,0 +1,4521 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Python OOP + DSA Systems Showcase</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Prism.js CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body data-theme="dark">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-code">
+                    </i>
+                    Python OOP + DSA Showcase
+                </a>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon" id="theme-icon">
+                    </i>
+                    <span id="theme-text">Light Mode</span>
+                </button>
+            </div>
+        </nav>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container text-center">
+                <h1 class="hero-title">Python Systems Showcase</h1>
+                <p class="hero-subtitle">Exploring Object-Oriented Programming, Data Structures, and Algorithms through Real-World Applications</p>
+                <div class="stats-grid mt-4">
+                    <div class="stat-card">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Complete Systems</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">18+</div>
+                        <div class="stat-label">OOP Classes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12+</div>
+                        <div class="stat-label">Data Structures</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">Algorithms</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Main Content -->
+        <div class="container">
+            <!-- Project 1: Hospital Patient Queue System -->
+            <div class="project-card">
+                <div class="project-header" onclick="toggleProject('project1')">
+                    <div>
+                        <i class="fas fa-hospital project-icon">
+                        </i>
+                        <div class="d-inline-block">
+                            <h3 class="project-title">Hospital Patient Queue System</h3>
+                            <p class="project-description">Priority-based patient management with triage and appointment scheduling</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down collapse-icon">
+                    </i>
+                </div>
+                <div class="collapse" id="project1">
+                    <div class="project-content">
+                        <div class="section-tabs">
+                            <button class="section-tab active" onclick="showSection('project1', 'oop')">
+                                <i class="fas fa-cube">
+                                </i>
+                                OOP Classes
+                            </button>
+                            <button class="section-tab" onclick="showSection('project1', 'dsa')">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures
+                            </button>
+                            <button class="section-tab" onclick="showSection('project1', 'algo')">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Algorithms
+                            </button>
+                        </div>
+                        <div class="section-content" id="project1-oop">
+                            <h4 class="section-title">
+                                <i class="fas fa-cube">
+                                </i>
+                                Object-Oriented Programming Classes
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Patient Class</div>
+                                <pre>
+                                    <code class="language-python">class Patient:
+    def __init__(self, patient_id, name, age, condition, priority):
+        self.patient_id = patient_id
+        self.name = name
+        self.age = age
+        self.condition = condition
+        self.priority = priority  # 1-5 (1 = Critical, 5 = Minor)
+        self.arrival_time = datetime.now()
+        self.status = "waiting"
+    
+    def __lt__(self, other):
+        return self.priority < other.priority
+    
+    def update_status(self, new_status):
+        self.status = new_status
+        
+    def get_waiting_time(self):
+        return datetime.now() - self.arrival_time</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Doctor Class</div>
+                                <pre>
+                                    <code class="language-python">class Doctor:
+    def __init__(self, doctor_id, name, specialization, availability=True):
+        self.doctor_id = doctor_id
+        self.name = name
+        self.specialization = specialization
+        self.availability = availability
+        self.current_patient = None
+        self.patients_treated = 0
+    
+    def assign_patient(self, patient):
+        if self.availability:
+            self.current_patient = patient
+            self.availability = False
+            patient.update_status("in_treatment")
+            return True
+        return False
+    
+    def finish_treatment(self):
+        if self.current_patient:
+            self.current_patient.update_status("treated")
+            self.current_patient = None
+            self.availability = True
+            self.patients_treated += 1</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">QueueManager Class</div>
+                                <pre>
+                                    <code class="language-python">class QueueManager:
+    def __init__(self):
+        self.priority_queue = PriorityQueue()
+        self.patient_records = {}  # HashMap for O(1) lookup
+        self.doctors = {}
+        self.appointments = Queue()
+    
+    def register_patient(self, patient):
+        self.priority_queue.put(patient)
+        self.patient_records[patient.patient_id] = patient
+        
+    def assign_next_patient(self):
+        if not self.priority_queue.empty():
+            patient = self.priority_queue.get()
+            available_doctor = self.find_available_doctor()
+            if available_doctor:
+                available_doctor.assign_patient(patient)
+                return True
+        return False
+    
+    def find_available_doctor(self):
+        for doctor in self.doctors.values():
+            if doctor.availability:
+                return doctor
+        return None</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project1-dsa">
+                            <h4 class="section-title">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures Implementation
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Priority Queue for Triage</div>
+                                <pre>
+                                    <code class="language-python">import heapq
+from collections import deque
+
+class TriagePriorityQueue:
+    def __init__(self):
+        self.heap = []
+        self.entry_finder = {}
+        self.counter = 0
+    
+    def add_patient(self, patient):
+        """Add patient with priority (1=Critical, 5=Minor)"""
+        if patient.patient_id in self.entry_finder:
+            self.remove_patient(patient.patient_id)
+        
+        entry = [patient.priority, self.counter, patient]
+        self.entry_finder[patient.patient_id] = entry
+        heapq.heappush(self.heap, entry)
+        self.counter += 1
+    
+    def remove_patient(self, patient_id):
+        """Mark patient as removed"""
+        entry = self.entry_finder.pop(patient_id)
+        entry[-1] = 'REMOVED'
+    
+    def get_next_patient(self):
+        """Get highest priority patient"""
+        while self.heap:
+            priority, count, patient = heapq.heappop(self.heap)
+            if patient != 'REMOVED':
+                del self.entry_finder[patient.patient_id]
+                return patient
+        return None</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">HashMap for Patient Records</div>
+                                <pre>
+                                    <code class="language-python">class PatientHashMap:
+    def __init__(self, initial_capacity=16):
+        self.capacity = initial_capacity
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+    
+    def _hash(self, key):
+        """Simple hash function"""
+        return hash(key) % self.capacity
+    
+    def put(self, patient_id, patient):
+        """Store patient record"""
+        index = self._hash(patient_id)
+        bucket = self.buckets[index]
+        
+        for i, (key, value) in enumerate(bucket):
+            if key == patient_id:
+                bucket[i] = (patient_id, patient)
+                return
+        
+        bucket.append((patient_id, patient))
+        self.size += 1
+        
+        if self.size > self.capacity * 0.7:
+            self._resize()
+    
+    def get(self, patient_id):
+        """Retrieve patient record in O(1) average time"""
+        index = self._hash(patient_id)
+        bucket = self.buckets[index]
+        
+        for key, value in bucket:
+            if key == patient_id:
+                return value
+        return None
+    
+    def _resize(self):
+        """Resize hash map when load factor exceeds 0.7"""
+        old_buckets = self.buckets
+        self.capacity *= 2
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        
+        for bucket in old_buckets:
+            for key, value in bucket:
+                self.put(key, value)</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Appointment Queue</div>
+                                <pre>
+                                    <code class="language-python">class AppointmentQueue:
+    def __init__(self):
+        self.queue = deque()
+        self.scheduled_appointments = {}
+    
+    def schedule_appointment(self, patient, doctor, appointment_time):
+        """Add appointment to queue"""
+        appointment = {
+            'patient': patient,
+            'doctor': doctor,
+            'time': appointment_time,
+            'status': 'scheduled'
+        }
+        
+        self.queue.append(appointment)
+        self.scheduled_appointments[patient.patient_id] = appointment
+    
+    def get_next_appointment(self):
+        """Get next scheduled appointment"""
+        if self.queue:
+            return self.queue.popleft()
+        return None
+    
+    def cancel_appointment(self, patient_id):
+        """Cancel appointment and remove from queue"""
+        if patient_id in self.scheduled_appointments:
+            appointment = self.scheduled_appointments[patient_id]
+            appointment['status'] = 'cancelled'
+            del self.scheduled_appointments[patient_id]</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project1-algo">
+                            <h4 class="section-title">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Core Algorithms
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Triage Sorting Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def triage_sort_patients(patients):
+    """
+    Sort patients by priority using a stable sorting algorithm
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    """
+    def get_triage_score(patient):
+        # Calculate composite score based on multiple factors
+        base_priority = patient.priority
+        age_factor = 0.1 if patient.age > 65 else 0
+        waiting_time = patient.get_waiting_time().total_seconds() / 3600
+        
+        # Lower score = higher priority
+        return base_priority - age_factor - (waiting_time * 0.01)
+    
+    # Use merge sort for stable sorting
+    return merge_sort(patients, key=get_triage_score)
+
+def merge_sort(arr, key):
+    """Merge sort implementation for stable sorting"""
+    if len(arr) <= 1:
+        return arr
+    
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid], key)
+    right = merge_sort(arr[mid:], key)
+    
+    return merge(left, right, key)
+
+def merge(left, right, key):
+    """Merge two sorted arrays"""
+    result = []
+    i = j = 0
+    
+    while i < len(left) and j < len(right):
+        if key(left[i]) <= key(right[j]):
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Appointment Scheduling Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def schedule_appointments(patients, doctors, time_slots):
+    """
+    Optimize appointment scheduling using greedy algorithm
+    Time Complexity: O(n * m) where n = patients, m = doctors
+    """
+    scheduled = []
+    available_slots = {doctor.doctor_id: time_slots.copy() for doctor in doctors}
+    
+    # Sort patients by priority
+    sorted_patients = sorted(patients, key=lambda p: p.priority)
+    
+    for patient in sorted_patients:
+        best_doctor = None
+        best_time = None
+        
+        # Find best doctor-time combination
+        for doctor in doctors:
+            if doctor.specialization_matches(patient.condition):
+                slots = available_slots[doctor.doctor_id]
+                if slots:
+                    # Choose earliest available slot
+                    best_time = min(slots)
+                    best_doctor = doctor
+                    break
+        
+        if best_doctor and best_time:
+            # Schedule the appointment
+            appointment = Appointment(patient, best_doctor, best_time)
+            scheduled.append(appointment)
+            available_slots[best_doctor.doctor_id].remove(best_time)
+    
+    return scheduled
+
+class Appointment:
+    def __init__(self, patient, doctor, time):
+        self.patient = patient
+        self.doctor = doctor
+        self.time = time
+        self.status = "scheduled"</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Patient ID Lookup Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def binary_search_patient(sorted_patients, target_id):
+    """
+    Binary search for patient by ID
+    Time Complexity: O(log n)
+    Space Complexity: O(1)
+    """
+    left, right = 0, len(sorted_patients) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        mid_id = sorted_patients[mid].patient_id
+        
+        if mid_id == target_id:
+            return sorted_patients[mid]
+        elif mid_id < target_id:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return None
+
+def quick_patient_lookup(patient_records, patient_id):
+    """
+    O(1) average case lookup using hash table
+    """
+    return patient_records.get(patient_id)
+
+def fuzzy_search_patients(patients, search_term):
+    """
+    Fuzzy search for patients by name using edit distance
+    Time Complexity: O(n * m) where n = patients, m = search_term length
+    """
+    results = []
+    
+    for patient in patients:
+        similarity = calculate_similarity(patient.name.lower(), search_term.lower())
+        if similarity > 0.6:  # 60% similarity threshold
+            results.append((patient, similarity))
+    
+    # Sort by similarity score (descending)
+    return sorted(results, key=lambda x: x[1], reverse=True)
+
+def calculate_similarity(str1, str2):
+    """Calculate similarity using Levenshtein distance"""
+    distance = levenshtein_distance(str1, str2)
+    max_len = max(len(str1), len(str2))
+    return 1 - (distance / max_len) if max_len > 0 else 1</code>
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Project 2: Student Course Management System -->
+            <div class="project-card">
+                <div class="project-header collapsed" onclick="toggleProject('project2')">
+                    <div>
+                        <i class="fas fa-graduation-cap project-icon">
+                        </i>
+                        <div class="d-inline-block">
+                            <h3 class="project-title">Student Course Management System</h3>
+                            <p class="project-description">Academic management with course prerequisites and grade tracking</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down collapse-icon">
+                    </i>
+                </div>
+                <div class="collapse" id="project2">
+                    <div class="project-content">
+                        <div class="section-tabs">
+                            <button class="section-tab active" onclick="showSection('project2', 'oop')">
+                                <i class="fas fa-cube">
+                                </i>
+                                OOP Classes
+                            </button>
+                            <button class="section-tab" onclick="showSection('project2', 'dsa')">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures
+                            </button>
+                            <button class="section-tab" onclick="showSection('project2', 'algo')">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Algorithms
+                            </button>
+                        </div>
+                        <div class="section-content" id="project2-oop">
+                            <h4 class="section-title">
+                                <i class="fas fa-cube">
+                                </i>
+                                Object-Oriented Programming Classes
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Student Class</div>
+                                <pre>
+                                    <code class="language-python">class Student:
+    def __init__(self, student_id, name, email, major):
+        self.student_id = student_id
+        self.name = name
+        self.email = email
+        self.major = major
+        self.enrolled_courses = LinkedList()
+        self.grades = {}
+        self.gpa = 0.0
+        self.credit_hours = 0
+        
+    def enroll_in_course(self, course):
+        if self.check_prerequisites(course):
+            self.enrolled_courses.append(course)
+            course.add_student(self)
+            return True
+        return False
+    
+    def check_prerequisites(self, course):
+        completed_courses = {course_id for course_id in self.grades.keys() 
+                           if self.grades[course_id] >= 'D'}
+        return course.prerequisites.issubset(completed_courses)
+    
+    def add_grade(self, course_id, grade):
+        self.grades[course_id] = grade
+        self.calculate_gpa()
+    
+    def calculate_gpa(self):
+        if not self.grades:
+            return 0.0
+        
+        grade_points = {'A': 4.0, 'B': 3.0, 'C': 2.0, 'D': 1.0, 'F': 0.0}
+        total_points = sum(grade_points.get(grade, 0) for grade in self.grades.values())
+        self.gpa = total_points / len(self.grades)
+        return self.gpa</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Course Class</div>
+                                <pre>
+                                    <code class="language-python">class Course:
+    def __init__(self, course_id, name, instructor, credits, max_capacity):
+        self.course_id = course_id
+        self.name = name
+        self.instructor = instructor
+        self.credits = credits
+        self.max_capacity = max_capacity
+        self.enrolled_students = []
+        self.prerequisites = set()
+        self.schedule = None
+        self.syllabus = ""
+    
+    def add_student(self, student):
+        if len(self.enrolled_students) < self.max_capacity:
+            self.enrolled_students.append(student)
+            return True
+        return False
+    
+    def remove_student(self, student):
+        if student in self.enrolled_students:
+            self.enrolled_students.remove(student)
+            return True
+        return False
+    
+    def add_prerequisite(self, course_id):
+        self.prerequisites.add(course_id)
+    
+    def get_enrollment_count(self):
+        return len(self.enrolled_students)
+    
+    def is_full(self):
+        return len(self.enrolled_students) >= self.max_capacity</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Gradebook Class</div>
+                                <pre>
+                                    <code class="language-python">class Gradebook:
+    def __init__(self, course):
+        self.course = course
+        self.assignments = []
+        self.grades = {}  # {student_id: {assignment_id: grade}}
+        self.grade_weights = {}
+    
+    def add_assignment(self, assignment_id, name, max_points, weight):
+        assignment = {
+            'id': assignment_id,
+            'name': name,
+            'max_points': max_points,
+            'weight': weight
+        }
+        self.assignments.append(assignment)
+        self.grade_weights[assignment_id] = weight
+    
+    def record_grade(self, student_id, assignment_id, points_earned):
+        if student_id not in self.grades:
+            self.grades[student_id] = {}
+        
+        self.grades[student_id][assignment_id] = points_earned
+    
+    def calculate_student_grade(self, student_id):
+        if student_id not in self.grades:
+            return 0.0
+        
+        total_weighted_score = 0
+        total_weight = 0
+        
+        for assignment in self.assignments:
+            assignment_id = assignment['id']
+            if assignment_id in self.grades[student_id]:
+                points = self.grades[student_id][assignment_id]
+                percentage = points / assignment['max_points']
+                weight = self.grade_weights[assignment_id]
+                
+                total_weighted_score += percentage * weight
+                total_weight += weight
+        
+        return (total_weighted_score / total_weight) * 100 if total_weight > 0 else 0
+    
+    def get_class_statistics(self):
+        all_grades = [self.calculate_student_grade(sid) for sid in self.grades.keys()]
+        if not all_grades:
+            return {'mean': 0, 'median': 0, 'std_dev': 0}
+        
+        return {
+            'mean': sum(all_grades) / len(all_grades),
+            'median': sorted(all_grades)[len(all_grades) // 2],
+            'std_dev': self.calculate_std_dev(all_grades)
+        }</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project2-dsa">
+                            <h4 class="section-title">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures Implementation
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Linked List for Course Enrollments</div>
+                                <pre>
+                                    <code class="language-python">class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class EnrollmentLinkedList:
+    def __init__(self):
+        self.head = None
+        self.size = 0
+    
+    def append(self, course):
+        """Add course to end of enrollment list"""
+        new_node = Node(course)
+        if not self.head:
+            self.head = new_node
+        else:
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = new_node
+        self.size += 1
+    
+    def remove(self, course_id):
+        """Remove course by ID"""
+        if not self.head:
+            return False
+        
+        if self.head.data.course_id == course_id:
+            self.head = self.head.next
+            self.size -= 1
+            return True
+        
+        current = self.head
+        while current.next:
+            if current.next.data.course_id == course_id:
+                current.next = current.next.next
+                self.size -= 1
+                return True
+            current = current.next
+        return False
+    
+    def find(self, course_id):
+        """Find course by ID"""
+        current = self.head
+        while current:
+            if current.data.course_id == course_id:
+                return current.data
+            current = current.next
+        return None
+    
+    def to_list(self):
+        """Convert to Python list for easier iteration"""
+        result = []
+        current = self.head
+        while current:
+            result.append(current.data)
+            current = current.next
+        return result</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Graph for Course Prerequisites</div>
+                                <pre>
+                                    <code class="language-python">class CoursePrerequisiteGraph:
+    def __init__(self):
+        self.graph = {}  # Adjacency list representation
+        self.courses = {}  # Course objects storage
+    
+    def add_course(self, course):
+        """Add course to the graph"""
+        self.courses[course.course_id] = course
+        if course.course_id not in self.graph:
+            self.graph[course.course_id] = []
+    
+    def add_prerequisite(self, course_id, prerequisite_id):
+        """Add prerequisite relationship (prerequisite -> course)"""
+        if prerequisite_id not in self.graph:
+            self.graph[prerequisite_id] = []
+        if course_id not in self.graph:
+            self.graph[course_id] = []
+        
+        self.graph[prerequisite_id].append(course_id)
+    
+    def get_prerequisites(self, course_id):
+        """Get all direct prerequisites for a course"""
+        prerequisites = []
+        for prereq_id, dependent_courses in self.graph.items():
+            if course_id in dependent_courses:
+                prerequisites.append(prereq_id)
+        return prerequisites
+    
+    def get_course_sequence(self, target_course_id):
+        """Get optimal course sequence using topological sort"""
+        visited = set()
+        rec_stack = set()
+        result = []
+        
+        def dfs(course_id):
+            if course_id in rec_stack:
+                raise ValueError(f"Circular dependency detected involving {course_id}")
+            if course_id in visited:
+                return
+            
+            visited.add(course_id)
+            rec_stack.add(course_id)
+            
+            # Visit all prerequisites first
+            prerequisites = self.get_prerequisites(course_id)
+            for prereq in prerequisites:
+                dfs(prereq)
+            
+            rec_stack.remove(course_id)
+            result.append(course_id)
+        
+        dfs(target_course_id)
+        return result
+    
+    def validate_enrollment(self, student, course_id):
+        """Check if student can enroll based on completed prerequisites"""
+        completed_courses = set(student.grades.keys())
+        prerequisites = set(self.get_prerequisites(course_id))
+        return prerequisites.issubset(completed_courses)</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">HashMap for Student Records</div>
+                                <pre>
+                                    <code class="language-python">class StudentRecordHashMap:
+    def __init__(self, initial_capacity=32):
+        self.capacity = initial_capacity
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        self.load_factor_threshold = 0.75
+    
+    def _hash(self, student_id):
+        """Hash function for student IDs"""
+        return hash(student_id) % self.capacity
+    
+    def put(self, student_id, student):
+        """Store student record"""
+        if self.size >= self.capacity * self.load_factor_threshold:
+            self._resize()
+        
+        index = self._hash(student_id)
+        bucket = self.buckets[index]
+        
+        # Check if student already exists
+        for i, (key, value) in enumerate(bucket):
+            if key == student_id:
+                bucket[i] = (student_id, student)
+                return
+        
+        # Add new student
+        bucket.append((student_id, student))
+        self.size += 1
+    
+    def get(self, student_id):
+        """Retrieve student record in O(1) average time"""
+        index = self._hash(student_id)
+        bucket = self.buckets[index]
+        
+        for key, value in bucket:
+            if key == student_id:
+                return value
+        return None
+    
+    def remove(self, student_id):
+        """Remove student record"""
+        index = self._hash(student_id)
+        bucket = self.buckets[index]
+        
+        for i, (key, value) in enumerate(bucket):
+            if key == student_id:
+                del bucket[i]
+                self.size -= 1
+                return True
+        return False
+    
+    def get_all_students(self):
+        """Return all students in the system"""
+        students = []
+        for bucket in self.buckets:
+            for key, value in bucket:
+                students.append(value)
+        return students
+    
+    def _resize(self):
+        """Resize hash map when load factor exceeds threshold"""
+        old_buckets = self.buckets
+        self.capacity *= 2
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        
+        for bucket in old_buckets:
+            for key, value in bucket:
+                self.put(key, value)</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project2-algo">
+                            <h4 class="section-title">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Core Algorithms
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Grade Sorting and Ranking Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def quick_sort_students_by_gpa(students, low=0, high=None):
+    """
+    Sort students by GPA using quicksort
+    Time Complexity: O(n log n) average, O(n²) worst case
+    Space Complexity: O(log n)
+    """
+    if high is None:
+        high = len(students) - 1
+    
+    if low < high:
+        pivot_index = partition_by_gpa(students, low, high)
+        quick_sort_students_by_gpa(students, low, pivot_index - 1)
+        quick_sort_students_by_gpa(students, pivot_index + 1, high)
+    
+    return students
+
+def partition_by_gpa(students, low, high):
+    """Partition function for quicksort"""
+    pivot = students[high].gpa
+    i = low - 1
+    
+    for j in range(low, high):
+        if students[j].gpa >= pivot:  # Descending order (highest GPA first)
+            i += 1
+            students[i], students[j] = students[j], students[i]
+    
+    students[i + 1], students[high] = students[high], students[i + 1]
+    return i + 1
+
+def calculate_class_rankings(students):
+    """
+    Calculate rankings with tie handling
+    Time Complexity: O(n log n)
+    """
+    sorted_students = quick_sort_students_by_gpa(students.copy())
+    rankings = {}
+    current_rank = 1
+    
+    for i, student in enumerate(sorted_students):
+        if i > 0 and student.gpa < sorted_students[i-1].gpa:
+            current_rank = i + 1
+        rankings[student.student_id] = current_rank
+    
+    return rankings</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Course Scheduling Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def schedule_courses_greedy(courses, time_slots, rooms):
+    """
+    Schedule courses using greedy algorithm to minimize conflicts
+    Time Complexity: O(n²) where n is number of courses
+    """
+    scheduled = {}
+    course_conflicts = build_conflict_graph(courses)
+    
+    # Sort courses by number of conflicts (most constrained first)
+    sorted_courses = sorted(courses, 
+                           key=lambda c: len(course_conflicts.get(c.course_id, [])), 
+                           reverse=True)
+    
+    for course in sorted_courses:
+        best_slot = find_best_time_slot(course, time_slots, rooms, scheduled, course_conflicts)
+        if best_slot:
+            scheduled[course.course_id] = best_slot
+    
+    return scheduled
+
+def build_conflict_graph(courses):
+    """Build graph of courses that cannot be scheduled simultaneously"""
+    conflicts = {}
+    
+    for i, course1 in enumerate(courses):
+        conflicts[course1.course_id] = []
+        for j, course2 in enumerate(courses):
+            if i != j and courses_conflict(course1, course2):
+                conflicts[course1.course_id].append(course2.course_id)
+    
+    return conflicts
+
+def courses_conflict(course1, course2):
+    """Check if two courses have scheduling conflicts"""
+    # Same instructor cannot teach multiple courses simultaneously
+    if course1.instructor == course2.instructor:
+        return True
+    
+    # Check for student enrollment overlaps (students can't be in two places)
+    students1 = set(s.student_id for s in course1.enrolled_students)
+    students2 = set(s.student_id for s in course2.enrolled_students)
+    return len(students1.intersection(students2)) > 0
+
+def find_best_time_slot(course, time_slots, rooms, scheduled, conflicts):
+    """Find optimal time slot for a course"""
+    conflicting_courses = conflicts.get(course.course_id, [])
+    
+    for time_slot in time_slots:
+        for room in rooms:
+            if room.capacity >= len(course.enrolled_students):
+                slot_key = (time_slot, room.room_id)
+                
+                # Check if any conflicting course is already scheduled at this time
+                conflict_found = False
+                for conflict_course_id in conflicting_courses:
+                    if conflict_course_id in scheduled:
+                        if scheduled[conflict_course_id][0] == time_slot:
+                            conflict_found = True
+                            break
+                
+                if not conflict_found:
+                    return (time_slot, room.room_id)
+    
+    return None</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Student Search Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def binary_search_student_by_id(sorted_students, target_id):
+    """
+    Binary search for student by ID
+    Time Complexity: O(log n)
+    Prerequisite: Students must be sorted by ID
+    """
+    left, right = 0, len(sorted_students) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        mid_id = sorted_students[mid].student_id
+        
+        if mid_id == target_id:
+            return sorted_students[mid]
+        elif mid_id < target_id:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return None
+
+def multi_criteria_student_search(students, criteria):
+    """
+    Search students by multiple criteria using filtering
+    Time Complexity: O(n) where n is number of students
+    """
+    def matches_criteria(student):
+        for key, value in criteria.items():
+            if key == 'name' and value.lower() not in student.name.lower():
+                return False
+            elif key == 'major' and student.major != value:
+                return False
+            elif key == 'min_gpa' and student.gpa < value:
+                return False
+            elif key == 'max_gpa' and student.gpa > value:
+                return False
+            elif key == 'min_credits' and student.credit_hours < value:
+                return False
+        return True
+    
+    return [student for student in students if matches_criteria(student)]
+
+def search_students_by_course(students, course_id):
+    """
+    Find all students enrolled in a specific course
+    Time Complexity: O(n * m) where n = students, m = avg courses per student
+    """
+    enrolled_students = []
+    
+    for student in students:
+        if student.is_enrolled_in_course(course_id):
+            enrolled_students.append(student)
+    
+    return enrolled_students
+
+def fuzzy_search_students(students, search_term, threshold=0.6):
+    """
+    Fuzzy search for students using edit distance
+    Time Complexity: O(n * m * k) where n = students, m = name length, k = search term length
+    """
+    results = []
+    
+    for student in students:
+        name_similarity = calculate_levenshtein_similarity(
+            student.name.lower(), search_term.lower()
+        )
+        
+        if name_similarity >= threshold:
+            results.append((student, name_similarity))
+    
+    # Sort by similarity score (highest first)
+    return sorted(results, key=lambda x: x[1], reverse=True)</code>
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Project 3: E-commerce Cart & Order System -->
+            <div class="project-card">
+                <div class="project-header collapsed" onclick="toggleProject('project3')">
+                    <div>
+                        <i class="fas fa-shopping-cart project-icon">
+                        </i>
+                        <div class="d-inline-block">
+                            <h3 class="project-title">E-commerce Cart & Order System</h3>
+                            <p class="project-description">Shopping cart management with inventory tracking and order processing</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down collapse-icon">
+                    </i>
+                </div>
+                <div class="collapse" id="project3">
+                    <div class="project-content">
+                        <div class="section-tabs">
+                            <button class="section-tab active" onclick="showSection('project3', 'oop')">
+                                <i class="fas fa-cube">
+                                </i>
+                                OOP Classes
+                            </button>
+                            <button class="section-tab" onclick="showSection('project3', 'dsa')">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures
+                            </button>
+                            <button class="section-tab" onclick="showSection('project3', 'algo')">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Algorithms
+                            </button>
+                        </div>
+                        <div class="section-content" id="project3-oop">
+                            <h4 class="section-title">
+                                <i class="fas fa-cube">
+                                </i>
+                                Object-Oriented Programming Classes
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Product Class</div>
+                                <pre>
+                                    <code class="language-python">class Product:
+    def __init__(self, product_id, name, price, category, stock_quantity):
+        self.product_id = product_id
+        self.name = name
+        self.price = price
+        self.category = category
+        self.stock_quantity = stock_quantity
+        self.description = ""
+        self.images = []
+        self.reviews = []
+        self.average_rating = 0.0
+        self.created_at = datetime.now()
+    
+    def update_stock(self, quantity_change):
+        """Update stock quantity (positive for restock, negative for purchase)"""
+        new_quantity = self.stock_quantity + quantity_change
+        if new_quantity >= 0:
+            self.stock_quantity = new_quantity
+            return True
+        return False
+    
+    def add_review(self, customer_id, rating, comment):
+        """Add customer review and update average rating"""
+        review = {
+            'customer_id': customer_id,
+            'rating': rating,
+            'comment': comment,
+            'date': datetime.now()
+        }
+        self.reviews.append(review)
+        self.calculate_average_rating()
+    
+    def calculate_average_rating(self):
+        """Calculate average rating from all reviews"""
+        if self.reviews:
+            total_rating = sum(review['rating'] for review in self.reviews)
+            self.average_rating = total_rating / len(self.reviews)
+        return self.average_rating
+    
+    def is_in_stock(self, requested_quantity=1):
+        """Check if requested quantity is available"""
+        return self.stock_quantity >= requested_quantity</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">ShoppingCart Class</div>
+                                <pre>
+                                    <code class="language-python">class ShoppingCart:
+    def __init__(self, customer_id):
+        self.customer_id = customer_id
+        self.items = []  # List of cart items
+        self.undo_stack = Stack()  # For undo operations
+        self.created_at = datetime.now()
+        self.last_modified = datetime.now()
+    
+    def add_item(self, product, quantity):
+        """Add item to cart with undo support"""
+        # Save state for undo
+        self.undo_stack.push(('add', product.product_id, quantity))
+        
+        # Check if item already exists in cart
+        for item in self.items:
+            if item['product'].product_id == product.product_id:
+                item['quantity'] += quantity
+                self.last_modified = datetime.now()
+                return True
+        
+        # Add new item
+        cart_item = {
+            'product': product,
+            'quantity': quantity,
+            'added_at': datetime.now()
+        }
+        self.items.append(cart_item)
+        self.last_modified = datetime.now()
+        return True
+    
+    def remove_item(self, product_id, quantity=None):
+        """Remove item or reduce quantity"""
+        for i, item in enumerate(self.items):
+            if item['product'].product_id == product_id:
+                # Save state for undo
+                original_quantity = item['quantity']
+                self.undo_stack.push(('remove', product_id, original_quantity))
+                
+                if quantity is None or quantity >= item['quantity']:
+                    # Remove entire item
+                    del self.items[i]
+                else:
+                    # Reduce quantity
+                    item['quantity'] -= quantity
+                
+                self.last_modified = datetime.now()
+                return True
+        return False
+    
+    def undo_last_action(self):
+        """Undo the last cart modification"""
+        if not self.undo_stack.is_empty():
+            action, product_id, quantity = self.undo_stack.pop()
+            
+            if action == 'add':
+                self.remove_item(product_id, quantity)
+            elif action == 'remove':
+                # Find product and re-add
+                # Implementation would require product lookup
+                pass
+    
+    def calculate_total(self):
+        """Calculate total cart value"""
+        total = 0
+        for item in self.items:
+            total += item['product'].price * item['quantity']
+        return total
+    
+    def get_item_count(self):
+        """Get total number of items in cart"""
+        return sum(item['quantity'] for item in self.items)
+    
+    def clear_cart(self):
+        """Empty the cart"""
+        self.undo_stack.push(('clear', self.items.copy(), None))
+        self.items.clear()
+        self.last_modified = datetime.now()</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Order Class</div>
+                                <pre>
+                                    <code class="language-python">class Order:
+    def __init__(self, order_id, customer_id, cart_items):
+        self.order_id = order_id
+        self.customer_id = customer_id
+        self.items = cart_items.copy()
+        self.status = "pending"
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        self.total_amount = self.calculate_total()
+        self.shipping_address = None
+        self.payment_method = None
+        self.tracking_number = None
+    
+    def calculate_total(self):
+        """Calculate order total including tax and shipping"""
+        subtotal = sum(item['product'].price * item['quantity'] for item in self.items)
+        tax = subtotal * 0.08  # 8% tax
+        shipping = 10.0 if subtotal < 50 else 0  # Free shipping over $50
+        return subtotal + tax + shipping
+    
+    def update_status(self, new_status):
+        """Update order status with timestamp"""
+        valid_statuses = ["pending", "processing", "shipped", "delivered", "cancelled"]
+        if new_status in valid_statuses:
+            self.status = new_status
+            self.updated_at = datetime.now()
+            return True
+        return False
+    
+    def add_tracking_number(self, tracking_number):
+        """Add tracking number when order ships"""
+        if self.status == "shipped":
+            self.tracking_number = tracking_number
+            return True
+        return False
+    
+    def can_cancel(self):
+        """Check if order can be cancelled"""
+        return self.status in ["pending", "processing"]
+    
+    def get_order_summary(self):
+        """Get formatted order summary"""
+        return {
+            'order_id': self.order_id,
+            'customer_id': self.customer_id,
+            'status': self.status,
+            'total': self.total_amount,
+            'item_count': len(self.items),
+            'created_at': self.created_at,
+            'tracking_number': self.tracking_number
+        }</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project3-dsa">
+                            <h4 class="section-title">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures Implementation
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Stack for Undo Operations</div>
+                                <pre>
+                                    <code class="language-python">class UndoStack:
+    def __init__(self, max_size=50):
+        self.stack = []
+        self.max_size = max_size
+    
+    def push(self, action):
+        """Push action onto stack for undo functionality"""
+        if len(self.stack) >= self.max_size:
+            # Remove oldest action if stack is full
+            self.stack.pop(0)
+        
+        self.stack.append(action)
+    
+    def pop(self):
+        """Pop most recent action from stack"""
+        if not self.is_empty():
+            return self.stack.pop()
+        return None
+    
+    def peek(self):
+        """Look at top action without removing it"""
+        if not self.is_empty():
+            return self.stack[-1]
+        return None
+    
+    def is_empty(self):
+        """Check if stack is empty"""
+        return len(self.stack) == 0
+    
+    def size(self):
+        """Get current stack size"""
+        return len(self.stack)
+    
+    def clear(self):
+        """Clear all actions from stack"""
+        self.stack.clear()
+
+class CartActionManager:
+    def __init__(self):
+        self.undo_stack = UndoStack()
+        self.redo_stack = UndoStack()
+    
+    def execute_action(self, action_type, cart, *args):
+        """Execute action and save for undo"""
+        # Save current state before action
+        cart_state = self.save_cart_state(cart)
+        self.undo_stack.push((action_type, cart_state, args))
+        
+        # Clear redo stack when new action is performed
+        self.redo_stack.clear()
+        
+        # Execute the action
+        if action_type == 'add':
+            return cart.add_item(*args)
+        elif action_type == 'remove':
+            return cart.remove_item(*args)
+        elif action_type == 'clear':
+            return cart.clear_cart()
+    
+    def undo(self, cart):
+        """Undo last action"""
+        if not self.undo_stack.is_empty():
+            action_type, cart_state, args = self.undo_stack.pop()
+            
+            # Save current state for redo
+            current_state = self.save_cart_state(cart)
+            self.redo_stack.push((action_type, current_state, args))
+            
+            # Restore previous state
+            self.restore_cart_state(cart, cart_state)
+            return True
+        return False
+    
+    def redo(self, cart):
+        """Redo last undone action"""
+        if not self.redo_stack.is_empty():
+            action_type, cart_state, args = self.redo_stack.pop()
+            
+            # Save current state for undo
+            current_state = self.save_cart_state(cart)
+            self.undo_stack.push((action_type, current_state, args))
+            
+            # Execute the action again
+            return self.execute_action(action_type, cart, *args)</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Queue for Order Processing</div>
+                                <pre>
+                                    <code class="language-python">from collections import deque
+import threading
+
+class OrderProcessingQueue:
+    def __init__(self):
+        self.queue = deque()
+        self.processing_queue = deque()
+        self.completed_orders = []
+        self.failed_orders = []
+        self.lock = threading.Lock()
+    
+    def add_order(self, order):
+        """Add new order to processing queue"""
+        with self.lock:
+            self.queue.append(order)
+            order.update_status("queued")
+    
+    def get_next_order(self):
+        """Get next order for processing"""
+        with self.lock:
+            if self.queue:
+                order = self.queue.popleft()
+                self.processing_queue.append(order)
+                order.update_status("processing")
+                return order
+        return None
+    
+    def complete_order(self, order):
+        """Mark order as completed"""
+        with self.lock:
+            if order in self.processing_queue:
+                self.processing_queue.remove(order)
+                self.completed_orders.append(order)
+                order.update_status("completed")
+                return True
+        return False
+    
+    def fail_order(self, order, reason):
+        """Mark order as failed"""
+        with self.lock:
+            if order in self.processing_queue:
+                self.processing_queue.remove(order)
+                order.failure_reason = reason
+                self.failed_orders.append(order)
+                order.update_status("failed")
+                return True
+        return False
+    
+    def get_queue_status(self):
+        """Get current queue statistics"""
+        with self.lock:
+            return {
+                'pending': len(self.queue),
+                'processing': len(self.processing_queue),
+                'completed': len(self.completed_orders),
+                'failed': len(self.failed_orders)
+            }
+    
+    def get_estimated_wait_time(self, order_id):
+        """Estimate wait time for a specific order"""
+        with self.lock:
+            position = 0
+            for i, order in enumerate(self.queue):
+                if order.order_id == order_id:
+                    position = i
+                    break
+            
+            # Assume 5 minutes per order processing time
+            estimated_minutes = position * 5
+            return estimated_minutes</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">HashMap for Inventory Management</div>
+                                <pre>
+                                    <code class="language-python">class InventoryHashMap:
+    def __init__(self, initial_capacity=64):
+        self.capacity = initial_capacity
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        self.load_factor_threshold = 0.75
+    
+    def _hash(self, product_id):
+        """Hash function for product IDs"""
+        return hash(product_id) % self.capacity
+    
+    def put(self, product_id, product):
+        """Store product in inventory"""
+        if self.size >= self.capacity * self.load_factor_threshold:
+            self._resize()
+        
+        index = self._hash(product_id)
+        bucket = self.buckets[index]
+        
+        # Update existing product
+        for i, (key, value) in enumerate(bucket):
+            if key == product_id:
+                bucket[i] = (product_id, product)
+                return
+        
+        # Add new product
+        bucket.append((product_id, product))
+        self.size += 1
+    
+    def get(self, product_id):
+        """Get product from inventory"""
+        index = self._hash(product_id)
+        bucket = self.buckets[index]
+        
+        for key, value in bucket:
+            if key == product_id:
+                return value
+        return None
+    
+    def update_stock(self, product_id, quantity_change):
+        """Update product stock quantity"""
+        product = self.get(product_id)
+        if product:
+            return product.update_stock(quantity_change)
+        return False
+    
+    def get_low_stock_products(self, threshold=10):
+        """Get products with stock below threshold"""
+        low_stock = []
+        for bucket in self.buckets:
+            for key, product in bucket:
+                if product.stock_quantity <= threshold:
+                    low_stock.append(product)
+        return low_stock
+    
+    def get_products_by_category(self, category):
+        """Get all products in a specific category"""
+        products = []
+        for bucket in self.buckets:
+            for key, product in bucket:
+                if product.category == category:
+                    products.append(product)
+        return products
+    
+    def search_products(self, search_term):
+        """Search products by name (case-insensitive)"""
+        results = []
+        search_lower = search_term.lower()
+        
+        for bucket in self.buckets:
+            for key, product in bucket:
+                if search_lower in product.name.lower():
+                    results.append(product)
+        return results
+    
+    def _resize(self):
+        """Resize hash map when load factor exceeds threshold"""
+        old_buckets = self.buckets
+        self.capacity *= 2
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        
+        for bucket in old_buckets:
+            for key, value in bucket:
+                self.put(key, value)</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project3-algo">
+                            <h4 class="section-title">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Core Algorithms
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Product Filtering and Search Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def advanced_product_filter(products, filters):
+    """
+    Filter products based on multiple criteria
+    Time Complexity: O(n) where n is number of products
+    """
+    def matches_filters(product):
+        # Price range filter
+        if 'min_price' in filters and product.price < filters['min_price']:
+            return False
+        if 'max_price' in filters and product.price > filters['max_price']:
+            return False
+        
+        # Category filter
+        if 'category' in filters and product.category != filters['category']:
+            return False
+        
+        # Rating filter
+        if 'min_rating' in filters and product.average_rating < filters['min_rating']:
+            return False
+        
+        # Stock availability filter
+        if 'in_stock_only' in filters and filters['in_stock_only']:
+            if product.stock_quantity <= 0:
+                return False
+        
+        # Search term filter (name and description)
+        if 'search_term' in filters:
+            term = filters['search_term'].lower()
+            if (term not in product.name.lower() and 
+                term not in product.description.lower()):
+                return False
+        
+        return True
+    
+    return [product for product in products if matches_filters(product)]
+
+def fuzzy_search_products(products, search_term, threshold=0.6):
+    """
+    Fuzzy search for products using string similarity
+    Time Complexity: O(n * m) where n = products, m = search term length
+    """
+    results = []
+    search_lower = search_term.lower()
+    
+    for product in products:
+        # Calculate similarity scores for name and description
+        name_similarity = calculate_similarity(product.name.lower(), search_lower)
+        desc_similarity = calculate_similarity(product.description.lower(), search_lower)
+        
+        # Use the higher similarity score
+        max_similarity = max(name_similarity, desc_similarity)
+        
+        if max_similarity >= threshold:
+            results.append((product, max_similarity))
+    
+    # Sort by similarity score (highest first)
+    return sorted(results, key=lambda x: x[1], reverse=True)
+
+def search_products_with_autocomplete(products, partial_term, max_suggestions=10):
+    """
+    Generate autocomplete suggestions for product search
+    Time Complexity: O(n) where n is number of products
+    """
+    suggestions = set()
+    partial_lower = partial_term.lower()
+    
+    for product in products:
+        words = product.name.lower().split()
+        for word in words:
+            if word.startswith(partial_lower):
+                suggestions.add(word)
+                if len(suggestions) >= max_suggestions:
+                    break
+    
+    return sorted(list(suggestions))</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Price Sorting and Comparison Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def merge_sort_products_by_price(products, ascending=True):
+    """
+    Sort products by price using merge sort (stable)
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+    """
+    if len(products) <= 1:
+        return products
+    
+    mid = len(products) // 2
+    left = merge_sort_products_by_price(products[:mid], ascending)
+    right = merge_sort_products_by_price(products[mid:], ascending)
+    
+    return merge_products(left, right, ascending)
+
+def merge_products(left, right, ascending):
+    """Merge two sorted arrays of products"""
+    result = []
+    i = j = 0
+    
+    while i < len(left) and j < len(right):
+        if ascending:
+            condition = left[i].price <= right[j].price
+        else:
+            condition = left[i].price >= right[j].price
+        
+        if condition:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+def find_products_in_price_range(sorted_products, min_price, max_price):
+    """
+    Binary search for products within price range
+    Time Complexity: O(log n) for finding bounds + O(k) for extracting results
+    Prerequisite: Products must be sorted by price
+    """
+    def binary_search_price(arr, target_price, find_first=True):
+        left, right = 0, len(arr) - 1
+        result = -1
+        
+        while left <= right:
+            mid = (left + right) // 2
+            
+            if find_first:
+                if arr[mid].price >= target_price:
+                    result = mid
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            else:
+                if arr[mid].price <= target_price:
+                    result = mid
+                    left = mid + 1
+                else:
+                    right = mid - 1
+        
+        return result
+    
+    start_index = binary_search_price(sorted_products, min_price, True)
+    end_index = binary_search_price(sorted_products, max_price, False)
+    
+    if start_index == -1 or end_index == -1:
+        return []
+    
+    return sorted_products[start_index:end_index + 1]
+
+def calculate_price_statistics(products):
+    """Calculate price statistics for product analysis"""
+    if not products:
+        return {}
+    
+    prices = [product.price for product in products]
+    prices.sort()
+    
+    n = len(prices)
+    mean_price = sum(prices) / n
+    median_price = prices[n // 2] if n % 2 == 1 else (prices[n // 2 - 1] + prices[n // 2]) / 2
+    
+    # Calculate standard deviation
+    variance = sum((price - mean_price) ** 2 for price in prices) / n
+    std_dev = variance ** 0.5
+    
+    return {
+        'min': prices[0],
+        'max': prices[-1],
+        'mean': mean_price,
+        'median': median_price,
+        'std_dev': std_dev,
+        'count': n
+    }</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Cart Optimization Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def optimize_cart_for_shipping(cart_items, shipping_tiers):
+    """
+    Optimize cart to minimize shipping costs
+    Time Complexity: O(n) where n is number of cart items
+    """
+    current_total = sum(item['product'].price * item['quantity'] for item in cart_items)
+    
+    # Find the next shipping tier threshold
+    next_tier = None
+    for tier in sorted(shipping_tiers, key=lambda x: x['threshold']):
+        if current_total < tier['threshold']:
+            next_tier = tier
+            break
+    
+    if next_tier:
+        amount_needed = next_tier['threshold'] - current_total
+        savings = calculate_shipping_savings(current_total, next_tier)
+        
+        return {
+            'current_total': current_total,
+            'amount_needed': amount_needed,
+            'potential_savings': savings,
+            'recommendation': f"Add ${amount_needed:.2f} more to qualify for {next_tier['name']}"
+        }
+    
+    return {'message': 'You qualify for the best shipping rate!'}
+
+def suggest_related_products(cart_items, all_products, max_suggestions=5):
+    """
+    Suggest related products based on cart contents
+    Time Complexity: O(n * m) where n = all products, m = cart items
+    """
+    cart_categories = set()
+    cart_product_ids = set()
+    
+    # Extract categories and product IDs from cart
+    for item in cart_items:
+        cart_categories.add(item['product'].category)
+        cart_product_ids.add(item['product'].product_id)
+    
+    suggestions = []
+    
+    for product in all_products:
+        if product.product_id not in cart_product_ids:
+            score = 0
+            
+            # Higher score for same category
+            if product.category in cart_categories:
+                score += 3
+            
+            # Higher score for highly rated products
+            score += product.average_rating
+            
+            # Higher score for products frequently bought together
+            score += calculate_co_purchase_score(product, cart_items)
+            
+            suggestions.append((product, score))
+    
+    # Sort by score and return top suggestions
+    suggestions.sort(key=lambda x: x[1], reverse=True)
+    return [product for product, score in suggestions[:max_suggestions]]
+
+def calculate_dynamic_pricing(product, demand_factor, inventory_level):
+    """
+    Calculate dynamic pricing based on demand and inventory
+    Time Complexity: O(1)
+    """
+    base_price = product.price
+    
+    # Demand-based adjustment (higher demand = higher price)
+    demand_multiplier = 1 + (demand_factor - 1) * 0.2
+    
+    # Inventory-based adjustment (low inventory = higher price)
+    if inventory_level < 10:
+        inventory_multiplier = 1.1
+    elif inventory_level > 100:
+        inventory_multiplier = 0.95
+    else:
+        inventory_multiplier = 1.0
+    
+    adjusted_price = base_price * demand_multiplier * inventory_multiplier
+    
+    # Ensure price doesn't exceed certain bounds
+    max_price = base_price * 1.5
+    min_price = base_price * 0.8
+    
+    return max(min_price, min(adjusted_price, max_price))</code>
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Project 4: Library Management System -->
+            <div class="project-card">
+                <div class="project-header collapsed" onclick="toggleProject('project4')">
+                    <div>
+                        <i class="fas fa-book project-icon">
+                        </i>
+                        <div class="d-inline-block">
+                            <h3 class="project-title">Library Management System</h3>
+                            <p class="project-description">Book lending system with member management and overdue tracking</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down collapse-icon">
+                    </i>
+                </div>
+                <div class="collapse" id="project4">
+                    <div class="project-content">
+                        <div class="section-tabs">
+                            <button class="section-tab active" onclick="showSection('project4', 'oop')">
+                                <i class="fas fa-cube">
+                                </i>
+                                OOP Classes
+                            </button>
+                            <button class="section-tab" onclick="showSection('project4', 'dsa')">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures
+                            </button>
+                            <button class="section-tab" onclick="showSection('project4', 'algo')">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Algorithms
+                            </button>
+                        </div>
+                        <div class="section-content" id="project4-oop">
+                            <h4 class="section-title">
+                                <i class="fas fa-cube">
+                                </i>
+                                Object-Oriented Programming Classes
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Book Class</div>
+                                <pre>
+                                    <code class="language-python">class Book:
+    def __init__(self, isbn, title, author, publisher, year_published):
+        self.isbn = isbn
+        self.title = title
+        self.author = author
+        self.publisher = publisher
+        self.year_published = year_published
+        self.genre = ""
+        self.description = ""
+        self.total_copies = 1
+        self.available_copies = 1
+        self.location = ""  # Shelf location
+        self.added_date = datetime.now()
+        self.borrowed_count = 0
+    
+    def checkout(self):
+        """Check out a copy of the book"""
+        if self.available_copies > 0:
+            self.available_copies -= 1
+            self.borrowed_count += 1
+            return True
+        return False
+    
+    def checkin(self):
+        """Return a copy of the book"""
+        if self.available_copies < self.total_copies:
+            self.available_copies += 1
+            return True
+        return False
+    
+    def is_available(self):
+        """Check if book is available for checkout"""
+        return self.available_copies > 0
+    
+    def add_copies(self, count):
+        """Add more copies of the book"""
+        self.total_copies += count
+        self.available_copies += count
+    
+    def get_popularity_score(self):
+        """Calculate popularity based on borrow frequency"""
+        days_since_added = (datetime.now() - self.added_date).days
+        if days_since_added == 0:
+            return 0
+        return self.borrowed_count / days_since_added</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Member Class</div>
+                                <pre>
+                                    <code class="language-python">class Member:
+    def __init__(self, member_id, name, email, phone, address):
+        self.member_id = member_id
+        self.name = name
+        self.email = email
+        self.phone = phone
+        self.address = address
+        self.membership_date = datetime.now()
+        self.membership_type = "regular"  # regular, premium, student
+        self.borrowed_books = []
+        self.borrowing_history = LinkedList()
+        self.outstanding_fines = 0.0
+        self.max_books_allowed = 5
+        self.is_active = True
+    
+    def can_borrow_book(self):
+        """Check if member can borrow more books"""
+        return (len(self.borrowed_books) < self.max_books_allowed and 
+                self.outstanding_fines < 10.0 and 
+                self.is_active)
+    
+    def borrow_book(self, book, due_date):
+        """Borrow a book"""
+        if self.can_borrow_book() and book.is_available():
+            loan = Loan(self.member_id, book.isbn, due_date)
+            self.borrowed_books.append(loan)
+            self.borrowing_history.append(loan)
+            book.checkout()
+            return loan
+        return None
+    
+    def return_book(self, isbn):
+        """Return a borrowed book"""
+        for i, loan in enumerate(self.borrowed_books):
+            if loan.book_isbn == isbn:
+                loan.return_book()
+                del self.borrowed_books[i]
+                return loan
+        return None
+    
+    def calculate_fine(self, loan):
+        """Calculate fine for overdue book"""
+        if loan.is_overdue():
+            days_overdue = loan.get_days_overdue()
+            daily_fine = 0.50  # $0.50 per day
+            return days_overdue * daily_fine
+        return 0.0
+    
+    def pay_fine(self, amount):
+        """Pay outstanding fines"""
+        if amount <= self.outstanding_fines:
+            self.outstanding_fines -= amount
+            return True
+        return False</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Loan Class</div>
+                                <pre>
+                                    <code class="language-python">class Loan:
+    def __init__(self, member_id, book_isbn, due_date):
+        self.loan_id = f"{member_id}_{book_isbn}_{int(time.time())}"
+        self.member_id = member_id
+        self.book_isbn = book_isbn
+        self.checkout_date = datetime.now()
+        self.due_date = due_date
+        self.return_date = None
+        self.is_returned = False
+        self.renewal_count = 0
+        self.max_renewals = 2
+        self.fine_amount = 0.0
+    
+    def return_book(self):
+        """Mark book as returned"""
+        self.return_date = datetime.now()
+        self.is_returned = True
+        
+        # Calculate fine if overdue
+        if self.is_overdue():
+            self.fine_amount = self.calculate_fine()
+    
+    def renew(self, new_due_date):
+        """Renew the loan"""
+        if self.renewal_count < self.max_renewals and not self.is_overdue():
+            self.due_date = new_due_date
+            self.renewal_count += 1
+            return True
+        return False
+    
+    def is_overdue(self):
+        """Check if loan is overdue"""
+        current_date = self.return_date or datetime.now()
+        return current_date > self.due_date
+    
+    def get_days_overdue(self):
+        """Get number of days overdue"""
+        if self.is_overdue():
+            current_date = self.return_date or datetime.now()
+            return (current_date - self.due_date).days
+        return 0
+    
+    def calculate_fine(self):
+        """Calculate fine amount for overdue book"""
+        days_overdue = self.get_days_overdue()
+        daily_fine = 0.50
+        return days_overdue * daily_fine
+    
+    def get_time_remaining(self):
+        """Get time remaining until due date"""
+        if not self.is_returned:
+            remaining = self.due_date - datetime.now()
+            return max(remaining.days, 0)
+        return 0</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project4-dsa">
+                            <h4 class="section-title">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures Implementation
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">HashMap for Book Catalog</div>
+                                <pre>
+                                    <code class="language-python">class BookCatalogHashMap:
+    def __init__(self, initial_capacity=128):
+        self.capacity = initial_capacity
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        self.load_factor_threshold = 0.75
+    
+    def _hash(self, isbn):
+        """Hash function for ISBN"""
+        return hash(isbn) % self.capacity
+    
+    def add_book(self, book):
+        """Add book to catalog"""
+        if self.size >= self.capacity * self.load_factor_threshold:
+            self._resize()
+        
+        index = self._hash(book.isbn)
+        bucket = self.buckets[index]
+        
+        # Check if book already exists
+        for i, (key, value) in enumerate(bucket):
+            if key == book.isbn:
+                # Update existing book
+                bucket[i] = (book.isbn, book)
+                return
+        
+        # Add new book
+        bucket.append((book.isbn, book))
+        self.size += 1
+    
+    def find_book(self, isbn):
+        """Find book by ISBN in O(1) average time"""
+        index = self._hash(isbn)
+        bucket = self.buckets[index]
+        
+        for key, value in bucket:
+            if key == isbn:
+                return value
+        return None
+    
+    def remove_book(self, isbn):
+        """Remove book from catalog"""
+        index = self._hash(isbn)
+        bucket = self.buckets[index]
+        
+        for i, (key, value) in enumerate(bucket):
+            if key == isbn:
+                del bucket[i]
+                self.size -= 1
+                return True
+        return False
+    
+    def search_by_title(self, title_query):
+        """Search books by title (linear search)"""
+        results = []
+        title_lower = title_query.lower()
+        
+        for bucket in self.buckets:
+            for key, book in bucket:
+                if title_lower in book.title.lower():
+                    results.append(book)
+        return results
+    
+    def search_by_author(self, author_query):
+        """Search books by author (linear search)"""
+        results = []
+        author_lower = author_query.lower()
+        
+        for bucket in self.buckets:
+            for key, book in bucket:
+                if author_lower in book.author.lower():
+                    results.append(book)
+        return results
+    
+    def get_all_books(self):
+        """Return all books in catalog"""
+        books = []
+        for bucket in self.buckets:
+            for key, book in bucket:
+                books.append(book)
+        return books
+    
+    def get_available_books(self):
+        """Get all currently available books"""
+        available = []
+        for bucket in self.buckets:
+            for key, book in bucket:
+                if book.is_available():
+                    available.append(book)
+        return available
+    
+    def _resize(self):
+        """Resize hash map when load factor exceeds threshold"""
+        old_buckets = self.buckets
+        self.capacity *= 2
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        
+        for bucket in old_buckets:
+            for key, value in bucket:
+                self.add_book(value)</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Queue for Book Reservations</div>
+                                <pre>
+                                    <code class="language-python">from collections import deque
+import heapq
+
+class BookReservationQueue:
+    def __init__(self):
+        self.reservations = {}  # {isbn: queue of member_ids}
+        self.member_reservations = {}  # {member_id: list of isbns}
+        self.priority_queue = []  # For premium members
+    
+    def reserve_book(self, isbn, member_id, is_premium=False):
+        """Reserve a book for a member"""
+        if isbn not in self.reservations:
+            self.reservations[isbn] = deque()
+        
+        if member_id not in self.member_reservations:
+            self.member_reservations[member_id] = []
+        
+        # Check if member already has reservation for this book
+        if member_id in self.reservations[isbn]:
+            return False
+        
+        if is_premium:
+            # Priority queue for premium members (lower number = higher priority)
+            priority = 0  # Highest priority
+            heapq.heappush(self.priority_queue, (priority, isbn, member_id))
+        else:
+            # Regular queue for standard members
+            self.reservations[isbn].append(member_id)
+        
+        self.member_reservations[member_id].append(isbn)
+        return True
+    
+    def get_next_reservation(self, isbn):
+        """Get next member in line for a book"""
+        # First check priority queue for premium reservations
+        if self.priority_queue:
+            for i, (priority, book_isbn, member_id) in enumerate(self.priority_queue):
+                if book_isbn == isbn:
+                    # Remove from priority queue
+                    del self.priority_queue[i]
+                    heapq.heapify(self.priority_queue)
+                    self._remove_member_reservation(member_id, isbn)
+                    return member_id
+        
+        # Then check regular queue
+        if isbn in self.reservations and self.reservations[isbn]:
+            member_id = self.reservations[isbn].popleft()
+            self._remove_member_reservation(member_id, isbn)
+            return member_id
+        
+        return None
+    
+    def cancel_reservation(self, isbn, member_id):
+        """Cancel a member's reservation"""
+        # Check priority queue first
+        for i, (priority, book_isbn, mid) in enumerate(self.priority_queue):
+            if book_isbn == isbn and mid == member_id:
+                del self.priority_queue[i]
+                heapq.heapify(self.priority_queue)
+                self._remove_member_reservation(member_id, isbn)
+                return True
+        
+        # Check regular queue
+        if isbn in self.reservations:
+            queue = self.reservations[isbn]
+            if member_id in queue:
+                # Convert to list, remove member, convert back to deque
+                queue_list = list(queue)
+                queue_list.remove(member_id)
+                self.reservations[isbn] = deque(queue_list)
+                self._remove_member_reservation(member_id, isbn)
+                return True
+        
+        return False
+    
+    def get_queue_position(self, isbn, member_id):
+        """Get member's position in reservation queue"""
+        # Check priority queue first
+        for i, (priority, book_isbn, mid) in enumerate(self.priority_queue):
+            if book_isbn == isbn and mid == member_id:
+                return 1  # Premium members get position 1
+        
+        # Check regular queue
+        if isbn in self.reservations:
+            queue_list = list(self.reservations[isbn])
+            try:
+                return queue_list.index(member_id) + 1
+            except ValueError:
+                pass
+        
+        return -1  # Not found
+    
+    def _remove_member_reservation(self, member_id, isbn):
+        """Helper method to remove reservation from member's list"""
+        if member_id in self.member_reservations:
+            if isbn in self.member_reservations[member_id]:
+                self.member_reservations[member_id].remove(isbn)</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Linked List for Transaction History</div>
+                                <pre>
+                                    <code class="language-python">class TransactionNode:
+    def __init__(self, transaction_data):
+        self.data = transaction_data
+        self.next = None
+        self.prev = None
+
+class TransactionLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self.size = 0
+        self.max_size = 1000  # Limit to prevent memory issues
+    
+    def add_transaction(self, transaction_type, member_id, book_isbn, details=None):
+        """Add new transaction to the front of the list"""
+        transaction = {
+            'type': transaction_type,  # 'checkout', 'return', 'renewal', 'fine_payment'
+            'member_id': member_id,
+            'book_isbn': book_isbn,
+            'timestamp': datetime.now(),
+            'details': details or {}
+        }
+        
+        new_node = TransactionNode(transaction)
+        
+        if not self.head:
+            self.head = self.tail = new_node
+        else:
+            new_node.next = self.head
+            self.head.prev = new_node
+            self.head = new_node
+        
+        self.size += 1
+        
+        # Remove oldest transaction if size exceeds limit
+        if self.size > self.max_size:
+            self._remove_tail()
+    
+    def get_member_transactions(self, member_id, limit=None):
+        """Get all transactions for a specific member"""
+        transactions = []
+        current = self.head
+        count = 0
+        
+        while current and (limit is None or count < limit):
+            if current.data['member_id'] == member_id:
+                transactions.append(current.data)
+                count += 1
+            current = current.next
+        
+        return transactions
+    
+    def get_book_transactions(self, book_isbn, limit=None):
+        """Get all transactions for a specific book"""
+        transactions = []
+        current = self.head
+        count = 0
+        
+        while current and (limit is None or count < limit):
+            if current.data['book_isbn'] == book_isbn:
+                transactions.append(current.data)
+                count += 1
+            current = current.next
+        
+        return transactions
+    
+    def get_recent_transactions(self, limit=50):
+        """Get most recent transactions"""
+        transactions = []
+        current = self.head
+        count = 0
+        
+        while current and count < limit:
+            transactions.append(current.data)
+            current = current.next
+            count += 1
+        
+        return transactions
+    
+    def search_transactions(self, start_date, end_date, transaction_type=None):
+        """Search transactions within date range"""
+        results = []
+        current = self.head
+        
+        while current:
+            transaction = current.data
+            if start_date <= transaction['timestamp'] <= end_date:
+                if transaction_type is None or transaction['type'] == transaction_type:
+                    results.append(transaction)
+            current = current.next
+        
+        return results
+    
+    def _remove_tail(self):
+        """Remove the oldest transaction (tail node)"""
+        if self.tail:
+            if self.tail.prev:
+                self.tail.prev.next = None
+                self.tail = self.tail.prev
+            else:
+                self.head = self.tail = None
+            self.size -= 1</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project4-algo">
+                            <h4 class="section-title">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Core Algorithms
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Book Search Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def advanced_book_search(catalog, query, search_fields=['title', 'author', 'isbn']):
+    """
+    Multi-field book search with ranking
+    Time Complexity: O(n) where n is number of books
+    """
+    results = []
+    query_lower = query.lower()
+    
+    for book in catalog.get_all_books():
+        score = 0
+        matches = []
+        
+        # Search in title
+        if 'title' in search_fields:
+            title_score = calculate_text_relevance(book.title.lower(), query_lower)
+            if title_score > 0:
+                score += title_score * 3  # Title matches weighted higher
+                matches.append('title')
+        
+        # Search in author
+        if 'author' in search_fields:
+            author_score = calculate_text_relevance(book.author.lower(), query_lower)
+            if author_score > 0:
+                score += author_score * 2  # Author matches weighted medium
+                matches.append('author')
+        
+        # Search in ISBN
+        if 'isbn' in search_fields:
+            if query_lower in book.isbn.lower():
+                score += 5  # Exact ISBN match gets high score
+                matches.append('isbn')
+        
+        # Search in description
+        if 'description' in search_fields and book.description:
+            desc_score = calculate_text_relevance(book.description.lower(), query_lower)
+            if desc_score > 0:
+                score += desc_score  # Description matches weighted lower
+                matches.append('description')
+        
+        if score > 0:
+            results.append({
+                'book': book,
+                'score': score,
+                'matches': matches,
+                'availability': book.available_copies
+            })
+    
+    # Sort by score (highest first), then by availability
+    results.sort(key=lambda x: (x['score'], x['availability']), reverse=True)
+    return results
+
+def calculate_text_relevance(text, query):
+    """Calculate relevance score for text matching"""
+    if query in text:
+        # Exact phrase match
+        return 2.0
+    
+    # Word-by-word matching
+    text_words = text.split()
+    query_words = query.split()
+    
+    matches = 0
+    for query_word in query_words:
+        for text_word in query_words:
+            if query_word in text_word:
+                matches += 1
+                break
+    
+    return matches / len(query_words) if query_words else 0
+
+def search_books_by_multiple_authors(catalog, authors):
+    """
+    Find books by multiple authors
+    Time Complexity: O(n * m) where n = books, m = authors
+    """
+    results = []
+    
+    for book in catalog.get_all_books():
+        for author in authors:
+            if author.lower() in book.author.lower():
+                results.append(book)
+                break  # Avoid duplicates
+    
+    return results</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Overdue Fine Calculator</div>
+                                <pre>
+                                    <code class="language-python">def calculate_overdue_fines(loans, fine_structure=None):
+    """
+    Calculate fines for all overdue loans with tiered pricing
+    Time Complexity: O(n) where n is number of loans
+    """
+    if fine_structure is None:
+        fine_structure = {
+            'daily_rate': 0.50,
+            'max_fine': 25.00,
+            'grace_period': 1,  # 1 day grace period
+            'escalation_tiers': [
+                {'days': 7, 'rate': 0.50},
+                {'days': 14, 'rate': 0.75},
+                {'days': 30, 'rate': 1.00}
+            ]
+        }
+    
+    total_fines = 0
+    fine_details = []
+    
+    for loan in loans:
+        if loan.is_overdue() and not loan.is_returned:
+            days_overdue = loan.get_days_overdue()
+            
+            if days_overdue <= fine_structure['grace_period']:
+                fine = 0
+            else:
+                effective_days = days_overdue - fine_structure['grace_period']
+                fine = calculate_tiered_fine(effective_days, fine_structure)
+                fine = min(fine, fine_structure['max_fine'])
+            
+            if fine > 0:
+                fine_details.append({
+                    'loan_id': loan.loan_id,
+                    'member_id': loan.member_id,
+                    'book_isbn': loan.book_isbn,
+                    'days_overdue': days_overdue,
+                    'fine_amount': fine,
+                    'due_date': loan.due_date
+                })
+                total_fines += fine
+    
+    return {
+        'total_fines': total_fines,
+        'fine_details': fine_details,
+        'total_overdue_items': len(fine_details)
+    }
+
+def calculate_tiered_fine(days_overdue, fine_structure):
+    """Calculate fine using tiered pricing structure"""
+    fine = 0
+    remaining_days = days_overdue
+    
+    for tier in fine_structure['escalation_tiers']:
+        tier_days = min(remaining_days, tier['days'])
+        fine += tier_days * tier['rate']
+        remaining_days -= tier_days
+        
+        if remaining_days <= 0:
+            break
+    
+    # Any remaining days use the highest tier rate
+    if remaining_days > 0:
+        highest_rate = fine_structure['escalation_tiers'][-1]['rate']
+        fine += remaining_days * highest_rate
+    
+    return fine
+
+def generate_overdue_report(members, loans):
+    """
+    Generate comprehensive overdue report
+    Time Complexity: O(n + m) where n = members, m = loans
+    """
+    overdue_data = {}
+    member_lookup = {member.member_id: member for member in members}
+    
+    for loan in loans:
+        if loan.is_overdue() and not loan.is_returned:
+            member_id = loan.member_id
+            if member_id not in overdue_data:
+                member = member_lookup.get(member_id)
+                overdue_data[member_id] = {
+                    'member': member,
+                    'overdue_loans': [],
+                    'total_fine': 0
+                }
+            
+            fine = loan.calculate_fine()
+            overdue_data[member_id]['overdue_loans'].append(loan)
+            overdue_data[member_id]['total_fine'] += fine
+    
+    # Sort by total fine amount (highest first)
+    sorted_overdue = sorted(
+        overdue_data.values(),
+        key=lambda x: x['total_fine'],
+        reverse=True
+    )
+    
+    return sorted_overdue</code>
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Project 5: Banking System -->
+            <div class="project-card">
+                <div class="project-header collapsed" onclick="toggleProject('project5')">
+                    <div>
+                        <i class="fas fa-university project-icon">
+                        </i>
+                        <div class="d-inline-block">
+                            <h3 class="project-title">Banking System with Transaction Manager</h3>
+                            <p class="project-description">Secure banking operations with transaction validation and balance management</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down collapse-icon">
+                    </i>
+                </div>
+                <div class="collapse" id="project5">
+                    <div class="project-content">
+                        <div class="section-tabs">
+                            <button class="section-tab active" onclick="showSection('project5', 'oop')">
+                                <i class="fas fa-cube">
+                                </i>
+                                OOP Classes
+                            </button>
+                            <button class="section-tab" onclick="showSection('project5', 'dsa')">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures
+                            </button>
+                            <button class="section-tab" onclick="showSection('project5', 'algo')">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Algorithms
+                            </button>
+                        </div>
+                        <div class="section-content" id="project5-oop">
+                            <h4 class="section-title">
+                                <i class="fas fa-cube">
+                                </i>
+                                Object-Oriented Programming Classes
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Account Class</div>
+                                <pre>
+                                    <code class="language-python">from decimal import Decimal
+import uuid
+
+class Account:
+    def __init__(self, account_number, customer_id, account_type, initial_balance=0):
+        self.account_number = account_number
+        self.customer_id = customer_id
+        self.account_type = account_type  # 'checking', 'savings', 'business'
+        self.balance = Decimal(str(initial_balance))
+        self.created_date = datetime.now()
+        self.is_active = True
+        self.is_frozen = False
+        self.daily_limit = Decimal('1000.00')
+        self.daily_withdrawn = Decimal('0.00')
+        self.last_transaction_date = None
+        self.transaction_count = 0
+        
+    def deposit(self, amount, transaction_id=None):
+        """Deposit money into account"""
+        if not self.is_active or amount <= 0:
+            return False
+        
+        amount = Decimal(str(amount))
+        self.balance += amount
+        self.last_transaction_date = datetime.now()
+        self.transaction_count += 1
+        return True
+    
+    def withdraw(self, amount, transaction_id=None):
+        """Withdraw money from account"""
+        if not self.is_active or self.is_frozen or amount <= 0:
+            return False
+        
+        amount = Decimal(str(amount))
+        
+        # Check sufficient balance
+        if self.balance < amount:
+            return False
+        
+        # Check daily limit
+        if self.daily_withdrawn + amount > self.daily_limit:
+            return False
+        
+        self.balance -= amount
+        self.daily_withdrawn += amount
+        self.last_transaction_date = datetime.now()
+        self.transaction_count += 1
+        return True
+    
+    def transfer_to(self, target_account, amount):
+        """Transfer money to another account"""
+        if self.withdraw(amount):
+            if target_account.deposit(amount):
+                return True
+            else:
+                # Rollback withdrawal if deposit fails
+                self.deposit(amount)
+        return False
+    
+    def get_balance(self):
+        """Get current account balance"""
+        return float(self.balance)
+    
+    def freeze_account(self):
+        """Freeze account (prevent withdrawals)"""
+        self.is_frozen = True
+    
+    def unfreeze_account(self):
+        """Unfreeze account"""
+        self.is_frozen = False
+    
+    def reset_daily_limit(self):
+        """Reset daily withdrawal limit (called daily)"""
+        self.daily_withdrawn = Decimal('0.00')</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Transaction Class</div>
+                                <pre>
+                                    <code class="language-python">class Transaction:
+    def __init__(self, from_account, to_account, amount, transaction_type):
+        self.transaction_id = str(uuid.uuid4())
+        self.from_account = from_account
+        self.to_account = to_account
+        self.amount = Decimal(str(amount))
+        self.transaction_type = transaction_type  # 'transfer', 'deposit', 'withdrawal'
+        self.status = 'pending'
+        self.created_at = datetime.now()
+        self.processed_at = None
+        self.description = ""
+        self.fee = Decimal('0.00')
+        self.validation_errors = []
+    
+    def validate(self):
+        """Validate transaction before processing"""
+        self.validation_errors = []
+        
+        # Check amount validity
+        if self.amount <= 0:
+            self.validation_errors.append("Amount must be positive")
+        
+        # Check account validity
+        if self.from_account and not self.from_account.is_active:
+            self.validation_errors.append("Source account is inactive")
+        
+        if self.to_account and not self.to_account.is_active:
+            self.validation_errors.append("Destination account is inactive")
+        
+        # Check sufficient funds for withdrawals/transfers
+        if self.transaction_type in ['withdrawal', 'transfer']:
+            if self.from_account.balance < self.amount:
+                self.validation_errors.append("Insufficient funds")
+        
+        # Check daily limits
+        if self.transaction_type in ['withdrawal', 'transfer']:
+            if (self.from_account.daily_withdrawn + self.amount > 
+                self.from_account.daily_limit):
+                self.validation_errors.append("Daily limit exceeded")
+        
+        return len(self.validation_errors) == 0
+    
+    def process(self):
+        """Process the transaction"""
+        if not self.validate():
+            self.status = 'failed'
+            return False
+        
+        try:
+            if self.transaction_type == 'deposit':
+                success = self.to_account.deposit(self.amount, self.transaction_id)
+            elif self.transaction_type == 'withdrawal':
+                success = self.from_account.withdraw(self.amount, self.transaction_id)
+            elif self.transaction_type == 'transfer':
+                success = self.from_account.transfer_to(self.to_account, self.amount)
+            else:
+                success = False
+            
+            if success:
+                self.status = 'completed'
+                self.processed_at = datetime.now()
+                return True
+            else:
+                self.status = 'failed'
+                self.validation_errors.append("Transaction processing failed")
+                return False
+                
+        except Exception as e:
+            self.status = 'error'
+            self.validation_errors.append(f"Processing error: {str(e)}")
+            return False
+    
+    def reverse(self):
+        """Reverse a completed transaction"""
+        if self.status != 'completed':
+            return False
+        
+        try:
+            if self.transaction_type == 'deposit':
+                success = self.to_account.withdraw(self.amount)
+            elif self.transaction_type == 'withdrawal':
+                success = self.from_account.deposit(self.amount)
+            elif self.transaction_type == 'transfer':
+                success = self.to_account.transfer_to(self.from_account, self.amount)
+            
+            if success:
+                self.status = 'reversed'
+                return True
+                
+        except Exception:
+            pass
+        
+        return False</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Bank Class</div>
+                                <pre>
+                                    <code class="language-python">class Bank:
+    def __init__(self, bank_name, routing_number):
+        self.bank_name = bank_name
+        self.routing_number = routing_number
+        self.accounts = BankAccountHashMap()
+        self.customers = CustomerHashMap()
+        self.transaction_processor = TransactionProcessor()
+        self.audit_log = AuditLog()
+        self.daily_transaction_limit = Decimal('10000.00')
+        self.daily_transaction_total = Decimal('0.00')
+        self.last_reset_date = datetime.now().date()
+    
+    def create_account(self, customer_id, account_type, initial_deposit=0):
+        """Create new bank account"""
+        account_number = self.generate_account_number()
+        account = Account(account_number, customer_id, account_type, initial_deposit)
+        
+        if self.accounts.put(account_number, account):
+            self.audit_log.log_account_creation(account)
+            return account
+        return None
+    
+    def close_account(self, account_number):
+        """Close bank account"""
+        account = self.accounts.get(account_number)
+        if account and account.balance == 0:
+            account.is_active = False
+            self.audit_log.log_account_closure(account)
+            return True
+        return False
+    
+    def process_transaction(self, transaction):
+        """Process a banking transaction"""
+        # Check daily bank limits
+        if (self.daily_transaction_total + transaction.amount > 
+            self.daily_transaction_limit):
+            transaction.validation_errors.append("Bank daily limit exceeded")
+            return False
+        
+        # Process the transaction
+        success = self.transaction_processor.process(transaction)
+        
+        if success:
+            self.daily_transaction_total += transaction.amount
+            self.audit_log.log_transaction(transaction)
+        
+        return success
+    
+    def get_account(self, account_number):
+        """Retrieve account by number"""
+        return self.accounts.get(account_number)
+    
+    def generate_account_number(self):
+        """Generate unique account number"""
+        import random
+        while True:
+            account_number = f"{random.randint(100000000, 999999999)}"
+            if not self.accounts.get(account_number):
+                return account_number
+    
+    def reset_daily_limits(self):
+        """Reset daily limits (called daily)"""
+        current_date = datetime.now().date()
+        if current_date > self.last_reset_date:
+            self.daily_transaction_total = Decimal('0.00')
+            self.last_reset_date = current_date
+            
+            # Reset account daily limits
+            for account in self.accounts.get_all_accounts():
+                account.reset_daily_limit()
+    
+    def get_bank_statistics(self):
+        """Get bank-wide statistics"""
+        all_accounts = self.accounts.get_all_accounts()
+        total_balance = sum(account.get_balance() for account in all_accounts)
+        active_accounts = len([acc for acc in all_accounts if acc.is_active])
+        
+        return {
+            'total_accounts': len(all_accounts),
+            'active_accounts': active_accounts,
+            'total_balance': total_balance,
+            'daily_transaction_total': float(self.daily_transaction_total)
+        }</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project5-dsa">
+                            <h4 class="section-title">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures Implementation
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Queue for Pending Transactions</div>
+                                <pre>
+                                    <code class="language-python">from collections import deque
+import threading
+import time
+
+class TransactionQueue:
+    def __init__(self, max_size=10000):
+        self.queue = deque(maxlen=max_size)
+        self.processing_queue = deque()
+        self.completed_transactions = []
+        self.failed_transactions = []
+        self.lock = threading.Lock()
+        self.is_processing = False
+    
+    def enqueue_transaction(self, transaction):
+        """Add transaction to processing queue"""
+        with self.lock:
+            if len(self.queue) < self.queue.maxlen:
+                self.queue.append(transaction)
+                transaction.status = 'queued'
+                return True
+            return False  # Queue is full
+    
+    def dequeue_transaction(self):
+        """Get next transaction for processing"""
+        with self.lock:
+            if self.queue:
+                transaction = self.queue.popleft()
+                self.processing_queue.append(transaction)
+                transaction.status = 'processing'
+                return transaction
+        return None
+    
+    def complete_transaction(self, transaction, success=True):
+        """Mark transaction as completed or failed"""
+        with self.lock:
+            if transaction in self.processing_queue:
+                self.processing_queue.remove(transaction)
+                
+                if success:
+                    transaction.status = 'completed'
+                    transaction.processed_at = datetime.now()
+                    self.completed_transactions.append(transaction)
+                else:
+                    transaction.status = 'failed'
+                    self.failed_transactions.append(transaction)
+                
+                return True
+        return False
+    
+    def get_queue_status(self):
+        """Get current queue statistics"""
+        with self.lock:
+            return {
+                'pending': len(self.queue),
+                'processing': len(self.processing_queue),
+                'completed': len(self.completed_transactions),
+                'failed': len(self.failed_transactions),
+                'queue_capacity': self.queue.maxlen
+            }
+    
+    def process_batch(self, batch_size=10):
+        """Process a batch of transactions"""
+        processed = []
+        
+        for _ in range(min(batch_size, len(self.queue))):
+            transaction = self.dequeue_transaction()
+            if transaction:
+                success = transaction.process()
+                self.complete_transaction(transaction, success)
+                processed.append(transaction)
+        
+        return processed
+    
+    def clear_old_transactions(self, days_old=30):
+        """Remove old completed/failed transactions to save memory"""
+        cutoff_date = datetime.now() - timedelta(days=days_old)
+        
+        with self.lock:
+            self.completed_transactions = [
+                t for t in self.completed_transactions 
+                if t.processed_at and t.processed_at > cutoff_date
+            ]
+            
+            self.failed_transactions = [
+                t for t in self.failed_transactions 
+                if t.created_at > cutoff_date
+            ]</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Stack for Transaction Reversal</div>
+                                <pre>
+                                    <code class="language-python">class TransactionReversalStack:
+    def __init__(self, max_size=100):
+        self.stack = []
+        self.max_size = max_size
+        self.reversal_timeout = 300  # 5 minutes to reverse
+    
+    def push_transaction(self, transaction):
+        """Add transaction to reversal stack"""
+        if len(self.stack) >= self.max_size:
+            # Remove oldest transaction
+            self.stack.pop(0)
+        
+        reversal_data = {
+            'transaction': transaction,
+            'timestamp': datetime.now(),
+            'can_reverse': True
+        }
+        
+        self.stack.append(reversal_data)
+    
+    def reverse_last_transaction(self):
+        """Reverse the most recent transaction"""
+        if not self.stack:
+            return None, "No transactions to reverse"
+        
+        reversal_data = self.stack[-1]
+        transaction = reversal_data['transaction']
+        
+        # Check if reversal is still allowed
+        if not self.can_reverse_transaction(reversal_data):
+            return None, "Transaction reversal timeout exceeded"
+        
+        # Attempt to reverse the transaction
+        if transaction.reverse():
+            reversal_data['can_reverse'] = False
+            return transaction, "Transaction reversed successfully"
+        else:
+            return None, "Failed to reverse transaction"
+    
+    def reverse_transaction_by_id(self, transaction_id):
+        """Reverse a specific transaction by ID"""
+        for reversal_data in reversed(self.stack):
+            if reversal_data['transaction'].transaction_id == transaction_id:
+                if not self.can_reverse_transaction(reversal_data):
+                    return None, "Transaction reversal timeout exceeded"
+                
+                transaction = reversal_data['transaction']
+                if transaction.reverse():
+                    reversal_data['can_reverse'] = False
+                    return transaction, "Transaction reversed successfully"
+                else:
+                    return None, "Failed to reverse transaction"
+        
+        return None, "Transaction not found in reversal stack"
+    
+    def can_reverse_transaction(self, reversal_data):
+        """Check if transaction can still be reversed"""
+        if not reversal_data['can_reverse']:
+            return False
+        
+        time_elapsed = datetime.now() - reversal_data['timestamp']
+        return time_elapsed.total_seconds() <= self.reversal_timeout
+    
+    def get_reversible_transactions(self):
+        """Get list of transactions that can still be reversed"""
+        reversible = []
+        current_time = datetime.now()
+        
+        for reversal_data in self.stack:
+            if self.can_reverse_transaction(reversal_data):
+                time_left = self.reversal_timeout - (current_time - reversal_data['timestamp']).total_seconds()
+                reversible.append({
+                    'transaction': reversal_data['transaction'],
+                    'time_left': max(0, time_left)
+                })
+        
+        return reversible
+    
+    def cleanup_expired_transactions(self):
+        """Remove transactions that can no longer be reversed"""
+        current_time = datetime.now()
+        self.stack = [
+            data for data in self.stack
+            if (current_time - data['timestamp']).total_seconds() <= self.reversal_timeout
+        ]</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">HashMap for Account Management</div>
+                                <pre>
+                                    <code class="language-python">class BankAccountHashMap:
+    def __init__(self, initial_capacity=256):
+        self.capacity = initial_capacity
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        self.load_factor_threshold = 0.75
+        self.account_index = {}  # Additional index for fast lookups
+    
+    def _hash(self, account_number):
+        """Hash function for account numbers"""
+        return hash(account_number) % self.capacity
+    
+    def put(self, account_number, account):
+        """Store account in hash map"""
+        if self.size >= self.capacity * self.load_factor_threshold:
+            self._resize()
+        
+        index = self._hash(account_number)
+        bucket = self.buckets[index]
+        
+        # Check if account already exists
+        for i, (key, value) in enumerate(bucket):
+            if key == account_number:
+                bucket[i] = (account_number, account)
+                self.account_index[account_number] = account
+                return True
+        
+        # Add new account
+        bucket.append((account_number, account))
+        self.account_index[account_number] = account
+        self.size += 1
+        return True
+    
+    def get(self, account_number):
+        """Get account by account number"""
+        # Use index for O(1) lookup
+        return self.account_index.get(account_number)
+    
+    def remove(self, account_number):
+        """Remove account from hash map"""
+        index = self._hash(account_number)
+        bucket = self.buckets[index]
+        
+        for i, (key, value) in enumerate(bucket):
+            if key == account_number:
+                del bucket[i]
+                if account_number in self.account_index:
+                    del self.account_index[account_number]
+                self.size -= 1
+                return True
+        return False
+    
+    def get_accounts_by_customer(self, customer_id):
+        """Get all accounts for a specific customer"""
+        customer_accounts = []
+        for account in self.account_index.values():
+            if account.customer_id == customer_id:
+                customer_accounts.append(account)
+        return customer_accounts
+    
+    def get_accounts_by_type(self, account_type):
+        """Get all accounts of a specific type"""
+        type_accounts = []
+        for account in self.account_index.values():
+            if account.account_type == account_type:
+                type_accounts.append(account)
+        return type_accounts
+    
+    def get_all_accounts(self):
+        """Return all accounts"""
+        return list(self.account_index.values())
+    
+    def get_active_accounts(self):
+        """Get all active accounts"""
+        return [account for account in self.account_index.values() if account.is_active]
+    
+    def search_accounts(self, criteria):
+        """Search accounts by multiple criteria"""
+        results = []
+        
+        for account in self.account_index.values():
+            matches = True
+            
+            if 'customer_id' in criteria and account.customer_id != criteria['customer_id']:
+                matches = False
+            if 'account_type' in criteria and account.account_type != criteria['account_type']:
+                matches = False
+            if 'min_balance' in criteria and account.balance < Decimal(str(criteria['min_balance'])):
+                matches = False
+            if 'is_active' in criteria and account.is_active != criteria['is_active']:
+                matches = False
+            
+            if matches:
+                results.append(account)
+        
+        return results
+    
+    def _resize(self):
+        """Resize hash map when load factor exceeds threshold"""
+        old_buckets = self.buckets
+        self.capacity *= 2
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        # Keep account_index as is, just rehash the buckets
+        
+        for bucket in old_buckets:
+            for key, value in bucket:
+                # Re-add to new bucket structure
+                index = self._hash(key)
+                self.buckets[index].append((key, value))
+                self.size += 1</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project5-algo">
+                            <h4 class="section-title">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Core Algorithms
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Transaction Validation Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def validate_transaction_comprehensive(transaction, fraud_detection=True):
+    """
+    Comprehensive transaction validation with fraud detection
+    Time Complexity: O(1) for basic validation, O(log n) with fraud detection
+    """
+    validation_result = {
+        'is_valid': True,
+        'errors': [],
+        'warnings': [],
+        'risk_score': 0
+    }
+    
+    # Basic validation
+    if transaction.amount <= 0:
+        validation_result['errors'].append("Amount must be positive")
+        validation_result['is_valid'] = False
+    
+    if transaction.amount > Decimal('10000'):
+        validation_result['warnings'].append("Large transaction amount")
+        validation_result['risk_score'] += 2
+    
+    # Account validation
+    if transaction.from_account:
+        if not transaction.from_account.is_active:
+            validation_result['errors'].append("Source account is inactive")
+            validation_result['is_valid'] = False
+        
+        if transaction.from_account.is_frozen:
+            validation_result['errors'].append("Source account is frozen")
+            validation_result['is_valid'] = False
+        
+        if transaction.from_account.balance < transaction.amount:
+            validation_result['errors'].append("Insufficient funds")
+            validation_result['is_valid'] = False
+    
+    if transaction.to_account:
+        if not transaction.to_account.is_active:
+            validation_result['errors'].append("Destination account is inactive")
+            validation_result['is_valid'] = False
+    
+    # Daily limit validation
+    if transaction.from_account:
+        daily_total = transaction.from_account.daily_withdrawn + transaction.amount
+        if daily_total > transaction.from_account.daily_limit:
+            validation_result['errors'].append("Daily withdrawal limit exceeded")
+            validation_result['is_valid'] = False
+    
+    # Fraud detection
+    if fraud_detection:
+        fraud_score = detect_fraudulent_transaction(transaction)
+        validation_result['risk_score'] += fraud_score
+        
+        if fraud_score > 5:
+            validation_result['warnings'].append("High fraud risk detected")
+        
+        if fraud_score > 8:
+            validation_result['errors'].append("Transaction blocked due to fraud risk")
+            validation_result['is_valid'] = False
+    
+    return validation_result
+
+def detect_fraudulent_transaction(transaction):
+    """
+    Fraud detection algorithm using pattern analysis
+    Time Complexity: O(log n) where n is historical transactions
+    """
+    risk_score = 0
+    
+    # Check transaction amount patterns
+    if transaction.amount > Decimal('5000'):
+        risk_score += 3
+    elif transaction.amount > Decimal('1000'):
+        risk_score += 1
+    
+    # Check time-based patterns
+    current_hour = datetime.now().hour
+    if current_hour < 6 or current_hour > 22:  # Late night transactions
+        risk_score += 2
+    
+    # Check account history
+    if transaction.from_account:
+        account_age = (datetime.now() - transaction.from_account.created_date).days
+        
+        if account_age < 30:  # New accounts are riskier
+            risk_score += 2
+        
+        # Check for rapid successive transactions
+        if transaction.from_account.last_transaction_date:
+            time_since_last = datetime.now() - transaction.from_account.last_transaction_date
+            if time_since_last.total_seconds() < 60:  # Less than 1 minute
+                risk_score += 3
+    
+    # Geographic/IP-based checks would go here in real implementation
+    
+    return risk_score
+
+def batch_validate_transactions(transactions):
+    """
+    Validate multiple transactions efficiently
+    Time Complexity: O(n) where n is number of transactions
+    """
+    results = []
+    
+    for transaction in transactions:
+        validation = validate_transaction_comprehensive(transaction)
+        results.append({
+            'transaction_id': transaction.transaction_id,
+            'validation': validation
+        })
+    
+    # Separate valid and invalid transactions
+    valid_transactions = [
+        result['transaction_id'] for result in results 
+        if result['validation']['is_valid']
+    ]
+    
+    invalid_transactions = [
+        result for result in results 
+        if not result['validation']['is_valid']
+    ]
+    
+    return {
+        'valid_count': len(valid_transactions),
+        'invalid_count': len(invalid_transactions),
+        'valid_transactions': valid_transactions,
+        'invalid_transactions': invalid_transactions
+    }</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Real-time Balance Calculation</div>
+                                <pre>
+                                    <code class="language-python">def calculate_real_time_balance(account, pending_transactions):
+    """
+    Calculate account balance including pending transactions
+    Time Complexity: O(n) where n is number of pending transactions
+    """
+    current_balance = account.balance
+    pending_debits = Decimal('0')
+    pending_credits = Decimal('0')
+    
+    for transaction in pending_transactions:
+        if transaction.status == 'pending':
+            if transaction.from_account and transaction.from_account.account_number == account.account_number:
+                pending_debits += transaction.amount
+            
+            if transaction.to_account and transaction.to_account.account_number == account.account_number:
+                pending_credits += transaction.amount
+    
+    available_balance = current_balance - pending_debits
+    projected_balance = current_balance + pending_credits - pending_debits
+    
+    return {
+        'current_balance': float(current_balance),
+        'available_balance': float(available_balance),
+        'projected_balance': float(projected_balance),
+        'pending_credits': float(pending_credits),
+        'pending_debits': float(pending_debits)
+    }
+
+def calculate_account_interest(account, interest_rate, compounding_frequency='monthly'):
+    """
+    Calculate compound interest for savings accounts
+    Time Complexity: O(1)
+    """
+    principal = account.balance
+    annual_rate = Decimal(str(interest_rate))
+    
+    if compounding_frequency == 'daily':
+        n = 365
+    elif compounding_frequency == 'monthly':
+        n = 12
+    elif compounding_frequency == 'quarterly':
+        n = 4
+    else:
+        n = 1  # Annual
+    
+    # Calculate time since last interest calculation
+    days_since_creation = (datetime.now() - account.created_date).days
+    years = Decimal(str(days_since_creation / 365.25))
+    
+    # Compound interest formula: A = P(1 + r/n)^(nt)
+    if years > 0:
+        compound_factor = (1 + annual_rate / n) ** (n * years)
+        final_amount = principal * Decimal(str(compound_factor))
+        interest_earned = final_amount - principal
+        
+        return {
+            'principal': float(principal),
+            'interest_earned': float(interest_earned),
+            'final_amount': float(final_amount),
+            'effective_rate': float(annual_rate)
+        }
+    
+    return {
+        'principal': float(principal),
+        'interest_earned': 0.0,
+        'final_amount': float(principal),
+        'effective_rate': float(annual_rate)
+    }
+
+def reconcile_account_balance(account, transaction_history):
+    """
+    Reconcile account balance against transaction history
+    Time Complexity: O(n) where n is number of transactions
+    """
+    calculated_balance = Decimal('0')
+    discrepancies = []
+    
+    # Sort transactions by timestamp
+    sorted_transactions = sorted(transaction_history, key=lambda t: t.created_at)
+    
+    for transaction in sorted_transactions:
+        if transaction.status == 'completed':
+            if (transaction.to_account and 
+                transaction.to_account.account_number == account.account_number):
+                calculated_balance += transaction.amount
+            
+            if (transaction.from_account and 
+                transaction.from_account.account_number == account.account_number):
+                calculated_balance -= transaction.amount
+    
+    actual_balance = account.balance
+    difference = actual_balance - calculated_balance
+    
+    reconciliation_result = {
+        'actual_balance': float(actual_balance),
+        'calculated_balance': float(calculated_balance),
+        'difference': float(difference),
+        'is_balanced': abs(difference) < Decimal('0.01'),  # Allow for rounding
+        'transaction_count': len(sorted_transactions)
+    }
+    
+    if not reconciliation_result['is_balanced']:
+        reconciliation_result['discrepancy_amount'] = float(difference)
+        reconciliation_result['requires_investigation'] = True
+    
+    return reconciliation_result</code>
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Project 6: Online Quiz/Exam Platform -->
+            <div class="project-card">
+                <div class="project-header collapsed" onclick="toggleProject('project6')">
+                    <div>
+                        <i class="fas fa-clipboard-list project-icon">
+                        </i>
+                        <div class="d-inline-block">
+                            <h3 class="project-title">Online Quiz/Exam Platform</h3>
+                            <p class="project-description">Interactive quiz system with question management and scoring algorithms</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down collapse-icon">
+                    </i>
+                </div>
+                <div class="collapse" id="project6">
+                    <div class="project-content">
+                        <div class="section-tabs">
+                            <button class="section-tab active" onclick="showSection('project6', 'oop')">
+                                <i class="fas fa-cube">
+                                </i>
+                                OOP Classes
+                            </button>
+                            <button class="section-tab" onclick="showSection('project6', 'dsa')">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures
+                            </button>
+                            <button class="section-tab" onclick="showSection('project6', 'algo')">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Algorithms
+                            </button>
+                        </div>
+                        <div class="section-content" id="project6-oop">
+                            <h4 class="section-title">
+                                <i class="fas fa-cube">
+                                </i>
+                                Object-Oriented Programming Classes
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Question Class</div>
+                                <pre>
+                                    <code class="language-python">class Question:
+    def __init__(self, question_id, text, question_type, difficulty_level):
+        self.question_id = question_id
+        self.text = text
+        self.question_type = question_type  # 'multiple_choice', 'true_false', 'short_answer'
+        self.difficulty_level = difficulty_level  # 1-5 (1=easy, 5=hard)
+        self.options = []  # For multiple choice questions
+        self.correct_answer = None
+        self.explanation = ""
+        self.points = 1
+        self.category = ""
+        self.tags = []
+        self.created_at = datetime.now()
+        self.usage_count = 0
+        self.success_rate = 0.0
+    
+    def add_option(self, option_text, is_correct=False):
+        """Add option for multiple choice questions"""
+        option = {
+            'text': option_text,
+            'is_correct': is_correct,
+            'option_id': len(self.options)
+        }
+        self.options.append(option)
+        
+        if is_correct:
+            self.correct_answer = option['option_id']
+    
+    def check_answer(self, user_answer):
+        """Check if user answer is correct"""
+        if self.question_type == 'multiple_choice':
+            return user_answer == self.correct_answer
+        elif self.question_type == 'true_false':
+            return user_answer == self.correct_answer
+        elif self.question_type == 'short_answer':
+            return self.check_short_answer(user_answer)
+        return False
+    
+    def check_short_answer(self, user_answer):
+        """Check short answer with some flexibility"""
+        if not self.correct_answer:
+            return False
+        
+        user_lower = user_answer.lower().strip()
+        correct_lower = self.correct_answer.lower().strip()
+        
+        # Exact match
+        if user_lower == correct_lower:
+            return True
+        
+        # Check for common variations
+        similarity = self.calculate_similarity(user_lower, correct_lower)
+        return similarity > 0.8  # 80% similarity threshold
+    
+    def calculate_similarity(self, text1, text2):
+        """Calculate text similarity using edit distance"""
+        # Simple implementation of normalized edit distance
+        if len(text1) == 0:
+            return 0 if len(text2) == 0 else 0
+        if len(text2) == 0:
+            return 0
+        
+        # Implementation would include full edit distance algorithm
+        return 0.9  # Placeholder
+    
+    def update_statistics(self, was_correct):
+        """Update question usage statistics"""
+        self.usage_count += 1
+        
+        # Update success rate using moving average
+        if self.usage_count == 1:
+            self.success_rate = 1.0 if was_correct else 0.0
+        else:
+            # Weighted average favoring recent attempts
+            weight = 0.1
+            self.success_rate = (1 - weight) * self.success_rate + weight * (1.0 if was_correct else 0.0)
+    
+    def get_difficulty_multiplier(self):
+        """Get point multiplier based on difficulty"""
+        multipliers = {1: 1.0, 2: 1.2, 3: 1.5, 4: 1.8, 5: 2.0}
+        return multipliers.get(self.difficulty_level, 1.0)</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Quiz Class</div>
+                                <pre>
+                                    <code class="language-python">class Quiz:
+    def __init__(self, quiz_id, title, description, creator_id):
+        self.quiz_id = quiz_id
+        self.title = title
+        self.description = description
+        self.creator_id = creator_id
+        self.questions = QuestionLinkedList()
+        self.time_limit = None  # in minutes
+        self.max_attempts = 1
+        self.passing_score = 70  # percentage
+        self.shuffle_questions = False
+        self.shuffle_options = False
+        self.is_published = False
+        self.created_at = datetime.now()
+        self.last_modified = datetime.now()
+        self.total_points = 0
+        self.category = ""
+        self.difficulty_level = "medium"
+    
+    def add_question(self, question):
+        """Add question to quiz"""
+        self.questions.append(question)
+        self.total_points += question.points * question.get_difficulty_multiplier()
+        self.last_modified = datetime.now()
+    
+    def remove_question(self, question_id):
+        """Remove question from quiz"""
+        removed_question = self.questions.remove_by_id(question_id)
+        if removed_question:
+            self.total_points -= removed_question.points * removed_question.get_difficulty_multiplier()
+            self.last_modified = datetime.now()
+            return True
+        return False
+    
+    def get_questions(self, shuffle=None):
+        """Get quiz questions, optionally shuffled"""
+        questions = self.questions.to_list()
+        
+        if shuffle or (shuffle is None and self.shuffle_questions):
+            import random
+            questions = questions.copy()
+            random.shuffle(questions)
+        
+        return questions
+    
+    def calculate_score(self, user_answers):
+        """Calculate quiz score based on user answers"""
+        total_points = 0
+        earned_points = 0
+        correct_count = 0
+        total_count = 0
+        
+        questions = self.questions.to_list()
+        
+        for i, question in enumerate(questions):
+            total_count += 1
+            question_points = question.points * question.get_difficulty_multiplier()
+            total_points += question_points
+            
+            if i < len(user_answers):
+                user_answer = user_answers[i]
+                if question.check_answer(user_answer):
+                    earned_points += question_points
+                    correct_count += 1
+                    question.update_statistics(True)
+                else:
+                    question.update_statistics(False)
+        
+        percentage = (earned_points / total_points * 100) if total_points > 0 else 0
+        
+        return {
+            'earned_points': earned_points,
+            'total_points': total_points,
+            'percentage': percentage,
+            'correct_count': correct_count,
+            'total_count': total_count,
+            'passed': percentage >= self.passing_score
+        }
+    
+    def generate_certificate_data(self, user_id, score_data):
+        """Generate data for completion certificate"""
+        return {
+            'user_id': user_id,
+            'quiz_title': self.title,
+            'score_percentage': score_data['percentage'],
+            'points_earned': score_data['earned_points'],
+            'completion_date': datetime.now(),
+            'passed': score_data['passed'],
+            'certificate_id': f"CERT_{self.quiz_id}_{user_id}_{int(time.time())}"
+        }
+    
+    def publish(self):
+        """Publish quiz for public access"""
+        if len(self.questions.to_list()) > 0:
+            self.is_published = True
+            return True
+        return False
+    
+    def unpublish(self):
+        """Unpublish quiz"""
+        self.is_published = False</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">QuizResult Class</div>
+                                <pre>
+                                    <code class="language-python">class QuizResult:
+    def __init__(self, result_id, user_id, quiz_id, attempt_number):
+        self.result_id = result_id
+        self.user_id = user_id
+        self.quiz_id = quiz_id
+        self.attempt_number = attempt_number
+        self.start_time = datetime.now()
+        self.end_time = None
+        self.user_answers = []
+        self.score_data = None
+        self.time_taken = None
+        self.is_completed = False
+        self.ip_address = None
+        self.user_agent = None
+        self.cheating_flags = []
+    
+    def record_answer(self, question_index, answer, time_spent):
+        """Record user answer for a question"""
+        answer_data = {
+            'question_index': question_index,
+            'answer': answer,
+            'time_spent': time_spent,
+            'timestamp': datetime.now()
+        }
+        
+        # Ensure we have enough slots in the answers list
+        while len(self.user_answers) <= question_index:
+            self.user_answers.append(None)
+        
+        self.user_answers[question_index] = answer_data
+    
+    def complete_quiz(self, quiz):
+        """Complete the quiz and calculate final score"""
+        self.end_time = datetime.now()
+        self.time_taken = (self.end_time - self.start_time).total_seconds()
+        
+        # Extract just the answers for scoring
+        answers_only = []
+        for answer_data in self.user_answers:
+            if answer_data:
+                answers_only.append(answer_data['answer'])
+            else:
+                answers_only.append(None)
+        
+        self.score_data = quiz.calculate_score(answers_only)
+        self.is_completed = True
+        
+        # Check for potential cheating indicators
+        self.detect_cheating_patterns(quiz)
+        
+        return self.score_data
+    
+    def detect_cheating_patterns(self, quiz):
+        """Detect potential cheating based on patterns"""
+        if not self.time_taken:
+            return
+        
+        questions = quiz.questions.to_list()
+        
+        # Check if completed too quickly
+        min_expected_time = len(questions) * 30  # 30 seconds per question minimum
+        if self.time_taken < min_expected_time:
+            self.cheating_flags.append("Completed too quickly")
+        
+        # Check answer patterns
+        self.check_answer_patterns()
+        
+        # Check time spent per question
+        self.check_time_distribution()
+    
+    def check_answer_patterns(self):
+        """Check for suspicious answer patterns"""
+        if len(self.user_answers) < 4:
+            return
+        
+        # Check for all same answers in multiple choice
+        multiple_choice_answers = []
+        for answer_data in self.user_answers:
+            if answer_data and isinstance(answer_data['answer'], int):
+                multiple_choice_answers.append(answer_data['answer'])
+        
+        if len(multiple_choice_answers) >= 4:
+            if len(set(multiple_choice_answers)) == 1:
+                self.cheating_flags.append("All identical answers")
+    
+    def check_time_distribution(self):
+        """Check for suspicious time distribution"""
+        times = []
+        for answer_data in self.user_answers:
+            if answer_data:
+                times.append(answer_data['time_spent'])
+        
+        if times:
+            avg_time = sum(times) / len(times)
+            very_quick = [t for t in times if t < avg_time * 0.2]
+            
+            if len(very_quick) > len(times) * 0.5:
+                self.cheating_flags.append("Inconsistent time distribution")
+    
+    def get_detailed_results(self, quiz):
+        """Get detailed results with question-by-question breakdown"""
+        if not self.is_completed:
+            return None
+        
+        questions = quiz.questions.to_list()
+        detailed_results = []
+        
+        for i, question in enumerate(questions):
+            answer_data = self.user_answers[i] if i < len(self.user_answers) else None
+            user_answer = answer_data['answer'] if answer_data else None
+            
+            result = {
+                'question_id': question.question_id,
+                'question_text': question.text,
+                'user_answer': user_answer,
+                'correct_answer': question.correct_answer,
+                'is_correct': question.check_answer(user_answer) if user_answer is not None else False,
+                'points_earned': question.points * question.get_difficulty_multiplier() if question.check_answer(user_answer) else 0,
+                'time_spent': answer_data['time_spent'] if answer_data else 0,
+                'explanation': question.explanation
+            }
+            detailed_results.append(result)
+        
+        return detailed_results</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project6-dsa">
+                            <h4 class="section-title">
+                                <i class="fas fa-sitemap">
+                                </i>
+                                Data Structures Implementation
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Linked List for Question Sequence</div>
+                                <pre>
+                                    <code class="language-python">class QuestionNode:
+    def __init__(self, question):
+        self.question = question
+        self.next = None
+        self.prev = None
+
+class QuestionLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self.size = 0
+        self.current_position = 0
+    
+    def append(self, question):
+        """Add question to end of list"""
+        new_node = QuestionNode(question)
+        
+        if not self.head:
+            self.head = self.tail = new_node
+        else:
+            new_node.prev = self.tail
+            self.tail.next = new_node
+            self.tail = new_node
+        
+        self.size += 1
+    
+    def prepend(self, question):
+        """Add question to beginning of list"""
+        new_node = QuestionNode(question)
+        
+        if not self.head:
+            self.head = self.tail = new_node
+        else:
+            new_node.next = self.head
+            self.head.prev = new_node
+            self.head = new_node
+        
+        self.size += 1
+    
+    def insert_at_position(self, position, question):
+        """Insert question at specific position"""
+        if position <= 0:
+            self.prepend(question)
+            return
+        
+        if position >= self.size:
+            self.append(question)
+            return
+        
+        new_node = QuestionNode(question)
+        current = self.head
+        
+        for _ in range(position):
+            current = current.next
+        
+        new_node.next = current
+        new_node.prev = current.prev
+        current.prev.next = new_node
+        current.prev = new_node
+        
+        self.size += 1
+    
+    def remove_by_id(self, question_id):
+        """Remove question by ID"""
+        current = self.head
+        
+        while current:
+            if current.question.question_id == question_id:
+                # Update links
+                if current.prev:
+                    current.prev.next = current.next
+                else:
+                    self.head = current.next
+                
+                if current.next:
+                    current.next.prev = current.prev
+                else:
+                    self.tail = current.prev
+                
+                self.size -= 1
+                return current.question
+            
+            current = current.next
+        
+        return None
+    
+    def get_question_at_position(self, position):
+        """Get question at specific position"""
+        if position < 0 or position >= self.size:
+            return None
+        
+        current = self.head
+        for _ in range(position):
+            current = current.next
+        
+        return current.question
+    
+    def move_question(self, from_position, to_position):
+        """Move question from one position to another"""
+        if (from_position < 0 or from_position >= self.size or
+            to_position < 0 or to_position >= self.size):
+            return False
+        
+        if from_position == to_position:
+            return True
+        
+        # Get the question to move
+        question = self.get_question_at_position(from_position)
+        if not question:
+            return False
+        
+        # Remove from current position
+        self.remove_by_id(question.question_id)
+        
+        # Insert at new position
+        self.insert_at_position(to_position, question)
+        
+        return True
+    
+    def to_list(self):
+        """Convert linked list to Python list"""
+        result = []
+        current = self.head
+        
+        while current:
+            result.append(current.question)
+            current = current.next
+        
+        return result
+    
+    def shuffle(self):
+        """Shuffle questions randomly"""
+        import random
+        questions = self.to_list()
+        random.shuffle(questions)
+        
+        # Rebuild the linked list with shuffled order
+        self.clear()
+        for question in questions:
+            self.append(question)
+    
+    def clear(self):
+        """Clear all questions"""
+        self.head = self.tail = None
+        self.size = 0
+        self.current_position = 0</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">HashMap for User Scores</div>
+                                <pre>
+                                    <code class="language-python">class UserScoreHashMap:
+    def __init__(self, initial_capacity=64):
+        self.capacity = initial_capacity
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        self.load_factor_threshold = 0.75
+    
+    def _hash(self, key):
+        """Hash function for user-quiz combinations"""
+        return hash(key) % self.capacity
+    
+    def _make_key(self, user_id, quiz_id):
+        """Create composite key for user-quiz combination"""
+        return f"{user_id}_{quiz_id}"
+    
+    def store_score(self, user_id, quiz_id, score_data):
+        """Store user score for a quiz"""
+        key = self._make_key(user_id, quiz_id)
+        
+        if self.size >= self.capacity * self.load_factor_threshold:
+            self._resize()
+        
+        index = self._hash(key)
+        bucket = self.buckets[index]
+        
+        # Check if score already exists (update)
+        for i, (stored_key, value) in enumerate(bucket):
+            if stored_key == key:
+                bucket[i] = (key, score_data)
+                return
+        
+        # Add new score
+        bucket.append((key, score_data))
+        self.size += 1
+    
+    def get_score(self, user_id, quiz_id):
+        """Get user score for a specific quiz"""
+        key = self._make_key(user_id, quiz_id)
+        index = self._hash(key)
+        bucket = self.buckets[index]
+        
+        for stored_key, value in bucket:
+            if stored_key == key:
+                return value
+        return None
+    
+    def get_user_scores(self, user_id):
+        """Get all scores for a specific user"""
+        user_scores = []
+        user_prefix = f"{user_id}_"
+        
+        for bucket in self.buckets:
+            for key, value in bucket:
+                if key.startswith(user_prefix):
+                    quiz_id = key[len(user_prefix):]
+                    user_scores.append({
+                        'quiz_id': quiz_id,
+                        'score_data': value
+                    })
+        
+        return user_scores
+    
+    def get_quiz_scores(self, quiz_id):
+        """Get all scores for a specific quiz"""
+        quiz_scores = []
+        quiz_suffix = f"_{quiz_id}"
+        
+        for bucket in self.buckets:
+            for key, value in bucket:
+                if key.endswith(quiz_suffix):
+                    user_id = key[:-len(quiz_suffix)]
+                    quiz_scores.append({
+                        'user_id': user_id,
+                        'score_data': value
+                    })
+        
+        return quiz_scores
+    
+    def get_top_scores(self, quiz_id, limit=10):
+        """Get top scores for a quiz"""
+        quiz_scores = self.get_quiz_scores(quiz_id)
+        
+        # Sort by percentage score (descending)
+        sorted_scores = sorted(
+            quiz_scores,
+            key=lambda x: x['score_data']['percentage'],
+            reverse=True
+        )
+        
+        return sorted_scores[:limit]
+    
+    def calculate_user_statistics(self, user_id):
+        """Calculate statistics for a user across all quizzes"""
+        user_scores = self.get_user_scores(user_id)
+        
+        if not user_scores:
+            return {'total_quizzes': 0, 'average_score': 0, 'best_score': 0}
+        
+        percentages = [score['score_data']['percentage'] for score in user_scores]
+        
+        return {
+            'total_quizzes': len(user_scores),
+            'average_score': sum(percentages) / len(percentages),
+            'best_score': max(percentages),
+            'worst_score': min(percentages),
+            'quizzes_passed': len([s for s in user_scores if s['score_data']['passed']])
+        }
+    
+    def _resize(self):
+        """Resize hash map when load factor exceeds threshold"""
+        old_buckets = self.buckets
+        self.capacity *= 2
+        self.size = 0
+        self.buckets = [[] for _ in range(self.capacity)]
+        
+        for bucket in old_buckets:
+            for key, value in bucket:
+                # Re-hash with new capacity
+                index = self._hash(key)
+                self.buckets[index].append((key, value))
+                self.size += 1</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Queue for Exam Flow Management</div>
+                                <pre>
+                                    <code class="language-python">from collections import deque
+import time
+
+class ExamFlowQueue:
+    def __init__(self):
+        self.waiting_queue = deque()  # Users waiting to start
+        self.active_exams = {}  # Currently taking exams
+        self.completed_exams = []  # Finished exams
+        self.exam_sessions = {}  # Session management
+        self.max_concurrent_exams = 100
+    
+    def enqueue_user(self, user_id, quiz_id, priority=0):
+        """Add user to exam waiting queue"""
+        exam_request = {
+            'user_id': user_id,
+            'quiz_id': quiz_id,
+            'priority': priority,
+            'enqueue_time': datetime.now(),
+            'estimated_start_time': self.calculate_estimated_start_time()
+        }
+        
+        self.waiting_queue.append(exam_request)
+        return exam_request
+    
+    def start_next_exam(self):
+        """Start exam for next user in queue"""
+        if (len(self.active_exams) >= self.max_concurrent_exams or 
+            not self.waiting_queue):
+            return None
+        
+        exam_request = self.waiting_queue.popleft()
+        session_id = self.create_exam_session(exam_request)
+        
+        if session_id:
+            self.active_exams[session_id] = {
+                'user_id': exam_request['user_id'],
+                'quiz_id': exam_request['quiz_id'],
+                'start_time': datetime.now(),
+                'current_question': 0,
+                'answers': []
+            }
+            
+            return session_id
+        
+        return None
+    
+    def create_exam_session(self, exam_request):
+        """Create new exam session"""
+        session_id = f"session_{exam_request['user_id']}_{int(time.time())}"
+        
+        session_data = {
+            'session_id': session_id,
+            'user_id': exam_request['user_id'],
+            'quiz_id': exam_request['quiz_id'],
+            'created_at': datetime.now(),
+            'expires_at': datetime.now() + timedelta(hours=2),  # 2-hour session
+            'is_active': True
+        }
+        
+        self.exam_sessions[session_id] = session_data
+        return session_id
+    
+    def submit_answer(self, session_id, question_index, answer):
+        """Submit answer for current question"""
+        if session_id in self.active_exams:
+            exam_data = self.active_exams[session_id]
+            
+            # Ensure answers list is long enough
+            while len(exam_data['answers']) <= question_index:
+                exam_data['answers'].append(None)
+            
+            exam_data['answers'][question_index] = {
+                'answer': answer,
+                'timestamp': datetime.now()
+            }
+            
+            exam_data['current_question'] = question_index + 1
+            return True
+        
+        return False
+    
+    def complete_exam(self, session_id, final_score=None):
+        """Complete exam and move to completed queue"""
+        if session_id in self.active_exams:
+            exam_data = self.active_exams[session_id]
+            exam_data['end_time'] = datetime.now()
+            exam_data['final_score'] = final_score
+            
+            # Move to completed exams
+            self.completed_exams.append(exam_data)
+            del self.active_exams[session_id]
+            
+            # Mark session as inactive
+            if session_id in self.exam_sessions:
+                self.exam_sessions[session_id]['is_active'] = False
+            
+            return True
+        
+        return False
+    
+    def get_queue_status(self):
+        """Get current queue status"""
+        return {
+            'waiting_count': len(self.waiting_queue),
+            'active_exams': len(self.active_exams),
+            'completed_today': len([e for e in self.completed_exams 
+                                  if e['end_time'].date() == datetime.now().date()]),
+            'capacity_utilization': len(self.active_exams) / self.max_concurrent_exams
+        }
+    
+    def calculate_estimated_start_time(self):
+        """Calculate estimated start time for queued users"""
+        if not self.waiting_queue:
+            return datetime.now()
+        
+        # Assume average exam time of 45 minutes
+        avg_exam_time = 45  # minutes
+        
+        # Calculate how many users are ahead
+        available_slots = max(0, self.max_concurrent_exams - len(self.active_exams))
+        queue_position = len(self.waiting_queue)
+        
+        if available_slots > 0:
+            estimated_minutes = 0
+        else:
+            estimated_minutes = (queue_position / self.max_concurrent_exams) * avg_exam_time
+        
+        return datetime.now() + timedelta(minutes=estimated_minutes)
+    
+    def cleanup_expired_sessions(self):
+        """Remove expired exam sessions"""
+        current_time = datetime.now()
+        expired_sessions = []
+        
+        for session_id, session_data in self.exam_sessions.items():
+            if current_time > session_data['expires_at']:
+                expired_sessions.append(session_id)
+        
+        for session_id in expired_sessions:
+            # Complete any active exams
+            if session_id in self.active_exams:
+                self.complete_exam(session_id)
+            
+            del self.exam_sessions[session_id]</code>
+                                </pre>
+                            </div>
+                        </div>
+                        <div class="section-content d-none" id="project6-algo">
+                            <h4 class="section-title">
+                                <i class="fas fa-cogs">
+                                </i>
+                                Core Algorithms
+                            </h4>
+                            <div class="code-block">
+                                <div class="code-header">Score Computation Algorithm</div>
+                                <pre>
+                                    <code class="language-python">def calculate_weighted_score(answers, questions, scoring_method='standard'):
+    """
+    Calculate quiz score using various scoring methods
+    Time Complexity: O(n) where n is number of questions
+    """
+    if scoring_method == 'standard':
+        return calculate_standard_score(answers, questions)
+    elif scoring_method == 'weighted_difficulty':
+        return calculate_difficulty_weighted_score(answers, questions)
+    elif scoring_method == 'negative_marking':
+        return calculate_negative_marking_score(answers, questions)
+    elif scoring_method == 'adaptive':
+        return calculate_adaptive_score(answers, questions)
+
+def calculate_standard_score(answers, questions):
+    """Standard scoring: 1 point per correct answer"""
+    correct_count = 0
+    total_count = len(questions)
+    
+    for i, question in enumerate(questions):
+        if i < len(answers) and answers[i] is not None:
+            if question.check_answer(answers[i]):
+                correct_count += 1
+    
+    percentage = (correct_count / total_count * 100) if total_count > 0 else 0
+    
+    return {
+        'correct_count': correct_count,
+        'total_count': total_count,
+        'percentage': percentage,
+        'total_points': correct_count,
+        'max_points': total_count,
+        'scoring_method': 'standard'
+    }
+
+def calculate_difficulty_weighted_score(answers, questions):
+    """Difficulty-weighted scoring: harder questions worth more points"""
+    earned_points = 0
+    max_points = 0
+    correct_count = 0
+    
+    for i, question in enumerate(questions):
+        question_points = question.points * question.get_difficulty_multiplier()
+        max_points += question_points
+        
+        if i < len(answers) and answers[i] is not None:
+            if question.check_answer(answers[i]):
+                earned_points += question_points
+                correct_count += 1
+    
+    percentage = (earned_points / max_points * 100) if max_points > 0 else 0
+    
+    return {
+        'correct_count': correct_count,
+        'total_count': len(questions),
+        'percentage': percentage,
+        'total_points': earned_points,
+        'max_points': max_points,
+        'scoring_method': 'weighted_difficulty'
+    }
+
+def calculate_negative_marking_score(answers, questions, penalty_factor=0.25):
+    """Negative marking: deduct points for wrong answers"""
+    earned_points = 0
+    max_points = 0
+    correct_count = 0
+    incorrect_count = 0
+    
+    for i, question in enumerate(questions):
+        question_points = question.points * question.get_difficulty_multiplier()
+        max_points += question_points
+        
+        if i < len(answers) and answers[i] is not None:
+            if question.check_answer(answers[i]):
+                earned_points += question_points
+                correct_count += 1
+            else:
+                # Negative marking
+                earned_points -= question_points * penalty_factor
+                incorrect_count += 1
+    
+    # Ensure score doesn't go below 0
+    earned_points = max(0, earned_points)
+    percentage = (earned_points / max_points * 100) if max_points > 0 else 0
+    
+    return {
+        'correct_count': correct_count,
+        'incorrect_count': incorrect_count,
+        'total_count': len(questions),
+        'percentage': percentage,
+        'total_points': earned_points,
+        'max_points': max_points,
+        'penalty_applied': incorrect_count * penalty_factor,
+        'scoring_method': 'negative_marking'
+    }
+
+def calculate_adaptive_score(answers, questions):
+    """Adaptive scoring: adjust points based on question performance"""
+    earned_points = 0
+    max_points = 0
+    correct_count = 0
+    
+    for i, question in enumerate(questions):
+        # Base points adjusted by question difficulty and success rate
+        base_points = question.points
+        difficulty_multiplier = question.get_difficulty_multiplier()
+        
+        # Questions with lower success rates are worth more
+        success_rate_multiplier = 2.0 - question.success_rate  # Range: 1.0 to 2.0
+        
+        question_points = base_points * difficulty_multiplier * success_rate_multiplier
+        max_points += question_points
+        
+        if i < len(answers) and answers[i] is not None:
+            if question.check_answer(answers[i]):
+                earned_points += question_points
+                correct_count += 1
+    
+    percentage = (earned_points / max_points * 100) if max_points > 0 else 0
+    
+    return {
+        'correct_count': correct_count,
+        'total_count': len(questions),
+        'percentage': percentage,
+        'total_points': earned_points,
+        'max_points': max_points,
+        'scoring_method': 'adaptive'
+    }</code>
+                                </pre>
+                            </div>
+                            <div class="code-block">
+                                <div class="code-header">Random Question Generation Algorithm</div>
+                                <pre>
+                                    <code class="language-python">import random
+
+def generate_random_quiz(question_pool, num_questions, difficulty_distribution=None):
+    """
+    Generate random quiz from question pool with difficulty distribution
+    Time Complexity: O(n log n) where n is pool size
+    """
+    if difficulty_distribution is None:
+        difficulty_distribution = {1: 0.1, 2: 0.2, 3: 0.4, 4: 0.2, 5: 0.1}
+    
+    # Group questions by difficulty
+    questions_by_difficulty = {}
+    for question in question_pool:
+        difficulty = question.difficulty_level
+        if difficulty not in questions_by_difficulty:
+            questions_by_difficulty[difficulty] = []
+        questions_by_difficulty[difficulty].append(question)
+    
+    selected_questions = []
+    
+    for difficulty, proportion in difficulty_distribution.items():
+        if difficulty in questions_by_difficulty:
+            questions_needed = int(num_questions * proportion)
+            available_questions = questions_by_difficulty[difficulty]
+            
+            if len(available_questions) >= questions_needed:
+                selected = random.sample(available_questions, questions_needed)
+            else:
+                selected = available_questions.copy()
+            
+            selected_questions.extend(selected)
+    
+    # Fill remaining slots if needed
+    while len(selected_questions) < num_questions:
+        remaining_questions = [q for q in question_pool if q not in selected_questions]
+        if not remaining_questions:
+            break
+        selected_questions.append(random.choice(remaining_questions))
+    
+    # Shuffle the final selection
+    random.shuffle(selected_questions)
+    return selected_questions[:num_questions]
+
+def generate_adaptive_quiz(question_pool, user_performance_history, target_difficulty=3):
+    """
+    Generate personalized quiz based on user's past performance
+    Time Complexity: O(n) where n is question pool size
+    """
+    user_weak_topics = analyze_user_weaknesses(user_performance_history)
+    user_avg_performance = calculate_average_performance(user_performance_history)
+    
+    # Adjust target difficulty based on user performance
+    if user_avg_performance > 80:
+        target_difficulty = min(5, target_difficulty + 1)
+    elif user_avg_performance < 60:
+        target_difficulty = max(1, target_difficulty - 1)
+    
+    # Score questions based on relevance to user
+    scored_questions = []
+    
+    for question in question_pool:
+        score = 0
+        
+        # Prefer questions in user's weak topics
+        if question.category in user_weak_topics:
+            score += 3
+        
+        # Prefer questions near target difficulty
+        difficulty_diff = abs(question.difficulty_level - target_difficulty)
+        score += (5 - difficulty_diff)
+        
+        # Prefer questions user hasn't seen recently
+        if not recently_answered(question, user_performance_history):
+            score += 2
+        
+        # Prefer questions with appropriate success rate
+        if 0.3 <= question.success_rate <= 0.7:  # Challenging but fair
+            score += 1
+        
+        scored_questions.append((question, score))
+    
+    # Sort by score and select top questions
+    scored_questions.sort(key=lambda x: x[1], reverse=True)
+    
+    # Take top 50% and randomly select from them for variety
+    top_half = scored_questions[:len(scored_questions)//2]
+    selected_questions = [q[0] for q in random.sample(top_half, min(20, len(top_half)))]
+    
+    return selected_questions
+
+def shuffle_question_options(questions):
+    """
+    Shuffle options for multiple choice questions
+    Time Complexity: O(n * m) where n = questions, m = avg options per question
+    """
+    shuffled_questions = []
+    
+    for question in questions:
+        if question.question_type == 'multiple_choice' and question.options:
+            # Create a copy of the question
+            new_question = copy.deepcopy(question)
+            
+            # Create mapping of old to new positions
+            original_options = new_question.options.copy()
+            random.shuffle(new_question.options)
+            
+            # Update correct answer index
+            for new_index, option in enumerate(new_question.options):
+                if option['is_correct']:
+                    new_question.correct_answer = new_index
+                    break
+            
+            shuffled_questions.append(new_question)
+        else:
+            shuffled_questions.append(question)
+    
+    return shuffled_questions
+
+def analyze_user_weaknesses(performance_history):
+    """Analyze user performance to identify weak topics"""
+    topic_performance = {}
+    
+    for result in performance_history:
+        for question_result in result.get('question_results', []):
+            topic = question_result.get('category', 'general')
+            
+            if topic not in topic_performance:
+                topic_performance[topic] = {'correct': 0, 'total': 0}
+            
+            topic_performance[topic]['total'] += 1
+            if question_result.get('is_correct', False):
+                topic_performance[topic]['correct'] += 1
+    
+    # Find topics with performance below 70%
+    weak_topics = []
+    for topic, stats in topic_performance.items():
+        if stats['total'] > 0:
+            performance = stats['correct'] / stats['total']
+            if performance < 0.7:
+                weak_topics.append(topic)
+    
+    return weak_topics</code>
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2025 Python OOP + DSA Systems Showcase. Built with modern web technologies.</p>
+                <p>Demonstrating the power of Object-Oriented Programming, Data Structures, and Algorithms in Python.</p>
+            </div>
+        </footer>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+        </script>
+        <!-- Prism.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js">
+        </script>
+        <script src="script.js">
+        </script>
+    </body>
+</html>
