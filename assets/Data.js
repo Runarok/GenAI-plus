@@ -1,18 +1,5 @@
 const menuData = [
   {
-    id: "games",
-    title: "Games",
-    links: [
-      { label: "Checkers", url: "Games/Checkers/index.html", desc: "Classic strategic boardgame." },            
-      { label: "Cyper Type", url: "Games/Cyper Type/index.html", desc: "Type Falling text." },
-      { label: "Reflex Rush", url: "Games/Reflex Rush/index.html", desc: "Rapid Response Test." },
-      { label: "Simon Says", url: "Games/Simon Says/index.html", desc: "Memory pattern light game." },
-      { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." },
-      { label: "Skyward Ascent", url: "Games/Skyward Ascent/index.html", desc: "Fancy Doodle Jump." },
-      { label: "Sudoku", url: "Games/Sudoku/index.html", desc: "Sudoku." }
-    ]
-  },
-  {
     id: "college",
     title: "College",
     links: [
@@ -26,6 +13,19 @@ const menuData = [
   { label: "Python Projects", url: "College/Python/index.html", desc: "Explore Simple Python projects." },
   { label: "Python Quiz Framework", url: "College/Quiz/index.html", desc: "OOP-based Python quiz (~1k lines)." }
    ]
+  },
+  {
+    id: "games",
+    title: "Games",
+    links: [
+      { label: "Checkers", url: "Games/Checkers/index.html", desc: "Classic strategic boardgame." },            
+      { label: "Cyper Type", url: "Games/Cyper Type/index.html", desc: "Type Falling text." },
+      { label: "Reflex Rush", url: "Games/Reflex Rush/index.html", desc: "Rapid Response Test." },
+      { label: "Simon Says", url: "Games/Simon Says/index.html", desc: "Memory pattern light game." },
+      { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." },
+      { label: "Skyward Ascent", url: "Games/Skyward Ascent/index.html", desc: "Fancy Doodle Jump." },
+      { label: "Sudoku", url: "Games/Sudoku/index.html", desc: "Sudoku." }
+    ]
   },
   {
     id: "tools",
