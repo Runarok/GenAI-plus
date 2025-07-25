@@ -1,0 +1,182 @@
+:root {
+	--toolbar-bg-light: #f2f2f2e6;
+	--toolbar-bg-dark: #12191fe6;
+	--toolbar-shadow: 0 2px 8px 0 #0003;
+	--toolbar-blur: blur(6px);
+	--toolbar-border: 1px solid #0002;
+	--toolbar-radius: 12px;
+	--font-main: 'Segoe UI', 'Cantarell', 'Lato', 'sans-serif';
+/* Theme colors */
+	<COMMENTFIX>
+
+
+    --main-bg-light: #f6fafb;
+	--main-bg-dark: #19222a;
+	--canvas-bg-light: #e9f1fa;
+	--canvas-bg-dark: #19222a;
+	--text-light: #1b2c34;
+	--text-dark: #e1ecf5;
+	--primary: #00b4b6;
+	--primary-dark: #0fe4dc;
+	--button-bg-light: #e4f0ee;
+	--button-bg-dark: #2b3a44;
+	--button-hover-light: #cfe4e1;
+	--button-hover-dark: #1f5667;
+	--toolbar-height: 58px;
+	--canvas-top: 58px;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background: var(--main-bg-dark);
+	font-family: var(--font-main);
+	transition: background 0.2s;
+	height: 100vh;
+	min-height: 100%;
+}
+
+body.light {
+	background: var(--main-bg-light);
+}
+
+#toolbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	height: var(--toolbar-height);
+	z-index: 1000;
+	color: var(--text-dark);
+	background: var(--toolbar-bg-dark);
+	box-shadow: var(--toolbar-shadow);
+	border-bottom: var(--toolbar-border);
+	backdrop-filter: var(--toolbar-blur);
+	border-radius: 0 0 var(--toolbar-radius) var(--toolbar-radius);
+	font-size: 1em;
+	user-select: none;
+	padding: 0 28px;
+	transition: background 0.2s, color 0.2s;
+}
+
+body.light #toolbar {
+	color: var(--text-light);
+	background: var(--toolbar-bg-light);
+	border-bottom: 1px solid #c4e5e7bb;
+}
+
+#toolbar label, #toolbar select, #toolbar input, #toolbar span, #toolbar button {
+	font-family: inherit;
+	font-size: 1em;
+}
+
+#tool-selector label, #tool-selector select {
+	margin-right: 8px;
+}
+
+#brush-size, #zoom {
+	width: 65px;
+}
+
+#clear-btn, #save-btn, #theme-btn {
+	background: var(--button-bg-dark);
+	color: var(--text-dark);
+	border: none;
+	padding: 8px 18px;
+	border-radius: 6px;
+	cursor: pointer;
+	margin-left: 6px;
+	transition: background 0.16s, color 0.16s;
+	font-weight: 500;
+	letter-spacing: 0.04em;
+}
+
+#clear-btn:hover, #save-btn:hover, #theme-btn:hover {
+	background: var(--button-hover-dark);
+	color: var(--primary-dark);
+}
+
+body.light #clear-btn, body.light #save-btn, body.light #theme-btn {
+	background: var(--button-bg-light);
+	color: var(--text-light);
+}
+
+body.light #clear-btn:hover, body.light #save-btn:hover, body.light #theme-btn:hover {
+	background: var(--button-hover-light);
+	color: var(--primary);
+}
+
+#theme-btn {
+	margin-left: auto;
+	font-size: 1.15em;
+	padding: 7px 15px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	border-radius: 50px;
+}
+
+#instructions {
+	color: var(--text-dark);
+	margin-left: 28px;
+	opacity: 0.7;
+	font-size: 0.97em;
+	white-space: pre-line;
+	transition: color 0.2s;
+}
+
+body.light #instructions {
+	color: var(--text-light);
+}
+
+canvas {
+	position: absolute;
+	top: var(--canvas-top);
+	left: 0;
+	background: var(--canvas-bg-dark);
+	width: 100vw;
+	height: calc(100vh - var(--canvas-top));
+	image-rendering: pixelated;
+	cursor: crosshair;
+	transition: background 0.2s;
+	outline: none;
+	display: block;
+}
+
+body.light canvas {
+	background: var(--canvas-bg-light);
+}
+
+#color-picker {
+	border: none;
+	outline: 2px solid var(--primary);
+	border-radius: 4px;
+	width: 34px;
+	height: 32px;
+	vertical-align: middle;
+	background: none;
+	margin-right: 2px;
+	cursor: pointer;
+	transition: outline 0.2s;
+}
+
+@media (max-width: 600px) {
+	#toolbar {
+		flex-wrap: wrap;
+		font-size: 0.96em;
+		padding: 0 6px;
+		gap: 8px;
+	}
+
+	#instructions {
+		display: none;
+	}
+
+	#theme-btn {
+		padding: 7px 8px;
+	}
+}

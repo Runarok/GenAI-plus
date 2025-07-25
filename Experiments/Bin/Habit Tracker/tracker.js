@@ -1,6 +1,5 @@
 // 👇 Set your fixed start time here
-// Changed to "18.52 - 21 07 2025" (6:52 PM, 21 July 2025)
-const customStartInput = "18.52 - 21 07 2025";
+const customStartInput = "12.23 - 25 07 2025";
 
 // Parse start time: "18.52 - 21 07 2025"
 const [timeStr, dateStr] = customStartInput.split(" - ");

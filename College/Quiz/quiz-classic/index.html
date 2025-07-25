@@ -1,428 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Quiz/Exam Platform - Python Code Showcase</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
-    
-    <!-- Prism.js for syntax highlighting -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-    
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
-            color: #e0e0e0;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #fff, #a8edea);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .tech-stack {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .tech-badge {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-menu {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .nav-item {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 15px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: white;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .section {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .section h2 {
-            color: #4fc3f7;
-            margin-bottom: 20px;
-            font-size: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section h3 {
-            color: #81c784;
-            margin: 25px 0 15px 0;
-            font-size: 1.4rem;
-        }
-
-        .description {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 4px solid #4fc3f7;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .feature-card {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .feature-card h4 {
-            color: #ffeb3b;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .code-container {
-            position: relative;
-            margin: 20px 0;
-        }
-
-        .code-header {
-            background: #2d2d2d;
-            padding: 10px 15px;
-            border-radius: 8px 8px 0 0;
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            border-bottom: 1px solid #444;
-        }
-
-        .code-title {
-            color: #4fc3f7;
-            font-weight: bold;
-        }
-
-        .copy-btn {
-            background: #4caf50;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-left: auto;
-        }
-
-        .copy-btn:hover {
-            background: #45a049;
-            transform: translateY(-1px);
-        }
-
-        .copy-btn.copied {
-            background: #2196f3;
-        }
-
-        pre {
-            margin: 0 !important;
-            border-radius: 0 0 8px 8px !important;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .usage-example {
-            background: rgba(76, 175, 80, 0.1);
-            border: 1px solid #4caf50;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .usage-example h4 {
-            color: #4caf50;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .complexity-info {
-            background: rgba(255, 193, 7, 0.1);
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-
-        .complexity-info h5 {
-            color: #ffc107;
-            margin-bottom: 8px;
-        }
-
-        .data-structures {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .ds-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .ds-card h4 {
-            color: #fff;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        .algorithms {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .algo-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            padding: 25px;
-            border-radius: 12px;
-            color: white;
-        }
-
-        .algo-card h4 {
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        .scrollspy-nav {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 10px;
-            padding: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 1000;
-        }
-
-        .scrollspy-nav a {
-            display: block;
-            color: #ccc;
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            margin: 5px 0;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .scrollspy-nav a:hover,
-        .scrollspy-nav a.active {
-            background: #4fc3f7;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .scrollspy-nav {
-                display: none;
-            }
-            
-            .nav-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 10px;
-            }
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4caf50;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            z-index: 2000;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header class="header">
-            <h1><i class="fas fa-graduation-cap"></i> Online Quiz/Exam Platform</h1>
-            <p>Comprehensive Python Implementation with OOP, DSA & Algorithms</p>
-            <div class="tech-stack">
-                <span class="tech-badge"><i class="fab fa-python"></i> Python OOP</span>
-                <span class="tech-badge"><i class="fas fa-link"></i> Linked Lists</span>
-                <span class="tech-badge"><i class="fas fa-hashtag"></i> Hash Maps</span>
-                <span class="tech-badge"><i class="fas fa-layer-group"></i> Queues</span>
-                <span class="tech-badge"><i class="fas fa-calculator"></i> Algorithms</span>
-            </div>
-        </header>
-
-        <nav class="nav-menu">
-            <div class="nav-grid">
-                <a href="#question-class" class="nav-item">
-                    <i class="fas fa-question-circle"></i> Question Class
-                </a>
-                <a href="#quiz-class" class="nav-item">
-                    <i class="fas fa-clipboard-list"></i> Quiz Class
-                </a>
-                <a href="#result-class" class="nav-item">
-                    <i class="fas fa-chart-bar"></i> Quiz Result Class
-                </a>
-                <a href="#linked-list" class="nav-item">
-                    <i class="fas fa-link"></i> Question Linked List
-                </a>
-                <a href="#hashmap" class="nav-item">
-                    <i class="fas fa-hashtag"></i> User Score HashMap
-                </a>
-                <a href="#queue" class="nav-item">
-                    <i class="fas fa-layer-group"></i> Exam Flow Queue
-                </a>
-                <a href="#algorithms" class="nav-item">
-                    <i class="fas fa-calculator"></i> Scoring Algorithms
-                </a>
-                <a href="#generation" class="nav-item">
-                    <i class="fas fa-random"></i> Question Generation
-                </a>
-            </div>
-        </nav>
-
-        <!-- Question Class Section -->
-        <section id="question-class" class="section">
-            <h2><i class="fas fa-question-circle"></i> Question Class</h2>
-            
-            <div class="description">
-                <p>The <strong>Question</strong> class is the foundation of the quiz system. It represents individual questions with support for multiple question types, difficulty levels, and advanced features like similarity checking and statistics tracking.</p>
-            </div>
-
-            <div class="features">
-                <div class="feature-card">
-                    <h4><i class="fas fa-list"></i> Question Types</h4>
-                    <p>Supports multiple choice, true/false, and short answer questions with flexible answer checking.</p>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Online Quiz/Exam Platform - Python Code Showcase</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+        <!-- Prism.js for syntax highlighting -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js">
+        </script>
+        <!-- Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <header class="header">
+                <h1>
+                    <i class="fas fa-graduation-cap">
+                    </i>
+                    Online Quiz/Exam Platform
+                </h1>
+                <p>Comprehensive Python Implementation with OOP, DSA & Algorithms</p>
+                <div class="tech-stack">
+                    <span class="tech-badge">
+                        <i class="fab fa-python">
+                        </i>
+                        Python OOP
+                    </span>
+                    <span class="tech-badge">
+                        <i class="fas fa-link">
+                        </i>
+                        Linked Lists
+                    </span>
+                    <span class="tech-badge">
+                        <i class="fas fa-hashtag">
+                        </i>
+                        Hash Maps
+                    </span>
+                    <span class="tech-badge">
+                        <i class="fas fa-layer-group">
+                        </i>
+                        Queues
+                    </span>
+                    <span class="tech-badge">
+                        <i class="fas fa-calculator">
+                        </i>
+                        Algorithms
+                    </span>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-signal"></i> Difficulty Levels</h4>
-                    <p>5-level difficulty system (1-5) with automatic point multipliers for scoring.</p>
+            </header>
+            <nav class="nav-menu">
+                <div class="nav-grid">
+                    <a href="#question-class" class="nav-item">
+                        <i class="fas fa-question-circle">
+                        </i>
+                        Question Class
+                    </a>
+                    <a href="#quiz-class" class="nav-item">
+                        <i class="fas fa-clipboard-list">
+                        </i>
+                        Quiz Class
+                    </a>
+                    <a href="#result-class" class="nav-item">
+                        <i class="fas fa-chart-bar">
+                        </i>
+                        Quiz Result Class
+                    </a>
+                    <a href="#linked-list" class="nav-item">
+                        <i class="fas fa-link">
+                        </i>
+                        Question Linked List
+                    </a>
+                    <a href="#hashmap" class="nav-item">
+                        <i class="fas fa-hashtag">
+                        </i>
+                        User Score HashMap
+                    </a>
+                    <a href="#queue" class="nav-item">
+                        <i class="fas fa-layer-group">
+                        </i>
+                        Exam Flow Queue
+                    </a>
+                    <a href="#algorithms" class="nav-item">
+                        <i class="fas fa-calculator">
+                        </i>
+                        Scoring Algorithms
+                    </a>
+                    <a href="#generation" class="nav-item">
+                        <i class="fas fa-random">
+                        </i>
+                        Question Generation
+                    </a>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-chart-line"></i> Statistics Tracking</h4>
-                    <p>Tracks usage count, success rate, and performance metrics for adaptive learning.</p>
+            </nav>
+            <!-- Question Class Section -->
+            <section id="question-class" class="section">
+                <h2>
+                    <i class="fas fa-question-circle">
+                    </i>
+                    Question Class
+                </h2>
+                <div class="description">
+                    <p>
+                        The
+                        <strong>Question</strong>
+                        class is the foundation of the quiz system. It represents individual questions with support for multiple question types, difficulty levels, and advanced features like similarity checking and statistics tracking.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-search"></i> Smart Answer Checking</h4>
-                    <p>Advanced text similarity for short answers with configurable thresholds.</p>
+                <div class="features">
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-list">
+                            </i>
+                            Question Types
+                        </h4>
+                        <p>Supports multiple choice, true/false, and short answer questions with flexible answer checking.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-signal">
+                            </i>
+                            Difficulty Levels
+                        </h4>
+                        <p>5-level difficulty system (1-5) with automatic point multipliers for scoring.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-chart-line">
+                            </i>
+                            Statistics Tracking
+                        </h4>
+                        <p>Tracks usage count, success rate, and performance metrics for adaptive learning.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-search">
+                            </i>
+                            Smart Answer Checking
+                        </h4>
+                        <p>Advanced text similarity for short answers with configurable thresholds.</p>
+                    </div>
                 </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-title">Question Class Implementation</span>
-                    <button class="copy-btn" onclick="copyCode('question-code')">
-                        <i class="fas fa-copy"></i> Copy Code
-                    </button>
-                </div>
-                <pre><code id="question-code" class="language-python">class Question:
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">Question Class Implementation</span>
+                        <button class="copy-btn" onclick="copyCode('question-code')">
+                            <i class="fas fa-copy">
+                            </i>
+                            Copy Code
+                        </button>
+                    </div>
+                    <pre>
+                        <code id="question-code" class="language-python">class Question:
     def __init__(self, question_id, text, question_type, difficulty_level):
         self.question_id = question_id
         self.text = text
@@ -491,19 +223,26 @@
     def get_difficulty_multiplier(self):
         """Get point multiplier based on difficulty"""
         multipliers = {1: 1.0, 2: 1.2, 3: 1.5, 4: 1.8, 5: 2.0}
-        return multipliers.get(self.difficulty_level, 1.0)</code></pre>
-            </div>
-
-            <div class="usage-example">
-                <h4><i class="fas fa-play"></i> Usage Example</h4>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-title">Creating and Using Questions</span>
-                        <button class="copy-btn" onclick="copyCode('question-usage')">
-                            <i class="fas fa-copy"></i> Copy Code
-                        </button>
-                    </div>
-                    <pre><code id="question-usage" class="language-python"># Create a multiple choice question
+        return multipliers.get(self.difficulty_level, 1.0)</code>
+                    </pre>
+                </div>
+                <div class="usage-example">
+                    <h4>
+                        <i class="fas fa-play">
+                        </i>
+                        Usage Example
+                    </h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">Creating and Using Questions</span>
+                            <button class="copy-btn" onclick="copyCode('question-usage')">
+                                <i class="fas fa-copy">
+                                </i>
+                                Copy Code
+                            </button>
+                        </div>
+                        <pre>
+                            <code id="question-usage" class="language-python"># Create a multiple choice question
 question = Question(1, "What is the capital of France?", "multiple_choice", 2)
 question.add_option("London", False)
 question.add_option("Berlin", False)
@@ -526,55 +265,91 @@ print(f"Answer 'four' correct: {short_q.check_answer('four')}")
 # Update statistics
 question.update_statistics(True)
 print(f"Success rate: {question.success_rate}")
-print(f"Difficulty multiplier: {question.get_difficulty_multiplier()}")</code></pre>
+print(f"Difficulty multiplier: {question.get_difficulty_multiplier()}")</code>
+                        </pre>
+                    </div>
                 </div>
-            </div>
-
-            <div class="complexity-info">
-                <h5><i class="fas fa-clock"></i> Time Complexity Analysis</h5>
-                <ul>
-                    <li><strong>add_option():</strong> O(1) - Constant time insertion</li>
-                    <li><strong>check_answer():</strong> O(1) for multiple choice, O(n) for short answer similarity</li>
-                    <li><strong>update_statistics():</strong> O(1) - Simple arithmetic operations</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Quiz Class Section -->
-        <section id="quiz-class" class="section">
-            <h2><i class="fas fa-clipboard-list"></i> Quiz Class</h2>
-            
-            <div class="description">
-                <p>The <strong>Quiz</strong> class manages collections of questions and provides comprehensive quiz functionality including scoring, time limits, shuffling, and publishing controls.</p>
-            </div>
-
-            <div class="features">
-                <div class="feature-card">
-                    <h4><i class="fas fa-cogs"></i> Quiz Configuration</h4>
-                    <p>Configurable time limits, attempt limits, passing scores, and question/option shuffling.</p>
+                <div class="complexity-info">
+                    <h5>
+                        <i class="fas fa-clock">
+                        </i>
+                        Time Complexity Analysis
+                    </h5>
+                    <ul>
+                        <li>
+                            <strong>add_option():</strong>
+                            O(1) - Constant time insertion
+                        </li>
+                        <li>
+                            <strong>check_answer():</strong>
+                            O(1) for multiple choice, O(n) for short answer similarity
+                        </li>
+                        <li>
+                            <strong>update_statistics():</strong>
+                            O(1) - Simple arithmetic operations
+                        </li>
+                    </ul>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-calculator"></i> Advanced Scoring</h4>
-                    <p>Multiple scoring methods with difficulty-based point multipliers and detailed analytics.</p>
+            </section>
+            <!-- Quiz Class Section -->
+            <section id="quiz-class" class="section">
+                <h2>
+                    <i class="fas fa-clipboard-list">
+                    </i>
+                    Quiz Class
+                </h2>
+                <div class="description">
+                    <p>
+                        The
+                        <strong>Quiz</strong>
+                        class manages collections of questions and provides comprehensive quiz functionality including scoring, time limits, shuffling, and publishing controls.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-certificate"></i> Certification</h4>
-                    <p>Automatic certificate generation for passed quizzes with unique certificate IDs.</p>
+                <div class="features">
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-cogs">
+                            </i>
+                            Quiz Configuration
+                        </h4>
+                        <p>Configurable time limits, attempt limits, passing scores, and question/option shuffling.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-calculator">
+                            </i>
+                            Advanced Scoring
+                        </h4>
+                        <p>Multiple scoring methods with difficulty-based point multipliers and detailed analytics.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-certificate">
+                            </i>
+                            Certification
+                        </h4>
+                        <p>Automatic certificate generation for passed quizzes with unique certificate IDs.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-eye">
+                            </i>
+                            Publishing Control
+                        </h4>
+                        <p>Quiz publishing system with validation and access control mechanisms.</p>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-eye"></i> Publishing Control</h4>
-                    <p>Quiz publishing system with validation and access control mechanisms.</p>
-                </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-title">Quiz Class Implementation</span>
-                    <button class="copy-btn" onclick="copyCode('quiz-code')">
-                        <i class="fas fa-copy"></i> Copy Code
-                    </button>
-                </div>
-                <pre><code id="quiz-code" class="language-python">class Quiz:
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">Quiz Class Implementation</span>
+                        <button class="copy-btn" onclick="copyCode('quiz-code')">
+                            <i class="fas fa-copy">
+                            </i>
+                            Copy Code
+                        </button>
+                    </div>
+                    <pre>
+                        <code id="quiz-code" class="language-python">class Quiz:
     def __init__(self, quiz_id, title, description, creator_id):
         self.quiz_id = quiz_id
         self.title = title
@@ -652,19 +427,26 @@ print(f"Difficulty multiplier: {question.get_difficulty_multiplier()}")</code></
             'completion_date': datetime.now(),
             'passed': score_data['passed'],
             'certificate_id': f"CERT_{self.quiz_id}_{user_id}_{int(time.time())}"
-        }</code></pre>
-            </div>
-
-            <div class="usage-example">
-                <h4><i class="fas fa-play"></i> Usage Example</h4>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-title">Creating and Managing Quizzes</span>
-                        <button class="copy-btn" onclick="copyCode('quiz-usage')">
-                            <i class="fas fa-copy"></i> Copy Code
-                        </button>
-                    </div>
-                    <pre><code id="quiz-usage" class="language-python"># Create a new quiz
+        }</code>
+                    </pre>
+                </div>
+                <div class="usage-example">
+                    <h4>
+                        <i class="fas fa-play">
+                        </i>
+                        Usage Example
+                    </h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">Creating and Managing Quizzes</span>
+                            <button class="copy-btn" onclick="copyCode('quiz-usage')">
+                                <i class="fas fa-copy">
+                                </i>
+                                Copy Code
+                            </button>
+                        </div>
+                        <pre>
+                            <code id="quiz-usage" class="language-python"># Create a new quiz
 quiz = Quiz(1, "Python Basics", "Test your Python knowledge", "teacher_123")
 quiz.time_limit = 30  # 30 minutes
 quiz.passing_score = 75
@@ -695,46 +477,70 @@ print(f"Passed: {score_data['passed']}")
 # Generate certificate if passed
 if score_data['passed']:
     cert_data = quiz.generate_certificate_data("user_456", score_data)
-    print(f"Certificate ID: {cert_data['certificate_id']}")</code></pre>
+    print(f"Certificate ID: {cert_data['certificate_id']}")</code>
+                        </pre>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Quiz Result Section -->
-        <section id="result-class" class="section">
-            <h2><i class="fas fa-chart-bar"></i> Quiz Result Class</h2>
-            
-            <div class="description">
-                <p>The <strong>QuizResult</strong> class tracks individual quiz attempts, recording answers, timing data, and implementing anti-cheating measures with detailed result analysis.</p>
-            </div>
-
-            <div class="features">
-                <div class="feature-card">
-                    <h4><i class="fas fa-stopwatch"></i> Time Tracking</h4>
-                    <p>Precise timing for overall quiz and individual questions with performance analytics.</p>
+            </section>
+            <!-- Quiz Result Section -->
+            <section id="result-class" class="section">
+                <h2>
+                    <i class="fas fa-chart-bar">
+                    </i>
+                    Quiz Result Class
+                </h2>
+                <div class="description">
+                    <p>
+                        The
+                        <strong>QuizResult</strong>
+                        class tracks individual quiz attempts, recording answers, timing data, and implementing anti-cheating measures with detailed result analysis.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-shield-alt"></i> Cheating Detection</h4>
-                    <p>Advanced algorithms to detect suspicious patterns and potential cheating attempts.</p>
+                <div class="features">
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-stopwatch">
+                            </i>
+                            Time Tracking
+                        </h4>
+                        <p>Precise timing for overall quiz and individual questions with performance analytics.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-shield-alt">
+                            </i>
+                            Cheating Detection
+                        </h4>
+                        <p>Advanced algorithms to detect suspicious patterns and potential cheating attempts.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-list-alt">
+                            </i>
+                            Detailed Results
+                        </h4>
+                        <p>Question-by-question breakdown with explanations and performance insights.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-database">
+                            </i>
+                            Session Management
+                        </h4>
+                        <p>Comprehensive session tracking with IP addresses and user agent information.</p>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-list-alt"></i> Detailed Results</h4>
-                    <p>Question-by-question breakdown with explanations and performance insights.</p>
-                </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-database"></i> Session Management</h4>
-                    <p>Comprehensive session tracking with IP addresses and user agent information.</p>
-                </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-title">QuizResult Class Implementation</span>
-                    <button class="copy-btn" onclick="copyCode('result-code')">
-                        <i class="fas fa-copy"></i> Copy Code
-                    </button>
-                </div>
-                <pre><code id="result-code" class="language-python">class QuizResult:
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">QuizResult Class Implementation</span>
+                        <button class="copy-btn" onclick="copyCode('result-code')">
+                            <i class="fas fa-copy">
+                            </i>
+                            Copy Code
+                        </button>
+                    </div>
+                    <pre>
+                        <code id="result-code" class="language-python">class QuizResult:
     def __init__(self, result_id, user_id, quiz_id, attempt_number):
         self.result_id = result_id
         self.user_id = user_id
@@ -828,19 +634,26 @@ if score_data['passed']:
             }
             detailed_results.append(result)
         
-        return detailed_results</code></pre>
-            </div>
-
-            <div class="usage-example">
-                <h4><i class="fas fa-play"></i> Usage Example</h4>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-title">Recording Quiz Results</span>
-                        <button class="copy-btn" onclick="copyCode('result-usage')">
-                            <i class="fas fa-copy"></i> Copy Code
-                        </button>
-                    </div>
-                    <pre><code id="result-usage" class="language-python"># Create a quiz result for tracking
+        return detailed_results</code>
+                    </pre>
+                </div>
+                <div class="usage-example">
+                    <h4>
+                        <i class="fas fa-play">
+                        </i>
+                        Usage Example
+                    </h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">Recording Quiz Results</span>
+                            <button class="copy-btn" onclick="copyCode('result-usage')">
+                                <i class="fas fa-copy">
+                                </i>
+                                Copy Code
+                            </button>
+                        </div>
+                        <pre>
+                            <code id="result-usage" class="language-python"># Create a quiz result for tracking
 result = QuizResult("result_001", "user_123", "quiz_456", 1)
 result.ip_address = "192.168.1.100"
 result.user_agent = "Mozilla/5.0..."
@@ -868,54 +681,89 @@ if result.cheating_flags:
 detailed = result.get_detailed_results(quiz)
 for i, detail in enumerate(detailed):
     print(f"Q{i+1}: {'✓' if detail['is_correct'] else '✗'} "
-          f"({detail['time_spent']}s)")</code></pre>
+          f"({detail['time_spent']}s)")</code>
+                        </pre>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Data Structures Section -->
-        <section id="linked-list" class="section">
-            <h2><i class="fas fa-link"></i> Data Structures Implementation</h2>
-            
-            <div class="description">
-                <p>The platform implements custom data structures optimized for quiz management: a <strong>Doubly Linked List</strong> for question ordering, a <strong>Hash Map</strong> for score storage, and a <strong>Queue</strong> for exam flow management.</p>
-            </div>
-
-            <div class="data-structures">
-                <div class="ds-card">
-                    <h4><i class="fas fa-link"></i> Question Linked List</h4>
-                    <p><strong>Purpose:</strong> Maintains question order with efficient insertion, deletion, and reordering operations.</p>
-                    <p><strong>Features:</strong> Doubly-linked for bidirectional traversal, position-based operations, and shuffling support.</p>
-                    <p><strong>Time Complexity:</strong></p>
-                    <ul>
-                        <li>Insert: O(1) at ends, O(n) at position</li>
-                        <li>Delete: O(n) by ID, O(1) with node reference</li>
-                        <li>Search: O(n)</li>
-                    </ul>
+            </section>
+            <!-- Data Structures Section -->
+            <section id="linked-list" class="section">
+                <h2>
+                    <i class="fas fa-link">
+                    </i>
+                    Data Structures Implementation
+                </h2>
+                <div class="description">
+                    <p>
+                        The platform implements custom data structures optimized for quiz management: a
+                        <strong>Doubly Linked List</strong>
+                        for question ordering, a
+                        <strong>Hash Map</strong>
+                        for score storage, and a
+                        <strong>Queue</strong>
+                        for exam flow management.
+                    </p>
                 </div>
-                
-                <div class="ds-card">
-                    <h4><i class="fas fa-hashtag"></i> User Score HashMap</h4>
-                    <p><strong>Purpose:</strong> Fast storage and retrieval of user scores with collision handling and dynamic resizing.</p>
-                    <p><strong>Features:</strong> Composite keys (user_id + quiz_id), load factor management, and statistical analysis.</p>
-                    <p><strong>Time Complexity:</strong></p>
-                    <ul>
-                        <li>Insert/Get: O(1) average, O(n) worst case</li>
-                        <li>Resize: O(n)</li>
-                        <li>Statistics: O(n) for user/quiz aggregation</li>
-                    </ul>
+                <div class="data-structures">
+                    <div class="ds-card">
+                        <h4>
+                            <i class="fas fa-link">
+                            </i>
+                            Question Linked List
+                        </h4>
+                        <p>
+                            <strong>Purpose:</strong>
+                            Maintains question order with efficient insertion, deletion, and reordering operations.
+                        </p>
+                        <p>
+                            <strong>Features:</strong>
+                            Doubly-linked for bidirectional traversal, position-based operations, and shuffling support.
+                        </p>
+                        <p>
+                            <strong>Time Complexity:</strong>
+                        </p>
+                        <ul>
+                            <li>Insert: O(1) at ends, O(n) at position</li>
+                            <li>Delete: O(n) by ID, O(1) with node reference</li>
+                            <li>Search: O(n)</li>
+                        </ul>
+                    </div>
+                    <div class="ds-card">
+                        <h4>
+                            <i class="fas fa-hashtag">
+                            </i>
+                            User Score HashMap
+                        </h4>
+                        <p>
+                            <strong>Purpose:</strong>
+                            Fast storage and retrieval of user scores with collision handling and dynamic resizing.
+                        </p>
+                        <p>
+                            <strong>Features:</strong>
+                            Composite keys (user_id + quiz_id), load factor management, and statistical analysis.
+                        </p>
+                        <p>
+                            <strong>Time Complexity:</strong>
+                        </p>
+                        <ul>
+                            <li>Insert/Get: O(1) average, O(n) worst case</li>
+                            <li>Resize: O(n)</li>
+                            <li>Statistics: O(n) for user/quiz aggregation</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-
-            <h3>Question Linked List Implementation</h3>
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-title">QuestionLinkedList Class</span>
-                    <button class="copy-btn" onclick="copyCode('linkedlist-code')">
-                        <i class="fas fa-copy"></i> Copy Code
-                    </button>
-                </div>
-                <pre><code id="linkedlist-code" class="language-python">class QuestionNode:
+                <h3>Question Linked List Implementation</h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">QuestionLinkedList Class</span>
+                        <button class="copy-btn" onclick="copyCode('linkedlist-code')">
+                            <i class="fas fa-copy">
+                            </i>
+                            Copy Code
+                        </button>
+                    </div>
+                    <pre>
+                        <code id="linkedlist-code" class="language-python">class QuestionNode:
     def __init__(self, question):
         self.question = question
         self.next = None
@@ -1019,22 +867,28 @@ class QuestionLinkedList:
         # Rebuild the linked list with shuffled order
         self.clear()
         for question in questions:
-            self.append(question)</code></pre>
-            </div>
-        </section>
-
-        <!-- HashMap Section -->
-        <section id="hashmap" class="section">
-            <h3><i class="fas fa-hashtag"></i> User Score HashMap Implementation</h3>
-            
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-title">UserScoreHashMap Class</span>
-                    <button class="copy-btn" onclick="copyCode('hashmap-code')">
-                        <i class="fas fa-copy"></i> Copy Code
-                    </button>
+            self.append(question)</code>
+                    </pre>
                 </div>
-                <pre><code id="hashmap-code" class="language-python">class UserScoreHashMap:
+            </section>
+            <!-- HashMap Section -->
+            <section id="hashmap" class="section">
+                <h3>
+                    <i class="fas fa-hashtag">
+                    </i>
+                    User Score HashMap Implementation
+                </h3>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">UserScoreHashMap Class</span>
+                        <button class="copy-btn" onclick="copyCode('hashmap-code')">
+                            <i class="fas fa-copy">
+                            </i>
+                            Copy Code
+                        </button>
+                    </div>
+                    <pre>
+                        <code id="hashmap-code" class="language-python">class UserScoreHashMap:
     def __init__(self, initial_capacity=64):
         self.capacity = initial_capacity
         self.size = 0
@@ -1122,19 +976,26 @@ class QuestionLinkedList:
                 # Re-hash with new capacity
                 index = self._hash(key)
                 self.buckets[index].append((key, value))
-                self.size += 1</code></pre>
-            </div>
-
-            <div class="usage-example">
-                <h4><i class="fas fa-play"></i> HashMap Usage Example</h4>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-title">Using the Score HashMap</span>
-                        <button class="copy-btn" onclick="copyCode('hashmap-usage')">
-                            <i class="fas fa-copy"></i> Copy Code
-                        </button>
-                    </div>
-                    <pre><code id="hashmap-usage" class="language-python"># Create score storage system
+                self.size += 1</code>
+                    </pre>
+                </div>
+                <div class="usage-example">
+                    <h4>
+                        <i class="fas fa-play">
+                        </i>
+                        HashMap Usage Example
+                    </h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">Using the Score HashMap</span>
+                            <button class="copy-btn" onclick="copyCode('hashmap-usage')">
+                                <i class="fas fa-copy">
+                                </i>
+                                Copy Code
+                            </button>
+                        </div>
+                        <pre>
+                            <code id="hashmap-usage" class="language-python"># Create score storage system
 score_map = UserScoreHashMap()
 
 # Store user scores
@@ -1160,46 +1021,70 @@ stats = score_map.calculate_user_statistics("user_123")
 print(f"User 123 statistics:")
 print(f"- Total quizzes: {stats['total_quizzes']}")
 print(f"- Average score: {stats['average_score']:.1f}%")
-print(f"- Best score: {stats['best_score']}%")</code></pre>
+print(f"- Best score: {stats['best_score']}%")</code>
+                        </pre>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Queue Section -->
-        <section id="queue" class="section">
-            <h2><i class="fas fa-layer-group"></i> Exam Flow Queue</h2>
-            
-            <div class="description">
-                <p>The <strong>ExamFlowQueue</strong> manages concurrent exam sessions using a queue-based system with session management, capacity control, and automatic cleanup of expired sessions.</p>
-            </div>
-
-            <div class="features">
-                <div class="feature-card">
-                    <h4><i class="fas fa-users"></i> Concurrent Management</h4>
-                    <p>Handles multiple simultaneous exam sessions with configurable capacity limits.</p>
+            </section>
+            <!-- Queue Section -->
+            <section id="queue" class="section">
+                <h2>
+                    <i class="fas fa-layer-group">
+                    </i>
+                    Exam Flow Queue
+                </h2>
+                <div class="description">
+                    <p>
+                        The
+                        <strong>ExamFlowQueue</strong>
+                        manages concurrent exam sessions using a queue-based system with session management, capacity control, and automatic cleanup of expired sessions.
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-clock"></i> Session Tracking</h4>
-                    <p>Comprehensive session lifecycle management with automatic expiration handling.</p>
+                <div class="features">
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-users">
+                            </i>
+                            Concurrent Management
+                        </h4>
+                        <p>Handles multiple simultaneous exam sessions with configurable capacity limits.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-clock">
+                            </i>
+                            Session Tracking
+                        </h4>
+                        <p>Comprehensive session lifecycle management with automatic expiration handling.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-chart-pie">
+                            </i>
+                            Queue Analytics
+                        </h4>
+                        <p>Real-time queue status monitoring and capacity utilization metrics.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>
+                            <i class="fas fa-hourglass-half">
+                            </i>
+                            Wait Time Estimation
+                        </h4>
+                        <p>Intelligent wait time calculation based on current queue and average exam duration.</p>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-chart-pie"></i> Queue Analytics</h4>
-                    <p>Real-time queue status monitoring and capacity utilization metrics.</p>
-                </div>
-                <div class="feature-card">
-                    <h4><i class="fas fa-hourglass-half"></i> Wait Time Estimation</h4>
-                    <p>Intelligent wait time calculation based on current queue and average exam duration.</p>
-                </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-title">ExamFlowQueue Implementation</span>
-                    <button class="copy-btn" onclick="copyCode('queue-code')">
-                        <i class="fas fa-copy"></i> Copy Code
-                    </button>
-                </div>
-                <pre><code id="queue-code" class="language-python">from collections import deque
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">ExamFlowQueue Implementation</span>
+                        <button class="copy-btn" onclick="copyCode('queue-code')">
+                            <i class="fas fa-copy">
+                            </i>
+                            Copy Code
+                        </button>
+                    </div>
+                    <pre>
+                        <code id="queue-code" class="language-python">from collections import deque
 import time
 
 class ExamFlowQueue:
@@ -1310,19 +1195,26 @@ class ExamFlowQueue:
         else:
             estimated_minutes = (queue_position / self.max_concurrent_exams) * avg_exam_time
         
-        return datetime.now() + timedelta(minutes=estimated_minutes)</code></pre>
-            </div>
-
-            <div class="usage-example">
-                <h4><i class="fas fa-play"></i> Queue Usage Example</h4>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-title">Managing Exam Flow</span>
-                        <button class="copy-btn" onclick="copyCode('queue-usage')">
-                            <i class="fas fa-copy"></i> Copy Code
-                        </button>
-                    </div>
-                    <pre><code id="queue-usage" class="language-python"># Create exam flow manager
+        return datetime.now() + timedelta(minutes=estimated_minutes)</code>
+                    </pre>
+                </div>
+                <div class="usage-example">
+                    <h4>
+                        <i class="fas fa-play">
+                        </i>
+                        Queue Usage Example
+                    </h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">Managing Exam Flow</span>
+                            <button class="copy-btn" onclick="copyCode('queue-usage')">
+                                <i class="fas fa-copy">
+                                </i>
+                                Copy Code
+                            </button>
+                        </div>
+                        <pre>
+                            <code id="queue-usage" class="language-python"># Create exam flow manager
 exam_queue = ExamFlowQueue()
 
 # Add users to waiting queue
@@ -1355,57 +1247,114 @@ print(f"- Active: {status['active_exams']}")
 print(f"- Capacity: {status['capacity_utilization']:.1%}")
 
 # Cleanup expired sessions
-exam_queue.cleanup_expired_sessions()</code></pre>
+exam_queue.cleanup_expired_sessions()</code>
+                        </pre>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Algorithms Section -->
-        <section id="algorithms" class="section">
-            <h2><i class="fas fa-calculator"></i> Scoring Algorithms</h2>
-            
-            <div class="description">
-                <p>The platform implements multiple sophisticated <strong>scoring algorithms</strong> to accommodate different assessment needs, from standard scoring to adaptive difficulty-based evaluation.</p>
-            </div>
-
-            <div class="algorithms">
-                <div class="algo-card">
-                    <h4><i class="fas fa-equals"></i> Standard Scoring</h4>
-                    <p><strong>Method:</strong> 1 point per correct answer</p>
-                    <p><strong>Use Case:</strong> Simple quizzes and basic assessments</p>
-                    <p><strong>Complexity:</strong> O(n) where n = number of questions</p>
+            </section>
+            <!-- Algorithms Section -->
+            <section id="algorithms" class="section">
+                <h2>
+                    <i class="fas fa-calculator">
+                    </i>
+                    Scoring Algorithms
+                </h2>
+                <div class="description">
+                    <p>
+                        The platform implements multiple sophisticated
+                        <strong>scoring algorithms</strong>
+                        to accommodate different assessment needs, from standard scoring to adaptive difficulty-based evaluation.
+                    </p>
                 </div>
-                
-                <div class="algo-card">
-                    <h4><i class="fas fa-weight-hanging"></i> Weighted Difficulty</h4>
-                    <p><strong>Method:</strong> Points multiplied by difficulty level</p>
-                    <p><strong>Use Case:</strong> Comprehensive exams with varying question difficulty</p>
-                    <p><strong>Complexity:</strong> O(n) with difficulty calculations</p>
+                <div class="algorithms">
+                    <div class="algo-card">
+                        <h4>
+                            <i class="fas fa-equals">
+                            </i>
+                            Standard Scoring
+                        </h4>
+                        <p>
+                            <strong>Method:</strong>
+                            1 point per correct answer
+                        </p>
+                        <p>
+                            <strong>Use Case:</strong>
+                            Simple quizzes and basic assessments
+                        </p>
+                        <p>
+                            <strong>Complexity:</strong>
+                            O(n) where n = number of questions
+                        </p>
+                    </div>
+                    <div class="algo-card">
+                        <h4>
+                            <i class="fas fa-weight-hanging">
+                            </i>
+                            Weighted Difficulty
+                        </h4>
+                        <p>
+                            <strong>Method:</strong>
+                            Points multiplied by difficulty level
+                        </p>
+                        <p>
+                            <strong>Use Case:</strong>
+                            Comprehensive exams with varying question difficulty
+                        </p>
+                        <p>
+                            <strong>Complexity:</strong>
+                            O(n) with difficulty calculations
+                        </p>
+                    </div>
+                    <div class="algo-card">
+                        <h4>
+                            <i class="fas fa-minus-circle">
+                            </i>
+                            Negative Marking
+                        </h4>
+                        <p>
+                            <strong>Method:</strong>
+                            Deduct points for incorrect answers
+                        </p>
+                        <p>
+                            <strong>Use Case:</strong>
+                            Competitive exams and professional certifications
+                        </p>
+                        <p>
+                            <strong>Complexity:</strong>
+                            O(n) with penalty calculations
+                        </p>
+                    </div>
+                    <div class="algo-card">
+                        <h4>
+                            <i class="fas fa-brain">
+                            </i>
+                            Adaptive Scoring
+                        </h4>
+                        <p>
+                            <strong>Method:</strong>
+                            Dynamic scoring based on question performance history
+                        </p>
+                        <p>
+                            <strong>Use Case:</strong>
+                            Personalized assessments and skill evaluation
+                        </p>
+                        <p>
+                            <strong>Complexity:</strong>
+                            O(n) with statistical analysis
+                        </p>
+                    </div>
                 </div>
-                
-                <div class="algo-card">
-                    <h4><i class="fas fa-minus-circle"></i> Negative Marking</h4>
-                    <p><strong>Method:</strong> Deduct points for incorrect answers</p>
-                    <p><strong>Use Case:</strong> Competitive exams and professional certifications</p>
-                    <p><strong>Complexity:</strong> O(n) with penalty calculations</p>
-                </div>
-                
-                <div class="algo-card">
-                    <h4><i class="fas fa-brain"></i> Adaptive Scoring</h4>
-                    <p><strong>Method:</strong> Dynamic scoring based on question performance history</p>
-                    <p><strong>Use Case:</strong> Personalized assessments and skill evaluation</p>
-                    <p><strong>Complexity:</strong> O(n) with statistical analysis</p>
-                </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-title">Scoring Algorithms Implementation</span>
-                    <button class="copy-btn" onclick="copyCode('scoring-code')">
-                        <i class="fas fa-copy"></i> Copy Code
-                    </button>
-                </div>
-                <pre><code id="scoring-code" class="language-python">def calculate_weighted_score(answers, questions, scoring_method='standard'):
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">Scoring Algorithms Implementation</span>
+                        <button class="copy-btn" onclick="copyCode('scoring-code')">
+                            <i class="fas fa-copy">
+                            </i>
+                            Copy Code
+                        </button>
+                    </div>
+                    <pre>
+                        <code id="scoring-code" class="language-python">def calculate_weighted_score(answers, questions, scoring_method='standard'):
     """
     Calculate quiz score using various scoring methods
     Time Complexity: O(n) where n is number of questions
@@ -1532,19 +1481,26 @@ def calculate_adaptive_score(answers, questions):
         'total_points': earned_points,
         'max_points': max_points,
         'scoring_method': 'adaptive'
-    }</code></pre>
-            </div>
-
-            <div class="usage-example">
-                <h4><i class="fas fa-play"></i> Scoring Algorithm Usage</h4>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-title">Using Different Scoring Methods</span>
-                        <button class="copy-btn" onclick="copyCode('scoring-usage')">
-                            <i class="fas fa-copy"></i> Copy Code
-                        </button>
-                    </div>
-                    <pre><code id="scoring-usage" class="language-python"># Create sample questions with different difficulties
+    }</code>
+                    </pre>
+                </div>
+                <div class="usage-example">
+                    <h4>
+                        <i class="fas fa-play">
+                        </i>
+                        Scoring Algorithm Usage
+                    </h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">Using Different Scoring Methods</span>
+                            <button class="copy-btn" onclick="copyCode('scoring-usage')">
+                                <i class="fas fa-copy">
+                                </i>
+                                Copy Code
+                            </button>
+                        </div>
+                        <pre>
+                            <code id="scoring-usage" class="language-python"># Create sample questions with different difficulties
 questions = [
     Question(1, "Easy question", "multiple_choice", 1),  # Difficulty 1
     Question(2, "Medium question", "multiple_choice", 3),  # Difficulty 3
@@ -1578,43 +1534,76 @@ print(f"Negative Marking: {negative['percentage']:.1f}% (penalty: {negative['pen
 for q in questions:
     q.success_rate = 0.6  # 60% success rate
 adaptive = calculate_weighted_score(user_answers, questions, 'adaptive')
-print(f"Adaptive: {adaptive['percentage']:.1f}% ({adaptive['total_points']:.1f}/{adaptive['max_points']:.1f} pts)")</code></pre>
+print(f"Adaptive: {adaptive['percentage']:.1f}% ({adaptive['total_points']:.1f}/{adaptive['max_points']:.1f} pts)")</code>
+                        </pre>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Question Generation Section -->
-        <section id="generation" class="section">
-            <h2><i class="fas fa-random"></i> Question Generation Algorithms</h2>
-            
-            <div class="description">
-                <p>Advanced <strong>question generation algorithms</strong> create personalized quizzes using random selection with difficulty distribution and adaptive algorithms based on user performance history.</p>
-            </div>
-
-            <div class="algorithms">
-                <div class="algo-card">
-                    <h4><i class="fas fa-dice"></i> Random Generation</h4>
-                    <p><strong>Method:</strong> Stratified sampling by difficulty levels</p>
-                    <p><strong>Features:</strong> Configurable difficulty distribution, balanced question selection</p>
-                    <p><strong>Complexity:</strong> O(n log n) for sorting and selection</p>
+            </section>
+            <!-- Question Generation Section -->
+            <section id="generation" class="section">
+                <h2>
+                    <i class="fas fa-random">
+                    </i>
+                    Question Generation Algorithms
+                </h2>
+                <div class="description">
+                    <p>
+                        Advanced
+                        <strong>question generation algorithms</strong>
+                        create personalized quizzes using random selection with difficulty distribution and adaptive algorithms based on user performance history.
+                    </p>
                 </div>
-                
-                <div class="algo-card">
-                    <h4><i class="fas fa-user-cog"></i> Adaptive Generation</h4>
-                    <p><strong>Method:</strong> Performance-based question selection</p>
-                    <p><strong>Features:</strong> Weakness analysis, personalized difficulty adjustment</p>
-                    <p><strong>Complexity:</strong> O(n) for scoring and selection</p>
+                <div class="algorithms">
+                    <div class="algo-card">
+                        <h4>
+                            <i class="fas fa-dice">
+                            </i>
+                            Random Generation
+                        </h4>
+                        <p>
+                            <strong>Method:</strong>
+                            Stratified sampling by difficulty levels
+                        </p>
+                        <p>
+                            <strong>Features:</strong>
+                            Configurable difficulty distribution, balanced question selection
+                        </p>
+                        <p>
+                            <strong>Complexity:</strong>
+                            O(n log n) for sorting and selection
+                        </p>
+                    </div>
+                    <div class="algo-card">
+                        <h4>
+                            <i class="fas fa-user-cog">
+                            </i>
+                            Adaptive Generation
+                        </h4>
+                        <p>
+                            <strong>Method:</strong>
+                            Performance-based question selection
+                        </p>
+                        <p>
+                            <strong>Features:</strong>
+                            Weakness analysis, personalized difficulty adjustment
+                        </p>
+                        <p>
+                            <strong>Complexity:</strong>
+                            O(n) for scoring and selection
+                        </p>
+                    </div>
                 </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="code-title">Question Generation Algorithms</span>
-                    <button class="copy-btn" onclick="copyCode('generation-code')">
-                        <i class="fas fa-copy"></i> Copy Code
-                    </button>
-                </div>
-                <pre><code id="generation-code" class="language-python">import random
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">Question Generation Algorithms</span>
+                        <button class="copy-btn" onclick="copyCode('generation-code')">
+                            <i class="fas fa-copy">
+                            </i>
+                            Copy Code
+                        </button>
+                    </div>
+                    <pre>
+                        <code id="generation-code" class="language-python">import random
 
 def generate_random_quiz(question_pool, num_questions, difficulty_distribution=None):
     """
@@ -1779,19 +1768,26 @@ def recently_answered(question, performance_history, days_threshold=30):
                 if q_result.get('question_id') == question.question_id:
                     return True
     
-    return False</code></pre>
-            </div>
-
-            <div class="usage-example">
-                <h4><i class="fas fa-play"></i> Question Generation Usage</h4>
-                <div class="code-container">
-                    <div class="code-header">
-                        <span class="code-title">Generating Personalized Quizzes</span>
-                        <button class="copy-btn" onclick="copyCode('generation-usage')">
-                            <i class="fas fa-copy"></i> Copy Code
-                        </button>
-                    </div>
-                    <pre><code id="generation-usage" class="language-python"># Create a question pool
+    return False</code>
+                    </pre>
+                </div>
+                <div class="usage-example">
+                    <h4>
+                        <i class="fas fa-play">
+                        </i>
+                        Question Generation Usage
+                    </h4>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">Generating Personalized Quizzes</span>
+                            <button class="copy-btn" onclick="copyCode('generation-usage')">
+                                <i class="fas fa-copy">
+                                </i>
+                                Copy Code
+                            </button>
+                        </div>
+                        <pre>
+                            <code id="generation-usage" class="language-python"># Create a question pool
 question_pool = []
 for i in range(100):
     difficulty = random.randint(1, 5)
@@ -1844,117 +1840,30 @@ print(f"User average performance: {avg_performance:.1f}%")
 
 # Shuffle question options
 shuffled_quiz = shuffle_question_options(adaptive_quiz)
-print(f"Questions shuffled: {len(shuffled_quiz)} questions with randomized options")</code></pre>
+print(f"Questions shuffled: {len(shuffled_quiz)} questions with randomized options")</code>
+                        </pre>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Scrollspy Navigation -->
-        <nav class="scrollspy-nav">
-            <a href="#question-class">Question</a>
-            <a href="#quiz-class">Quiz</a>
-            <a href="#result-class">Result</a>
-            <a href="#linked-list">Linked List</a>
-            <a href="#hashmap">HashMap</a>
-            <a href="#queue">Queue</a>
-            <a href="#algorithms">Algorithms</a>
-            <a href="#generation">Generation</a>
-        </nav>
-    </div>
-
-    <!-- Toast notification -->
-    <div id="toast" class="toast">
-        <i class="fas fa-check"></i> Code copied to clipboard!
-    </div>
-
-    <script>
-        // Copy code functionality
-        function copyCode(elementId) {
-            const codeElement = document.getElementById(elementId);
-            const text = codeElement.textContent;
-            
-            navigator.clipboard.writeText(text).then(() => {
-                showToast();
-                
-                // Update button temporarily
-                const button = event.target.closest('.copy-btn');
-                const originalHTML = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                button.classList.add('copied');
-                
-                setTimeout(() => {
-                    button.innerHTML = originalHTML;
-                    button.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-        }
-
-        // Show toast notification
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Active navigation highlighting
-        function updateActiveNav() {
-            const sections = document.querySelectorAll('.section');
-            const navLinks = document.querySelectorAll('.scrollspy-nav a');
-            
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (window.pageYOffset >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
-            });
-        }
-
-        // Update active navigation on scroll
-        window.addEventListener('scroll', updateActiveNav);
-        
-        // Initialize active navigation
-        updateActiveNav();
-
-        // Add loading animation
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease-in-out';
-            
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-
-        // Prism.js configuration
-        Prism.highlightAll();
-    </script>
-</body>
+            </section>
+            <!-- Scrollspy Navigation -->
+            <nav class="scrollspy-nav">
+                <a href="#question-class">Question</a>
+                <a href="#quiz-class">Quiz</a>
+                <a href="#result-class">Result</a>
+                <a href="#linked-list">Linked List</a>
+                <a href="#hashmap">HashMap</a>
+                <a href="#queue">Queue</a>
+                <a href="#algorithms">Algorithms</a>
+                <a href="#generation">Generation</a>
+            </nav>
+        </div>
+        <!-- Toast notification -->
+        <div id="toast" class="toast">
+            <i class="fas fa-check">
+            </i>
+            Code copied to clipboard!
+        </div>
+        <script src="script.js">
+        </script>
+    </body>
 </html>

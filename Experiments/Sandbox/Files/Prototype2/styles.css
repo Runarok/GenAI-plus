@@ -1,0 +1,32 @@
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #111;
+}
+
+canvas {
+	display: block;
+	position: absolute;
+	top: 40px;
+/* Add space for the color picker */
+	<COMMENTFIX>
+
+
+    left: 0;
+	width: 100%;
+	height: calc(100vh - 40px);
+/* Adjust the height to fit the window minus the color picker space */
+	<COMMENTFIX>
+}
+
+#color-selector {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	z-index: 1000;
+	padding: 10px;
+	background-color: rgba(0, 0, 0, 0.6);
+	border-radius: 5px;
+	color: white;
+}

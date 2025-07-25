@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quiz Master - Dark Theme</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+        <!-- CDN Links -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-brain">
+                        </i>
+                        Quiz Master
+                    </div>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon">
+                        </i>
+                        <span id="theme-text">Light Mode</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main class="main">
+            <div class="container">
+                <!-- Timer -->
+                <div class="timer" id="timer">
+                    <div class="timer-display" id="timer-display">15:00</div>
+                    <div class="timer-label">Time Remaining</div>
+                </div>
+                <!-- Quiz Container -->
+                <div class="quiz-container">
+                    <!-- Quiz Start Screen -->
+                    <div id="quiz-start" class="quiz-header">
+                        <h1 class="quiz-title">JavaScript Fundamentals Quiz</h1>
+                        <p class="quiz-description">Test your knowledge of JavaScript basics with this comprehensive quiz. You have 15 minutes to complete 10 questions.</p>
+                        <div style="margin-top: 2rem;">
+                            <button class="btn btn-primary" onclick="startQuiz()">
+                                <i class="fas fa-play">
+                                </i>
+                                Start Quiz
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Quiz Progress -->
+                    <div id="quiz-progress" class="progress-container hidden">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill">
+                            </div>
+                        </div>
+                        <div class="progress-text" id="progress-text">Question 1 of 10</div>
+                    </div>
+                    <!-- Question Container -->
+                    <div id="question-container" class="hidden">
+                        <div class="question-card">
+                            <div class="question-header">
+                                <span class="question-number" id="question-number">1</span>
+                                <span class="question-difficulty" id="question-difficulty">Medium</span>
+                            </div>
+                            <div class="question-text" id="question-text">
+                            </div>
+                            <div class="options-container" id="options-container">
+                            </div>
+                        </div>
+                        <div class="button-container">
+                            <button class="btn btn-secondary" onclick="previousQuestion()" id="prev-btn">
+                                <i class="fas fa-arrow-left">
+                                </i>
+                                Previous
+                            </button>
+                            <button class="btn btn-primary" onclick="nextQuestion()" id="next-btn">
+                                Next
+                                <i class="fas fa-arrow-right">
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Results Container -->
+                    <div id="results-container" class="results-container hidden">
+                        <h2 class="quiz-title">Quiz Complete!</h2>
+                        <div class="score-circle" id="score-circle">
+                            <div class="score-inner">
+                                <div class="score-percentage" id="score-percentage">0%</div>
+                                <div class="score-label">Score</div>
+                            </div>
+                        </div>
+                        <div class="results-stats">
+                            <div class="stat-card">
+                                <div class="stat-value" id="correct-answers">0</div>
+                                <div class="stat-label">Correct Answers</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="time-taken">0:00</div>
+                                <div class="stat-label">Time Taken</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="accuracy">0%</div>
+                                <div class="stat-label">Accuracy</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 2rem;">
+                            <button class="btn btn-primary" onclick="restartQuiz()">
+                                <i class="fas fa-redo">
+                                </i>
+                                Take Quiz Again
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="script.js">
+        </script>
+    </body>
+</html>

@@ -23,8 +23,9 @@ const menuData = [
   { label: "Cipher Programs", url: "College/Cipher Programs/index.html", desc: "Demo classical cryptographic ciphers." },
   { label: "Internet of Things", url: "College/LABS/Internet of Things/index.html", desc: "Hands-on IoT projects and demos." },
   { label: "Embedded Systems", url: "College/LABS/Embedded Systems/index.html", desc: "Explore embedded system projects." },
-  { label: "Python Projects", url: "College/Python/index.html", desc: "Explore Simple Python projects." }
-]
+  { label: "Python Projects", url: "College/Python/index.html", desc: "Explore Simple Python projects." },
+  { label: "Python Quiz Framework", url: "College/Quiz/index.html", desc: "OOP-based Python quiz (~1k lines)." }
+   ]
   },
   {
     id: "tools",
@@ -57,6 +58,7 @@ const menuData = [
     id: "about",
     title: "About",
     links: [
+      { label: "About me", url: "About/index.html?page=about", desc: "Mindset, tools, and flow." },
       { label: "Project Info", url: "About/index.html?page=hub", desc: "Learn more about this hub." },
       { label: "Contact", url: "About/index.html?page=contact", desc: "Get in touch." }
     ]
