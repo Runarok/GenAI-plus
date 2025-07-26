@@ -2,25 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Habit Streak Tracker</title>
+  <title>Habit Tracker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="tracker.css" />
 </head>
 <body>
   <div class="container">
-    <h1>📈 Habit Streak Tracker</h1>
+    <h1>🧠 Habit Tracker</h1>
 
     <div id="tab-buttons" class="tabs"></div>
-
     <div id="habit-content"></div>
 
     <div id="controls">
-      <button onclick="exportHabits()">Export</button>
-      <button onclick="document.getElementById('importFile').click()">Import</button>
-      <input type="file" id="importFile" accept=".json" style="display: none" />
-      <button onclick="promptNewHabit()">➕ Add Habit</button>
+      <button id="manageHabitsBtn">⚙️ Manage Habits</button>
     </div>
   </div>
+
+  <!-- MANAGE HABITS MODAL -->
+  <div id="manageModal" class="modal hidden">
+    <div class="modal-content" style="max-width: 600px;">
+      <h2>Manage Habits</h2>
+      <div id="habitsList"></div>
+      <hr style="margin: 1.5rem 0;">
+      <div>
+        <h3>Add New Habit</h3>
+        <input type="text" id="newHabitName" placeholder="Habit Name" />
+        <input type="text" id="newHabitTime" placeholder="Start (HH.MM - DD MM YYYY)" />
+        <button id="addHabitModalBtn">➕ Add</button>
+      </div>
+      <hr style="margin: 1.5rem 0;">
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <button id="exportModalBtn">📤 Export</button>
+        <label style="cursor: pointer;">
+          📥 Import
+          <input type="file" id="importModalFile" style="display: none;" />
+        </label>
+        <button id="closeManageModalBtn">✖ Close</button>
+      </div>
+    </div>
+  </div>
+
   <script src="tracker.js"></script>
 </body>
 </html>
