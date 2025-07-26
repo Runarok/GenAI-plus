@@ -1,30 +1,40 @@
+/* Reset & Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #0c0c0c;
+  background: #0d0d0d;
   color: #e0f7f4;
-  margin: 0;
   padding: 2rem;
   display: flex;
   justify-content: center;
+  min-height: 100vh;
 }
 
+/* Container */
 .container {
-  max-width: 800px;
   width: 100%;
+  max-width: 800px;
   text-align: center;
 }
 
+/* Header */
 h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #00ffd5;
   margin-bottom: 2rem;
 }
 
+/* Tabs */
 .tabs {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
   margin-bottom: 2rem;
 }
 
@@ -36,151 +46,278 @@ h1 {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: background 0.2s;
 }
+
+.tabs button:hover {
+  background: #00e2bb;
+}
+
 .tabs button.active {
   background: #00c4aa;
 }
 
-.achievement, .countdown {
+/* Habit Blocks */
+.achievement,
+.countdown {
   background: #161616;
   padding: 1rem;
   border-left: 4px solid #00ffd5;
-  margin-bottom: 1rem;
   border-radius: 8px;
+  margin-bottom: 1.5rem;
   text-align: left;
-  box-shadow: 0 2px 6px rgba(0, 255, 213, 0.15);
+  box-shadow: 0 2px 6px rgba(0, 255, 213, 0.2);
 }
 
-.achievement strong, .countdown strong {
-  font-size: 1.3rem;
+.achievement strong,
+.countdown strong {
+  font-size: 1.2rem;
   color: #afffea;
 }
 
-.achievement span, .countdown span {
+.achievement span,
+.countdown span {
+  margin-top: 0.4rem;
   display: block;
-  margin-top: 4px;
-  font-size: 1rem;
   color: #c0ffef;
+  font-size: 1rem;
 }
 
+/* Controls */
 #controls {
   margin-top: 2rem;
 }
 
 #controls button {
-  margin: 0.5rem;
   padding: 0.7rem 1.2rem;
+  font-size: 1rem;
   background-color: #00ffd5;
   color: #000;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 1rem;
+  transition: background 0.2s;
 }
 
 #controls button:hover {
   background-color: #00d9b3;
 }
 
+/* Modal */
 .modal {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.8);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 10;
+  align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
-  background: #161616;
+  background: #1c1c1c;
   padding: 2rem;
   border-radius: 10px;
   color: #e0f7f4;
   width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 10px #00ffd5;
+  max-width: 600px;
+  box-shadow: 0 0 15px #00ffd5;
+  animation: fadeIn 0.3s ease-out;
 }
 
-@media (min-width: 600px) {
-  .modal-content {
-    max-width: 600px;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .modal-content h2 {
-  margin-top: 0;
   color: #00ffd5;
+  margin-bottom: 1rem;
+}
+
+.modal-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .modal-content input {
-  width: 45%;
+  width: calc(50% - 1rem);
   padding: 0.6rem;
   margin: 0.5rem;
   font-size: 1rem;
-  border: none;
   border-radius: 6px;
+  border: none;
+  background: #2a2a2a;
+  color: #e0f7f4;
 }
 
+.modal-content input::placeholder {
+  color: #a0ccc7;
+}
+
+/* Habit Rows */
+#habitsList {
+  margin-bottom: 1.5rem;
+}
+
+.habit-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.habit-row input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 40%;
+  border-radius: 4px;
+  border: none;
+  background: #2a2a2a;
+  color: #e0f7f4;
+}
+
+.habit-row .delete-btn,
+.habit-row .save-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.habit-row .delete-btn {
+  background: #ff4b4b;
+  color: #fff;
+}
+
+.habit-row .delete-btn:hover {
+  background: #c90000;
+}
+
+.habit-row .save-btn {
+  background: #00ffd5;
+  color: #000;
+}
+
+.habit-row .save-btn:disabled {
+  background: #444;
+  cursor: not-allowed;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 500px) {
+  .habit-row input {
+    width: 100%;
+  }
+
+  .modal-content input {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+}
+
+/* Add New Habit Row */
+.new-habit-row {
+  justify-content: flex-start;
+}
+
+.new-habit-row input {
+  flex: 1;
+  min-width: 40%;
+}
+
+.new-habit-row .add-btn {
+  background: #00ffd5;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.new-habit-row .add-btn:hover {
+  background: #00d9b3;
+}
+
+/* Modal Actions */
 .modal-actions {
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
 }
 
-.modal-actions button {
+/* Bottom Modal Buttons */
+.bottom-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.modal-actions button,
+.import-label {
   flex: 1;
-  padding: 0.6rem;
+  min-width: 120px;
+  padding: 0.7rem 1.2rem;
   font-size: 1rem;
+  font-weight: 600;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease-in-out;
   background-color: #00ffd5;
   color: #000;
+  user-select: none;
 }
 
+.modal-actions button:hover,
+.import-label:hover {
+  background-color: #00d9b3;
+}
+
+.import-label {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.import-label input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Close Button */
+.close-btn {
+  background-color: #ff4b4b;
+  color: white;
+}
+
+.close-btn:hover {
+  background-color: #d10000;
+}
+
+/* Hidden */
 .hidden {
   display: none;
 }
 
-#habitsList {
-  margin-bottom: 1rem;
-}
-
-.habit-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-  justify-content: center;
-}
-.habit-row input {
-  width: 35%;
-  padding: 0.4rem;
-  font-size: 1rem;
-}
-.habit-row .delete-btn {
-  background: #ff4848;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 0.3rem 0.7rem;
-  cursor: pointer;
-}
-.habit-row .delete-btn:hover {
-  background: #d10000;
-}
-.habit-row .save-btn {
-  background: #00ffd5;
-  color: #000;
-  border: none;
-  border-radius: 4px;
-  padding: 0.3rem 0.7rem;
-  cursor: pointer;
-}
-.habit-row .save-btn:disabled {
-  background: #555;
-  cursor: not-allowed;
-}
