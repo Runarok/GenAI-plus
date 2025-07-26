@@ -1,26 +1,27 @@
-// 👇 Set your fixed start time here
-const customStartInput = "12.23 - 25 07 2025";
+// Default fallback start time
+const defaultStartInput = "16.23 - 26 07 2025";
 
-// Parse start time: "18.52 - 21 07 2025"
+// Load from localStorage or fallback
+const saved = localStorage.getItem("streakStart");
+const customStartInput = saved || defaultStartInput;
+
+// Parse start time
 const [timeStr, dateStr] = customStartInput.split(" - ");
 const [hour, minute] = timeStr.split('.').map(Number);
 const [day, month, year] = dateStr.split(' ').map(Number);
 const startTime = new Date(year, month - 1, day, hour, minute);
 
-// Use current real time
+// Current time
 const now = new Date();
-
 const diffMs = now - startTime;
 const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 const totalWeeks = Math.floor(totalDays / 7);
 const totalMonths = Math.floor(totalDays / 30.44);
 const totalYears = Math.floor(totalDays / 365.25);
 
-const formatDate = (date) => {
-  return date.toLocaleDateString('en-GB', {
-    day: 'numeric', month: 'short', year: 'numeric'
-  });
-};
+const formatDate = (date) => date.toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'short', year: 'numeric'
+});
 
 const achievements = [];
 
@@ -92,7 +93,6 @@ const nextTargets = [
   }
 ];
 
-// Set accurate future dates
 nextTargets[2].date.setMonth(startTime.getMonth() + totalMonths + 1);
 nextTargets[3].date.setFullYear(startTime.getFullYear() + totalYears + 1);
 
@@ -105,7 +105,7 @@ nextTargets.forEach(entry => {
   countdownContainer.appendChild(div);
 
   const update = () => {
-    const current = new Date(); // real-time updates
+    const current = new Date();
     let diff = entry.date - current;
 
     if (diff <= 0) {
@@ -113,11 +113,11 @@ nextTargets.forEach(entry => {
       return;
     }
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const days = Math.floor(diff / 86400000);
     diff -= days * 86400000;
-    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const hours = Math.floor(diff / 3600000);
     diff -= hours * 3600000;
-    const minutes = Math.floor(diff / (1000 * 60));
+    const minutes = Math.floor(diff / 60000);
     diff -= minutes * 60000;
     const seconds = Math.floor(diff / 1000);
 
@@ -128,3 +128,32 @@ nextTargets.forEach(entry => {
   update();
   setInterval(update, 1000);
 });
+
+// Import/Export functions
+function exportStreakData() {
+  const data = { start: customStartInput };
+  const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "streak.json";
+  a.click();
+}
+
+function importStreakData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const data = JSON.parse(e.target.result);
+    if (data.start) {
+      localStorage.setItem("streakStart", data.start);
+      location.reload();
+    }
+  };
+  reader.readAsText(file);
+}
+
+document.getElementById("exportBtn").addEventListener("click", exportStreakData);
+document.getElementById("importInput").addEventListener("change", importStreakData);
