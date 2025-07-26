@@ -2,24 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Habit Streak Achievements</title>
+  <title>Habit Streak Tracker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
-  <link rel="stylesheet" href="tracker.css">
+  <link rel="stylesheet" href="tracker.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Streak Achievements</h1>
-    <div id="achievements"></div>
+    <h1>📈 Habit Streak Tracker</h1>
 
-    <h2>Next Milestones</h2>
-    <div id="countdowns"></div>
+    <div id="tab-buttons" class="tabs"></div>
 
-    <button id="exportBtn">Export</button>
-    <label>
-      <input type="file" id="importInput" accept=".json" style="display: none;">
-      <button onclick="document.getElementById('importInput').click()">Import</button>
-    </label>
+    <div id="habit-content"></div>
+
+    <div id="controls">
+      <button onclick="exportHabits()">Export</button>
+      <button onclick="document.getElementById('importFile').click()">Import</button>
+      <input type="file" id="importFile" accept=".json" style="display: none" />
+      <button onclick="promptNewHabit()">➕ Add Habit</button>
+    </div>
   </div>
   <script src="tracker.js"></script>
 </body>
