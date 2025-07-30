@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prototype Hub</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #f1f1f1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00bfff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #00bfff88;
+    }
+
+    p.description {
+      max-width: 700px;
+      font-size: 16px;
+      color: #bbbbbb;
+      margin-bottom: 40px;
+    }
+
+    .hub {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .card {
+      position: relative;
+      background: #1e1e1e;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #00bfff;
+    }
+
+    .card p {
+      color: #ccc;
+      margin: 8px 0;
+    }
+
+    .card span.click-note {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: #888;
+      font-style: italic;
+    }
+
+    .card a {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      text-indent: -9999px;
+      overflow: hidden;
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .unused {
+      opacity: 0.5;
+    }
+
+    @media (max-width: 600px) {
+      .hub {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 Game Showcasing Hub</h1>
+  <p class="description">
+    This hub gives access to various UI prototypes. <br>
+    <strong>Prototype 1</strong> is a basic version (no markdown), <strong>Prototype 2</strong> supports markdown and is in use. <br>
+    <strong>Showcaser</strong> and <strong>Editor</strong> are reserved for future use.
+  </p>
+
+  <div class="hub" id="hub"></div>
+
+  <script>
+    const prototypes = [
+      {
+        title: "🧪 Prototype 1",
+        description: "Basic prototype without Markdown support. Actively used elsewhere.",
+        url: "path/to/prototype1.html",
+        active: true
+      },
+      {
+        title: "📄 Prototype 2",
+        description: "Enhanced version with Markdown rendering. Currently in use.",
+        url: "path/to/prototype2.html",
+        active: true
+      },
+      {
+        title: "📺 Showcaser",
+        description: "Planned as a visual output viewer. Not yet in use.",
+        url: "path/to/showcaser.html",
+        active: false
+      },
+      {
+        title: "📝 Editor",
+        description: "Reserved for a future editor with live editing capabilities.",
+        url: "path/to/editor.html",
+        active: false
+      }
+    ];
+
+    const hub = document.getElementById('hub');
+
+    prototypes.forEach(({ title, description, url, active }) => {
+      const card = document.createElement('div');
+      card.className = 'card' + (active ? '' : ' unused');
+
+      card.innerHTML = `
+        <a href="${url}" ${active ? '' : 'tabindex="-1"'}></a>
+        <div class="card-content">
+          <h2>${title}</h2>
+          <p>${description}</p>
+          <span class="click-note">Click anywhere to open</span>
+        </div>
+      `;
+
+      hub.appendChild(card);
+    });
+  </script>
+</body>
+</html>

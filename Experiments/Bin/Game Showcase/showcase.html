@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Showcase</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <style>
+        :root {
+            /* Dark Theme (Default) */
+            --bg-primary: #0f0f0f;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2a2a2a;
+            --bg-quaternary: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #1d4ed8;
+            --border-color: #404040;
+            --shadow: rgba(0, 0, 0, 0.5);
+            --hover-bg: #333333;
+            --modal-bg: rgba(0, 0, 0, 0.8);
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --bg-quaternary: #dee2e6;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6c757d;
+            --accent-primary: #0d6efd;
+            --accent-secondary: #0b5ed7;
+            --border-color: #dee2e6;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --hover-bg: #f1f3f4;
+            --modal-bg: rgba(255, 255, 255, 0.95);
+            --success-color: #198754;
+            --warning-color: #fd7e14;
+            --error-color: #dc3545;
+        }
+
+        [data-theme="cyberpunk"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a0a1a;
+            --bg-tertiary: #2a1a2a;
+            --bg-quaternary: #3a2a3a;
+            --text-primary: #00ff41;
+            --text-secondary: #ff0080;
+            --text-muted: #808080;
+            --accent-primary: #ff0080;
+            --accent-secondary: #00ff41;
+            --border-color: #ff0080;
+            --shadow: rgba(255, 0, 128, 0.3);
+            --hover-bg: #2a1a2a;
+            --modal-bg: rgba(26, 10, 26, 0.95);
+            --success-color: #00ff41;
+            --warning-color: #ffff00;
+            --error-color: #ff0080;
+        }
+
+        [data-theme="ocean"] {
+            --bg-primary: #0c1821;
+            --bg-secondary: #1e3a5f;
+            --bg-tertiary: #2e4a6f;
+            --bg-quaternary: #3e5a7f;
+            --text-primary: #e0f2fe;
+            --text-secondary: #b3e5fc;
+            --text-muted: #81d4fa;
+            --accent-primary: #00bcd4;
+            --accent-secondary: #0097a7;
+            --border-color: #00acc1;
+            --shadow: rgba(0, 188, 212, 0.2);
+            --hover-bg: #3e5a7f;
+            --modal-bg: rgba(30, 58, 95, 0.95);
+            --success-color: #4dd0e1;
+            --warning-color: #ffb74d;
+            --error-color: #f48fb1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .theme-selector, .view-selector {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .theme-selector:hover, .view-selector:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--accent-primary);
+        }
+
+        .search-box {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-box::placeholder {
+            color: var(--text-muted);
+        }
+
+        .edit-btn {
+            background-color: var(--warning-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .edit-btn:hover {
+            background-color: #e08e0b;
+            transform: translateY(-2px);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-item:hover {
+            background-color: var(--hover-bg);
+            color: var(--text-primary);
+        }
+
+        .breadcrumb-item.active {
+            color: var(--accent-primary);
+            font-weight: 500;
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 2rem 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .back-button {
+            background-color: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-secondary);
+            transform: translateY(-2px);
+        }
+
+        .view-options {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .view-toggle {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-toggle.active {
+            background-color: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .view-toggle:hover:not(.active) {
+            background-color: var(--hover-bg);
+            color: var(--text-primary);
+        }
+
+        /* Showcase Grid */
+        .showcase-grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .showcase-grid.grid-view {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        }
+
+        .showcase-grid.list-view {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .showcase-grid.compact-view {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Showcase Items */
+        .showcase-item {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: relative;
+        }
+
+        .showcase-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px var(--shadow);
+            border-color: var(--accent-primary);
+        }
+
+        .showcase-item.no-image {
+            padding: 1.5rem;
+        }
+
+        .showcase-item.list-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        .showcase-item.list-item:hover {
+            transform: none;
+            background-color: var(--hover-bg);
+        }
+
+        .showcase-image {
+            width: 100%;
+            height: 220px;
+            position: relative;
+            background-color: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 3rem;
+            overflow: hidden;
+        }
+
+        .showcase-image.compact {
+            height: 160px;
+        }
+
+        .showcase-image.list-image {
+            width: 80px;
+            height: 80px;
+            min-width: 80px;
+            border-radius: 8px;
+            font-size: 1.5rem;
+        }
+
+        .showcase-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: var(--bg-quaternary);
+        }
+
+        .showcase-image .placeholder-icon {
+            opacity: 0.3;
+        }
+
+        .showcase-content {
+            padding: 1.5rem;
+        }
+
+        .showcase-content.compact {
+            padding: 1rem;
+        }
+
+        .showcase-content.list-content {
+            padding: 0;
+            flex: 1;
+        }
+
+        .showcase-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .showcase-title.compact {
+            font-size: 1.1rem;
+        }
+
+        .showcase-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .showcase-description.compact {
+            -webkit-line-clamp: 2;
+            font-size: 0.85rem;
+        }
+
+        .folder-icon {
+            color: var(--accent-primary);
+            font-size: 1rem;
+        }
+
+        .item-type-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: var(--accent-primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-bg);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            max-width: 900px;
+            max-height: 90vh;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 20px 40px var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-tertiary);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background-color: var(--hover-bg);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            background-color: var(--bg-quaternary);
+        }
+
+        .markdown-content {
+            color: var(--text-primary);
+        }
+
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3,
+        .markdown-content h4,
+        .markdown-content h5,
+        .markdown-content h6 {
+            color: var(--accent-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .markdown-content h1 { font-size: 2rem; }
+        .markdown-content h2 { font-size: 1.5rem; }
+        .markdown-content h3 { font-size: 1.25rem; }
+
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .markdown-content ul,
+        .markdown-content ol {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--accent-primary);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .markdown-content code {
+            background-color: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .markdown-content pre {
+            background-color: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .markdown-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .markdown-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .markdown-content a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .markdown-content a:hover {
+            text-decoration: underline;
+        }
+
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .markdown-content th,
+        .markdown-content td {
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .markdown-content th {
+            background-color: var(--bg-tertiary);
+            font-weight: 600;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .controls {
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .showcase-grid.grid-view {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+
+            .showcase-grid.compact-view {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .view-options {
+                justify-content: center;
+            }
+
+            .modal-content {
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+            }
+
+            .modal-body {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .showcase-grid.grid-view,
+            .showcase-grid.compact-view {
+                grid-template-columns: 1fr;
+            }
+
+            .showcase-item.list-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .showcase-image.list-image {
+                width: 100%;
+                height: 120px;
+                min-width: auto;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" alt="Logo">
+                    <span>Game Showcase</span>
+                </div>
+                <div class="controls">
+                    <select class="theme-selector" id="themeSelector" aria-label="Select theme">
+                        <option value="dark">🌙 Dark</option>
+                        <option value="light">☀️ Light</option>
+                        <option value="cyberpunk">🤖 Cyberpunk</option>
+                        <option value="ocean">🌊 Ocean</option>
+                    </select>
+                    <input type="text" class="search-box" id="searchBox" placeholder="Search games..." aria-label="Search games">
+                    <a href="editor.html" class="edit-btn">
+                        <i class="fas fa-edit"></i>
+                        Edit Content
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-nav" id="breadcrumbNav">
+                <a href="#" class="breadcrumb-item active" data-path="">🏠 Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="container">
+            <div class="toolbar">
+                <button class="back-button" id="backButton" style="display: none;">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </button>
+                <div class="view-options">
+                    <span style="color: var(--text-muted); margin-right: 0.5rem;">View:</span>
+                    <button class="view-toggle active" data-view="grid" title="Grid View">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-toggle" data-view="list" title="List View">
+                        <i class="fas fa-list"></i>
+                    </button>
+                    <button class="view-toggle" data-view="compact" title="Compact View">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="showcaseContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for detailed view -->
+    <div class="modal" id="itemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <button class="modal-close" id="modalClose" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class GameShowcase {
+            constructor() {
+                this.currentPath = [];
+                this.showcaseData = null;
+                this.searchTerm = '';
+                this.currentView = 'grid';
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.loadData();
+            }
+
+            initializeElements() {
+                this.showcaseContainer = document.getElementById('showcaseContainer');
+                this.breadcrumbNav = document.getElementById('breadcrumbNav');
+                this.backButton = document.getElementById('backButton');
+                this.searchBox = document.getElementById('searchBox');
+                this.themeSelector = document.getElementById('themeSelector');
+                this.modal = document.getElementById('itemModal');
+                this.modalTitle = document.getElementById('modalTitle');
+                this.modalBody = document.getElementById('modalBody');
+                this.modalClose = document.getElementById('modalClose');
+            }
+
+            setupEventListeners() {
+                // Theme selector
+                this.themeSelector.addEventListener('change', (e) => {
+                    document.body.setAttribute('data-theme', e.target.value);
+                    localStorage.setItem('theme', e.target.value);
+                });
+
+                // Load saved theme
+                const savedTheme = localStorage.getItem('theme') || 'dark';
+                document.body.setAttribute('data-theme', savedTheme);
+                this.themeSelector.value = savedTheme;
+
+                // Load saved view
+                const savedView = localStorage.getItem('view') || 'grid';
+                this.currentView = savedView;
+
+                // Search functionality
+                this.searchBox.addEventListener('input', (e) => {
+                    this.searchTerm = e.target.value.toLowerCase();
+                    this.render();
+                });
+
+                // Back button
+                this.backButton.addEventListener('click', () => {
+                    this.navigateBack();
+                });
+
+                // View toggles
+                document.querySelectorAll('.view-toggle').forEach(toggle => {
+                    toggle.addEventListener('click', (e) => {
+                        const view = e.currentTarget.dataset.view;
+                        this.setView(view);
+                    });
+                });
+
+                // Modal controls
+                this.modalClose.addEventListener('click', () => {
+                    this.closeModal();
+                });
+
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target === this.modal) {
+                        this.closeModal();
+                    }
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.closeModal();
+                    }
+                    if (e.key === 'Backspace' && e.ctrlKey && this.currentPath.length > 0) {
+                        this.navigateBack();
+                    }
+                });
+
+                // Handle browser back/forward
+                window.addEventListener('popstate', () => {
+                    this.loadFromURL();
+                    this.render();
+                });
+            }
+
+            loadData() {
+                // Try to load from localStorage first (from editor)
+                const saved = localStorage.getItem('showcaseData');
+                if (saved) {
+                    try {
+                        this.showcaseData = JSON.parse(saved);
+                        this.loadFromURL();
+                        this.render();
+                        return;
+                    } catch (e) {
+                        console.error('Failed to load saved data:', e);
+                    }
+                }
+
+                // Fallback to default data if no saved data
+                this.showcaseData = {
+                    title: "Game Showcase",
+                    items: [
+                        {
+                            title: "Welcome to Game Showcase",
+                            description: "Use the editor to create your own showcase content. Click 'Edit Content' in the header to get started!",
+                            showImage: false,
+                            markdown: `
+# Welcome to Game Showcase! 🎮
+
+This is your **dynamic game showcase system**. You can create, edit, and organize your game content with ease.
+
+## Getting Started
+
+1. **Click "Edit Content"** in the header to open the visual editor
+2. **Create folders** to organize your games by category
+3. **Add games** with descriptions, images, and detailed markdown content
+4. **Use markdown** to create rich content with images, code blocks, and formatting
+
+## Features
+
+- 📁 **Nested folder structure** for organization
+- 🖼️ **Base64 image support** in both items and markdown
+- 🎨 **Multiple themes** (Dark, Light, Cyberpunk, Ocean)
+- 📱 **Responsive design** with multiple view modes
+- 🔗 **URL parameterization** for sharing direct links
+- ✏️ **Visual editor** for easy content management
+
+## Example Markdown Features
+
+### Code Blocks
+\`\`\`javascript
+function createAwesomeGame() {
+    return "Your next favorite game!";
+}
+\`\`\`
+
+### Lists
+- Feature 1
+- Feature 2
+- Feature 3
+
+### Images
+You can embed images directly in markdown using base64 or URLs!
+
+> Start creating your showcase by clicking **"Edit Content"** above!
+                            `
+                        }
+                    ]
+                };
+
+                this.loadFromURL();
+                this.render();
+            }
+
+            setView(view) {
+                this.currentView = view;
+                localStorage.setItem('view', view);
+                
+                // Update active toggle
+                document.querySelectorAll('.view-toggle').forEach(toggle => {
+                    toggle.classList.toggle('active', toggle.dataset.view === view);
+                });
+                
+                this.render();
+            }
+
+            loadFromURL() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const path = urlParams.get('path');
+                
+                if (path) {
+                    this.currentPath = path.split('/').filter(p => p);
+                } else {
+                    this.currentPath = [];
+                }
+            }
+
+            updateURL() {
+                const path = this.currentPath.join('/');
+                const url = path ? `?path=${encodeURIComponent(path)}` : window.location.pathname;
+                window.history.pushState({}, '', url);
+            }
+
+            getCurrentData() {
+                if (!this.showcaseData) return { items: [] };
+                
+                let data = this.showcaseData;
+                
+                for (const pathSegment of this.currentPath) {
+                    if (data.items) {
+                        const item = data.items.find(item => 
+                            this.slugify(item.title) === pathSegment
+                        );
+                        if (item && item.folder) {
+                            data = item.folder;
+                        } else {
+                            // Path not found, reset to root
+                            this.currentPath = [];
+                            return this.showcaseData;
+                        }
+                    }
+                }
+                
+                return data;
+            }
+
+            slugify(text) {
+                return text.toLowerCase()
+                    .replace(/[^\w\s-]/g, '')
+                    .replace(/[\s_-]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+            }
+
+            navigateTo(item) {
+                if (item.folder) {
+                    this.currentPath.push(this.slugify(item.title));
+                    this.updateURL();
+                    this.render();
+                } else if (item.markdown) {
+                    this.showItemModal(item);
+                }
+            }
+
+            navigateBack() {
+                if (this.currentPath.length > 0) {
+                    this.currentPath.pop();
+                    this.updateURL();
+                    this.render();
+                }
+            }
+
+            navigateToBreadcrumb(index) {
+                this.currentPath = this.currentPath.slice(0, index);
+                this.updateURL();
+                this.render();
+            }
+
+            showItemModal(item) {
+                this.modalTitle.textContent = item.title;
+                
+                let modalContent = '';
+                
+                if (item.image) {
+                    modalContent += `<img src="${item.image}" alt="${item.title}" class="modal-image">`;
+                }
+                
+                if (item.markdown) {
+                    modalContent += `<div class="markdown-content">${marked.parse(item.markdown)}</div>`;
+                } else if (item.description) {
+                    modalContent += `<p>${item.description}</p>`;
+                }
+                
+                this.modalBody.innerHTML = modalContent;
+                this.modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                // Highlight code blocks
+                if (window.Prism) {
+                    Prism.highlightAllUnder(this.modalBody);
+                }
+            }
+
+            closeModal() {
+                this.modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            filterItems(items) {
+                if (!this.searchTerm) return items;
+                
+                return items.filter(item => 
+                    item.title.toLowerCase().includes(this.searchTerm) ||
+                    (item.description && item.description.toLowerCase().includes(this.searchTerm))
+                );
+            }
+
+            renderBreadcrumb() {
+                if (!this.showcaseData) return;
+                
+                const breadcrumbItems = ['🏠 Home'];
+                let currentData = this.showcaseData;
+                
+                for (const pathSegment of this.currentPath) {
+                    if (currentData.items) {
+                        const item = currentData.items.find(item => 
+                            this.slugify(item.title) === pathSegment
+                        );
+                        if (item) {
+                            breadcrumbItems.push(item.title);
+                            if (item.folder) {
+                                currentData = item.folder;
+                            }
+                        }
+                    }
+                }
+
+                this.breadcrumbNav.innerHTML = breadcrumbItems.map((item, index) => {
+                    const isLast = index === breadcrumbItems.length - 1;
+                    const isFirst = index === 0;
+                    
+                    let html = '';
+                    if (!isFirst) {
+                        html += '<span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>';
+                    }
+                    
+                    html += `<a href="#" class="breadcrumb-item ${isLast ? 'active' : ''}" 
+                             onclick="gameShowcase.navigateToBreadcrumb(${index}); return false;"
+                             title="Navigate to ${item}">
+                             ${item}
+                           </a>`;
+                    
+                    return html;
+                }).join('');
+            }
+
+            renderShowcase() {
+                const currentData = this.getCurrentData();
+                const items = currentData.items || [];
+                const filteredItems = this.filterItems(items);
+
+                // Show/hide back button
+                this.backButton.style.display = this.currentPath.length > 0 ? 'inline-flex' : 'none';
+
+                // Set active view toggle
+                document.querySelectorAll('.view-toggle').forEach(toggle => {
+                    toggle.classList.toggle('active', toggle.dataset.view === this.currentView);
+                });
+
+                if (filteredItems.length === 0) {
+                    this.showcaseContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <h3>No items found</h3>
+                            <p>${this.searchTerm ? 'Try adjusting your search terms' : 'This folder is empty'}</p>
+                            ${!this.searchTerm && this.currentPath.length === 0 ? '<p><a href="editor.html" class="edit-btn" style="margin-top: 1rem; display: inline-flex;"><i class="fas fa-edit"></i> Start Creating Content</a></p>' : ''}
+                        </div>
+                    `;
+                    return;
+                }
+
+                const showcaseHTML = `
+                    <div class="showcase-grid ${this.currentView}-view">
+                        ${filteredItems.map(item => this.renderItem(item)).join('')}
+                    </div>
+                `;
+
+                this.showcaseContainer.innerHTML = showcaseHTML;
+
+                // Add click listeners
+                this.showcaseContainer.querySelectorAll('.showcase-item').forEach((element, index) => {
+                    element.addEventListener('click', () => {
+                        this.navigateTo(filteredItems[index]);
+                    });
+                });
+            }
+
+            renderItem(item) {
+                const hasFolder = !!item.folder;
+                const hasImage = item.image || (item.showImage !== false && !hasFolder);
+                const hasMarkdown = !!item.markdown;
+                const isListView = this.currentView === 'list';
+                const isCompactView = this.currentView === 'compact';
+                
+                let itemClasses = 'showcase-item';
+                if (!hasImage) itemClasses += ' no-image';
+                if (isListView) itemClasses += ' list-item';
+
+                let imageContent = '';
+                if (hasImage) {
+                    const imageClasses = `showcase-image ${isCompactView ? 'compact' : ''} ${isListView ? 'list-image' : ''}`;
+                    if (item.image) {
+                        imageContent = `
+                            <div class="${imageClasses}">
+                                <img src="${item.image}" alt="${item.title}" loading="lazy">
+                            </div>
+                        `;
+                    } else {
+                        const iconClass = hasFolder ? 'fa-folder' : (hasMarkdown ? 'fa-file-alt' : 'fa-gamepad');
+                        imageContent = `
+                            <div class="${imageClasses}">
+                                <i class="fas ${iconClass} placeholder-icon"></i>
+                            </div>
+                        `;
+                    }
+                }
+
+                const contentClasses = `showcase-content ${isCompactView ? 'compact' : ''} ${isListView ? 'list-content' : ''}`;
+                const titleClasses = `showcase-title ${isCompactView ? 'compact' : ''}`;
+                const descClasses = `showcase-description ${isCompactView ? 'compact' : ''}`;
+
+                let badge = '';
+                if (hasFolder) {
+                    badge = '<span class="item-type-badge">Folder</span>';
+                } else if (hasMarkdown) {
+                    badge = '<span class="item-type-badge">Info</span>';
+                }
+
+                return `
+                    <div class="${itemClasses}" role="button" tabindex="0" aria-label="${item.title}${hasFolder ? ' (folder)' : ''}">
+                        ${imageContent}
+                        <div class="${contentClasses}">
+                            <h3 class="${titleClasses}">
+                                ${hasFolder ? '<i class="fas fa-folder folder-icon" aria-hidden="true"></i>' : ''}
+                                ${item.title}
+                            </h3>
+                            ${item.description ? `<p class="${descClasses}">${item.description}</p>` : ''}
+                        </div>
+                        ${badge}
+                    </div>
+                `;
+            }
+
+            render() {
+                this.renderBreadcrumb();
+                this.renderShowcase();
+            }
+        }
+
+        // Initialize the showcase
+        const gameShowcase = new GameShowcase();
+
+        // Initialize view toggles
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedView = localStorage.getItem('view') || 'grid';
+            gameShowcase.setView(savedView);
+        });
+
+        // Auto-refresh data when returning from editor
+        window.addEventListener('focus', () => {
+            gameShowcase.loadData();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prototype Hub</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #f1f1f1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00bfff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #00bfff88;
+    }
+
+    p.description {
+      max-width: 700px;
+      font-size: 16px;
+      color: #bbbbbb;
+      margin-bottom: 40px;
+    }
+
+    .hub {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .card {
+      background: #1e1e1e;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #00bfff;
+    }
+
+    .card p {
+      color: #ccc;
+      margin: 8px 0;
+    }
+
+    .card .click-note {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: #888;
+      font-style: italic;
+    }
+
+    .card .status {
+      font-size: 13px;
+      margin-top: 8px;
+      color: #888;
+    }
+
+    @media (max-width: 600px) {
+      .hub {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 Game Showcasing Hub</h1>
+  <p class="description">
+    This hub gives access to four working prototypes. <br>
+    <strong>Prototype 1</strong> (basic) and <strong>Prototype 2</strong> (markdown-enabled) are actively used elsewhere. <br>
+    <strong>Showcaser</strong> and <strong>Editor</strong> are fully implemented but not yet integrated externally.
+  </p>
+
+  <div class="hub" id="hub"></div>
+
+  <script>
+    const prototypes = [
+      {
+        title: "🧪 Prototype 1",
+        description: "Basic prototype without Markdown support.",
+        url: "path/to/prototype1.html",
+        status: "In use elsewhere"
+      },
+      {
+        title: "📄 Prototype 2",
+        description: "Enhanced version with Markdown rendering.",
+        url: "path/to/prototype2.html",
+        status: "In use elsewhere"
+      },
+      {
+        title: "📺 Showcaser",
+        description: "Visual showcase for prototype outputs.",
+        url: "path/to/showcaser.html",
+        status: "Implemented, not externally used"
+      },
+      {
+        title: "📝 Editor",
+        description: "Editor with live editing and preview capabilities.",
+        url: "path/to/editor.html",
+        status: "Implemented, not externally used"
+      }
+    ];
+
+    const hub = document.getElementById('hub');
+
+    prototypes.forEach(({ title, description, url, status }) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      card.innerHTML = `
+        <h2>${title}</h2>
+        <p>${description}</p>
+        <div class="status">${status}</div>
+        <div class="click-note">Click to open</div>
+      `;
+
+      card.addEventListener('click', () => {
+        window.location.href = url;
+      });
+
+      hub.appendChild(card);
+    });
+  </script>
+</body>
+</html>
