@@ -4,11 +4,12 @@ const PAGE_CONFIG = {
   buttons: [
     { label: "AnimeMerch", path: "/AnimeMerch/" },
     { label: "Brainfuck", path: "/Brainfuck/" },
+    { label: "Game Showcase", path: "/Game Showcase/" },
     { label: "Habit Tracker", path: "/Habit Tracker/" },
+    { label: "markdown2webpdf", path: "/markdown2webpdf/" },
     { label: "Menu History", path: "/Menu History/" }
-  ]
+  ].sort((a, b) => a.label.localeCompare(b.label))
 };
-
 
 // --- Theme Management ---
 function setTheme(theme) {
