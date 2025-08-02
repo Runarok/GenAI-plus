@@ -7,7 +7,8 @@ const PAGE_CONFIG = {
     { label: "Game Showcase", path: "/Game Showcase/" },
     { label: "Habit Tracker", path: "/Habit Tracker/" },
     { label: "markdown2webpdf", path: "/markdown2webpdf/" },
-    { label: "Menu History", path: "/Menu History/" }
+    { label: "Menu History", path: "/Menu History/" },
+    { label: "ProtoPad", path: "/ProtoPad/" }
   ].sort((a, b) => a.label.localeCompare(b.label))
 };
 

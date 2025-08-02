@@ -37,8 +37,9 @@ const menuData = [
       { label: "HTML Merger", url: "Tools/HTML Merger/index.html", desc: "Inline HTML, CSS, JS with preview." },
       { label: "HTML Splitter", url: "Tools/HTML Splitter/index.html", desc: "Splits code into HTML, CSS, and JS." },
       { label: "Markdown Editor", url: "Tools/MarkDown/index.html", desc: "Live Github markdown." },
-      { label: "ProtoPad", url: "Tools/ProtoPad/index.html",  desc: "Minimal prototype notepad." },
       { label: "SVG Editor", url: "Tools/Svg Edit/index.html", desc: "Live SVG Editor." },
+      { label: "Morse Code", url: "Tools/MorseCode/index.html",  desc: "Live MorseCode." },
+      { label: "HTML Splitter v2", url: "Tools/HTML Splitter v2/index.html", desc: "HTML Splitter version 2." },
       { label: "Themes", url: "Tools/Theme/index.html", desc: "Few Themes." }
     ]
   },
