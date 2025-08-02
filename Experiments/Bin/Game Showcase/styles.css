@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+h1 {
+  color: #00bfff;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #00bfff88;
+}
+
+p.description {
+  max-width: 700px;
+  font-size: 16px;
+  color: #bbbbbb;
+  margin-bottom: 40px;
+}
+
+.hub {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.card {
+  background: #1e1e1e;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #00bfff;
+}
+
+.card p {
+  color: #ccc;
+  margin: 8px 0;
+}
+
+.card .click-note {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  color: #888;
+  font-style: italic;
+}
+
+.card .status {
+  font-size: 13px;
+  margin-top: 8px;
+  color: #888;
+}
+
+@media (max-width: 600px) {
+  .hub {
+    grid-template-columns: 1fr;
+  }
+}

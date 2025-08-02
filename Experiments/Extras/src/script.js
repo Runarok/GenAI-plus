@@ -1,11 +1,10 @@
 // --- Dynamic Button UI Config ---
 const PAGE_CONFIG = {
-  header: "Project Limbo: The Graveyard of Optional Resurrection",
+  header: "Extra Works: Collection of Side Projects",
   buttons: [
-    { label: "AnimeMerch", path: "/AnimeMerch/" },
-    { label: "Brainfuck", path: "/Brainfuck/" },
-    { label: "Habit Tracker", path: "/Habit Tracker/" },
-    { label: "Menu History", path: "/Menu History/" }
+    { label: "Birthday Card", path: "/BCK/" },
+    { label: "GitLinkSyncer", path: "/GitLinkSyncer/" },
+    { label: "Meta-Prompting", path: "/Meta-Prompting/" }
   ]
 };
 

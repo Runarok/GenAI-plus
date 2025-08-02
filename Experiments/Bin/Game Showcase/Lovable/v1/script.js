@@ -1,444 +1,3 @@
-
-                showMarkdownModal(item.markdown, item.title || key);
-            } else {<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Showcase</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
-    <style>
-        :root {
-            /* Dark Theme (Default) */
-            --bg-primary: #0f0f0f;
-            --bg-secondary: #1a1a1a;
-            --bg-tertiary: #2a2a2a;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #888888;
-            --accent-primary: #6366f1;
-            --accent-secondary: #8b5cf6;
-            --border: #333333;
-            --shadow: rgba(0, 0, 0, 0.5);
-            --gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
-        }
-
-        [data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-tertiary: #e9ecef;
-            --text-primary: #212529;
-            --text-secondary: #495057;
-            --text-muted: #6c757d;
-            --accent-primary: #6366f1;
-            --accent-secondary: #8b5cf6;
-            --border: #dee2e6;
-            --shadow: rgba(0, 0, 0, 0.1);
-            --gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
-        }
-
-        [data-theme="neon"] {
-            --bg-primary: #000000;
-            --bg-secondary: #111111;
-            --bg-tertiary: #1a1a2e;
-            --text-primary: #00ffff;
-            --text-secondary: #ff00ff;
-            --text-muted: #888888;
-            --accent-primary: #00ffff;
-            --accent-secondary: #ff00ff;
-            --border: #333333;
-            --shadow: rgba(0, 255, 255, 0.3);
-            --gradient: linear-gradient(135deg, #00ffff, #ff00ff);
-        }
-
-        [data-theme="forest"] {
-            --bg-primary: #1a2e1a;
-            --bg-secondary: #2d4a2d;
-            --bg-tertiary: #3a5a3a;
-            --text-primary: #e8f5e8;
-            --text-secondary: #c0d6c0;
-            --text-muted: #8fac8f;
-            --accent-primary: #4ade80;
-            --accent-secondary: #22c55e;
-            --border: #4a6741;
-            --shadow: rgba(74, 222, 128, 0.2);
-            --gradient: linear-gradient(135deg, #4ade80, #22c55e);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            transition: all 0.3s ease;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .theme-selector {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .theme-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.875rem;
-        }
-
-        .theme-btn:hover,
-        .theme-btn.active {
-            background: var(--accent-primary);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            padding: 0.75rem 1rem;
-            background: var(--bg-secondary);
-            border-radius: 0.5rem;
-            border: 1px solid var(--border);
-        }
-
-        .breadcrumb-item {
-            color: var(--accent-primary);
-            cursor: pointer;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .breadcrumb-item:hover {
-            color: var(--accent-secondary);
-        }
-
-        .breadcrumb-separator {
-            color: var(--text-muted);
-        }
-
-        .search-bar {
-            width: 100%;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 0.75rem;
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-bar:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px var(--shadow);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px var(--shadow);
-            border-color: var(--accent-primary);
-        }
-
-        .card-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: var(--bg-tertiary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 3rem;
-        }
-
-        .card-content {
-            padding: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .card-description {
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .folder-icon {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--accent-primary);
-            color: white;
-            padding: 0.5rem;
-            border-radius: 50%;
-            font-size: 1.2rem;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            text-decoration: none;
-            border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: var(--accent-primary);
-            color: white;
-            transform: translateX(-5px);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-muted);
-        }
-
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .theme-selector {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .breadcrumb {
-                flex-wrap: wrap;
-            }
-        }
-
-        /* Markdown content styles */
-        .markdown-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 2rem;
-        }
-
-        .markdown-content {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 2rem;
-            position: relative;
-        }
-
-        .markdown-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--accent-primary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .markdown-content h1 {
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            font-size: 2rem;
-            border-bottom: 2px solid var(--accent-primary);
-            padding-bottom: 0.5rem;
-        }
-
-        .markdown-content h2 {
-            color: var(--text-primary);
-            margin: 1.5rem 0 1rem 0;
-            font-size: 1.5rem;
-        }
-
-        .markdown-content h3 {
-            color: var(--text-secondary);
-            margin: 1rem 0 0.5rem 0;
-            font-size: 1.2rem;
-        }
-
-        .markdown-content p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-
-        .markdown-content ul {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            padding-left: 2rem;
-        }
-
-        .markdown-content li {
-            margin-bottom: 0.5rem;
-        }
-
-        .markdown-content img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 0.5rem;
-            margin: 1rem 0;
-            border: 1px solid var(--border);
-        }
-
-        .markdown-content code {
-            background: var(--bg-secondary);
-            color: var(--accent-primary);
-            padding: 0.2rem 0.4rem;
-            border-radius: 0.25rem;
-            font-family: 'Courier New', monospace;
-        }
-
-        @media (max-width: 768px) {
-            .markdown-modal {
-                padding: 1rem;
-            }
-
-            .markdown-content {
-                padding: 1.5rem;
-                max-height: 90vh;
-            }
-
-            .markdown-content h1 {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 1.5rem;
-            }
-
-            .card-content {
-                padding: 1rem;
-            }
-
-            .markdown-content {
-                padding: 1rem;
-            }
-        }
-    </style>
-</head>
-<body data-theme="dark">
-    <div class="container">
-        <header class="header">
-            <h1 class="logo">Game Showcase</h1>
-            <div class="theme-selector">
-                <button class="theme-btn active" data-theme="dark">Dark</button>
-                <button class="theme-btn" data-theme="light">Light</button>
-                <button class="theme-btn" data-theme="neon">Neon</button>
-                <button class="theme-btn" data-theme="forest">Forest</button>
-            </div>
-        </header>
-
-        <nav class="breadcrumb" id="breadcrumb" style="display: none;">
-            <!-- Breadcrumb will be populated by JavaScript -->
-        </nav>
-
-        <input type="text" class="search-bar" id="searchBar" placeholder="Search games and folders...">
-
-        <div id="content">
-            <div class="loading">Loading showcase...</div>
-        </div>
-    </div>
-
-    <script>
         // Sample game showcase data structure - 4 levels: Game -> Level Type -> Levels -> Markdown Content
         const showcaseData = {
             title: "Game Showcase",
@@ -833,6 +392,8 @@ Velen is a war-torn swampland filled with monsters, bandits, and desperate peopl
             const item = (filteredData || currentData)[key];
             
             if (item.markdown) {
+                showMarkdownModal(item.markdown, item.title || key);
+            } else {
                 alert(`${item.title || key}\n\n${item.description || 'No description available'}`);
             }
         }
@@ -843,14 +404,17 @@ Velen is a war-torn swampland filled with monsters, bandits, and desperate peopl
             modal.className = 'markdown-modal';
             modal.innerHTML = `
                 <div class="markdown-content">
-                    <button class="markdown-close" onclick="closeMarkdownModal()">&times;</button>
-                    <div id="markdown-body"></div>
+                    <div class="markdown-header">
+                        <h2 class="markdown-title">${title}</h2>
+                        <button class="markdown-close" onclick="closeMarkdownModal()">&times;</button>
+                    </div>
+                    <div class="markdown-body" id="markdown-body"></div>
                 </div>
             `;
             
             document.body.appendChild(modal);
             
-            // Convert markdown to HTML (basic conversion)
+            // Convert markdown to HTML (enhanced conversion)
             const htmlContent = convertMarkdownToHTML(markdownContent);
             document.getElementById('markdown-body').innerHTML = htmlContent;
             
@@ -860,6 +424,15 @@ Velen is a war-torn swampland filled with monsters, bandits, and desperate peopl
                     closeMarkdownModal();
                 }
             });
+
+            // Close on Escape key
+            const handleEscape = (e) => {
+                if (e.key === 'Escape') {
+                    closeMarkdownModal();
+                    document.removeEventListener('keydown', handleEscape);
+                }
+            };
+            document.addEventListener('keydown', handleEscape);
         }
 
         function closeMarkdownModal() {
@@ -926,6 +499,3 @@ Velen is a war-torn swampland filled with monsters, bandits, and desperate peopl
         window.navigateBack = navigateBack;
         window.navigateToBreadcrumb = navigateToBreadcrumb;
         window.showItemDetails = showItemDetails;
-    </script>
-</body>
-</html>

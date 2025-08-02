@@ -1,6 +1,6 @@
 // --- Dynamic Button UI Config ---
 const PAGE_CONFIG = {
-  header: "GenAI-plus Dynamic Folders",
+  header: "AI Chat Bots",
   buttons: [
     { label: "Coretrace", path: "/Coretrace/" },
     { label: "SnarkBot", path: "/SnarkBot/" }

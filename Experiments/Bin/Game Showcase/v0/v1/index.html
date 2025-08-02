@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Game Showcase</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body data-theme="dark">
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <img src="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" alt="Logo">
+                        <span>Game Showcase</span>
+                    </div>
+                    <div class="controls">
+                        <select class="theme-selector" id="themeSelector">
+                            <option value="dark">Dark Theme</option>
+                            <option value="light">Light Theme</option>
+                            <option value="cyberpunk">Cyberpunk</option>
+                            <option value="ocean">Ocean</option>
+                        </select>
+                        <input type="text" class="search-box" id="searchBox" placeholder="Search games...">
+                    </div>
+                </div>
+            </div>
+        </header>
+        <nav class="breadcrumb">
+            <div class="container">
+                <div class="breadcrumb-nav" id="breadcrumbNav">
+                    <a href="#" class="breadcrumb-item active" data-path="">Home</a>
+                </div>
+            </div>
+        </nav>
+        <main class="main">
+            <div class="container">
+                <button class="back-button" id="backButton" style="display: none;">
+                    <i class="fas fa-arrow-left">
+                    </i>
+                    Back
+                </button>
+                <div id="showcaseContainer">
+                    <div class="loading">
+                        <div class="spinner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="script.js">
+        </script>
+    </body>
+</html>

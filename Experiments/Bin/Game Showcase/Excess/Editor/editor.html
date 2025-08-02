@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Game Showcase Editor</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js">
+        </script>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>
+                    <i class="fas fa-edit">
+                    </i>
+                    Game Showcase Editor
+                </h1>
+                <p>Visual editor for creating and managing your game showcase data</p>
+            </div>
+            <div class="main-controls">
+                <button class="btn success" onclick="saveData()">
+                    <i class="fas fa-save">
+                    </i>
+                    Save Data
+                </button>
+                <button class="btn" onclick="exportJSON()">
+                    <i class="fas fa-download">
+                    </i>
+                    Export JSON
+                </button>
+                <button class="btn secondary" onclick="importJSON()">
+                    <i class="fas fa-upload">
+                    </i>
+                    Import JSON
+                </button>
+                <button class="btn warning" onclick="previewShowcase()">
+                    <i class="fas fa-eye">
+                    </i>
+                    Preview Showcase
+                </button>
+                <button class="btn secondary" onclick="addRootItem()">
+                    <i class="fas fa-plus">
+                    </i>
+                    Add Root Item
+                </button>
+            </div>
+            <div class="editor-layout">
+                <div class="tree-panel">
+                    <div class="tree-header">
+                        <h3>
+                            <i class="fas fa-sitemap">
+                            </i>
+                            Content Structure
+                        </h3>
+                        <span id="itemCount" class="text-muted">0 items</span>
+                    </div>
+                    <div id="treeContainer">
+                        <!-- Tree will be rendered here -->
+                    </div>
+                </div>
+                <div class="form-panel">
+                    <h3>
+                        <i class="fas fa-cog">
+                        </i>
+                        Item Editor
+                    </h3>
+                    <div id="formContainer">
+                        <p class="text-muted">Select an item to edit, or create a new one.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modals -->
+        <div class="modal" id="jsonModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>JSON Data</h3>
+                    <button class="tree-item-btn" onclick="closeModal('jsonModal')">
+                        <i class="fas fa-times">
+                        </i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="json-output" id="jsonOutput">
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn" onclick="copyJSON()">
+                            <i class="fas fa-copy">
+                            </i>
+                            Copy to Clipboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="importModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Import JSON Data</h3>
+                    <button class="tree-item-btn" onclick="closeModal('importModal')">
+                        <i class="fas fa-times">
+                        </i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Paste JSON Data:</label>
+                        <textarea class="form-textarea" id="importTextarea" placeholder="Paste your JSON data here..." style="min-height: 200px;">
+                        </textarea>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn success" onclick="processImport()">
+                            <i class="fas fa-check">
+                            </i>
+                            Import
+                        </button>
+                        <button class="btn secondary" onclick="closeModal('importModal')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="script.js">
+        </script>
+    </body>
+</html>
