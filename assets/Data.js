@@ -34,12 +34,12 @@ const menuData = [
       { label: "Calculator", url: "Tools/Calculator/index.html", desc: "Simple math calculator." },
       { label: "Cheat Sheets", url: "Tools/CheatSheets/index.html", desc: "CheatSheets for Remembering." },
       { label: "HTML Editor", url: "Tools/HTML Editor/index.html", desc: "Live HTML editor." },
+      { label: "Image Base64", url: "Tools/Base64CropImage/index.html", desc: "Base64 & Image conversion." },
       { label: "HTML Merger", url: "Tools/HTML Merger/index.html", desc: "Inline HTML, CSS, JS with preview." },
       { label: "HTML Splitter", url: "Tools/HTML Splitter/index.html", desc: "Splits code into HTML, CSS, and JS." },
       { label: "Markdown Editor", url: "Tools/MarkDown/index.html", desc: "Live Github markdown." },
       { label: "SVG Editor", url: "Tools/Svg Edit/index.html", desc: "Live SVG Editor." },
       { label: "Morse Code", url: "Tools/MorseCode/index.html",  desc: "Live MorseCode." },
-      { label: "HTML Splitter v2", url: "Tools/HTML Splitter v2/index.html", desc: "HTML Splitter version 2." },
       { label: "Themes", url: "Tools/Theme/index.html", desc: "Few Themes." }
     ]
   },
