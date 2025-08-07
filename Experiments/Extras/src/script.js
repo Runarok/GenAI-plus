@@ -4,6 +4,7 @@ const PAGE_CONFIG = {
   buttons: [
     { label: "Birthday Card", path: "/BCK/" },
     { label: "GitLinkSyncer", path: "/GitLinkSyncer/" },
+    { label: "Crown Walkthrough", path: "/Crown/" },
     { label: "Meta-Prompting", path: "/Meta-Prompting/" }
   ]
 };

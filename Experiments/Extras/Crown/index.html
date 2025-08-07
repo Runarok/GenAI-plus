@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Game Showcase</title>
+        <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body data-theme="dark">
+        <div class="container">
+            <header class="header">
+                <h1 class="logo">Game Showcase</h1>
+                <div class="theme-selector">
+                    <button class="theme-btn active" data-theme="dark">Dark</button>
+                    <button class="theme-btn" data-theme="light">Light</button>
+                    <button class="theme-btn" data-theme="neon">Neon</button>
+                    <button class="theme-btn" data-theme="forest">Forest</button>
+                </div>
+            </header>
+            <nav class="breadcrumb" id="breadcrumb" style="display: none;">
+                <!-- Breadcrumb will be populated by JavaScript -->
+            </nav>
+            <input type="text" class="search-bar" id="searchBar" placeholder="Search games and folders...">
+            <div id="content">
+                <div class="loading">Loading showcase...</div>
+            </div>
+        </div>
+        <script src="script.js">
+        </script>
+    </body>
+</html>
