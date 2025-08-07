@@ -1,5 +1,3 @@
-
-
 # 🌟 GenAI-plus Repository 🌟
 
 Welcome to the **GenAI-plus** repository – a continuation and evolution of my previous project, [GenAI](https://runarok.github.io/GenAI/). In this repo, I'm still using AI, but this time with more advanced tools, refined ideas, and a better understanding of what I want to build. Think of this as the **next chapter** – a spiritual sequel with more experimentation, creativity, and learning.
