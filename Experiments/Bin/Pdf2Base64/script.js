@@ -1,121 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>PDF to Base64 Optimized</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      background-color: #1e1e2f;
-      color: #f0f0f0;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    header {
-      background-color: #2a2a3d;
-      padding: 15px 20px;
-      font-size: 22px;
-      color: #4aa3ff;
-      text-align: center;
-    }
-    .tabs {
-      display: flex;
-      justify-content: center;
-      background-color: #2a2a3d;
-    }
-    .tab {
-      padding: 15px 30px;
-      cursor: pointer;
-      color: #ccc;
-      border-bottom: 3px solid transparent;
-    }
-    .tab.active {
-      color: #4aa3ff;
-      border-bottom: 3px solid #4aa3ff;
-    }
-    .tab-content {
-      display: none;
-      padding: 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .tab-content.active {
-      display: block;
-    }
-    input[type="file"], input[type="text"] {
-      background-color: #2a2a3d;
-      color: #f0f0f0;
-      border: none;
-      padding: 10px;
-      border-radius: 5px;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    button {
-      background-color: #4aa3ff;
-      border: none;
-      color: white;
-      padding: 10px 15px;
-      margin: 5px 0;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #3891e3;
-    }
-    .page-card {
-      background-color: #2a2a3d;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    canvas {
-      max-width: 100%;
-      border: 1px solid #444;
-      border-radius: 5px;
-      display: block;
-      margin-bottom: 10px;
-    }
-    textarea {
-      width: 100%;
-      height: 80px;
-      background-color: #1e1e2f;
-      color: #9fefef;
-      border: 1px solid #444;
-      padding: 10px;
-      font-family: monospace;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-  </style>
-</head>
-<body>
-  <header>PDF to Base64 (Optimized)</header>
-
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('upload-tab')">Upload</div>
-    <div class="tab" onclick="switchTab('pages-tab')">Per Page View</div>
-    <div class="tab" onclick="switchTab('all-tab')">All Base64</div>
-  </div>
-
-  <div id="upload-tab" class="tab-content active">
-    <h2>Select PDF</h2>
-    <input type="file" id="pdf-upload" accept="application/pdf">
-    <div id="loading" style="color:#4aa3ff;"></div>
-  </div>
-
-  <div id="pages-tab" class="tab-content">
-    <input type="text" id="searchInput" placeholder="Search by page number...">
-    <div id="output"></div>
-  </div>
-
-  <div id="all-tab" class="tab-content">
-    <h3>All Base64 (One per line)</h3>
-    <textarea id="all-base64-text" readonly></textarea>
-    <button onclick="copyAllBase64()">Copy All</button>
-  </div>
-
-  <script>
     const pdfjsLib = window['pdfjs-dist/build/pdf'];
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -128,7 +10,6 @@
     let base64Map = {};
     let pageCount = 0;
 
-    // Tab switching
     function switchTab(tabId) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
@@ -160,6 +41,7 @@
         }
 
         setupLazyLoading();
+        gradualAllBase64Update(); // Start gradual all base64 update
         switchTab('pages-tab');
         loadingDiv.textContent = '';
       };
@@ -209,7 +91,6 @@
             };
 
             card.dataset.rendered = "true";
-            updateAllBase64Text();
           }
         }
       }, options);
@@ -217,10 +98,30 @@
       document.querySelectorAll('.page-card').forEach(card => observer.observe(card));
     }
 
-    function updateAllBase64Text() {
-      const sortedKeys = Object.keys(base64Map).sort((a, b) => a - b);
-      const base64s = sortedKeys.map(k => base64Map[k]);
-      allBase64Text.value = base64s.join('\n\n');
+    // Gradual updating for all base64 textarea
+    async function gradualAllBase64Update() {
+      allBase64Text.value = '';
+      for (let i = 1; i <= pageCount; i++) {
+        if (!base64Map[i]) {
+          // Render page base64 if not ready (force render to get base64 without canvas)
+          const page = await pdfDoc.getPage(i);
+          const viewport = page.getViewport({ scale: 0.7 }); // smaller scale for speed
+
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          await page.render({ canvasContext: ctx, viewport }).promise;
+          const base64 = canvas.toDataURL('image/png');
+          base64Map[i] = base64;
+        }
+        allBase64Text.value += base64Map[i] + '\n\n';
+
+        // Slowly update textarea to avoid freezing (chunk every 5 pages)
+        if (i % 5 === 0) {
+          await new Promise(r => setTimeout(r, 50));
+        }
+      }
     }
 
     function copyAllBase64() {
@@ -235,6 +136,3 @@
         card.style.display = val === '' || pageNum.includes(val) ? 'block' : 'none';
       });
     });
-  </script>
-</body>
-</html>
