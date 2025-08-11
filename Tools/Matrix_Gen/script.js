@@ -1,650 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Matrix Generator</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #5855eb;
-            --secondary: #8b5cf6;
-            --accent: #06b6d4;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-tertiary: #334155;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #64748b;
-            --border: #475569;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            --radius: 0.5rem;
-            --transition: all 0.2s ease-in-out;
-        }
 
-        [data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-tertiary: #e2e8f0;
-            --text-primary: #1e293b;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
-            --border: #cbd5e1;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-
-        [data-theme="ocean"] {
-            --primary: #0ea5e9;
-            --primary-hover: #0284c7;
-            --secondary: #06b6d4;
-            --accent: #8b5cf6;
-            --bg-primary: #0c4a6e;
-            --bg-secondary: #075985;
-            --bg-tertiary: #0369a1;
-            --text-primary: #e0f2fe;
-            --text-secondary: #b3e5fc;
-            --text-muted: #81d4fa;
-            --border: #0284c7;
-        }
-
-        [data-theme="forest"] {
-            --primary: #059669;
-            --primary-hover: #047857;
-            --secondary: #10b981;
-            --accent: #34d399;
-            --bg-primary: #064e3b;
-            --bg-secondary: #065f46;
-            --bg-tertiary: #047857;
-            --text-primary: #ecfdf5;
-            --text-secondary: #d1fae5;
-            --text-muted: #a7f3d0;
-            --border: #059669;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            transition: var(--transition);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 0;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 2rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .theme-switcher {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .theme-btn {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 0.5rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-        }
-
-        .theme-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        .theme-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 2rem;
-            flex: 1;
-        }
-
-        .matrix-section {
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        .controls-section {
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            height: fit-content;
-            position: sticky;
-            top: 1rem;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .matrix-container {
-            overflow: auto;
-            max-height: 70vh;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--bg-primary);
-        }
-
-        .matrix-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .matrix-cell {
-            padding: 0.5rem;
-            text-align: center;
-            border-right: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            background: var(--bg-secondary);
-            transition: var(--transition);
-            font-size: 0.875rem;
-            min-width: 60px;
-        }
-
-        .matrix-cell:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .matrix-cell.diagonal {
-            background: var(--primary) !important;
-            color: white;
-        }
-
-        .matrix-cell.positive {
-            background: rgba(16, 185, 129, 0.2);
-        }
-
-        .matrix-cell.negative {
-            background: rgba(239, 68, 68, 0.2);
-        }
-
-        .matrix-cell.zero {
-            background: rgba(100, 116, 139, 0.2);
-        }
-
-        .control-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .control-label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            font-size: 0.875rem;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 0.75rem;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            transition: var(--transition);
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .input-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border);
-        }
-
-        .btn-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .select-field {
-            width: 100%;
-            padding: 0.75rem;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            cursor: pointer;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .checkbox {
-            width: 1rem;
-            height: 1rem;
-            accent-color: var(--primary);
-        }
-
-        .stats {
-            background: var(--bg-primary);
-            padding: 1rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            margin-top: 1rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-        }
-
-        .stat-item {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .stat-value {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .tooltip {
-            position: relative;
-            cursor: help;
-        }
-
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            padding: 0.5rem;
-            border-radius: var(--radius);
-            font-size: 0.75rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            border: 1px solid var(--border);
-            z-index: 1000;
-        }
-
-        .tooltip:hover::after {
-            opacity: 1;
-        }
-
-        .matrix-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .matrix-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding: 0.75rem;
-            background: var(--bg-primary);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .loading {
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .controls-section {
-                position: static;
-                order: -1;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .matrix-container {
-                max-height: 50vh;
-            }
-
-            .btn-group {
-                grid-template-columns: 1fr;
-            }
-
-            .input-group {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0.5rem;
-            }
-
-            .matrix-section, .controls-section {
-                padding: 1rem;
-            }
-
-            .matrix-cell {
-                padding: 0.25rem;
-                font-size: 0.75rem;
-                min-width: 40px;
-            }
-        }
-
-        /* Dark mode preference */
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme]) {
-                /* Dark theme is already default */
-            }
-        }
-    </style>
-</head>
-<body data-theme="dark">
-    <div class="container">
-        <header class="header">
-            <div class="logo">
-                <i class="fas fa-calculator"></i>
-                Interactive Matrix Generator
-            </div>
-            <div class="theme-switcher">
-                <button class="theme-btn active" data-theme="dark" title="Dark Theme">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="theme-btn" data-theme="light" title="Light Theme">
-                    <i class="fas fa-sun"></i>
-                </button>
-                <button class="theme-btn" data-theme="ocean" title="Ocean Theme">
-                    <i class="fas fa-water"></i>
-                </button>
-                <button class="theme-btn" data-theme="forest" title="Forest Theme">
-                    <i class="fas fa-tree"></i>
-                </button>
-            </div>
-        </header>
-
-        <main class="main-content">
-            <section class="matrix-section">
-                <div class="section-title">
-                    <i class="fas fa-th"></i>
-                    Matrix Display
-                </div>
-                
-                <div class="matrix-info">
-                    <div>
-                        <strong id="matrix-size">3×3 Matrix</strong>
-                        <span class="text-muted" id="matrix-type">Random</span>
-                    </div>
-                    <div class="matrix-actions">
-                        <button class="btn btn-secondary" onclick="copyMatrix()" title="Copy to Clipboard">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                        <button class="btn btn-secondary" onclick="exportCSV()" title="Export as CSV">
-                            <i class="fas fa-file-csv"></i>
-                        </button>
-                        <button class="btn btn-secondary" onclick="exportText()" title="Export as Text">
-                            <i class="fas fa-file-alt"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="matrix-container">
-                    <table class="matrix-table" id="matrix-table">
-                        <!-- Matrix will be generated here -->
-                    </table>
-                </div>
-
-                <div class="stats">
-                    <div class="stats-grid" id="matrix-stats">
-                        <!-- Stats will be displayed here -->
-                    </div>
-                </div>
-            </section>
-
-            <section class="controls-section">
-                <div class="section-title">
-                    <i class="fas fa-cog"></i>
-                    Controls
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label tooltip" data-tooltip="Set matrix dimensions">
-                        <i class="fas fa-expand-arrows-alt"></i>
-                        Dimensions
-                    </label>
-                    <div class="input-group">
-                        <input type="number" class="input-field" id="rows" value="3" min="1" max="20" placeholder="Rows">
-                        <input type="number" class="input-field" id="cols" value="3" min="1" max="20" placeholder="Cols">
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label tooltip" data-tooltip="Value range for random numbers">
-                        <i class="fas fa-arrows-alt-h"></i>
-                        Value Range
-                    </label>
-                    <div class="input-group">
-                        <input type="number" class="input-field" id="min-val" value="-10" placeholder="Min">
-                        <input type="number" class="input-field" id="max-val" value="10" placeholder="Max">
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label">
-                        <i class="fas fa-list"></i>
-                        Generation Mode
-                    </label>
-                    <select class="select-field" id="matrix-mode">
-                        <option value="random">Random Fill</option>
-                        <option value="identity">Identity Matrix</option>
-                        <option value="zero">Zero Matrix</option>
-                        <option value="sparse">Sparse Matrix</option>
-                        <option value="diagonal">Diagonal Matrix</option>
-                    </select>
-                </div>
-
-                <div class="control-group">
-                    <div class="checkbox-group">
-                        <input type="checkbox" class="checkbox" id="decimals">
-                        <label for="decimals" class="control-label">Use Decimals</label>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" class="checkbox" id="highlight-diagonal">
-                        <label for="highlight-diagonal" class="control-label">Highlight Diagonal</label>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" class="checkbox" id="color-coding" checked>
-                        <label for="color-coding" class="control-label">Color Coding</label>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label tooltip" data-tooltip="Enter a seed for reproducible random generation">
-                        <i class="fas fa-seedling"></i>
-                        Random Seed
-                    </label>
-                    <input type="text" class="input-field" id="seed-input" placeholder="Enter seed (optional)">
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn" onclick="generateMatrix()">
-                        <i class="fas fa-sync-alt"></i>
-                        Generate
-                    </button>
-                    <button class="btn btn-secondary" onclick="transposeMatrix()">
-                        <i class="fas fa-exchange-alt"></i>
-                        Transpose
-                    </button>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-secondary" onclick="sortRows()">
-                        <i class="fas fa-sort-amount-down"></i>
-                        Sort Rows
-                    </button>
-                    <button class="btn btn-secondary" onclick="sortCols()">
-                        <i class="fas fa-sort-amount-down fa-rotate-90"></i>
-                        Sort Cols
-                    </button>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label">
-                        <i class="fas fa-magic"></i>
-                        Quick Actions
-                    </label>
-                    <div class="btn-group">
-                        <button class="btn btn-secondary" onclick="fillOnes()" title="Fill with 1s">
-                            <i class="fas fa-fill"></i>
-                            Ones
-                        </button>
-                        <button class="btn btn-secondary" onclick="generateRandomSeed()" title="Generate Random Seed">
-                            <i class="fas fa-dice"></i>
-                            Random Seed
-                        </button>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <script>
         // Global variables
         let currentMatrix = [];
         let matrixStats = {};
@@ -684,7 +38,15 @@
 
             // Auto-generate on input change
             ['rows', 'cols', 'min-val', 'max-val', 'matrix-mode'].forEach(id => {
-                document.getElementById(id).addEventListener('change', generateMatrix);
+                document.getElementById(id).addEventListener('change', function() {
+                    // If there's a seed, use it; otherwise generate normally
+                    const currentSeed = document.getElementById('seed-input').value.trim();
+                    if (currentSeed) {
+                        generateMatrixWithSeed(currentSeed);
+                    } else {
+                        generateMatrix();
+                    }
+                });
             });
 
             ['decimals', 'highlight-diagonal', 'color-coding'].forEach(id => {
@@ -719,7 +81,12 @@
                         case 's':
                             if (e.shiftKey) {
                                 e.preventDefault();
-                                applySeed();
+                                const currentSeed = document.getElementById('seed-input').value.trim();
+                                if (currentSeed) {
+                                    applySeed();
+                                } else {
+                                    generateRandomSeed();
+                                }
                             }
                             break;
                     }
@@ -753,6 +120,12 @@
 
         // Matrix generation
         function generateMatrix() {
+            // Get current seed and reapply it to ensure consistency
+            const currentSeed = document.getElementById('seed-input').value.trim();
+            if (currentSeed) {
+                Math.seedrandom(currentSeed);
+            }
+            
             const rows = parseInt(document.getElementById('rows').value) || 3;
             const cols = parseInt(document.getElementById('cols').value) || 3;
             const minVal = parseFloat(document.getElementById('min-val').value) || -10;
@@ -982,20 +355,27 @@
                 document.getElementById('seed-input').value = seed;
             }
             
-            // Apply the seed using the seedrandom library
+            // Store the seed and regenerate matrix
+            generateMatrixWithSeed(seed);
+            showNotification(`Seed applied: ${seed}`, 'success');
+        }
+
+        function generateMatrixWithSeed(seed) {
+            // Apply the seed right before generation to ensure consistency
             Math.seedrandom(seed);
             generateMatrix();
-            showNotification(`Seed applied: ${seed}`, 'success');
         }
 
         function generateRandomSeed() {
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let result = '';
+            // Use a separate random generator for seed generation to avoid affecting the main seed
+            const tempRng = new Math.seedrandom();
             for (let i = 0; i < 8; i++) {
-                result += characters.charAt(Math.floor(Math.random() * characters.length));
+                result += characters.charAt(Math.floor(tempRng() * characters.length));
             }
             document.getElementById('seed-input').value = result;
-            applySeed();
+            generateMatrixWithSeed(result);
         }
 
         // Statistics calculation
@@ -1212,6 +592,4 @@
 
         // Initialize accessibility features
         setTimeout(setupAccessibility, 100);
-    </script>
-</body>
-</html>
+    
