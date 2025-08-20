@@ -11,6 +11,8 @@ const menuData = [
   { label: "Internet of Things", url: "College/LABS/Internet of Things/index.html", desc: "Hands-on IoT projects and demos." },
   { label: "Embedded Systems", url: "College/LABS/Embedded Systems/index.html", desc: "Explore embedded system projects." },
   { label: "Python Projects", url: "College/Python/index.html", desc: "Explore Simple Python projects." },
+  { label: "SDLC v1", url: "College/SDLC/SDLC v1/index.html", desc: "SDLC Project version 2." },
+  { label: "SDLC v2", url: "College/SDLC/SDLC v2/index.html", desc: "SDLC Project version 2." },
   { label: "Python Quiz Framework", url: "College/Quiz/index.html", desc: "OOP-based Python quiz (~1k lines)." }
    ]
   },
