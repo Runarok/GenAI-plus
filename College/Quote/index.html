@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Manager - Campus Discoveries</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="dark">
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">Quote Manager</h1>
+            <nav class="nav">
+                <button id="infoBtn" class="btn btn-outline" aria-label="Information">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 16v-4"></path>
+                        <path d="M12 8h.01"></path>
+                    </svg>
+                    Info
+                </button>
+                <select id="themeSelector" class="theme-selector" aria-label="Select Theme">
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                    <option value="blue">Ocean</option>
+                    <option value="purple">Purple</option>
+                </select>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <section class="controls">
+                <div class="filter-section">
+                    <label for="floorFilter" class="filter-label">Filter by Floor:</label>
+                    <select id="floorFilter" class="floor-filter">
+                        <option value="all">All Floors</option>
+                        <option value="Ground">Ground Floor</option>
+                        <option value="1st">1st Floor</option>
+                        <option value="2nd">2nd Floor</option>
+                        <option value="3rd">3rd Floor</option>
+                        <option value="4th">4th Floor</option>
+                    </select>
+                </div>
+                <div class="stats">
+                    <span id="quoteCount" class="quote-count">0 quotes</span>
+                </div>
+            </section>
+
+            <section id="quotesContainer" class="quotes-container" role="main" aria-label="Quotes List">
+                <!-- Quotes will be dynamically loaded here -->
+            </section>
+        </div>
+    </main>
+
+    <!-- Info Modal -->
+    <div id="infoModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="modalTitle">About Quote Manager</h2>
+                <button id="closeModal" class="close-btn" aria-label="Close modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </header>
+            <div class="modal-body">
+                <p>This Quote Manager is a personal exploration project documenting inspirational quotes discovered on doorways and walls throughout our campus building.</p>
+                
+                <p>The quotes are recorded in the exact order they were found while walking through the main college building from the ground floor to the 4th floor, following a clockwise path via stair entrances.</p>
+                
+                <p>Each quote includes:</p>
+                <ul>
+                    <li>The original quote text as it appears</li>
+                    <li>The author (when known or attributed)</li>
+                    <li>The specific floor(s) where the quote can be found</li>
+                </ul>
+                
+                <p>Use the floor filter to explore quotes from specific levels of the building, or browse them all to follow the complete journey of discovery.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
