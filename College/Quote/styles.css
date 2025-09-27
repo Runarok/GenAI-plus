@@ -310,9 +310,10 @@ body {
     background-color: var(--accent);
     color: white;
     border-radius: 1rem;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 500;
     white-space: nowrap;
+    font-family: 'Courier New', monospace;
 }
 
 .floor-tag.multiple {

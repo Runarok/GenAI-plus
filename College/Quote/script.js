@@ -33,85 +33,10 @@ class QuoteManager {
             this.filteredQuotes = [...this.quotes];
         } catch (error) {
             console.error('Error loading quotes:', error);
-            // Fallback to embedded quotes if JSON file fails to load
-            this.quotes = this.getFallbackQuotes();
-            this.filteredQuotes = [...this.quotes];
+            this.showError('Unable to load quotes. Please check your connection and try again.');
+            this.quotes = [];
+            this.filteredQuotes = [];
         }
-    }
-    
-    getFallbackQuotes() {
-        return [
-            {
-                id: 1,
-                text: "The only way to do great work is to love what you do.",
-                author: "Steve Jobs",
-                floors: ["Ground"],
-                order: 1
-            },
-            {
-                id: 2,
-                text: "Innovation distinguishes between a leader and a follower.",
-                author: "Steve Jobs",
-                floors: ["Ground", "1st"],
-                order: 2
-            },
-            {
-                id: 3,
-                text: "Be yourself; everyone else is already taken.",
-                author: "Oscar Wilde",
-                floors: ["1st"],
-                order: 3
-            },
-            {
-                id: 4,
-                text: "Two things are infinite: the universe and human stupidity; and I'm not sure about the universe.",
-                author: "Albert Einstein",
-                floors: ["1st", "2nd"],
-                order: 4
-            },
-            {
-                id: 5,
-                text: "The future belongs to those who believe in the beauty of their dreams.",
-                author: "Eleanor Roosevelt",
-                floors: ["2nd"],
-                order: 5
-            },
-            {
-                id: 6,
-                text: "It is during our darkest moments that we must focus to see the light.",
-                author: "Aristotle",
-                floors: ["2nd", "3rd"],
-                order: 6
-            },
-            {
-                id: 7,
-                text: "The way to get started is to quit talking and begin doing.",
-                author: "Walt Disney",
-                floors: ["3rd"],
-                order: 7
-            },
-            {
-                id: 8,
-                text: "Life is what happens to you while you're busy making other plans.",
-                author: "John Lennon",
-                floors: ["3rd", "4th"],
-                order: 8
-            },
-            {
-                id: 9,
-                text: "The future depends on what you do today.",
-                author: "Mahatma Gandhi",
-                floors: ["4th"],
-                order: 9
-            },
-            {
-                id: 10,
-                text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-                author: "Winston Churchill",
-                floors: ["4th"],
-                order: 10
-            }
-        ];
     }
     
     setupEventListeners() {
@@ -184,8 +109,8 @@ class QuoteManager {
             return;
         }
         
-        // Sort quotes by their order (ground floor to 4th floor, clockwise)
-        const sortedQuotes = [...this.filteredQuotes].sort((a, b) => a.order - b.order);
+        // Sort quotes by their ID (discovery order)
+        const sortedQuotes = [...this.filteredQuotes].sort((a, b) => a.id - b.id);
         
         const quotesHTML = sortedQuotes.map(quote => this.getQuoteCardHTML(quote)).join('');
         container.innerHTML = quotesHTML;
@@ -202,8 +127,11 @@ class QuoteManager {
     }
     
     getQuoteCardHTML(quote) {
-        const floorsHTML = quote.floors.map(floor => 
-            `<span class="floor-tag ${quote.floors.length > 1 ? 'multiple' : ''}">${floor} Floor</span>`
+        const floorsHTML = quote.floors.map(floor => {
+            const position = quote.floorPositions && quote.floorPositions[floor] ? 
+                ` (#${quote.floorPositions[floor]})` : '';
+            return `<span class="floor-tag ${quote.floors.length > 1 ? 'multiple' : ''}">${floor} Floor${position}</span>`;
+        }
         ).join('');
         
         return `
