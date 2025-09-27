@@ -1,0 +1,519 @@
+{
+  "quotes": [
+    {
+      "id": 1,
+      "text": "If you salute your work , you do not have to salute anybody , if you pollute your work , you have to salute everybody",
+      "author": "A p j abdul kalam",
+      "floors": [
+        "Ground"
+      ],
+      "floorPositions": {
+        "Ground": 1
+      }
+    },
+    {
+      "id": 2,
+      "text": "A lift of joy and happiness is possible only on the basis of knowledge and science",
+      "author": "Dr sarvepalli radhakrishnan",
+      "floors": [
+        "Ground",
+        "First",
+        "Fourth"
+      ],
+      "floorPositions": {
+        "Ground": 2,
+        "First": 10,
+        "Fourth": 4
+      }
+    },
+    {
+      "id": 3,
+      "text": "The best way to predict a future is to create it",
+      "author": "Abraham Lincoln",
+      "floors": [
+        "Ground",
+        "Third"
+      ],
+      "floorPositions": {
+        "Ground": 3,
+        "Third": 9
+      }
+    },
+    {
+      "id": 4,
+      "text": "The gift of knowledge is the highest gift in the world",
+      "author": "Swami Vivekanandha",
+      "floors": [
+        "Ground"
+      ],
+      "floorPositions": {
+        "Ground": 4
+      }
+    },
+    {
+      "id": 5,
+      "text": "Confidence and hard work is the best medicine to kill the disease called failure, it will make your successful person",
+      "author": "- apj abdul kalam",
+      "floors": [
+        "Ground"
+      ],
+      "floorPositions": {
+        "Ground": 5
+      }
+    },
+    {
+      "id": 6,
+      "text": "When educating the minds of our youth, we must not forget to educate their hearts",
+      "author": "Dalai Lama",
+      "floors": [
+        "Ground"
+      ],
+      "floorPositions": {
+        "Ground": 6
+      }
+    },
+    {
+      "id": 7,
+      "text": "Got may never know what results come of your actions but if you do nothing, there will be no results",
+      "author": "Mahatma Gandhi",
+      "floors": [
+        "Ground"
+      ],
+      "floorPositions": {
+        "Ground": 7
+      }
+    },
+    {
+      "id": 8,
+      "text": "Success is a vehicle which moves on the wheel named hard work and fuel called self confidence",
+      "author": "Dr apj abdul kalam",
+      "floors": [
+        "Ground",
+        "Fourth"
+      ],
+      "floorPositions": {
+        "Ground": 8,
+        "Fourth": 2
+      }
+    },
+    {
+      "id": 9,
+      "text": "Every man who has become great owes gya achievement to incessant toil",
+      "author": "sir n Visvesvaraya",
+      "floors": [
+        "Ground"
+      ],
+      "floorPositions": {
+        "Ground": 9
+      }
+    },
+    {
+      "id": 10,
+      "text": "One whose knowledge is confined to book and whose wealth is the possession of others can use neither his knowledge nor wealth when the need for them arises",
+      "author": "Chanakya",
+      "floors": [
+        "First"
+      ],
+      "floorPositions": {
+        "First": 1
+      }
+    },
+    {
+      "id": 11,
+      "text": "Education is the manifestation of perfection present already in man",
+      "author": "Swami vivekananda",
+      "floors": [
+        "First"
+      ],
+      "floorPositions": {
+        "First": 2
+      }
+    },
+    {
+      "id": 12,
+      "text": "Teaching is a very noble profession that shapes the character caliber and future of an individual. If the people remember me as a good teacher , that will be the biggest honor for me",
+      "author": "Dr apj abdul kalam",
+      "floors": [
+        "First"
+      ],
+      "floorPositions": {
+        "First": 3
+      }
+    },
+    {
+      "id": 13,
+      "text": "We are what we think . All that we are arises with our thoughts . With our thoughts, we make the world",
+      "author": "Buddha",
+      "floors": [
+        "First"
+      ],
+      "floorPositions": {
+        "First": 4
+      }
+    },
+    {
+      "id": 14,
+      "text": "An engineer is a person who applies the skill and knowledge of basic science for the good of society",
+      "author": "Sir m Visvesvaraya",
+      "floors": [
+        "First",
+        "Second",
+        "Fourth"
+      ],
+      "floorPositions": {
+        "First": 5,
+        "Second": 4,
+        "Fourth": 1
+      }
+    },
+    {
+      "id": 15,
+      "text": "The highest education is the which does not give merely information but makes our life in harmony with all existence",
+      "author": "Rabindranath Tagore",
+      "floors": [
+        "First",
+        "Fourth"
+      ],
+      "floorPositions": {
+        "First": 6,
+        "Fourth": 8
+      }
+    },
+    {
+      "id": 16,
+      "text": "Education is the most powerful weapon which you can use to change the world",
+      "author": "Nelson Mandela",
+      "floors": [
+        "First",
+        "Second",
+        "Fourth"
+      ],
+      "floorPositions": {
+        "First": 7,
+        "Second": 10,
+        "Fourth": 3
+      }
+    },
+    {
+      "id": 17,
+      "text": "Freedom is not worth having if it doesn't include the freedom to make mistakes",
+      "author": "Mahatma Gandhi",
+      "floors": [
+        "First"
+      ],
+      "floorPositions": {
+        "First": 8
+      }
+    },
+    {
+      "id": 18,
+      "text": "Never lose heart while pressing the path id trust live a principled life",
+      "author": "Basavanna",
+      "floors": [
+        "First"
+      ],
+      "floorPositions": {
+        "First": 9
+      }
+    },
+    {
+      "id": 19,
+      "text": "I am the master of my failure, if i never fail how will I ever learn?",
+      "author": "C v raman",
+      "floors": [
+        "First",
+        "Fourth"
+      ],
+      "floorPositions": {
+        "First": 11,
+        "Fourth": 13
+      }
+    },
+    {
+      "id": 20,
+      "text": "Education is the ability to listen to almost anything without losing your temper or your self-confidence",
+      "author": "- Robert Frost",
+      "floors": [
+        "Second"
+      ],
+      "floorPositions": {
+        "Second": 1
+      }
+    },
+    {
+      "id": 21,
+      "text": "Intelligence plus character - that is the goal of true education",
+      "author": "- martin luther king",
+      "floors": [
+        "Second"
+      ],
+      "floorPositions": {
+        "Second": 2
+      }
+    },
+    {
+      "id": 22,
+      "text": "To succeed in your mission you must have a single minded devotion to your goal",
+      "author": "- dr a p j abdul kalam",
+      "floors": [
+        "Second"
+      ],
+      "floorPositions": {
+        "Second": 3
+      }
+    },
+    {
+      "id": 23,
+      "text": "A man is great by his deed not by birth",
+      "author": "- Chanakya",
+      "floors": [
+        "Second"
+      ],
+      "floorPositions": {
+        "Second": 5
+      }
+    },
+    {
+      "id": 24,
+      "text": "Your mind is a powerful thing . When you filter it with positive thoughts , your life will start to change",
+      "author": "- gauthama buddha",
+      "floors": [
+        "Second"
+      ],
+      "floorPositions": {
+        "Second": 6
+      }
+    },
+    {
+      "id": 25,
+      "text": "Try not to became a man of success but rather try to become a man of value",
+      "author": "- dr a p j abdul kalam",
+      "floors": [
+        "Second"
+      ],
+      "floorPositions": {
+        "Second": 7
+      }
+    },
+    {
+      "id": 26,
+      "text": "Climbing to the top demands strength whether it is to the top of Mount Everest or to the top of your career",
+      "author": "- dr a p j abdul kalam",
+      "floors": [
+        "Second"
+      ],
+      "floorPositions": {
+        "Second": 8
+      }
+    },
+    {
+      "id": 27,
+      "text": "By education i mean an allround drawing of the best in child and man in body mind and spirit",
+      "author": "- mahatma gandhi",
+      "floors": [
+        "Second"
+      ],
+      "floorPositions": {
+        "Second": 9
+      }
+    },
+    {
+      "id": 28,
+      "text": "In learning you will teach and in teaching you will learn",
+      "author": "- phil collins",
+      "floors": [
+        "Second"
+      ],
+      "floorPositions": {
+        "Second": 11
+      }
+    },
+    {
+      "id": 29,
+      "text": "Have more than you show , speak less than you know",
+      "author": "- william shakespeare",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 1
+      }
+    },
+    {
+      "id": 30,
+      "text": "We are what we repeatedly do . Excellence then is not an act but a habit",
+      "author": "- aristotle",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 2
+      }
+    },
+    {
+      "id": 31,
+      "text": "Innovation distinguishes between a leader and a follow",
+      "author": "- steve jobs",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 3
+      }
+    },
+    {
+      "id": 32,
+      "text": "Imagination is the foundation of all invention and innovation",
+      "author": "- jk Rowling",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 4
+      }
+    },
+    {
+      "id": 33,
+      "text": "Mirror is my best friend because when i cry it never laughs",
+      "author": "- charlie chaplin",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 10
+      }
+    },
+    {
+      "id": 34,
+      "text": "The beautiful things about learning is that no one take it away from you",
+      "author": "- b b king",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 11
+      }
+    },
+    {
+      "id": 35,
+      "text": "Computer are able to see hear and learn welcome to the future",
+      "author": "- dave waters",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 12
+      }
+    },
+    {
+      "id": 36,
+      "text": "The future belongs to those who believe in the beauty of their dreams",
+      "author": "- Eleanor Roosevelt",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 5
+      }
+    },
+    {
+      "id": 37,
+      "text": "Education is not the learning of facts it's rather the training if the mind to think",
+      "author": "- albert einstein",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 7
+      }
+    },
+    {
+      "id": 38,
+      "text": "Arise awake and stop not until the goal is reached",
+      "author": "- swami vivekananda",
+      "floors": [
+        "Third"
+      ],
+      "floorPositions": {
+        "Third": 8
+      }
+    },
+    {
+      "id": 39,
+      "text": "To give real service, you must add something which cannot be brought or measured with money",
+      "author": "Sir m Visvesvaraya",
+      "floors": [
+        "Fourth"
+      ],
+      "floorPositions": {
+        "Fourth": 1
+      }
+    },
+    {
+      "id": 40,
+      "text": "Try not to become just a nab if success but rather try to become A man of value",
+      "author": "Albert einstein",
+      "floors": [
+        "Fourth"
+      ],
+      "floorPositions": {
+        "Fourth": 5
+      }
+    },
+    {
+      "id": 41,
+      "text": "Manpower without any unity it is harmonised and United properly then united properly then it becomes a spiritual power",
+      "author": "Sardar vallabhbhai patel",
+      "floors": [
+        "Fourth"
+      ],
+      "floorPositions": {
+        "Fourth": 6
+      }
+    },
+    {
+      "id": 42,
+      "text": "Stay hungry stay foolish",
+      "author": "Steve jobs",
+      "floors": [
+        "Fourth"
+      ],
+      "floorPositions": {
+        "Fourth": 7
+      }
+    },
+    {
+      "id": 43,
+      "text": "When you stand above the crowd you must be ready to have stones thrown at you",
+      "author": "Vikram Sarabhai",
+      "floors": [
+        "Fourth"
+      ],
+      "floorPositions": {
+        "Fourth": 10
+      }
+    },
+    {
+      "id": 44,
+      "text": "Your brand is what other people say about it when your not in the room",
+      "author": "Jeff bezos",
+      "floors": [
+        "Fourth"
+      ],
+      "floorPositions": {
+        "Fourth": 11
+      }
+    },
+    {
+      "id": 45,
+      "text": "If you want to walk fast walk alone. But if you want to walk far walk together",
+      "author": "Ratan tata",
+      "floors": [
+        "Fourth"
+      ],
+      "floorPositions": {
+        "Fourth": 12
+      }
+    }
+  ]
+}
