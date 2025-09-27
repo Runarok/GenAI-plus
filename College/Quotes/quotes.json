@@ -17,13 +17,13 @@
       "author": "Dr sarvepalli radhakrishnan",
       "floors": [
         "Ground",
-        "First",
-        "Fourth"
+        "1st",
+        "4th"
       ],
       "floorPositions": {
         "Ground": 2,
-        "First": 10,
-        "Fourth": 4
+        "1st": 10,
+        "4th": 4
       }
     },
     {
@@ -32,11 +32,11 @@
       "author": "Abraham Lincoln",
       "floors": [
         "Ground",
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
         "Ground": 3,
-        "Third": 9
+        "3rd": 9
       }
     },
     {
@@ -89,11 +89,11 @@
       "author": "Dr apj abdul kalam",
       "floors": [
         "Ground",
-        "Fourth"
+        "4th"
       ],
       "floorPositions": {
         "Ground": 8,
-        "Fourth": 2
+        "4th": 2
       }
     },
     {
@@ -112,10 +112,10 @@
       "text": "One whose knowledge is confined to book and whose wealth is the possession of others can use neither his knowledge nor wealth when the need for them arises",
       "author": "Chanakya",
       "floors": [
-        "First"
+        "1st"
       ],
       "floorPositions": {
-        "First": 1
+        "1st": 1
       }
     },
     {
@@ -123,10 +123,10 @@
       "text": "Education is the manifestation of perfection present already in man",
       "author": "Swami vivekananda",
       "floors": [
-        "First"
+        "1st"
       ],
       "floorPositions": {
-        "First": 2
+        "1st": 2
       }
     },
     {
@@ -134,10 +134,10 @@
       "text": "Teaching is a very noble profession that shapes the character caliber and future of an individual. If the people remember me as a good teacher , that will be the biggest honor for me",
       "author": "Dr apj abdul kalam",
       "floors": [
-        "First"
+        "1st"
       ],
       "floorPositions": {
-        "First": 3
+        "1st": 3
       }
     },
     {
@@ -145,10 +145,10 @@
       "text": "We are what we think . All that we are arises with our thoughts . With our thoughts, we make the world",
       "author": "Buddha",
       "floors": [
-        "First"
+        "1st"
       ],
       "floorPositions": {
-        "First": 4
+        "1st": 4
       }
     },
     {
@@ -156,14 +156,14 @@
       "text": "An engineer is a person who applies the skill and knowledge of basic science for the good of society",
       "author": "Sir m Visvesvaraya",
       "floors": [
-        "First",
-        "Second",
-        "Fourth"
+        "1st",
+        "2nd",
+        "4th"
       ],
       "floorPositions": {
-        "First": 5,
-        "Second": 4,
-        "Fourth": 1
+        "1st": 5,
+        "2nd": 4,
+        "4th": 1
       }
     },
     {
@@ -171,12 +171,12 @@
       "text": "The highest education is the which does not give merely information but makes our life in harmony with all existence",
       "author": "Rabindranath Tagore",
       "floors": [
-        "First",
-        "Fourth"
+        "1st",
+        "4th"
       ],
       "floorPositions": {
-        "First": 6,
-        "Fourth": 8
+        "1st": 6,
+        "4th": 8
       }
     },
     {
@@ -184,14 +184,14 @@
       "text": "Education is the most powerful weapon which you can use to change the world",
       "author": "Nelson Mandela",
       "floors": [
-        "First",
-        "Second",
-        "Fourth"
+        "1st",
+        "2nd",
+        "4th"
       ],
       "floorPositions": {
-        "First": 7,
-        "Second": 10,
-        "Fourth": 3
+        "1st": 7,
+        "2nd": 10,
+        "4th": 3
       }
     },
     {
@@ -199,10 +199,10 @@
       "text": "Freedom is not worth having if it doesn't include the freedom to make mistakes",
       "author": "Mahatma Gandhi",
       "floors": [
-        "First"
+        "1st"
       ],
       "floorPositions": {
-        "First": 8
+        "1st": 8
       }
     },
     {
@@ -210,10 +210,10 @@
       "text": "Never lose heart while pressing the path id trust live a principled life",
       "author": "Basavanna",
       "floors": [
-        "First"
+        "1st"
       ],
       "floorPositions": {
-        "First": 9
+        "1st": 9
       }
     },
     {
@@ -221,12 +221,12 @@
       "text": "I am the master of my failure, if i never fail how will I ever learn?",
       "author": "C v raman",
       "floors": [
-        "First",
-        "Fourth"
+        "1st",
+        "4th"
       ],
       "floorPositions": {
-        "First": 11,
-        "Fourth": 13
+        "1st": 11,
+        "4th": 13
       }
     },
     {
@@ -234,10 +234,10 @@
       "text": "Education is the ability to listen to almost anything without losing your temper or your self-confidence",
       "author": "- Robert Frost",
       "floors": [
-        "Second"
+        "2nd"
       ],
       "floorPositions": {
-        "Second": 1
+        "2nd": 1
       }
     },
     {
@@ -245,10 +245,10 @@
       "text": "Intelligence plus character - that is the goal of true education",
       "author": "- martin luther king",
       "floors": [
-        "Second"
+        "2nd"
       ],
       "floorPositions": {
-        "Second": 2
+        "2nd": 2
       }
     },
     {
@@ -256,10 +256,10 @@
       "text": "To succeed in your mission you must have a single minded devotion to your goal",
       "author": "- dr a p j abdul kalam",
       "floors": [
-        "Second"
+        "2nd"
       ],
       "floorPositions": {
-        "Second": 3
+        "2nd": 3
       }
     },
     {
@@ -267,10 +267,10 @@
       "text": "A man is great by his deed not by birth",
       "author": "- Chanakya",
       "floors": [
-        "Second"
+        "2nd"
       ],
       "floorPositions": {
-        "Second": 5
+        "2nd": 5
       }
     },
     {
@@ -278,10 +278,10 @@
       "text": "Your mind is a powerful thing . When you filter it with positive thoughts , your life will start to change",
       "author": "- gauthama buddha",
       "floors": [
-        "Second"
+        "2nd"
       ],
       "floorPositions": {
-        "Second": 6
+        "2nd": 6
       }
     },
     {
@@ -289,10 +289,10 @@
       "text": "Try not to became a man of success but rather try to become a man of value",
       "author": "- dr a p j abdul kalam",
       "floors": [
-        "Second"
+        "2nd"
       ],
       "floorPositions": {
-        "Second": 7
+        "2nd": 7
       }
     },
     {
@@ -300,10 +300,10 @@
       "text": "Climbing to the top demands strength whether it is to the top of Mount Everest or to the top of your career",
       "author": "- dr a p j abdul kalam",
       "floors": [
-        "Second"
+        "2nd"
       ],
       "floorPositions": {
-        "Second": 8
+        "2nd": 8
       }
     },
     {
@@ -311,10 +311,10 @@
       "text": "By education i mean an allround drawing of the best in child and man in body mind and spirit",
       "author": "- mahatma gandhi",
       "floors": [
-        "Second"
+        "2nd"
       ],
       "floorPositions": {
-        "Second": 9
+        "2nd": 9
       }
     },
     {
@@ -322,10 +322,10 @@
       "text": "In learning you will teach and in teaching you will learn",
       "author": "- phil collins",
       "floors": [
-        "Second"
+        "2nd"
       ],
       "floorPositions": {
-        "Second": 11
+        "2nd": 11
       }
     },
     {
@@ -333,10 +333,10 @@
       "text": "Have more than you show , speak less than you know",
       "author": "- william shakespeare",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 1
+        "3rd": 1
       }
     },
     {
@@ -344,10 +344,10 @@
       "text": "We are what we repeatedly do . Excellence then is not an act but a habit",
       "author": "- aristotle",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 2
+        "3rd": 2
       }
     },
     {
@@ -355,10 +355,10 @@
       "text": "Innovation distinguishes between a leader and a follow",
       "author": "- steve jobs",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 3
+        "3rd": 3
       }
     },
     {
@@ -366,10 +366,10 @@
       "text": "Imagination is the foundation of all invention and innovation",
       "author": "- jk Rowling",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 4
+        "3rd": 4
       }
     },
     {
@@ -377,10 +377,10 @@
       "text": "Mirror is my best friend because when i cry it never laughs",
       "author": "- charlie chaplin",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 10
+        "3rd": 10
       }
     },
     {
@@ -388,10 +388,10 @@
       "text": "The beautiful things about learning is that no one take it away from you",
       "author": "- b b king",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 11
+        "3rd": 11
       }
     },
     {
@@ -399,10 +399,10 @@
       "text": "Computer are able to see hear and learn welcome to the future",
       "author": "- dave waters",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 12
+        "3rd": 12
       }
     },
     {
@@ -410,10 +410,10 @@
       "text": "The future belongs to those who believe in the beauty of their dreams",
       "author": "- Eleanor Roosevelt",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 5
+        "3rd": 5
       }
     },
     {
@@ -421,10 +421,10 @@
       "text": "Education is not the learning of facts it's rather the training if the mind to think",
       "author": "- albert einstein",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 7
+        "3rd": 7
       }
     },
     {
@@ -432,10 +432,10 @@
       "text": "Arise awake and stop not until the goal is reached",
       "author": "- swami vivekananda",
       "floors": [
-        "Third"
+        "3rd"
       ],
       "floorPositions": {
-        "Third": 8
+        "3rd": 8
       }
     },
     {
@@ -443,10 +443,10 @@
       "text": "To give real service, you must add something which cannot be brought or measured with money",
       "author": "Sir m Visvesvaraya",
       "floors": [
-        "Fourth"
+        "4th"
       ],
       "floorPositions": {
-        "Fourth": 1
+        "4th": 1
       }
     },
     {
@@ -454,10 +454,10 @@
       "text": "Try not to become just a nab if success but rather try to become A man of value",
       "author": "Albert einstein",
       "floors": [
-        "Fourth"
+        "4th"
       ],
       "floorPositions": {
-        "Fourth": 5
+        "4th": 5
       }
     },
     {
@@ -465,10 +465,10 @@
       "text": "Manpower without any unity it is harmonised and United properly then united properly then it becomes a spiritual power",
       "author": "Sardar vallabhbhai patel",
       "floors": [
-        "Fourth"
+        "4th"
       ],
       "floorPositions": {
-        "Fourth": 6
+        "4th": 6
       }
     },
     {
@@ -476,10 +476,10 @@
       "text": "Stay hungry stay foolish",
       "author": "Steve jobs",
       "floors": [
-        "Fourth"
+        "4th"
       ],
       "floorPositions": {
-        "Fourth": 7
+        "4th": 7
       }
     },
     {
@@ -487,10 +487,10 @@
       "text": "When you stand above the crowd you must be ready to have stones thrown at you",
       "author": "Vikram Sarabhai",
       "floors": [
-        "Fourth"
+        "4th"
       ],
       "floorPositions": {
-        "Fourth": 10
+        "4th": 10
       }
     },
     {
@@ -498,10 +498,10 @@
       "text": "Your brand is what other people say about it when your not in the room",
       "author": "Jeff bezos",
       "floors": [
-        "Fourth"
+        "4th"
       ],
       "floorPositions": {
-        "Fourth": 11
+        "4th": 11
       }
     },
     {
@@ -509,10 +509,10 @@
       "text": "If you want to walk fast walk alone. But if you want to walk far walk together",
       "author": "Ratan tata",
       "floors": [
-        "Fourth"
+        "4th"
       ],
       "floorPositions": {
-        "Fourth": 12
+        "4th": 12
       }
     }
   ]
