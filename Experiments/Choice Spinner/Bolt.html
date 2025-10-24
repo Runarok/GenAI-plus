@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choice Spinner - Let Fate Decide</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ========================================
+           GLOBAL RESET & BASE STYLES
+           ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        /* Animated background gradient */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles background effect */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20% 30%, rgba(100, 200, 255, 0.3), transparent),
+                radial-gradient(2px 2px at 60% 70%, rgba(200, 100, 255, 0.3), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(255, 100, 200, 0.3), transparent);
+            background-size: 200% 200%;
+            animation: particleFloat 20s ease infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(50px, 50px); }
+        }
+
+        /* ========================================
+           MAIN CONTAINER
+           ======================================== */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            width: 90%;
+            max-height: 95vh;
+            padding: 40px;
+            background: rgba(20, 20, 35, 0.85);
+            border-radius: 24px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(100, 150, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .container::-webkit-scrollbar-track {
+            background: rgba(15, 15, 30, 0.3);
+            border-radius: 10px;
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+        }
+
+        .container::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+
+        /* ========================================
+           HEADER SECTION
+           ======================================== */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .header .subtitle {
+            font-size: 0.95rem;
+            color: #a0a0b0;
+            font-weight: 300;
+        }
+
+        .tooltip {
+            display: inline-block;
+            margin-left: 8px;
+            color: #667eea;
+            cursor: help;
+            position: relative;
+        }
+
+        .tooltip:hover::after {
+            content: 'Add your options, then spin to let fate decide! Add multiple at once with commas or new lines. Press Ctrl+Enter to add, Space to spin.';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.2s ease;
+            max-width: 350px;
+            white-space: normal;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(5px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ========================================
+           INPUT SECTION
+           ======================================== */
+        .input-section {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .input-section textarea {
+            flex: 1;
+            padding: 14px 18px;
+            background: rgba(30, 30, 50, 0.7);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+            resize: vertical;
+            min-height: 50px;
+            max-height: 150px;
+        }
+
+        .input-section textarea:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            background: rgba(30, 30, 50, 0.9);
+        }
+
+        .input-section textarea::placeholder {
+            color: #666;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+        }
+
+        /* ========================================
+           CHOICES SECTION
+           ======================================== */
+        .choices-section {
+            margin-bottom: 30px;
+        }
+
+        .choices-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .choices-header h3 {
+            font-size: 1.1rem;
+            color: #b0b0c0;
+            font-weight: 500;
+        }
+
+        .clear-btn {
+            padding: 8px 16px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 8px;
+            color: #ef4444;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .clear-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+        }
+
+        .choices-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            min-height: 80px;
+            max-height: 200px;
+            padding: 20px;
+            background: rgba(15, 15, 30, 0.5);
+            border-radius: 12px;
+            border: 2px dashed rgba(102, 126, 234, 0.2);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .choices-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .choices-list::-webkit-scrollbar-track {
+            background: rgba(15, 15, 30, 0.3);
+            border-radius: 10px;
+        }
+
+        .choices-list::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.4);
+            border-radius: 10px;
+        }
+
+        .choices-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.6);
+        }
+
+        .choices-list.empty::after {
+            content: 'No choices yet. Add some to get started!';
+            width: 100%;
+            text-align: center;
+            color: #555;
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+
+        .choice-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: default;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .choice-tag:hover {
+            background: rgba(102, 126, 234, 0.25);
+            border-color: rgba(102, 126, 234, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .choice-tag.spinning {
+            animation: pulse 0.5s ease infinite;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .choice-tag.selected {
+            animation: selectedPulse 1s ease;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #10b981;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.8);
+            transform: scale(1.1);
+        }
+
+        @keyframes selectedPulse {
+            0%, 100% { transform: scale(1.1); box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); }
+            50% { transform: scale(1.15); box-shadow: 0 0 40px rgba(16, 185, 129, 1); }
+        }
+
+        .remove-choice {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .remove-choice:hover {
+            transform: scale(1.2);
+            color: #ff5555;
+        }
+
+        /* ========================================
+           SPIN BUTTON SECTION
+           ======================================== */
+        .spin-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .spin-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spin-btn:disabled {
+            background: rgba(100, 100, 100, 0.3);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .spin-btn:disabled:hover {
+            transform: none;
+        }
+
+        .spin-btn.spinning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            animation: spinGlow 1s ease infinite;
+        }
+
+        @keyframes spinGlow {
+            0%, 100% { box-shadow: 0 6px 25px rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 6px 35px rgba(245, 158, 11, 0.7); }
+        }
+
+        .spin-btn i {
+            font-size: 1.3rem;
+        }
+
+        .spin-btn.spinning i {
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========================================
+           RESULT SECTION
+           ======================================== */
+        .result-section {
+            text-align: center;
+            padding: 25px;
+            background: rgba(15, 15, 30, 0.6);
+            border-radius: 12px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result-section h3 {
+            font-size: 1rem;
+            color: #a0a0b0;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .result-text {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #667eea;
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .result-text.show {
+            animation: resultReveal 0.5s ease;
+        }
+
+        @keyframes resultReveal {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* ========================================
+           CONFETTI EFFECT
+           ======================================== */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            position: absolute;
+            animation: confettiFall 3s linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ========================================
+           RESPONSIVE DESIGN
+           ======================================== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                width: 95%;
+                max-height: 90vh;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header {
+                margin-bottom: 20px;
+            }
+
+            .input-section {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .choices-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .result-text {
+                font-size: 1.4rem;
+            }
+
+            .result-section {
+                padding: 20px;
+                min-height: 80px;
+            }
+
+            .shortcuts {
+                font-size: 0.75rem;
+                padding: 10px;
+            }
+        }
+
+        /* ========================================
+           KEYBOARD SHORTCUTS INDICATOR
+           ======================================== */
+        .shortcuts {
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(15, 15, 30, 0.4);
+            border-radius: 10px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+        }
+
+        .shortcuts kbd {
+            display: inline-block;
+            padding: 3px 8px;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 5px;
+            font-family: monospace;
+            color: #667eea;
+            margin: 0 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-circle-notch"></i> Choice Spinner
+            </h1>
+            <p class="subtitle">
+                Let fate decide your next move
+                <span class="tooltip">
+                    <i class="fas fa-question-circle"></i>
+                </span>
+            </p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <textarea
+                id="choiceInput"
+                placeholder="Enter choices (separate with commas or new lines)..."
+                rows="2"
+            ></textarea>
+            <button class="btn" id="addBtn">
+                <i class="fas fa-plus"></i>
+                Add
+            </button>
+        </div>
+
+        <!-- Choices Section -->
+        <div class="choices-section">
+            <div class="choices-header">
+                <h3>Your Choices (<span id="choiceCount">0</span>)</h3>
+                <button class="clear-btn" id="clearBtn">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+            <div class="choices-list empty" id="choicesList"></div>
+        </div>
+
+        <!-- Spin Button -->
+        <div class="spin-section">
+            <button class="btn spin-btn" id="spinBtn" disabled>
+                <i class="fas fa-sync-alt"></i>
+                Spin the Wheel
+            </button>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section">
+            <h3>Selected Choice:</h3>
+            <div class="result-text" id="resultText">Ready to spin!</div>
+        </div>
+
+        <!-- Keyboard Shortcuts Info -->
+        <div class="shortcuts">
+            <i class="fas fa-keyboard"></i>
+            Quick keys: <kbd>Ctrl+Enter</kbd> to add • <kbd>Space</kbd> to spin
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // STATE MANAGEMENT
+        // ========================================
+        let choices = [];
+        let isSpinning = false;
+
+        // DOM Elements
+        const choiceInput = document.getElementById('choiceInput');
+        const addBtn = document.getElementById('addBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const choicesList = document.getElementById('choicesList');
+        const choiceCount = document.getElementById('choiceCount');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultText = document.getElementById('resultText');
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChoicesFromStorage();
+            renderChoices();
+            updateUI();
+        });
+
+        // ========================================
+        // LOCAL STORAGE FUNCTIONS
+        // ========================================
+        function saveChoicesToStorage() {
+            localStorage.setItem('spinnerChoices', JSON.stringify(choices));
+        }
+
+        function loadChoicesFromStorage() {
+            const saved = localStorage.getItem('spinnerChoices');
+            if (saved) {
+                try {
+                    choices = JSON.parse(saved);
+                } catch (e) {
+                    choices = [];
+                }
+            }
+        }
+
+        // ========================================
+        // CHOICE MANAGEMENT
+        // ========================================
+        function addChoice() {
+            const value = choiceInput.value.trim();
+
+            if (!value) {
+                shakeElement(choiceInput);
+                return;
+            }
+
+            // Split by commas or newlines, trim each, and filter out empty strings
+            const newChoices = value
+                .split(/[,\n]+/)
+                .map(choice => choice.trim())
+                .filter(choice => choice.length > 0);
+
+            if (newChoices.length === 0) {
+                shakeElement(choiceInput);
+                return;
+            }
+
+            // Track duplicates and new additions
+            let addedCount = 0;
+            let duplicateCount = 0;
+
+            newChoices.forEach(choice => {
+                if (!choices.includes(choice)) {
+                    choices.push(choice);
+                    addedCount++;
+                } else {
+                    duplicateCount++;
+                }
+            });
+
+            choiceInput.value = '';
+            choiceInput.focus();
+
+            saveChoicesToStorage();
+            renderChoices();
+            updateUI();
+
+            if (addedCount > 0) {
+                playSound('add');
+                if (duplicateCount > 0) {
+                    showNotification(`Added ${addedCount} choice${addedCount > 1 ? 's' : ''}, ${duplicateCount} duplicate${duplicateCount > 1 ? 's' : ''} skipped`);
+                }
+            } else if (duplicateCount > 0) {
+                shakeElement(choiceInput);
+                showNotification('All choices already exist!');
+            }
+        }
+
+        function removeChoice(index) {
+            choices.splice(index, 1);
+            saveChoicesToStorage();
+            renderChoices();
+            updateUI();
+            playSound('remove');
+        }
+
+        function clearAllChoices() {
+            if (choices.length === 0) return;
+
+            if (confirm('Are you sure you want to clear all choices?')) {
+                choices = [];
+                resultText.textContent = 'Ready to spin!';
+                resultText.classList.remove('show');
+                saveChoicesToStorage();
+                renderChoices();
+                updateUI();
+                playSound('clear');
+            }
+        }
+
+        // ========================================
+        // RENDERING
+        // ========================================
+        function renderChoices() {
+            choicesList.innerHTML = '';
+
+            if (choices.length === 0) {
+                choicesList.classList.add('empty');
+                return;
+            }
+
+            choicesList.classList.remove('empty');
+
+            choices.forEach((choice, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'choice-tag';
+                tag.innerHTML = `
+                    <span>${choice}</span>
+                    <button class="remove-choice" onclick="removeChoice(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                choicesList.appendChild(tag);
+            });
+
+            choiceCount.textContent = choices.length;
+        }
+
+        function updateUI() {
+            spinBtn.disabled = choices.length < 2;
+
+            if (choices.length < 2) {
+                resultText.textContent = choices.length === 0
+                    ? 'Add some choices to get started!'
+                    : 'Add at least 2 choices to spin!';
+            } else if (resultText.textContent === 'Add some choices to get started!' ||
+                       resultText.textContent === 'Add at least 2 choices to spin!') {
+                resultText.textContent = 'Ready to spin!';
+            }
+        }
+
+        // ========================================
+        // SPINNING LOGIC
+        // ========================================
+        async function spinWheel() {
+            if (isSpinning || choices.length < 2) return;
+
+            isSpinning = true;
+            spinBtn.classList.add('spinning');
+            spinBtn.disabled = true;
+            resultText.textContent = 'Spinning...';
+            resultText.classList.remove('show');
+
+            playSound('spin');
+
+            const choiceTags = document.querySelectorAll('.choice-tag');
+            const spinDuration = 3000;
+            const spinInterval = 150;
+            const spins = spinDuration / spinInterval;
+
+            let currentIndex = 0;
+
+            for (let i = 0; i < spins; i++) {
+                await new Promise(resolve => setTimeout(resolve, spinInterval));
+
+                choiceTags.forEach(tag => tag.classList.remove('spinning'));
+                choiceTags[currentIndex].classList.add('spinning');
+
+                currentIndex = (currentIndex + 1) % choices.length;
+            }
+
+            const selectedIndex = Math.floor(Math.random() * choices.length);
+            const winner = choices[selectedIndex];
+
+            choiceTags.forEach(tag => tag.classList.remove('spinning'));
+            choiceTags[selectedIndex].classList.add('selected');
+
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            resultText.textContent = winner;
+            resultText.classList.add('show');
+
+            createConfetti();
+            playSound('win');
+
+            setTimeout(() => {
+                choiceTags[selectedIndex].classList.remove('selected');
+                isSpinning = false;
+                spinBtn.classList.remove('spinning');
+                spinBtn.disabled = false;
+            }, 2000);
+        }
+
+        // ========================================
+        // VISUAL EFFECTS
+        // ========================================
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#10b981', '#f59e0b', '#ef4444', '#ec4899'];
+            const confettiCount = 50;
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function shakeElement(element) {
+            element.style.animation = 'none';
+            setTimeout(() => {
+                element.style.animation = 'shake 0.3s ease';
+            }, 10);
+        }
+
+        function showNotification(message) {
+            resultText.textContent = message;
+            setTimeout(() => {
+                if (choices.length >= 2) {
+                    resultText.textContent = 'Ready to spin!';
+                }
+            }, 2000);
+        }
+
+        // ========================================
+        // SOUND EFFECTS (Simple beep sounds)
+        // ========================================
+        function playSound(type) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            gainNode.gain.value = 0.1;
+
+            switch(type) {
+                case 'add':
+                    oscillator.frequency.value = 600;
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                    break;
+                case 'remove':
+                    oscillator.frequency.value = 400;
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                    break;
+                case 'spin':
+                    oscillator.frequency.value = 800;
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                    break;
+                case 'win':
+                    oscillator.frequency.value = 1000;
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                    break;
+                case 'clear':
+                    oscillator.frequency.value = 300;
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.15);
+                    break;
+            }
+        }
+
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
+        addBtn.addEventListener('click', addChoice);
+        clearBtn.addEventListener('click', clearAllChoices);
+        spinBtn.addEventListener('click', spinWheel);
+
+        choiceInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
+                addChoice();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !isSpinning && choices.length >= 2) {
+                if (document.activeElement !== choiceInput) {
+                    e.preventDefault();
+                    spinWheel();
+                }
+            }
+        });
+
+        // Add shake animation dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -57,6 +57,8 @@ const menuData = [
     { "label": "SnarkBot", "url": "Experiments/AI Chat/SnarkBot/index.html", "desc": "Snarky AI bot." },
     { "label": "Bin", "url": "Experiments/Bin/index.html", "desc": "Trash/projects that failed or were ditched." },
     { "label": "MBTI test", "url": "Experiments/Type/index.html", "desc": "MBTI Personality Test." },
+    { "label": "CS-v0", "url": "Experiments/Choice Spinner/v0.html", "desc": "Choice Spinner v0." },
+    { "label": "CS-Bolt", "url": "Experiments/Choice Spinner/Bolt.html", "desc": "Choice Spinner Bolt." },
     { "label": "Extras", "url": "Experiments/Extras/index.html", "desc": "Useful/specific projects that don't fit elsewhere." }
   ]
 },

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choice Spinner - Let Fate Decide</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #e0e0e0;
+        }
+
+        /* Animated background */
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 255, 200, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            width: 100%;
+            max-height: 100vh;
+            background: rgba(20, 20, 35, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 255, 200, 0.1), 0 0 60px rgba(138, 43, 226, 0.05);
+            border: 1px solid rgba(0, 255, 200, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            margin: 20px;
+            /* Added scrollbar styling for better appearance */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 255, 200, 0.3) transparent;
+        }
+
+        .container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 200, 0.3);
+            border-radius: 3px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffc8 0%, #8a2be2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 255, 200, 0.3);
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: #a0a0b0;
+            font-weight: 300;
+        }
+
+        /* Input Section */
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 255, 200, 0.3);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: none;
+            /* Added placeholder text for multiple input support */
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #00ffc8;
+            background: rgba(0, 255, 200, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 200, 0.3);
+        }
+
+        input[type="text"]::placeholder {
+            color: #606070;
+        }
+
+        /* Buttons */
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #00ffc8 0%, #00d4aa 100%);
+            color: #0f0c29;
+            box-shadow: 0 4px 15px rgba(0, 255, 200, 0.3);
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 200, 0.5);
+        }
+
+        .btn-add:active {
+            transform: translateY(0);
+        }
+
+        .btn-spin {
+            background: linear-gradient(135deg, #8a2be2 0%, #6a0dad 100%);
+            color: #fff;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 4px 20px rgba(138, 43, 226, 0.4);
+            flex-shrink: 0;
+        }
+
+        .btn-spin:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(138, 43, 226, 0.6);
+        }
+
+        .btn-spin:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .btn-spin:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-clear {
+            background: rgba(255, 100, 100, 0.2);
+            color: #ff6464;
+            border: 1px solid rgba(255, 100, 100, 0.5);
+            width: 100%;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-clear:hover {
+            background: rgba(255, 100, 100, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 100, 100, 0.2);
+        }
+
+        .btn-remove {
+            background: rgba(255, 100, 100, 0.15);
+            color: #ff8080;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 100, 100, 0.4);
+        }
+
+        .btn-remove:hover {
+            background: rgba(255, 100, 100, 0.25);
+        }
+
+        /* Choices Section */
+        .choices-section {
+            margin-bottom: 15px;
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .choices-label {
+            font-size: 0.9rem;
+            color: #a0a0b0;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .choices-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 50px;
+            align-content: flex-start;
+            overflow-y: auto;
+            padding-right: 5px;
+            flex: 1;
+            /* Made scrollable with flex layout */
+        }
+
+        .choices-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .choices-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .choices-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 200, 0.2);
+            border-radius: 2px;
+        }
+
+        .choice-tag {
+            background: rgba(0, 255, 200, 0.1);
+            border: 1px solid rgba(0, 255, 200, 0.4);
+            color: #00ffc8;
+            padding: 10px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: slideIn 0.3s ease;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .choice-tag:hover {
+            background: rgba(0, 255, 200, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 200, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .choice-tag.selected {
+            background: linear-gradient(135deg, rgba(0, 255, 200, 0.3) 0%, rgba(138, 43, 226, 0.3) 100%);
+            border-color: #00ffc8;
+            box-shadow: 0 0 20px rgba(0, 255, 200, 0.5), 0 0 40px rgba(138, 43, 226, 0.3);
+            animation: pulse 0.6s ease;
+        }
+
+        .choice-tag.spinning {
+            animation: spin 0.1s linear;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg) scale(1.05);
+            }
+            to {
+                transform: rotate(360deg) scale(1.05);
+            }
+        }
+
+        /* Result Section */
+        .result-section {
+            text-align: center;
+            margin-top: 15px;
+            padding: 20px;
+            background: rgba(0, 255, 200, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 200, 0.2);
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            flex-shrink: 0;
+            /* Improved animation with falling effect */
+        }
+
+        .result-section.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            animation: dropIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: auto;
+        }
+
+        @keyframes dropIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(5px) scale(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            color: #a0a0b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .result-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffc8 0%, #8a2be2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            word-break: break-word;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            color: #606070;
+            padding: 20px;
+            font-size: 0.95rem;
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: rgba(0, 255, 200, 0.2);
+            color: #00ffc8;
+            text-align: center;
+            border-radius: 8px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 255, 200, 0.3);
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #00ffc8;
+            pointer-events: none;
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header p {
+                font-size: 0.85rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            button {
+                font-size: 0.9rem;
+                padding: 10px 16px;
+            }
+
+            .result-text {
+                font-size: 1.4rem;
+            }
+
+            .choices-label {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-spinner"></i> Choice Spinner</h1>
+            <p>Add your options, then spin to let fate decide!</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    id="choiceInput" 
+                    placeholder="Enter choices (comma or line separated)..." 
+                    autocomplete="off"
+                >
+                <button class="btn-add" id="addBtn" title="Add choice (Enter)">
+                    <i class="fas fa-plus"></i> Add
+                </button>
+            </div>
+        </div>
+
+        <div class="choices-section">
+            <div class="choices-label">
+                <i class="fas fa-list"></i> Your Choices
+                <span class="tooltip">
+                    <i class="fas fa-question-circle" style="margin-left: 8px; cursor: help;"></i>
+                    <span class="tooltiptext">Add choices separated by commas or new lines, then click Spin!</span>
+                </span>
+            </div>
+            <div class="choices-container" id="choicesContainer">
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No choices yet. Add one to get started!</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-spin" id="spinBtn" disabled title="Spin to select (Space)">
+            <i class="fas fa-sync-alt"></i> Spin the Wheel
+        </button>
+
+        <button class="btn-clear" id="clearBtn" title="Remove all choices">
+            <i class="fas fa-trash"></i> Clear All
+        </button>
+
+        <div class="result-section" id="resultSection">
+            <div class="result-label">🎉 Selected Choice</div>
+            <div class="result-text" id="resultText"></div>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let choices = [];
+        let isSpinning = false;
+
+        // DOM Elements
+        const choiceInput = document.getElementById('choiceInput');
+        const addBtn = document.getElementById('addBtn');
+        const spinBtn = document.getElementById('spinBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const choicesContainer = document.getElementById('choicesContainer');
+        const resultSection = document.getElementById('resultSection');
+        const resultText = document.getElementById('resultText');
+
+        // Initialize
+        loadChoices();
+        updateUI();
+
+        // Event Listeners
+        addBtn.addEventListener('click', addChoice);
+        spinBtn.addEventListener('click', spinWheel);
+        clearBtn.addEventListener('click', clearAllChoices);
+        choiceInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addChoice();
+        });
+        document.addEventListener('keypress', (e) => {
+            if (e.code === 'Space' && !isSpinning && choices.length > 0) {
+                e.preventDefault();
+                spinWheel();
+            }
+        });
+
+        function addChoice() {
+            const value = choiceInput.value.trim();
+            if (value === '') {
+                choiceInput.focus();
+                return;
+            }
+
+            // Split by commas or newlines, trim each choice
+            const newChoices = value
+                .split(/[,\n]/)
+                .map(choice => choice.trim())
+                .filter(choice => choice.length > 0);
+
+            let addedCount = 0;
+            for (const choice of newChoices) {
+                if (!choices.includes(choice)) {
+                    choices.push(choice);
+                    addedCount++;
+                }
+            }
+
+            if (addedCount === 0) {
+                alert('All choices already exist or were invalid!');
+            }
+
+            choiceInput.value = '';
+            saveChoices();
+            updateUI();
+            choiceInput.focus();
+        }
+
+        // Remove Choice
+        function removeChoice(index) {
+            choices.splice(index, 1);
+            saveChoices();
+            updateUI();
+        }
+
+        // Clear All Choices
+        function clearAllChoices() {
+            if (choices.length === 0) return;
+            if (confirm('Are you sure you want to clear all choices?')) {
+                choices = [];
+                resultSection.classList.remove('active');
+                saveChoices();
+                updateUI();
+            }
+        }
+
+        // Spin Wheel
+        async function spinWheel() {
+            if (isSpinning || choices.length === 0) return;
+
+            isSpinning = true;
+            spinBtn.disabled = true;
+            resultSection.classList.remove('active');
+
+            // Spinning animation
+            const spinDuration = 2000 + Math.random() * 1000;
+            const spinStart = Date.now();
+            const choiceTags = document.querySelectorAll('.choice-tag');
+
+            const spinInterval = setInterval(() => {
+                const elapsed = Date.now() - spinStart;
+                if (elapsed < spinDuration) {
+                    const randomIndex = Math.floor(Math.random() * choices.length);
+                    choiceTags.forEach((tag, idx) => {
+                        tag.classList.toggle('spinning', idx === randomIndex);
+                    });
+                } else {
+                    clearInterval(spinInterval);
+                    choiceTags.forEach(tag => tag.classList.remove('spinning'));
+                }
+            }, 100);
+
+            // Wait for spin to complete
+            await new Promise(resolve => setTimeout(resolve, spinDuration));
+
+            // Select final choice
+            const selectedIndex = Math.floor(Math.random() * choices.length);
+            const selectedChoice = choices[selectedIndex];
+
+            // Update UI
+            choiceTags.forEach((tag, idx) => {
+                tag.classList.toggle('selected', idx === selectedIndex);
+            });
+
+            resultText.textContent = selectedChoice;
+            resultSection.classList.add('active');
+
+            // Confetti effect
+            createConfetti();
+
+            // Play sound (optional)
+            playSound();
+
+            isSpinning = false;
+            spinBtn.disabled = false;
+        }
+
+        // Create Confetti
+        function createConfetti() {
+            const confettiCount = 30;
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = Math.random() > 0.5 ? '#00ffc8' : '#8a2be2';
+                confetti.style.delay = Math.random() * 0.3 + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 3300);
+            }
+        }
+
+        // Play Sound (using Web Audio API)
+        function playSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                // Audio context not available
+            }
+        }
+
+        // Update UI
+        function updateUI() {
+            // Update choices display
+            if (choices.length === 0) {
+                choicesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>No choices yet. Add one to get started!</p>
+                    </div>
+                `;
+            } else {
+                choicesContainer.innerHTML = choices
+                    .map((choice, index) => `
+                        <div class="choice-tag">
+                            <span>${choice}</span>
+                            <button class="btn-remove" onclick="removeChoice(${index})" title="Remove this choice">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `)
+                    .join('');
+            }
+
+            // Update button states
+            spinBtn.disabled = choices.length === 0;
+            clearBtn.disabled = choices.length === 0;
+        }
+
+        // LocalStorage
+        function saveChoices() {
+            localStorage.setItem('spinnerChoices', JSON.stringify(choices));
+        }
+
+        function loadChoices() {
+            const saved = localStorage.getItem('spinnerChoices');
+            if (saved) {
+                try {
+                    choices = JSON.parse(saved);
+                } catch (e) {
+                    choices = [];
+                }
+            }
+        }
+    </script>
+</body>
+</html>
