@@ -3,9 +3,10 @@ const PAGE_CONFIG = {
   header: "Extra Works: Collection of Side Projects",
   buttons: [
     { label: "Birthday Card", path: "/BCK/" },
-    { label: "GitLinkSyncer", path: "/GitLinkSyncer/" },
     { label: "Crown Walkthrough", path: "/Crown/" },
-    { label: "Meta-Prompting", path: "/Meta-Prompting/" }
+    { label: "GitLinkSyncer", path: "/GitLinkSyncer/" },
+    { label: "Meta-Prompting", path: "/Meta-Prompting/" },
+    { label: "Crown PharmaCare", path: "/PharmaCare/" }
   ]
 };
 
