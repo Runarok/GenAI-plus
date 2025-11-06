@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Management System</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>Result Management</h1>
+                    <p>Login to your account</p>
+                </div>
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginRole">Role</label>
+                        <select id="loginRole" required>
+                            <option value="">Select your role</option>
+                            <option value="admin">Admin</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    <span class="error-message" id="loginError"></span>
+                </form>
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" onclick="showPage('registerPage')">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="registerPage" class="page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>Create Account</h1>
+                    <p>Register as Admin or Student</p>
+                </div>
+                <form id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="regName">Full Name</label>
+                        <input type="text" id="regName" placeholder="Your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email Address</label>
+                        <input type="email" id="regEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" placeholder="At least 6 characters" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirm Password</label>
+                        <input type="password" id="regConfirmPassword" placeholder="Confirm password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regRole">Register as</label>
+                        <select id="regRole" required>
+                            <option value="">Select role</option>
+                            <option value="admin">Admin</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    <span class="error-message" id="registerError"></span>
+                </form>
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" onclick="showPage('loginPage')">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminPage" class="page">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-brand">
+                    <h2>Admin Dashboard</h2>
+                </div>
+                <ul class="navbar-menu">
+                    <li><a href="#" class="nav-link active" onclick="switchTab('admin-dashboard')">Dashboard</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchTab('add-student')">Add Student</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchTab('view-students')">View Students</a></li>
+                    <li><a href="#" class="nav-link logout" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            <!-- Dashboard Tab -->
+            <div id="admin-dashboard" class="tab-content active">
+                <div class="tab-header">
+                    <h2>Dashboard Overview</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Students</div>
+                        <div class="stat-value" id="totalStudents">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Average Grade</div>
+                        <div class="stat-value" id="averageGrade">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Highest Score</div>
+                        <div class="stat-value" id="highestScore">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Student Tab -->
+            <div id="add-student" class="tab-content">
+                <div class="tab-header">
+                    <h2>Add New Student</h2>
+                </div>
+                <form id="addStudentForm" class="form-card">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentName">Student Name</label>
+                            <input type="text" id="studentName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rollNumber">Roll Number</label>
+                            <input type="text" id="rollNumber" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="className">Class</label>
+                            <input type="text" id="className" placeholder="e.g., 10A" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentEmail">Email</label>
+                            <input type="email" id="studentEmail" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject Marks (out of 100)</label>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="englishMarks">English</label>
+                                <input type="number" id="englishMarks" min="0" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="mathMarks">Mathematics</label>
+                                <input type="number" id="mathMarks" min="0" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="scienceMarks">Science</label>
+                                <input type="number" id="scienceMarks" min="0" max="100" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="historyMarks">History</label>
+                                <input type="number" id="historyMarks" min="0" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="geographyMarks">Geography</label>
+                                <input type="number" id="geographyMarks" min="0" max="100" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Student</button>
+                    <span class="error-message" id="addStudentError"></span>
+                </form>
+            </div>
+
+            <!-- View Students Tab -->
+            <div id="view-students" class="tab-content">
+                <div class="tab-header">
+                    <h2>Student Results</h2>
+                    <div class="search-filter">
+                        <input type="text" id="searchInput" placeholder="Search by name or roll number" class="search-box">
+                        <select id="sortBy" class="sort-box">
+                            <option value="">Sort by...</option>
+                            <option value="name">Name (A-Z)</option>
+                            <option value="total-desc">Total Marks (High-Low)</option>
+                            <option value="total-asc">Total Marks (Low-High)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table id="studentsTable" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Roll No.</th>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>English</th>
+                                <th>Math</th>
+                                <th>Science</th>
+                                <th>History</th>
+                                <th>Geography</th>
+                                <th>Total</th>
+                                <th>Grade</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsList">
+                            <tr class="empty-row"><td colspan="11">No students added yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Edit Student</h3>
+                    <button type="button" class="close-btn" onclick="closeEditModal()">&times;</button>
+                </div>
+                <form id="editForm" class="modal-form">
+                    <div class="form-group">
+                        <label for="editStudentName">Student Name</label>
+                        <input type="text" id="editStudentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editClassName">Class</label>
+                        <input type="text" id="editClassName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject Marks</label>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editEnglishMarks">English</label>
+                                <input type="number" id="editEnglishMarks" min="0" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editMathMarks">Mathematics</label>
+                                <input type="number" id="editMathMarks" min="0" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editScienceMarks">Science</label>
+                                <input type="number" id="editScienceMarks" min="0" max="100" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editHistoryMarks">History</label>
+                                <input type="number" id="editHistoryMarks" min="0" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editGeographyMarks">Geography</label>
+                                <input type="number" id="editGeographyMarks" min="0" max="100" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Dashboard -->
+    <div id="studentPage" class="page">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-brand">
+                    <h2>Student Dashboard</h2>
+                </div>
+                <ul class="navbar-menu">
+                    <li><a href="#" class="nav-link active" onclick="switchTab('student-dashboard')">Dashboard</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchTab('results')">My Results</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchTab('profile')">Profile</a></li>
+                    <li><a href="#" class="nav-link logout" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            <!-- Dashboard Tab -->
+            <div id="student-dashboard" class="tab-content active">
+                <div class="tab-header">
+                    <h2>Welcome, <span id="studentNameDisplay">Student</span>!</h2>
+                </div>
+                <div class="welcome-card">
+                    <p>View your academic performance and personal information in the tabs above.</p>
+                </div>
+            </div>
+
+            <!-- Results Tab -->
+            <div id="results" class="tab-content">
+                <div class="tab-header">
+                    <h2>My Results</h2>
+                </div>
+                <div id="noResults" class="empty-state">
+                    <p>Your results have not been added by the admin yet.</p>
+                </div>
+                <div id="resultsContent" class="results-card" style="display: none;">
+                    <div class="result-header">
+                        <div class="result-info">
+                            <p><strong>Name:</strong> <span id="resultName"></span></p>
+                            <p><strong>Roll No:</strong> <span id="resultRoll"></span></p>
+                            <p><strong>Class:</strong> <span id="resultClass"></span></p>
+                        </div>
+                        <button class="btn btn-primary" onclick="downloadResult()">Download PDF</button>
+                    </div>
+                    <div class="marks-grid">
+                        <div class="mark-card">
+                            <div class="mark-subject">English</div>
+                            <div class="mark-value" id="markEnglish">-</div>
+                        </div>
+                        <div class="mark-card">
+                            <div class="mark-subject">Mathematics</div>
+                            <div class="mark-value" id="markMath">-</div>
+                        </div>
+                        <div class="mark-card">
+                            <div class="mark-subject">Science</div>
+                            <div class="mark-value" id="markScience">-</div>
+                        </div>
+                        <div class="mark-card">
+                            <div class="mark-subject">History</div>
+                            <div class="mark-value" id="markHistory">-</div>
+                        </div>
+                        <div class="mark-card">
+                            <div class="mark-subject">Geography</div>
+                            <div class="mark-value" id="markGeography">-</div>
+                        </div>
+                    </div>
+                    <div class="result-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Total Marks</span>
+                            <span class="summary-value" id="resultTotal">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Average</span>
+                            <span class="summary-value" id="resultAverage">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Grade</span>
+                            <span class="summary-value grade-badge" id="resultGrade">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profile" class="tab-content">
+                <div class="tab-header">
+                    <h2>My Profile</h2>
+                </div>
+                <form id="profileForm" class="form-card">
+                    <div class="form-group">
+                        <label for="profileEmail">Email Address (Read-only)</label>
+                        <input type="email" id="profileEmail" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileName">Full Name</label>
+                        <input type="text" id="profileName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePhone">Phone Number</label>
+                        <input type="tel" id="profilePhone" placeholder="Your phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="profileAddress">Address</label>
+                        <textarea id="profileAddress" placeholder="Your address" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <span class="error-message" id="profileError"></span>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

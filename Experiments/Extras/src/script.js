@@ -6,7 +6,8 @@ const PAGE_CONFIG = {
     { label: "Crown Walkthrough", path: "/Crown/" },
     { label: "GitLinkSyncer", path: "/GitLinkSyncer/" },
     { label: "Meta-Prompting", path: "/Meta-Prompting/" },
-    { label: "Crown PharmaCare", path: "/PharmaCare/" }
+    { label: "PharmaCare", path: "/PharmaCare/" },
+    { label: "Result Management", path: "/Result Management/" }
   ]
 };
 
