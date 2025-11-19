@@ -7,16 +7,60 @@
     <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
     <style>
         :root {
-            --tcl-primary: #2563eb;
-            --tcl-bg: #dbeafe;
-            --tcl-border: #60a5fa;
-            --c-primary: #059669;
-            --c-bg: #d1fae5;
-            --c-border: #34d399;
-            --code-bg: #1e293b;
-            --code-text: #e2e8f0;
+            /* Dark mode variables (default) */
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #13131a;
+            --bg-glass: rgba(20, 20, 30, 0.7);
+            --bg-glass-hover: rgba(30, 30, 45, 0.85);
+            --text-primary: #e8e8f0;
+            --text-secondary: #a8a8b8;
+            --text-muted: #707080;
+            --accent-primary: #5b9bff;
+            --accent-secondary: #8b5cf6;
+            --accent-success: #10b981;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glow-color: rgba(91, 155, 255, 0.3);
+            --shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.2);
+            
+            /* Legacy support */
+            --tcl-primary: #5b9bff;
+            --tcl-bg: rgba(91, 155, 255, 0.1);
+            --tcl-border: #5b9bff;
+            --c-primary: #10b981;
+            --c-bg: rgba(16, 185, 129, 0.1);
+            --c-border: #10b981;
+            --code-bg: #13131a;
+            --code-text: #e8e8f0;
             --highlight: #fef08a;
-            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f5f7;
+            --bg-secondary: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.7);
+            --bg-glass-hover: rgba(255, 255, 255, 0.9);
+            --text-primary: #1d1d1f;
+            --text-secondary: #515154;
+            --text-muted: #86868b;
+            --accent-primary: #0071e3;
+            --accent-secondary: #7c3aed;
+            --accent-success: #059669;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --glow-color: rgba(0, 113, 227, 0.2);
+            --shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.15);
+            --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.08);
+            
+            --tcl-primary: #0071e3;
+            --tcl-bg: rgba(0, 113, 227, 0.08);
+            --tcl-border: #0071e3;
+            --c-primary: #059669;
+            --c-bg: rgba(5, 150, 105, 0.08);
+            --c-border: #059669;
+            --code-bg: #f5f5f7;
+            --code-text: #1d1d1f;
+            --shadow: rgba(0, 0, 0, 0.15);
         }
 
         * {
@@ -26,56 +70,100 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #1f2937;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             padding: 20px;
             line-height: 1.6;
+            margin: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-secondary);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-strong);
             overflow: hidden;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
         }
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
             padding: 40px;
             text-align: center;
+            position: relative;
+        }
+
+        .header-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+            font-size: 20px;
+        }
+
+        .icon-btn:hover {
+            background: var(--bg-glass-hover);
+            box-shadow: 0 0 20px var(--glow-color);
+            transform: scale(1.05);
         }
 
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            letter-spacing: -0.02em;
         }
 
         .header p {
             font-size: 1.1rem;
-            opacity: 0.9;
+            color: var(--text-secondary);
         }
 
         /* Memory Summary Panel */
         .memory-summary {
-            background: linear-gradient(to right, #fef3c7, #fde68a);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 30px;
             margin: 20px;
             border-radius: 15px;
-            border-left: 5px solid #f59e0b;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-soft);
         }
 
         .memory-summary h2 {
-            color: #92400e;
+            color: var(--text-primary);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 600;
         }
 
         .memory-grid {
@@ -86,21 +174,29 @@
         }
 
         .memory-card {
-            background: white;
+            background: var(--bg-secondary);
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px var(--shadow);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .memory-card:hover {
+            box-shadow: 0 0 20px var(--glow-color);
+            transform: translateY(-2px);
         }
 
         .memory-card h3 {
             font-size: 1rem;
-            color: #7c2d12;
+            color: var(--text-primary);
             margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .memory-card p {
             font-size: 0.9rem;
-            color: #451a03;
+            color: var(--text-secondary);
         }
 
         /* Section Headers */
@@ -115,18 +211,21 @@
             margin-bottom: 30px;
             padding: 20px;
             border-radius: 15px;
-            background: linear-gradient(to right, var(--tcl-bg), var(--tcl-border));
-            border-left: 6px solid var(--tcl-primary);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--tcl-primary);
         }
 
         .section-header.c-section {
-            background: linear-gradient(to right, var(--c-bg), var(--c-border));
-            border-left: 6px solid var(--c-primary);
+            border-left: 4px solid var(--c-primary);
         }
 
         .section-header h2 {
             font-size: 2rem;
-            color: #1f2937;
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
         .section-icon {
@@ -135,17 +234,21 @@
 
         /* TCL vs AWK Comparison */
         .tcl-awk-comparison {
-            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 25px;
             border-radius: 15px;
             margin-bottom: 30px;
-            border: 2px solid var(--tcl-border);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-soft);
         }
 
         .tcl-awk-comparison h3 {
-            color: #3730a3;
+            color: var(--text-primary);
             margin-bottom: 15px;
             text-align: center;
+            font-weight: 600;
         }
 
         .comparison-grid {
@@ -156,16 +259,23 @@
         }
 
         .comparison-box {
-            background: white;
+            background: var(--bg-secondary);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 12px var(--shadow);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .comparison-box:hover {
+            box-shadow: 0 0 20px var(--glow-color);
         }
 
         .comparison-box h4 {
-            color: var(--tcl-primary);
+            color: var(--accent-primary);
             margin-bottom: 10px;
             font-size: 1.2rem;
+            font-weight: 600;
         }
 
         .comparison-box ul {
@@ -175,29 +285,32 @@
 
         .comparison-box li {
             padding: 8px 0;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
         }
 
         .comparison-box li:before {
             content: "→ ";
-            color: var(--tcl-primary);
+            color: var(--accent-primary);
             font-weight: bold;
         }
 
         /* Program Card */
         .program-card {
-            background: white;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 15px;
             margin-bottom: 30px;
-            box-shadow: 0 8px 24px var(--shadow);
+            box-shadow: var(--shadow-soft);
             overflow: hidden;
-            border: 2px solid #e5e7eb;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .program-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 30px var(--glow-color);
         }
 
         .program-card.tcl-card {
@@ -218,11 +331,13 @@
         }
 
         .program-card.tcl-card .program-header {
-            background: var(--tcl-bg);
+            background: var(--bg-glass);
+            border-left: 4px solid var(--tcl-primary);
         }
 
         .program-card.c-card .program-header {
-            background: var(--c-bg);
+            background: var(--bg-glass);
+            border-left: 4px solid var(--c-primary);
         }
 
         .program-title {
@@ -233,7 +348,8 @@
 
         .program-title h3 {
             font-size: 1.5rem;
-            color: #1f2937;
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
         .program-label {
@@ -269,14 +385,15 @@
         /* Concept Map */
         .concept-map {
             padding: 20px;
-            background: #f9fafb;
-            border-top: 1px solid #e5e7eb;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
         }
 
         .concept-map h4 {
-            color: #374151;
+            color: var(--text-primary);
             margin-bottom: 10px;
             font-size: 1rem;
+            font-weight: 600;
         }
 
         .concept-tags {
@@ -286,13 +403,20 @@
         }
 
         .concept-tag {
-            background: white;
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.9rem;
-            border: 2px solid #d1d5db;
-            color: #374151;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
             font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .concept-tag:hover {
+            box-shadow: 0 0 15px var(--glow-color);
+            color: var(--text-primary);
         }
 
         /* Program Content */
@@ -306,23 +430,27 @@
         }
 
         .explanation {
-            background: linear-gradient(to right, #fef3c7, #fde68a);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
-            border-left: 4px solid #f59e0b;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-soft);
         }
 
         .explanation h4 {
-            color: #92400e;
+            color: var(--text-primary);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: 600;
         }
 
         .explanation p {
-            color: #451a03;
+            color: var(--text-secondary);
             line-height: 1.8;
         }
 
@@ -333,13 +461,16 @@
         }
 
         .code-header {
-            background: #374151;
-            color: white;
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
             padding: 10px 15px;
             border-radius: 10px 10px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
         }
 
         .code-label-group {
@@ -348,11 +479,12 @@
         }
 
         .code-type {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--bg-secondary);
             padding: 4px 12px;
             border-radius: 15px;
             font-size: 0.85rem;
             font-weight: 600;
+            border: 1px solid var(--border-color);
         }
 
         .code-box {
@@ -361,11 +493,13 @@
             padding: 20px;
             border-radius: 0 0 10px 10px;
             overflow-x: auto;
-            font-family: 'Courier New', monospace;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
             font-size: 0.9rem;
             line-height: 1.6;
             max-height: 400px;
             position: relative;
+            border: 1px solid var(--border-color);
+            border-top: none;
         }
 
         .code-box pre {
@@ -400,26 +534,29 @@
             position: relative;
             display: inline-block;
             cursor: help;
-            border-bottom: 2px dotted #60a5fa;
+            border-bottom: 2px dotted var(--accent-primary);
         }
 
         .tooltip .tooltiptext {
             visibility: hidden;
             width: 250px;
-            background-color: #1e293b;
-            color: #e2e8f0;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: var(--text-primary);
             text-align: center;
             border-radius: 8px;
             padding: 10px;
             position: absolute;
-            z-index: 1;
+            z-index: 1000;
             bottom: 125%;
             left: 50%;
             margin-left: -125px;
             opacity: 0;
             transition: opacity 0.3s;
             font-size: 0.85rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-strong);
+            border: 1px solid var(--border-color);
         }
 
         .tooltip:hover .tooltiptext {
@@ -429,23 +566,27 @@
 
         /* Quiz Section */
         .quiz-section {
-            background: linear-gradient(to right, #ddd6fe, #c4b5fd);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
-            border-left: 4px solid #7c3aed;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-soft);
         }
 
         .quiz-section h4 {
-            color: #5b21b6;
+            color: var(--text-primary);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: 600;
         }
 
         .quiz-question {
-            color: #3730a3;
+            color: var(--text-secondary);
             font-weight: 500;
             font-size: 1rem;
         }
@@ -454,9 +595,10 @@
             display: none;
             margin-top: 15px;
             padding: 15px;
-            background: white;
+            background: var(--bg-secondary);
             border-radius: 8px;
-            color: #1f2937;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
 
         .quiz-hint.show {
@@ -466,44 +608,44 @@
         /* Buttons */
         .btn {
             padding: 10px 20px;
-            border: none;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
             font-size: 0.95rem;
             margin: 5px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-primary);
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 20px var(--glow-color);
+            transform: translateY(-2px);
         }
 
         .btn-primary {
-            background: #2563eb;
+            background: var(--accent-primary);
             color: white;
+            border-color: var(--accent-primary);
         }
 
         .btn-primary:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            background: var(--accent-primary);
+            box-shadow: 0 0 25px var(--glow-color);
         }
 
         .btn-secondary {
-            background: #6b7280;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #4b5563;
-            transform: translateY(-2px);
+            background: var(--bg-glass);
+            color: var(--text-primary);
         }
 
         .btn-success {
-            background: #059669;
+            background: var(--accent-success);
             color: white;
-        }
-
-        .btn-success:hover {
-            background: #047857;
-            transform: translateY(-2px);
+            border-color: var(--accent-success);
         }
 
         /* Flashcard Mode */
@@ -511,10 +653,14 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin: 20px 0;
+            margin: 20px;
             padding: 20px;
-            background: #f3f4f6;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-soft);
         }
 
         .hidden-content {
@@ -562,23 +708,278 @@
 
         /* TCL-AWK Connector */
         .tcl-awk-connector {
-            background: linear-gradient(to right, var(--tcl-bg), #ede9fe);
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
             padding: 15px;
             border-radius: 8px;
             margin: 15px 0;
-            border: 2px dashed #7c3aed;
+            border: 2px dashed var(--accent-secondary);
             text-align: center;
             font-weight: 600;
-            color: #5b21b6;
+            color: var(--text-primary);
+        }
+
+        /* Right Side Tools Panel */
+        .tools-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: var(--bg-glass);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -10px 0 50px rgba(0, 0, 0, 0.5);
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .tools-panel.open {
+            right: 0;
+        }
+
+        .tools-panel h3 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .tools-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tools-section:last-child {
+            border-bottom: none;
+        }
+
+        .tools-section h4 {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 15px;
+        }
+
+        .toggle-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .toggle-option:hover {
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+
+        .toggle-option label {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        input[type="checkbox"]:checked + .toggle-switch {
+            background: var(--accent-primary);
+        }
+
+        input[type="checkbox"]:checked + .toggle-switch::after {
+            left: 26px;
+            background: white;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        .dropdown-select {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-select:hover, .dropdown-select:focus {
+            box-shadow: 0 0 15px var(--glow-color);
+            outline: none;
+        }
+
+        .panel-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .panel-close-btn:hover {
+            background: var(--bg-glass-hover);
+            box-shadow: 0 0 15px var(--glow-color);
+            transform: rotate(90deg);
+        }
+
+        /* Overlay when panel is open */
+        .panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 9999;
+        }
+
+        .panel-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Keyboard shortcut hint */
+        .shortcut-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
+    <!-- Panel Overlay -->
+    <div class="panel-overlay" id="panelOverlay" onclick="toggleToolsPanel()"></div>
+
+    <!-- Right Side Tools Panel -->
+    <div class="tools-panel" id="toolsPanel">
+        <div class="panel-close-btn" onclick="toggleToolsPanel()">✕</div>
+        <h3>⚙️ Study Tools</h3>
+
+        <!-- Code Display Options -->
+        <div class="tools-section">
+            <h4>Code Display</h4>
+            <div class="toggle-option">
+                <label for="showCode">Show Code</label>
+                <input type="checkbox" id="showCode" checked onchange="applyDisplayOptions()">
+                <label for="showCode" class="toggle-switch"></label>
+            </div>
+            <div class="toggle-option">
+                <label for="showComments">Show Comments</label>
+                <input type="checkbox" id="showComments" checked onchange="applyDisplayOptions()">
+                <label for="showComments" class="toggle-switch"></label>
+            </div>
+            <div class="toggle-option">
+                <label for="showExplanations">Show Explanations</label>
+                <input type="checkbox" id="showExplanations" checked onchange="applyDisplayOptions()">
+                <label for="showExplanations" class="toggle-switch"></label>
+            </div>
+            <div class="toggle-option">
+                <label for="showQuestions">Show Quiz Questions</label>
+                <input type="checkbox" id="showQuestions" checked onchange="applyDisplayOptions()">
+                <label for="showQuestions" class="toggle-switch"></label>
+            </div>
+        </div>
+
+        <!-- Viva Questions Options -->
+        <div class="tools-section">
+            <h4>Viva Questions</h4>
+            <label style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px; display: block;">Questions per program:</label>
+            <select class="dropdown-select" id="vivaCount" onchange="applyVivaOptions()">
+                <option value="1">1 Question</option>
+                <option value="5" selected>5 Questions</option>
+                <option value="10">10 Questions</option>
+                <option value="20">20 Questions</option>
+                <option value="50">All Questions</option>
+            </select>
+            <div class="toggle-option" style="margin-top: 15px;">
+                <label for="showVivaAnswers">Show Answers</label>
+                <input type="checkbox" id="showVivaAnswers" onchange="applyVivaOptions()">
+                <label for="showVivaAnswers" class="toggle-switch"></label>
+            </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <div class="tools-section">
+            <h4>Appearance</h4>
+            <div class="toggle-option">
+                <label for="themeToggle">Dark Mode</label>
+                <input type="checkbox" id="themeToggle" checked onchange="toggleTheme()">
+                <label for="themeToggle" class="toggle-switch"></label>
+            </div>
+        </div>
+
+        <!-- Keyboard Shortcuts -->
+        <div class="tools-section">
+            <h4>Keyboard Shortcuts</h4>
+            <div style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.8;">
+                <div><kbd style="background: var(--bg-secondary); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border-color);">Ctrl/Cmd + K</kbd> Open Tools</div>
+                <div><kbd style="background: var(--bg-secondary); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border-color);">Esc</kbd> Close Tools</div>
+                <div><kbd style="background: var(--bg-secondary); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border-color);">Ctrl/Cmd + T</kbd> Toggle Theme</div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
             <h1>🎓 Network Programming Study Companion</h1>
             <p>Master 10 Programs: 5 TCL/AWK + 5 C Programs with Memory Aids &amp; Interactive Learning</p>
+            <div class="header-controls">
+                <div class="icon-btn" onclick="toggleTheme()" title="Toggle Theme (Ctrl/Cmd + T)">
+                    🌙
+                </div>
+                <div class="icon-btn" onclick="toggleToolsPanel()" title="Open Tools (Ctrl/Cmd + K)">
+                    ⚙️
+                </div>
+            </div>
         </div>
 
         <!-- Memory Summary Panel -->
@@ -1913,9 +2314,108 @@ $ns at <span class="number">45.0</span> <span class="string">"$cbr0 stop"</span>
             });
         }
 
-        // Add syntax highlighting on page load
+        // Toggle Tools Panel
+        function toggleToolsPanel() {
+            const panel = document.getElementById('toolsPanel');
+            const overlay = document.getElementById('panelOverlay');
+            panel.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // Toggle Theme
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            
+            // Update toggle checkbox
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.checked = (newTheme === 'dark');
+            
+            // Save preference
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Apply Display Options from Tools Panel
+        function applyDisplayOptions() {
+            const showCode = document.getElementById('showCode').checked;
+            const showComments = document.getElementById('showComments').checked;
+            const showExplanations = document.getElementById('showExplanations').checked;
+            const showQuestions = document.getElementById('showQuestions').checked;
+
+            // Show/hide code blocks
+            document.querySelectorAll('.code-container').forEach(container => {
+                container.style.display = showCode ? 'block' : 'none';
+            });
+
+            // Show/hide comments in code
+            document.querySelectorAll('.comment').forEach(comment => {
+                comment.style.display = showComments ? 'inline' : 'none';
+            });
+
+            // Show/hide explanations
+            document.querySelectorAll('.explanation').forEach(exp => {
+                exp.style.display = showExplanations ? 'block' : 'none';
+            });
+
+            // Show/hide quiz sections
+            document.querySelectorAll('.quiz-section').forEach(quiz => {
+                quiz.style.display = showQuestions ? 'block' : 'none';
+            });
+        }
+
+        // Apply Viva Options
+        function applyVivaOptions() {
+            const showAnswers = document.getElementById('showVivaAnswers').checked;
+            
+            // Toggle visibility of quiz hints based on showAnswers
+            document.querySelectorAll('.quiz-hint').forEach(hint => {
+                if (showAnswers) {
+                    hint.classList.add('show');
+                } else {
+                    hint.classList.remove('show');
+                }
+            });
+        }
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + K: Toggle Tools Panel
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                toggleToolsPanel();
+            }
+            
+            // Esc: Close Tools Panel
+            if (e.key === 'Escape') {
+                const panel = document.getElementById('toolsPanel');
+                const overlay = document.getElementById('panelOverlay');
+                if (panel.classList.contains('open')) {
+                    panel.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
+            }
+            
+            // Ctrl/Cmd + T: Toggle Theme
+            if ((e.ctrlKey || e.metaKey) && e.key === 't') {
+                e.preventDefault();
+                toggleTheme();
+            }
+        });
+
+        // Initialize on page load
         window.addEventListener('DOMContentLoaded', function() {
             console.log('Network Programming Study Companion loaded successfully!');
+            
+            // Load saved theme preference
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeToggle').checked = (savedTheme === 'dark');
+            
+            // Initialize display options
+            applyDisplayOptions();
+            applyVivaOptions();
         });
     </script>
 </body>
