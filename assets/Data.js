@@ -15,7 +15,6 @@ const menuData = [
   { label: "SDLC v2", url: "College/SDLC/SDLC v2/index.html", desc: "SDLC Project version 2." },
   { label: "College Quotes", url: "College/Quotes/index.html", desc: "Quotes around ECE Block." },
   { label: "Control Networks", url: "College/CNP/index.html", desc: "Control Networks Protocol Programs." },
-  { label: "Stone Story Guide", url: "College/Stone Story/index.html", desc: "Stone Story Helping Guide." },
   { label: "Python Quiz Framework", url: "College/Quiz/index.html", desc: "OOP-based Python quiz (~1k lines)." }
    ]
   },
@@ -29,7 +28,8 @@ const menuData = [
       { label: "Simon Says", url: "Games/Simon Says/index.html", desc: "Memory pattern light game." },
       { label: "Space Dash", url: "Games/Space Dash/index.html", desc: "Space Dash." },
       { label: "Skyward Ascent", url: "Games/Skyward Ascent/index.html", desc: "Fancy Doodle Jump." },
-      { label: "Sudoku", url: "Games/Sudoku/index.html", desc: "Sudoku." }
+      { label: "Sudoku", url: "Games/Sudoku/index.html", desc: "Sudoku." },
+      { label: "Stone Story Guide", url: "Games/Stone Story/index.html", desc: "Stone Story Helping Guide." }
     ]
   },
   {
