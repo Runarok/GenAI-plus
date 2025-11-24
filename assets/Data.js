@@ -13,6 +13,7 @@ const menuData = [
   { label: "Python Projects", url: "College/Python/index.html", desc: "Explore Simple Python projects." },
   { label: "SDLC v1", url: "College/SDLC/SDLC v1/index.html", desc: "SDLC Project version 2." },
   { label: "SDLC v2", url: "College/SDLC/SDLC v2/index.html", desc: "SDLC Project version 2." },
+  { label: "Project Review", url: "College/Proj Review/index.html", desc: "Proj Review Details of Phase 2" },
   { label: "College Quotes", url: "College/Quotes/index.html", desc: "Quotes around ECE Block." },
   { label: "Control Networks", url: "College/CNP/index.html", desc: "Control Networks Protocol Programs." },
   { label: "Python Quiz Framework", url: "College/Quiz/index.html", desc: "OOP-based Python quiz (~1k lines)." }
