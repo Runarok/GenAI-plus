@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Engineering Education Hub</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <style>
+        :root {
+            --color-bg: #1a1a2e;
+            --color-surface: #16213e;
+            --color-text: #eaeaea;
+            --color-text-secondary: #b0b0b0;
+            --color-primary: #0f3460;
+            --color-primary-hover: #16a085;
+            --color-accent: #e94560;
+            --color-border: #2d4059;
+            --color-success: #2ecc71;
+            --color-warning: #f39c12;
+            --color-info: #3498db;
+        }
+
+        [data-theme="light"] {
+            --color-bg: #f5f7fa;
+            --color-surface: #ffffff;
+            --color-text: #2c3e50;
+            --color-text-secondary: #555;
+            --color-primary: #3498db;
+            --color-primary-hover: #2980b9;
+            --color-accent: #e94560;
+            --color-border: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--color-primary);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin: 0;
+            color: #fff;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: var(--color-surface);
+            border-right: 1px solid var(--color-border);
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-title {
+            padding: 12px 20px;
+            font-weight: 600;
+            color: var(--color-accent);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
+            color: var(--color-text-secondary);
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(14, 216, 214, 0.1);
+            border-left-color: var(--color-primary-hover);
+            color: var(--color-text);
+        }
+
+        .sidebar-item.active {
+            background-color: rgba(14, 216, 214, 0.2);
+            border-left-color: var(--color-primary-hover);
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            background-color: var(--color-surface);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--color-primary-hover);
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        h3 {
+            color: var(--color-accent);
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: var(--color-text);
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+
+        .definition-box {
+            background-color: rgba(14, 216, 214, 0.1);
+            border-left: 4px solid var(--color-primary-hover);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .example-box {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--color-success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .comparison-table tr:hover {
+            background-color: rgba(14, 216, 214, 0.05);
+        }
+
+        .keyword {
+            color: var(--color-primary-hover);
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: var(--color-accent);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-bottom: 5px;
+        }
+
+        .toggle-btn {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--color-primary-hover);
+        }
+
+        .toggle-content {
+            display: none;
+            background-color: rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .toggle-content.show {
+            display: block;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--color-primary-hover);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            border: none;
+            font-size: 20px;
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                max-height: 200px;
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+                overflow-x: auto;
+                display: flex;
+            }
+
+            .sidebar-section {
+                min-width: 200px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <header>
+        <div class="header-content">
+            <div class="logo">📚</div>
+            <div>
+                <h1>Software Engineering Education Hub</h1>
+                <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.7);">Modules 4 & 5: Design, Testing & Quality</p>
+            </div>
+        </div>
+        <div class="header-controls">
+            <button class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Module 4: Design</div>
+                <div class="sidebar-item active" data-content="design-intro">Design Overview</div>
+                <div class="sidebar-item" data-content="design-process">Design Process</div>
+                <div class="sidebar-item" data-content="architectural-styles">Architectural Styles</div>
+                <div class="sidebar-item" data-content="class-based-design">Class-based Components</div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Module 5: Testing & Quality</div>
+                <div class="sidebar-item" data-content="testing-intro">Testing Overview</div>
+                <div class="sidebar-item" data-content="white-box-testing">White Box Testing</div>
+                <div class="sidebar-item" data-content="black-box-testing">Black Box Testing</div>
+                <div class="sidebar-item" data-content="vv">V&V Overview</div>
+                <div class="sidebar-item" data-content="reliability">Reliability Metrics</div>
+                <div class="sidebar-item" data-content="reviews">Reviews & Inspection</div>
+                <div class="sidebar-item" data-content="quality-models">Quality Models</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Module 4: Design Introduction -->
+            <div id="design-intro" class="content-section active">
+                <div class="content-card">
+                    <h2>Software Design Overview</h2>
+                    <p>Software design is the art and science of creating a blueprint for software systems that are maintainable, scalable, and efficient.</p>
+                    
+                    <h3>What is Design?</h3>
+                    <p>Design involves creating a detailed plan of how a software system will be structured and how it will function. It bridges the gap between requirements and implementation.</p>
+
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Software design is the process of creating an architecture and detailed design that meets the specified requirements, considering constraints such as performance, scalability, maintainability, and user experience.
+                    </div>
+
+                    <h3>Importance of Software Design</h3>
+                    <ul>
+                        <li><strong>Visibility:</strong> Makes the invisible visible - helps teams understand complex systems</li>
+                        <li><strong>Quality Assurance:</strong> Ensures adherence to quality standards from the beginning</li>
+                        <li><strong>Cost Reduction:</strong> Catching design flaws early reduces development and maintenance costs</li>
+                        <li><strong>Communication:</strong> Provides a common understanding among team members and stakeholders</li>
+                        <li><strong>Reusability:</strong> Well-designed components can be reused across projects</li>
+                    </ul>
+
+                    <h3>Levels of Design</h3>
+                    <ul>
+                        <li><strong>Architecture Design:</strong> High-level system structure and component organization</li>
+                        <li><strong>Detailed Design:</strong> Low-level design of individual components and modules</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Module 4: Design Process -->
+            <div id="design-process" class="content-section">
+                <div class="content-card">
+                    <h2>Software Design Process</h2>
+                    <p>The design process follows a systematic approach to create software architectures and detailed designs.</p>
+
+                    <h3>Design Process Steps</h3>
+                    <ol>
+                        <li><strong>Requirements Analysis:</strong> Understand and analyze functional and non-functional requirements</li>
+                        <li><strong>Architectural Design:</strong> Define the overall system structure and components</li>
+                        <li><strong>Detailed Design:</strong> Design individual modules and their interactions</li>
+                        <li><strong>Design Documentation:</strong> Create comprehensive design documentation</li>
+                        <li><strong>Design Review:</strong> Review design against requirements and standards</li>
+                        <li><strong>Design Validation:</strong> Ensure design can be implemented and meets requirements</li>
+                    </ol>
+
+                    <h3>Design Principles</h3>
+                    <ul>
+                        <li><strong>Modularity:</strong> Divide system into independent, manageable modules</li>
+                        <li><strong>Abstraction:</strong> Hide complexity and expose only necessary interfaces</li>
+                        <li><strong>Cohesion:</strong> Elements within a module should be closely related</li>
+                        <li><strong>Coupling:</strong> Minimize dependencies between modules</li>
+                        <li><strong>Separation of Concerns:</strong> Each module should have a single, well-defined responsibility</li>
+                    </ul>
+
+                    <div class="definition-box">
+                        <strong>Key Principle:</strong> High cohesion and low coupling lead to maintainable and flexible designs.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 4: Architectural Styles -->
+            <div id="architectural-styles" class="content-section">
+                <div class="content-card">
+                    <h2>Categories of Architectural Styles</h2>
+                    <p>Architectural styles are reusable patterns that guide high-level system structure decisions.</p>
+
+                    <h3>1. Layered (N-tier) Architecture</h3>
+                    <div class="definition-box">
+                        <strong>Description:</strong> Organizes the system into horizontal layers, each with a specific role (presentation, business logic, data access).
+                    </div>
+                    <ul>
+                        <li><strong>Advantages:</strong> Easy to organize teams, clear separation of concerns, simple to understand</li>
+                        <li><strong>Disadvantages:</strong> Can become monolithic, performance overhead from layer traversal</li>
+                    </ul>
+
+                    <h3>2. Event-Driven Architecture</h3>
+                    <div class="definition-box">
+                        <strong>Description:</strong> Components interact through events. An event source generates events that are consumed by event subscribers.
+                    </div>
+                    <ul>
+                        <li><strong>Advantages:</strong> Decoupled components, highly responsive, scales well</li>
+                        <li><strong>Disadvantages:</strong> Complex testing, difficult to trace execution flow</li>
+                    </ul>
+
+                    <h3>3. Microservices Architecture</h3>
+                    <div class="definition-box">
+                        <strong>Description:</strong> Large applications are composed of small, independent services that can be developed and deployed separately.
+                    </div>
+                    <ul>
+                        <li><strong>Advantages:</strong> Independent deployment, technology diversity, scalability</li>
+                        <li><strong>Disadvantages:</strong> Distributed system complexity, network latency, data consistency challenges</li>
+                    </ul>
+
+                    <h3>4. Model-View-Controller (MVC)</h3>
+                    <div class="definition-box">
+                        <strong>Description:</strong> Separates application into three components: Model (data), View (UI), and Controller (logic).
+                    </div>
+                    <ul>
+                        <li><strong>Advantages:</strong> Separation of concerns, parallel development, easier testing</li>
+                        <li><strong>Disadvantages:</strong> More complexity for simple applications</li>
+                    </ul>
+
+                    <h3>5. Service-Oriented Architecture (SOA)</h3>
+                    <div class="definition-box">
+                        <strong>Description:</strong> Services are modular business capabilities exposed through standardized interfaces, typically using web services.
+                    </div>
+                    <ul>
+                        <li><strong>Advantages:</strong> Reusability, interoperability, flexibility</li>
+                        <li><strong>Disadvantages:</strong> Performance overhead, complexity, requires mature processes</li>
+                    </ul>
+
+                    <h3>Comparison Table</h3>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Architecture</th>
+                            <th>Best For</th>
+                            <th>Scalability</th>
+                            <th>Complexity</th>
+                        </tr>
+                        <tr>
+                            <td>Layered</td>
+                            <td>Traditional web apps</td>
+                            <td>Moderate</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Event-Driven</td>
+                            <td>Real-time systems</td>
+                            <td>High</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>Microservices</td>
+                            <td>Large, complex apps</td>
+                            <td>Very High</td>
+                            <td>Very High</td>
+                        </tr>
+                        <tr>
+                            <td>MVC</td>
+                            <td>Web applications</td>
+                            <td>Moderate</td>
+                            <td>Moderate</td>
+                        </tr>
+                        <tr>
+                            <td>SOA</td>
+                            <td>Enterprise systems</td>
+                            <td>High</td>
+                            <td>High</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Module 4: Class-based Components Design -->
+            <div id="class-based-design" class="content-section">
+                <div class="content-card">
+                    <h2>Principles of Designing Class-Based Components</h2>
+                    <p>Object-oriented design focuses on creating well-designed classes that are modular, reusable, and maintainable.</p>
+
+                    <h3>Key Design Principles</h3>
+
+                    <h3>1. Single Responsibility Principle (SRP)</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> A class should have one, and only one, reason to change. Each class should have a single responsibility.
+                    </div>
+                    <div class="example-box">
+                        <strong>Example:</strong> A User class should only handle user data, not authentication logic. Authentication should be a separate class.
+                    </div>
+
+                    <h3>2. Open/Closed Principle (OCP)</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Classes should be open for extension but closed for modification.
+                    </div>
+                    <div class="example-box">
+                        <strong>Example:</strong> Use inheritance and interfaces to extend functionality without modifying existing code.
+                    </div>
+
+                    <h3>3. Liskov Substitution Principle (LSP)</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Objects of a superclass should be replaceable with objects of its subclasses without breaking the application.
+                    </div>
+
+                    <h3>4. Interface Segregation Principle (ISP)</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Clients should not be forced to depend on interfaces they do not use. Create specific interfaces rather than general ones.
+                    </div>
+
+                    <h3>5. Dependency Inversion Principle (DIP)</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> High-level modules should not depend on low-level modules. Both should depend on abstractions.
+                    </div>
+
+                    <h3>Class Design Best Practices</h3>
+                    <ul>
+                        <li><strong>Cohesion:</strong> Keep related functionality together in a class</li>
+                        <li><strong>Encapsulation:</strong> Hide internal implementation details, expose only necessary public interfaces</li>
+                        <li><strong>Abstraction:</strong> Define clear contracts through interfaces and abstract classes</li>
+                        <li><strong>Inheritance:</strong> Use inheritance for "is-a" relationships, favor composition for "has-a" relationships</li>
+                        <li><strong>Polymorphism:</strong> Design for polymorphism to enable flexible and extensible designs</li>
+                    </ul>
+
+                    <h3>Design Patterns</h3>
+                    <p>Common design patterns for class-based components:</p>
+                    <ul>
+                        <li><strong>Singleton:</strong> Ensure a class has only one instance</li>
+                        <li><strong>Factory:</strong> Create objects without specifying exact classes</li>
+                        <li><strong>Observer:</strong> Define one-to-many dependencies between objects</li>
+                        <li><strong>Strategy:</strong> Define a family of algorithms and make them interchangeable</li>
+                        <li><strong>Decorator:</strong> Add behavior to objects dynamically</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Module 5: Testing Introduction -->
+            <div id="testing-intro" class="content-section">
+                <div class="content-card">
+                    <h2>Software Testing Overview</h2>
+                    <p>Testing is a critical activity that ensures software quality and meets specified requirements.</p>
+
+                    <h3>What is Software Testing?</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Software testing is the process of executing a software application or system with the intent of finding and reporting defects, and validating that it performs according to specifications.
+                    </div>
+
+                    <h3>Objectives of Testing</h3>
+                    <ul>
+                        <li>Identify defects and errors in the software</li>
+                        <li>Verify that the software meets specified requirements</li>
+                        <li>Validate that the software is fit for use</li>
+                        <li>Ensure quality and reliability of the system</li>
+                        <li>Build confidence in the software system</li>
+                    </ul>
+
+                    <h3>Testing Levels</h3>
+                    <ul>
+                        <li><strong>Unit Testing:</strong> Testing individual units or components in isolation</li>
+                        <li><strong>Integration Testing:</strong> Testing how different components work together</li>
+                        <li><strong>System Testing:</strong> Testing the complete integrated system</li>
+                        <li><strong>Acceptance Testing:</strong> Testing whether the system meets user requirements and acceptance criteria</li>
+                    </ul>
+
+                    <h3>Testing Types</h3>
+                    <ul>
+                        <li><strong>Functional Testing:</strong> Verifies that functions work as intended</li>
+                        <li><strong>Non-functional Testing:</strong> Tests performance, security, usability, reliability, etc.</li>
+                        <li><strong>Regression Testing:</strong> Ensures that changes don't break existing functionality</li>
+                        <li><strong>Smoke Testing:</strong> Quick sanity check that critical functionality works</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Module 5: White Box Testing -->
+            <div id="white-box-testing" class="content-section">
+                <div class="content-card">
+                    <h2>White Box Testing</h2>
+                    <p>Also known as glass box, clear box, or structural testing.</p>
+
+                    <h3>Definition</h3>
+                    <div class="definition-box">
+                        <strong>White Box Testing:</strong> A testing approach where the tester has knowledge of the internal code structure, design, and implementation of the software. Tests are derived from code structure analysis.
+                    </div>
+
+                    <h3>Key Characteristics</h3>
+                    <ul>
+                        <li>Tests are based on internal code structure and logic</li>
+                        <li>Requires knowledge of programming languages and code implementation</li>
+                        <li>Testers have access to source code</li>
+                        <li>Focuses on testing code paths and branches</li>
+                    </ul>
+
+                    <h3>White Box Testing Techniques</h3>
+
+                    <h4>1. Statement Coverage</h4>
+                    <p>Ensuring every statement in the code is executed at least once.</p>
+                    <div class="example-box">
+                        <strong>Example:</strong> If code has 100 lines, aim to execute all 100 lines during testing.
+                    </div>
+
+                    <h4>2. Branch Coverage</h4>
+                    <p>Ensuring every branch (if/else paths) is executed at least once.</p>
+                    <div class="example-box">
+                        <strong>Example:</strong> For an if-else statement, test both the true and false conditions.
+                    </div>
+
+                    <h4>3. Path Coverage</h4>
+                    <p>Ensuring every possible path through the code is executed.</p>
+
+                    <h4>4. Condition Coverage</h4>
+                    <p>Ensuring every condition in a decision statement evaluates to both true and false.</p>
+
+                    <h3>Advantages of White Box Testing</h3>
+                    <ul>
+                        <li>Thorough testing of code logic and structure</li>
+                        <li>Identifies unused code and dead paths</li>
+                        <li>Tests internal logic and algorithms</li>
+                        <li>Can be automated easily</li>
+                    </ul>
+
+                    <h3>Disadvantages of White Box Testing</h3>
+                    <ul>
+                        <li>Requires knowledge of programming languages</li>
+                        <li>Time-consuming to write and maintain tests</li>
+                        <li>May miss user-centric issues</li>
+                        <li>Cannot test non-functional requirements easily</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Module 5: Black Box Testing -->
+            <div id="black-box-testing" class="content-section">
+                <div class="content-card">
+                    <h2>Black Box Testing</h2>
+                    <p>Also known as behavioral testing or functional testing.</p>
+
+                    <h3>Definition</h3>
+                    <div class="definition-box">
+                        <strong>Black Box Testing:</strong> A testing approach where the tester does not have knowledge of the internal code structure or implementation. Tests are based on specifications and requirements, treating the system as a "black box."
+                    </div>
+
+                    <h3>Key Characteristics</h3>
+                    <ul>
+                        <li>Tests are based on specifications and requirements</li>
+                        <li>No knowledge of internal code structure required</li>
+                        <li>Tester focuses on inputs and outputs</li>
+                        <li>Tests user-visible functionality</li>
+                    </ul>
+
+                    <h3>Black Box Testing Techniques</h3>
+
+                    <h4>1. Equivalence Partitioning</h4>
+                    <p>Dividing input data into groups that are expected to behave similarly.</p>
+                    <div class="example-box">
+                        <strong>Example:</strong> For age input (1-100 valid, <1 or >100 invalid), test valid range (e.g., 50) and invalid ranges (e.g., -1, 150).
+                    </div>
+
+                    <h4>2. Boundary Value Analysis</h4>
+                    <p>Testing values at the boundaries of input domains.</p>
+                    <div class="example-box">
+                        <strong>Example:</strong> For age input 1-100, test 0, 1, 100, and 101.
+                    </div>
+
+                    <h4>3. Decision Table Testing</h4>
+                    <p>Creating test cases for all combinations of conditions.</p>
+
+                    <h4>4. State Transition Testing</h4>
+                    <p>Testing the transitions between different states of the system.</p>
+
+                    <h3>Advantages of Black Box Testing</h3>
+                    <ul>
+                        <li>Tests from user perspective</li>
+                        <li>No knowledge of programming language required</li>
+                        <li>Identifies missing functionality</li>
+                        <li>Tests complete system integration</li>
+                        <li>Can be performed by non-technical testers</li>
+                    </ul>
+
+                    <h3>Disadvantages of Black Box Testing</h3>
+                    <ul>
+                        <li>May not cover all code paths</li>
+                        <li>Tests are often redundant</li>
+                        <li>Cannot identify specific internal bugs</li>
+                        <li>May not test all boundary conditions</li>
+                    </ul>
+
+                    <h3>Comparison: White Box vs Black Box</h3>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Aspect</th>
+                            <th>White Box</th>
+                            <th>Black Box</th>
+                        </tr>
+                        <tr>
+                            <td>Code Knowledge</td>
+                            <td>Required</td>
+                            <td>Not Required</td>
+                        </tr>
+                        <tr>
+                            <td>Testing Approach</td>
+                            <td>Structure-based</td>
+                            <td>Behavior-based</td>
+                        </tr>
+                        <tr>
+                            <td>Testers</td>
+                            <td>Developers/Tech QA</td>
+                            <td>QA Engineers</td>
+                        </tr>
+                        <tr>
+                            <td>Test Cases</td>
+                            <td>Based on code paths</td>
+                            <td>Based on specifications</td>
+                        </tr>
+                        <tr>
+                            <td>Coverage</td>
+                            <td>Code coverage focus</td>
+                            <td>Functional coverage focus</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Module 5: V&V -->
+            <div id="vv" class="content-section">
+                <div class="content-card">
+                    <h2>Verification and Validation (V&V)</h2>
+                    <p>Two critical concepts in software quality assurance that are often confused but have different meanings.</p>
+
+                    <h3>Verification</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Verification is the process of evaluating whether the software product meets the specifications that were used to design it. It answers: "Are we building the product right?"
+                    </div>
+                    <ul>
+                        <li><strong>Focus:</strong> Internal correctness</li>
+                        <li><strong>Question:</strong> Does the code meet design requirements?</li>
+                        <li><strong>Activities:</strong> Reviews, inspections, unit testing, integration testing</li>
+                        <li><strong>Timing:</strong> During development</li>
+                    </ul>
+
+                    <h3>Validation</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Validation is the process of establishing whether the completed software product satisfies user requirements. It answers: "Are we building the right product?"
+                    </div>
+                    <ul>
+                        <li><strong>Focus:</strong> Meeting user needs</li>
+                        <li><strong>Question:</strong> Does the system meet user requirements?</li>
+                        <li><strong>Activities:</strong> User acceptance testing, system testing, beta testing</li>
+                        <li><strong>Timing:</strong> After development, before release</li>
+                    </ul>
+
+                    <h3>V&V Process</h3>
+                    <ol>
+                        <li><strong>Requirements Review:</strong> Verify requirements are clear and complete</li>
+                        <li><strong>Design Review:</strong> Verify design satisfies requirements</li>
+                        <li><strong>Code Review:</strong> Verify code implements design correctly</li>
+                        <li><strong>Unit Testing:</strong> Verify individual units work correctly</li>
+                        <li><strong>Integration Testing:</strong> Verify components work together</li>
+                        <li><strong>System Testing:</strong> Validate system meets requirements</li>
+                        <li><strong>User Acceptance Testing:</strong> Validate system meets user needs</li>
+                    </ol>
+
+                    <div class="definition-box">
+                        <strong>Key Point:</strong> Verification ensures the development process is correct; Validation ensures the final product is correct for the intended use.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module 5: Reliability Metrics -->
+            <div id="reliability" class="content-section">
+                <div class="content-card">
+                    <h2>Reliability Metrics and Quality Characteristics</h2>
+                    <p>Quantifiable measures to assess and monitor software quality and reliability.</p>
+
+                    <h3>What is Reliability?</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Reliability is the probability that a system will perform its intended function without failure for a specified period of time under specified conditions.
+                    </div>
+
+                    <h3>Key Reliability Metrics</h3>
+
+                    <h4>1. Mean Time Between Failures (MTBF)</h4>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Average time elapsed between system failures. Calculated as: Total service time / Number of failures.
+                    </div>
+                    <div class="example-box">
+                        <strong>Example:</strong> If a system runs for 10,000 hours with 10 failures, MTBF = 1,000 hours.
+                    </div>
+
+                    <h4>2. Mean Time To Repair (MTTR)</h4>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Average time taken to fix a failure and restore the system to operation.
+                    </div>
+
+                    <h4>3. Availability</h4>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Percentage of time a system is available and usable. Calculated as: MTBF / (MTBF + MTTR)
+                    </div>
+                    <div class="example-box">
+                        <strong>Example:</strong> MTBF = 100 hours, MTTR = 2 hours, Availability = 100/(100+2) = 98.04%
+                    </div>
+
+                    <h4>4. Failure Rate</h4>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Number of failures per unit time. Used to track system stability.
+                    </div>
+
+                    <h4>5. Defect Density</h4>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Number of defects per unit size (e.g., defects per 1000 lines of code - KLOC).
+                    </div>
+
+                    <h3>Software Quality Characteristics</h3>
+
+                    <h4>Product Operation Qualities</h4>
+                    <ul>
+                        <li><strong>Correctness:</strong> Extent to which program satisfies specifications and fulfills user objectives</li>
+                        <li><strong>Reliability:</strong> Ability to perform intended function with required precision</li>
+                        <li><strong>Efficiency:</strong> Amount of computing resources required by software</li>
+                        <li><strong>Integrity:</strong> Extent to which access to software/data by unauthorized persons is controlled</li>
+                        <li><strong>Usability:</strong> Effort required to learn, operate, and interpret output</li>
+                    </ul>
+
+                    <h4>Product Revision Qualities</h4>
+                    <ul>
+                        <li><strong>Maintainability:</strong> Effort required to locate and fix errors</li>
+                        <li><strong>Testability:</strong> Effort required to test that system performs intended function</li>
+                        <li><strong>Flexibility:</strong> Effort required to modify operational program</li>
+                    </ul>
+
+                    <h4>Product Transition Qualities</h4>
+                    <ul>
+                        <li><strong>Portability:</strong> Effort required to transfer program to different hardware/software</li>
+                        <li><strong>Reusability:</strong> Extent to which program can be used in other applications</li>
+                        <li><strong>Interoperability:</strong> Effort required to couple one system to another</li>
+                    </ul>
+
+                    <h3>Quality Models</h3>
+                    <p><strong>McCall's Model:</strong> Quality defined in terms of operational characteristics, maintainability, and portability.</p>
+                    <p><strong>Boehm's Model:</strong> Quality based on as-is utility, maintainability, and portability.</p>
+                    <p><strong>ISO 9126 Model:</strong> Defines quality in terms of functionality, reliability, usability, efficiency, maintainability, and portability.</p>
+                </div>
+            </div>
+
+            <!-- Module 5: Reviews and Inspection -->
+            <div id="reviews" class="content-section">
+                <div class="content-card">
+                    <h2>Reviews and Inspections</h2>
+                    <p>Systematic processes for evaluating software artifacts to ensure quality and identify defects early.</p>
+
+                    <h3>What are Reviews and Inspections?</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> Reviews and inspections are static testing techniques where software artifacts (documents, code, design) are examined without execution to identify defects and ensure compliance with standards.
+                    </div>
+
+                    <h3>Types of Reviews</h3>
+
+                    <h4>1. Formal Inspection</h4>
+                    <p>A rigorous, structured review process with defined roles and procedures.</p>
+                    <ul>
+                        <li><strong>Moderator:</strong> Leads the inspection process</li>
+                        <li><strong>Author:</strong> Creator of the artifact being reviewed</li>
+                        <li><strong>Reviewers:</strong> Examine the artifact for defects</li>
+                        <li><strong>Recorder:</strong> Documents defects and issues found</li>
+                    </ul>
+
+                    <h4>2. Walk-through</h4>
+                    <p>An informal review where the author explains the artifact to reviewers.</p>
+                    <ul>
+                        <li>Less structured than formal inspection</li>
+                        <li>Author leads the review</li>
+                        <li>Good for knowledge transfer and team understanding</li>
+                    </ul>
+
+                    <h4>3. Code Review</h4>
+                    <p>Systematic examination of source code by peers.</p>
+                    <ul>
+                        <li>Identifies coding errors and violations of standards</li>
+                        <li>Improves code quality and maintainability</li>
+                        <li>Can be formal or informal peer reviews</li>
+                    </ul>
+
+                    <h3>Inspection Process Steps</h3>
+                    <ol>
+                        <li><strong>Planning:</strong> Prepare for inspection, identify participants</li>
+                        <li><strong>Overview:</strong> Introduce the artifact and inspection procedures</li>
+                        <li><strong>Preparation:</strong> Participants review artifact individually</li>
+                        <li><strong>Meeting:</strong> Group discussion to identify and record defects</li>
+                        <li><strong>Rework:</strong> Author fixes defects found</li>
+                        <li><strong>Follow-up:</strong> Verify rework and close inspection</li>
+                    </ol>
+
+                    <h3>Benefits of Reviews and Inspections</h3>
+                    <ul>
+                        <li>Find defects early in development (before testing)</li>
+                        <li>Cost-effective: cheaper to fix defects earlier</li>
+                        <li>Improve code quality and maintainability</li>
+                        <li>Promote knowledge sharing among team members</li>
+                        <li>Establish coding standards and best practices</li>
+                        <li>Build team morale and collaboration</li>
+                    </ul>
+
+                    <h3>Best Practices</h3>
+                    <ul>
+                        <li>Define clear inspection criteria and checklists</li>
+                        <li>Keep inspection meetings focused and time-bound</li>
+                        <li>Separate defect finding from defect fixing</li>
+                        <li>Document all defects and their resolutions</li>
+                        <li>Use metrics to track inspection effectiveness</li>
+                        <li>Make inspections a regular part of development process</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Module 5: Quality Models -->
+            <div id="quality-models" class="content-section">
+                <div class="content-card">
+                    <h2>Quality Models</h2>
+                    <p>Quality models provide frameworks for understanding and measuring software quality.</p>
+
+                    <h3>McCall's Quality Model</h3>
+                    <div class="definition-box">
+                        <strong>Overview:</strong> McCall defined quality in terms of three high-level parameters and eleven quality factors.
+                    </div>
+                    <p><strong>Three High-Level Parameters:</strong></p>
+                    <ul>
+                        <li><strong>Operational Characteristics:</strong> How well the software operates</li>
+                        <li><strong>Maintenance Characteristics:</strong> How easy it is to fix defects</li>
+                        <li><strong>Transition Characteristics:</strong> How easy it is to port to different platforms</li>
+                    </ul>
+                    <p><strong>Eleven Quality Factors:</strong> Correctness, Reliability, Efficiency, Integrity, Usability, Maintainability, Flexibility, Testability, Portability, Reusability, Interoperability</p>
+
+                    <h3>Boehm's Quality Model</h3>
+                    <div class="definition-box">
+                        <strong>Overview:</strong> Boehm suggested quality based on three high-level characteristics important to users.
+                    </div>
+                    <ul>
+                        <li><strong>As-is Utility:</strong> How well (easily, reliably, efficiently) it can be used</li>
+                        <li><strong>Maintainability:</strong> How easy to understand, modify, and retest</li>
+                        <li><strong>Portability:</strong> Difficulty in making software work in changed environment</li>
+                    </ul>
+
+                    <h3>ISO 9126 Quality Model</h3>
+                    <div class="definition-box">
+                        <strong>Overview:</strong> International standard for software quality characteristics.
+                    </div>
+                    <p><strong>Six Quality Characteristics:</strong></p>
+                    <ul>
+                        <li><strong>Functionality:</strong> Ability to provide functions that meet stated needs</li>
+                        <li><strong>Reliability:</strong> Ability to maintain level of performance</li>
+                        <li><strong>Usability:</strong> Effort needed for use and individual assessment</li>
+                        <li><strong>Efficiency:</strong> Performance in relation to resources</li>
+                        <li><strong>Maintainability:</strong> Effort needed to make modifications</li>
+                        <li><strong>Portability:</strong> Ability to be transferred to different environments</li>
+                    </ul>
+
+                    <h3>Garvin's Eight Quality Dimensions</h3>
+                    <ul>
+                        <li><strong>Performance:</strong> How well it performs the jobs</li>
+                        <li><strong>Features:</strong> How well it supports required features</li>
+                        <li><strong>Reliability:</strong> Probability of working satisfactorily within specified time</li>
+                        <li><strong>Conformance:</strong> Degree to which product meets requirements</li>
+                        <li><strong>Durability:</strong> Measure of product life</li>
+                        <li><strong>Serviceability:</strong> Speed and effectiveness of maintenance</li>
+                        <li><strong>Aesthetics:</strong> The look and feel of the product</li>
+                        <li><strong>Perceived Quality:</strong> User's opinion about product quality</li>
+                    </ul>
+
+                    <h3>Product vs Process Quality Management</h3>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Product Quality</th>
+                            <th>Process Quality</th>
+                        </tr>
+                        <tr>
+                            <td>Focus</td>
+                            <td>Final software product</td>
+                            <td>Development processes</td>
+                        </tr>
+                        <tr>
+                            <td>Measurement</td>
+                            <td>After completion</td>
+                            <td>Throughout development</td>
+                        </tr>
+                        <tr>
+                            <td>Metrics</td>
+                            <td>Defects, performance, usability</td>
+                            <td>Defect detection, productivity, adherence</td>
+                        </tr>
+                        <tr>
+                            <td>Benefits</td>
+                            <td>Clear benchmarks, comparisons</td>
+                            <td>Early defect detection, continuous improvement</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <button class="scroll-to-top" id="scrollToTop">↑</button>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateThemeButton();
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton();
+        });
+
+        function updateThemeButton() {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            themeToggle.textContent = currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+
+        // Sidebar Navigation
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active from all items and sections
+                sidebarItems.forEach(i => i.classList.remove('active'));
+                contentSections.forEach(s => s.classList.remove('active'));
+
+                // Add active to clicked item
+                item.classList.add('active');
+
+                // Show corresponding section
+                const contentId = item.getAttribute('data-content');
+                const targetSection = document.getElementById(contentId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    window.scrollTo(0, 0);
+                }
+            });
+        });
+
+        // Toggle Buttons
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-toggle');
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.classList.toggle('show');
+                    btn.textContent = targetElement.classList.contains('show') ? 'Hide Details ▼' : 'Show Details ▶';
+                }
+            });
+        });
+
+        // Scroll to Top Button
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Responsive sidebar for mobile
+        let isFirstLoad = true;
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768 && isFirstLoad) {
+                // Reset on resize
+            }
+        });
+    </script>
+</body>
+</html>
