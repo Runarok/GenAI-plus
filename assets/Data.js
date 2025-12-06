@@ -14,6 +14,7 @@ const menuData = [
   { label: "SDLC v1", url: "College/SDLC/SDLC v1/index.html", desc: "SDLC Project version 2." },
   { label: "SDLC v2", url: "College/SDLC/SDLC v2/index.html", desc: "SDLC Project version 2." },
   { label: "Project Review", url: "College/Proj Review/index.html", desc: "Proj Review Details of Phase 2" },
+  { label: "SE Mod 4 & 5", url: "College/SE 45/index.html", desc: "SE Mod 4n5 Imp Concepts" },
   { label: "College Quotes", url: "College/Quotes/index.html", desc: "Quotes around ECE Block." },
   { label: "Control Networks", url: "College/CNP/index.html", desc: "Control Networks Protocol Programs." },
   { label: "Python Quiz Framework", url: "College/Quiz/index.html", desc: "OOP-based Python quiz (~1k lines)." }
@@ -43,6 +44,7 @@ const menuData = [
       { label: "Image Base64", url: "Tools/Base64CropImage/index.html", desc: "Base64 & Image conversion." },
       { label: "HTML Merger", url: "Tools/HTML Merger/index.html", desc: "Inline HTML, CSS, JS with preview." },
       { label: "HTML Splitter", url: "Tools/HTML Splitter/index.html", desc: "Splits code into HTML, CSS, and JS." },
+      { label: "HTML Split v2", url: "Tools/HTML Splitter v2/index.html", desc: "Better Working and Minimalistic." },
       { label: "Markdown Editor", url: "Tools/MarkDown/index.html", desc: "Live Github markdown." },
       { label: "SVG Editor", url: "Tools/Svg Edit/index.html", desc: "Live SVG Editor." },
       { label: "Morse Code", url: "Tools/MorseCode/index.html",  desc: "Live MorseCode." },
@@ -61,8 +63,8 @@ const menuData = [
     { "label": "SnarkBot", "url": "Experiments/AI Chat/SnarkBot/index.html", "desc": "Snarky AI bot." },
     { "label": "Bin", "url": "Experiments/Bin/index.html", "desc": "Trash/projects that failed or were ditched." },
     { "label": "MBTI test", "url": "Experiments/Type/index.html", "desc": "MBTI Personality Test." },
-    { "label": "CS-v0", "url": "Experiments/Choice Spinner/v0.html", "desc": "Choice Spinner v0." },
-    { "label": "CS-Bolt", "url": "Experiments/Choice Spinner/Bolt.html", "desc": "Choice Spinner Bolt." },
+    { "label": "CS-v0", "url": "Experiments/Choice Spinner/v0/index.html", "desc": "Choice Spinner v0." },
+    { "label": "CS-Bolt", "url": "Experiments/Choice Spinner/Bolt/index.html", "desc": "Choice Spinner Bolt." },
     { "label": "Extras", "url": "Experiments/Extras/index.html", "desc": "Useful/specific projects that don't fit elsewhere." }
   ]
 },

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>HTML Splitter Tool</title>
+                <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+                <link rel="stylesheet" href="styles.css">
+            </head>
+            <body>
+                <div class="container">
+                    <h1>🔀 HTML Splitter</h1>
+                        <p class="subtitle">Extract HTML, CSS, and JavaScript from a single file while preserving formatting and indentation</p>
+                            <div class="error-message" id="errorMessage"></div>
+                                <div class="success-message" id="successMessage"></div>
+                                    <div class="upload-section" id="uploadArea">
+                                        <div class="upload-text">📁 Drop your HTML file here or click to upload</div>
+                                            <div class="upload-hint">Supports .html, .htm files</div>
+                                            </div>
+                                            <input type="file" id="fileInput" accept=".html,.htm" />
+                                            <div id="outputContainer" style="display: none;">
+                                                <div class="info-box">
+                                                    <strong>✓ File processed successfully!</strong> Below are your extracted HTML, CSS, and JavaScript files with proper indentation preserved.
+                                                    </div>
+                                                    <div class="stats" id="stats"></div>
+                                                        <div class="button-group">
+                                                            <button class="btn-primary" onclick="downloadAllFiles()">📦 Download All Files (ZIP)</button>
+                                                                <button class="btn-secondary" onclick="copyAllCode()">📋 Copy All Code</button>
+                                                                    <button class="btn-secondary" onclick="clearOutput()">🔄 Clear</button>
+                                                                    </div>
+                                                                    <div class="output-section">
+                                                                        <div class="code-panel">
+                                                                            <div class="panel-header html">
+                                                                                📄 index.html
+                                                                                <button class="copy-btn" onclick="copyCode('htmlOutput')">Copy</button>
+                                                                                </div>
+                                                                                <div class="code-display">
+                                                                                    <pre><code id="htmlOutput"></code></pre>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="code-panel">
+                                                                                    <div class="panel-header css">
+                                                                                        🎨 styles.css
+                                                                                        <button class="copy-btn" onclick="copyCode('cssOutput')">Copy</button>
+                                                                                        </div>
+                                                                                        <div class="code-display">
+                                                                                            <pre><code id="cssOutput"></code></pre>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="code-panel">
+                                                                                            <div class="panel-header js">
+                                                                                                ⚙️ script.js
+                                                                                                <button class="copy-btn" onclick="copyCode('jsOutput')">Copy</button>
+                                                                                                </div>
+                                                                                                <div class="code-display">
+                                                                                                    <pre><code id="jsOutput"></code></pre>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <script src="script.js"></script>
+                                                                                    </body>
+                                                                                </html>

@@ -1,0 +1,72 @@
+<!doctype html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Choice Spinner - Let Fate Decide</title>
+                <!-- Favicon -->
+                    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+                    <!-- Google Fonts -->
+                        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+                        <!-- Font Awesome Icons -->
+                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                            <link rel="stylesheet" href="styles.css">
+                        </head>
+                        <body>
+                            <!-- Main Container -->
+                                <div class="container">
+                                    <!-- Header -->
+                                        <div class="header">
+                                            <h1>
+                                                <i class="fas fa-circle-notch"></i> Choice Spinner
+                                                </h1>
+                                                <p class="subtitle">
+                                                    Let fate decide your next move
+                                                    <span class="tooltip">
+                                                        <i class="fas fa-question-circle"></i>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <!-- Input Section -->
+                                                    <div class="input-section">
+                                                        <textarea
+                                                            id="choiceInput"
+                                                            placeholder="Enter choices (separate with commas or new lines)..."
+                                                            rows="2"
+                                                            ></textarea>
+                                                            <button class="btn" id="addBtn">
+                                                                <i class="fas fa-plus"></i>
+                                                                    Add
+                                                                </button>
+                                                            </div>
+                                                            <!-- Choices Section -->
+                                                                <div class="choices-section">
+                                                                    <div class="choices-header">
+                                                                        <h3>Your Choices (<span id="choiceCount">0</span>)</h3>
+                                                                            <button class="clear-btn" id="clearBtn">
+                                                                                <i class="fas fa-trash"></i> Clear All
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="choices-list empty" id="choicesList"></div>
+                                                                            </div>
+                                                                            <!-- Spin Button -->
+                                                                                <div class="spin-section">
+                                                                                    <button class="btn spin-btn" id="spinBtn" disabled>
+                                                                                        <i class="fas fa-sync-alt"></i>
+                                                                                            Spin the Wheel
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <!-- Result Section -->
+                                                                                        <div class="result-section">
+                                                                                            <h3>Selected Choice:</h3>
+                                                                                                <div class="result-text" id="resultText">Ready to spin!</div>
+                                                                                                </div>
+                                                                                                <!-- Keyboard Shortcuts Info -->
+                                                                                                    <div class="shortcuts">
+                                                                                                        <i class="fas fa-keyboard"></i>
+                                                                                                            Quick keys: <kbd>Ctrl+Enter</kbd> to add • <kbd>Space</kbd> to spin
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <script src="script.js"></script>
+                                                                                                    </body>
+                                                                                                </html>

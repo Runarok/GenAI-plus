@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Choice Spinner - Let Fate Decide</title>
+                <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                <link rel="stylesheet" href="styles.css">
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1><i class="fas fa-spinner"></i> Choice Spinner</h1>
+                            <p>Add your options, then spin to let fate decide!</p>
+                            </div>
+                            <div class="input-section">
+                                <div class="input-group">
+                                    <input
+                                    type="text"
+                                    id="choiceInput"
+                                    placeholder="Enter choices (comma or line separated)..."
+                                    autocomplete="off"
+                                    >
+                                    <button class="btn-add" id="addBtn" title="Add choice (Enter)">
+                                        <i class="fas fa-plus"></i> Add
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="choices-section">
+                                    <div class="choices-label">
+                                        <i class="fas fa-list"></i> Your Choices
+                                            <span class="tooltip">
+                                                <i class="fas fa-question-circle" style="margin-left: 8px; cursor: help;"></i>
+                                                    <span class="tooltiptext">Add choices separated by commas or new lines, then click Spin!</span>
+                                                    </span>
+                                                </div>
+                                                <div class="choices-container" id="choicesContainer">
+                                                    <div class="empty-state">
+                                                        <i class="fas fa-inbox"></i>
+                                                            <p>No choices yet. Add one to get started!</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="btn-spin" id="spinBtn" disabled title="Spin to select (Space)">
+                                                        <i class="fas fa-sync-alt"></i> Spin the Wheel
+                                                        </button>
+                                                        <button class="btn-clear" id="clearBtn" title="Remove all choices">
+                                                            <i class="fas fa-trash"></i> Clear All
+                                                            </button>
+                                                            <div class="result-section" id="resultSection">
+                                                                <div class="result-label">🎉 Selected Choice</div>
+                                                                    <div class="result-text" id="resultText"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <script src="script.js"></script>
+                                                                </body>
+                                                            </html>
