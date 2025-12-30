@@ -48,6 +48,7 @@ const menuData = [
       { label: "Markdown Editor", url: "Tools/MarkDown/index.html", desc: "Live Github markdown." },
       { label: "SVG Editor", url: "Tools/Svg Edit/index.html", desc: "Live SVG Editor." },
       { label: "Morse Code", url: "Tools/MorseCode/index.html",  desc: "Live MorseCode." },
+      { label: "LocalStorage  Viewer", url: "Tools/LocalStorage/index.html",  desc: "View LocalStorage." },
       { label: "Matrix Generator", url: "Tools/Matrix_Gen/index.html",  desc: "Random Matrix Generator." },
       { label: "Brightness Gradient", url: "Tools/Brightness Gradient/index.html",  desc: "Brightness Gradient Image Editor." },
       { label: "Themes", url: "Tools/Theme/index.html", desc: "Few Themes." }
