@@ -83,7 +83,11 @@ body {
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 1.25rem;
+
+    max-width: 100%;
+    overflow: hidden;
 }
+
 
 .item-header {
     display: flex;
@@ -95,7 +99,9 @@ body {
     font-family: var(--font-mono);
     color: var(--accent);
     font-weight: bold;
-    word-break: break-all;
+
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 .item-meta {
@@ -107,10 +113,15 @@ pre {
     background: #232323;
     padding: 1rem;
     border-radius: 6px;
-    overflow: auto;
+    overflow-x: auto;           
     font-size: .85rem;
     border: 1px solid #333;
+
+    white-space: pre-wrap;     
+    word-break: break-word;    
+    overflow-wrap: anywhere;   
 }
+
 
 .string { color: #ce9178; }
 .number { color: #b5cea8; }
