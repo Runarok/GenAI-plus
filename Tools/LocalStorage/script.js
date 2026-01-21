@@ -6,7 +6,6 @@ function showToast(message, type = 'info', timeout = 3000) {
     const t = document.createElement('div');
     t.className = `toast ${type}`;
     t.textContent = message;
-
     document.getElementById('toast-container').appendChild(t);
     setTimeout(() => t.remove(), timeout);
 }
@@ -29,11 +28,15 @@ function showUndoToast(message, timeout = 5000) {
     }, timeout);
 
     undoBtn.onclick = () => {
-        if (lastDeleted) {
+        if (lastDeleted?.bulk) {
+            Object.entries(lastDeleted.backup).forEach(
+                ([k, v]) => localStorage.setItem(k, v)
+            );
+        } else if (lastDeleted) {
             localStorage.setItem(lastDeleted.key, lastDeleted.value);
-            render();
-            showToast(`Restored "${lastDeleted.key}"`, 'success');
         }
+        render();
+        showToast('Restored', 'success');
         lastDeleted = null;
         clearTimeout(timer);
         t.remove();
@@ -77,13 +80,10 @@ function showConfirmToast(message, onConfirm) {
         onConfirm();
         cleanup();
     };
-
     cancelBtn.onclick = cleanup;
 
     document.addEventListener('keydown', onKey);
     document.getElementById('toast-container').appendChild(t);
-
-    // Focus delete by default
     confirmBtn.focus();
 }
 
@@ -94,6 +94,10 @@ function formatBytes(bytes) {
     const sizes = ['Bytes', 'KB', 'MB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
+}
+
+function truncate(str, max = 2000) {
+    return str.length > max ? str.slice(0, max) + '\n… (truncated)' : str;
 }
 
 function syntaxHighlight(json) {
@@ -116,6 +120,16 @@ function syntaxHighlight(json) {
     );
 }
 
+function detectType(raw) {
+    if (raw?.startsWith('data:image/')) return 'image';
+    try {
+        const parsed = JSON.parse(raw);
+        return typeof parsed === 'object' ? 'json' : 'primitive';
+    } catch {
+        return 'string';
+    }
+}
+
 /* ---------- RENDER ---------- */
 function render() {
     const list = document.getElementById('storage-list');
@@ -136,14 +150,22 @@ function render() {
         const size = new Blob([key + raw]).size;
         totalSize += size;
 
-        let value;
-        let isJson = false;
+        const type = detectType(raw);
+        let content = '';
+        let label = '';
 
-        try {
-            value = syntaxHighlight(JSON.parse(raw));
-            isJson = true;
-        } catch {
-            value = `<span class="string">"${raw.replace(/</g, '&lt;')}"</span>`;
+        if (type === 'image') {
+            label = 'Image';
+            content = `<img src="${raw}" class="preview-image">`;
+        } else if (type === 'json') {
+            label = 'JSON';
+            content = syntaxHighlight(JSON.parse(raw));
+        } else if (type === 'primitive') {
+            label = 'Primitive';
+            content = `<span class="number">${raw}</span>`;
+        } else {
+            label = 'String';
+            content = `<span class="string">"${truncate(raw).replace(/</g, '&lt;')}"</span>`;
         }
 
         const card = document.createElement('div');
@@ -153,7 +175,7 @@ function render() {
                 <div>
                     <div class="key-name">${key}</div>
                     <div class="item-meta">
-                        Size: ${formatBytes(size)} • ${isJson ? 'JSON' : 'String'}
+                        Size: ${formatBytes(size)} • ${label}
                     </div>
                 </div>
                 <div class="actions">
@@ -161,7 +183,7 @@ function render() {
                     <button class="btn btn-sm btn-danger" onclick="deleteItem('${key}')">Delete</button>
                 </div>
             </div>
-            <pre>${value}</pre>
+            <pre>${content}</pre>
         `;
         list.appendChild(card);
     });
@@ -172,9 +194,7 @@ function render() {
 /* ---------- ACTIONS ---------- */
 function deleteItem(key) {
     showConfirmToast(`Delete "${key}"?`, () => {
-        const value = localStorage.getItem(key);
-        lastDeleted = { key, value };
-
+        lastDeleted = { key, value: localStorage.getItem(key) };
         localStorage.removeItem(key);
         render();
         showUndoToast(`Deleted "${key}"`);
@@ -192,12 +212,10 @@ function confirmClearAll() {
         Object.keys(localStorage).forEach(
             (k) => (backup[k] = localStorage.getItem(k))
         );
-
         lastDeleted = { bulk: true, backup };
-
         localStorage.clear();
         render();
-        showToast('All data cleared', 'error');
+        showUndoToast('All data cleared');
     });
 }
 
