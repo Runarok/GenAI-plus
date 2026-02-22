@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>GenAI+ Quiz Master</title>
+                <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+                <link rel="stylesheet" href="styles.css">
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <div class="logo">⚡ GenAI+ Quiz</div>
+                            <div class="controls">
+                                <button class="theme-toggle" aria-label="Toggle theme">🌙 Dark</button>
+                                    <button class="exit-btn" aria-label="Exit quiz">✕ Exit</button>
+                                    </div>
+                                </div>
+                                <div class="main-content">
+                                    <!-- Quiz Selection -->
+                                        <div class="quiz-selection" id="quizSelection"></div>
+                                            <!-- Quiz Screen -->
+                                                <div class="quiz-screen" id="quizScreen">
+                                                    <div class="quiz-header">
+                                                        <h2 class="quiz-title" id="quizTitle"></h2>
+                                                            <div class="progress-container">
+                                                                <div class="progress-bar">
+                                                                    <div class="progress-fill" id="progressFill"></div>
+                                                                    </div>
+                                                                    <div class="progress-text" id="progressText"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="question-section">
+                                                                    <div class="question-number" id="questionNumber"></div>
+                                                                        <h3 class="question-text" id="questionText"></h3>
+                                                                            <div class="options-container" id="optionsContainer"></div>
+                                                                            </div>
+                                                                            <div class="buttons-container">
+                                                                                <button class="btn btn-secondary" id="prevBtn" aria-label="Previous question">← Previous</button>
+                                                                                    <button class="btn btn-primary" id="nextBtn" aria-label="Next question">Next →</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- Results Screen -->
+                                                                                    <div class="results-screen" id="resultsScreen">
+                                                                                        <div style="margin-bottom: 2rem;">
+                                                                                            <div class="score-display" id="scoreDisplay">0/0</div>
+                                                                                                <div class="score-label">Quiz Completed!</div>
+                                                                                                </div>
+                                                                                                <div class="feedback-message" id="feedbackMessage"></div>
+                                                                                                    <div class="score-breakdown">
+                                                                                                        <div class="score-item">
+                                                                                                            <div class="score-item-value" id="correctCount">0</div>
+                                                                                                                <div class="score-item-label">Correct</div>
+                                                                                                                </div>
+                                                                                                                <div class="score-item">
+                                                                                                                    <div class="score-item-value" id="incorrectCount">0</div>
+                                                                                                                        <div class="score-item-label">Incorrect</div>
+                                                                                                                        </div>
+                                                                                                                        <div class="score-item">
+                                                                                                                            <div class="score-item-value" id="percentageScore">0%</div>
+                                                                                                                                <div class="score-item-label">Score</div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                            <div class="buttons-container">
+                                                                                                                                <button class="btn btn-primary" id="retakeBtn" aria-label="Retake quiz">Retake Quiz</button>
+                                                                                                                                    <button class="btn btn-secondary" id="homeBtn" aria-label="Back to home">Back Home</button>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="cheating-warning" id="cheatingWarning">
+                                                                                                                            <h3>⚠️ Tab Switching Detected</h3>
+                                                                                                                                <p>Completing the quiz is disabled while you're in another tab.</p>
+                                                                                                                                </div>
+                                                                                                                                <script src="script.js"></script>
+                                                                                                                                </body>
+                                                                                                                            </html>

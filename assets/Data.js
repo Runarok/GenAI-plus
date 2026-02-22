@@ -14,6 +14,7 @@ const menuData = [
   { label: "SDLC v1", url: "College/SDLC/SDLC v1/index.html", desc: "SDLC Project version 2." },
   { label: "SDLC v2", url: "College/SDLC/SDLC v2/index.html", desc: "SDLC Project version 2." },
   { label: "Project Review", url: "College/Proj Review/index.html", desc: "Proj Review Details of Phase 2" },
+  { label: "Computer Science Quiz", url: "College/CS Quiz/index.html", desc: "Internship Quiz" },
   { label: "SE Mod 4 & 5", url: "College/SE 45/index.html", desc: "SE Mod 4n5 Imp Concepts" },
   { label: "College Quotes", url: "College/Quotes/index.html", desc: "Quotes around ECE Block." },
   { label: "Control Networks", url: "College/CNP/index.html", desc: "Control Networks Protocol Programs." },
