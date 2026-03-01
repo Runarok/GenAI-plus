@@ -55,7 +55,7 @@ const quizzes = [{
     ]
   },
   {
-    name: "C Programming Basics 1",
+    name: "C Programming Basics 2",
     description: "Introduction to C language, its origin, and basic usage.",
     questions: [{
         question: "The C programming language was developed by:",
@@ -110,7 +110,7 @@ const quizzes = [{
     ]
   },
   {
-    name: "C Programming Basics 2",
+    name: "C Programming Basics 3",
     description: "Understanding C syntax, keywords, and case sensitivity.",
     questions: [{
         question: "C is a case-sensitive language, which means:",
@@ -275,7 +275,7 @@ const quizzes = [{
     ]
   },
   {
-    name: "C Programming Advanced 3 - Variable Argument Functions",
+    name: "C Programming Advanced 3",
     description: "Understanding variable argument functions and memory concepts in C.",
     questions: [{
         question: "Variable argument functions allow:",
@@ -330,7 +330,7 @@ const quizzes = [{
     ]
   },
   {
-    name: "C Programming Advanced 3 - File Handling & Errors",
+    name: "C Programming Advanced 4",
     description: "File operations and common types of errors in C programming.",
     questions: [{
         question: "File handling allows programs to:",
