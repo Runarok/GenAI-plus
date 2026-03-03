@@ -11,14 +11,21 @@ const menuData = [
   { label: "Internet of Things", url: "College/LABS/Internet of Things/index.html", desc: "Hands-on IoT projects and demos." },
   { label: "Embedded Systems", url: "College/LABS/Embedded Systems/index.html", desc: "Explore embedded system projects." },
   { label: "Python Projects", url: "College/Python/index.html", desc: "Explore Simple Python projects." },
-  { label: "SDLC v1", url: "College/SDLC/SDLC v1/index.html", desc: "SDLC Project version 2." },
-  { label: "SDLC v2", url: "College/SDLC/SDLC v2/index.html", desc: "SDLC Project version 2." },
-  { label: "Project Review", url: "College/Proj Review/index.html", desc: "Proj Review Details of Phase 2" },
-  { label: "Computer Science Quiz", url: "College/CS Quiz/index.html", desc: "Internship Quiz" },
   { label: "SE Mod 4 & 5", url: "College/SE 45/index.html", desc: "SE Mod 4n5 Imp Concepts" },
   { label: "College Quotes", url: "College/Quotes/index.html", desc: "Quotes around ECE Block." },
-  { label: "Control Networks", url: "College/CNP/index.html", desc: "Control Networks Protocol Programs." },
-  { label: "Python Quiz Framework", url: "College/Quiz/index.html", desc: "OOP-based Python quiz (~1k lines)." }
+  { label: "Control Networks", url: "College/CNP/index.html", desc: "Control Networks Protocol Programs." }
+   ]
+  },
+  {
+    id: "course",
+    title: "Coursework",
+    links: [
+  { label: "Computer Science Quiz", url: "Course/CS Quiz/index.html", desc: "Internship Chapter 1 Quiz" },
+  { label: "UX Quiz", url: "Course/UX Quiz/index.html", desc: "Internship Chapter 2 Quiz" },
+  { label: "Project Review", url: "Course/Proj Review/index.html", desc: "Proj Review Details of Phase 2" },
+  { label: "SDLC v1", url: "Course/SDLC/SDLC v1/index.html", desc: "SDLC Project version 1." },
+  { label: "SDLC v2", url: "Course/SDLC/SDLC v2/index.html", desc: "SDLC Project version 2." },
+  { label: "Python Quiz Framework", url: "Course/Quiz/index.html", desc: "OOP-based Python quiz (~1k lines)." }
    ]
   },
   {
