@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <title>Flipkart Checkout UX Redesign Case Study</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Flipkart Checkout UX Redesign Case Study</h1>
+            <p>Before vs After Experience Comparison</p>
+        </div>
+
+        <!-- SECTION 1: CHECKOUT FLOW COMPLEXITY -->
+        <div class="section">
+            <h2 class="section-title">1. Checkout Flow Complexity</h2>
+            <p class="section-description">
+                Problem: Multi-step checkout process creates friction and increases cart abandonment rates
+            </p>
+
+            <div class="comparison">
+                <!-- BEFORE -->
+                <div class="design-card before">
+                    <span class="tag before">Before</span>
+
+                    <div class="mockup">
+                        <div class="mockup-step">
+                            <div class="step-header">Cart Page</div>
+                            <div class="product-item">
+                                <div class="product-image">
+                                    <img src="data:image/png;base64,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"">
+                                </div>
+                                <div class="product-info">
+                                    <h4>Samsung Galaxy S23 Ultra</h4>
+                                    <div class="price">₹24,999</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Continue</button>
+                        </div>
+
+                        <div class="mockup-step">
+                            <div class="step-header">Login Required</div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" placeholder="Enter phone number">
+                            </div>
+                            <button class="btn btn-primary">Send OTP</button>
+                        </div>
+
+                        <div class="mockup-step">
+                            <div class="step-header">Delivery Address</div>
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" placeholder="Full name">
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" placeholder="House No, Building Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Pincode</label>
+                                <input type="text" placeholder="Pincode">
+                            </div>
+                            <button class="btn btn-primary">Continue</button>
+                        </div>
+
+                        <div class="mockup-step">
+                            <div class="step-header">Payment Options</div>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-before" id="upi-before">
+                                    <label for="upi-before">UPI</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-before" id="card-before">
+                                    <label for="card-before">Credit Card</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-before" id="wallet-before">
+                                    <label for="wallet-before">Wallet</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Pay Now</button>
+                        </div>
+                    </div>
+
+                    <div class="caption">
+                        <strong>Before:</strong> Multiple steps create friction and increase cart abandonment. Users must navigate through 4 separate pages to complete purchase.
+                    </div>
+                </div>
+
+                <!-- AFTER -->
+                <div class="design-card after">
+                    <span class="tag after">After</span>
+
+                    <div class="one-page-checkout">
+                        <div class="compact-section">
+                            <h3>Product Summary</h3>
+                            <div class="product-item">
+                                <div class="product-image">
+                                    <img src="data:image/png;base64,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">
+                                </div>
+                                <div class="product-info">
+                                    <h4>Samsung Galaxy S23 Ultra</h4>
+                                    <div class="price">₹24,999</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="compact-section">
+                            <h3>Delivery Details</h3>
+                            <div class="address-box">
+                                <strong>Rahul Sharma</strong><br>
+                                Flat 302, Green Valley Apartments<br>
+                                Bangalore, Karnataka - 560078<br>
+                                Phone: +91 98765 43210
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="compact-section">
+                            <h3>Payment Method</h3>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-after" id="upi-after" checked>
+                                    <label for="upi-after">UPI</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-after" id="card-after">
+                                    <label for="card-after">Credit / Debit Card</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-after" id="wallet-after">
+                                    <label for="wallet-after">Wallet</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="price-row total">
+                            <span>Total</span>
+                            <span>₹24,999</span>
+                        </div>
+
+                        <button class="btn btn-primary btn-large" style="margin-top: 16px;">Place Order</button>
+                    </div>
+
+                    <div class="caption">
+                        <strong>After:</strong> One-page checkout reduces steps and improves conversion. All information is visible and editable on a single screen.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: HIDDEN PRICING TRANSPARENCY -->
+        <div class="section">
+            <h2 class="section-title">2. Hidden Pricing Transparency</h2>
+            <p class="section-description">
+                Problem: Hidden fees revealed only at checkout lead to cart abandonment and user frustration
+            </p>
+
+            <div class="comparison">
+                <!-- BEFORE -->
+                <div class="design-card before">
+                    <span class="tag before">Before</span>
+
+                    <div class="mockup">
+                        <div class="product-card">
+                            <div class="product-header">
+                                <div class="product-img-large">
+                                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAAQAElEQVR4AeScCXxV1bXGv33mO09JbmYyQgJJIIxWBkUrgmK1vvJUnIoDtlWfFa1WrVqcnrUOzwHUOiFY+/RhLR2ctYqKoJRJIMxDwpxAyHjHc89b69D4sxZCAtYEe37Z9567zz7D/t9vrb322hckfMu3xsbN/pd/97vJDz3w61/OnPnYba+88srkNWvWFB5Jt7/VsNatWFF0ww13/uaee+95+lf33Xf7z66/fvoll1zy2/POO2/Jz39x8/07d+5M7w60byWsLVu2FM58bOaNt0y/c95f3/1g0qqVNY5INA6X2wtFUbBixQr//zzw8HXX/PSns3bs2OHsKrBvHaxly5aNvfnmm+fOmTP73rq62gpd19G3b18MGDAAWVlZyM7ORnV1NUKhEN5+5+3T3nvvvXP/LWEtXLhw7O233/4s+aTBDIlV5CY15eTkobCwGEOGDENZ+QD4/EEb4JgxY1BfX1/1bwdr7dq1ZY8++ujDZIIFhmGgra0NiUQCRUVFGDlyJPr374+MjAykp6fD4/GAYWqqAdM0dQLm6QowqSuNensby7K0GY88etfqlasqdVWDmUhCVXVUVFRhyLChCISC9FmF2+1GBsHyeb2IRCKsKsyf/9Glb7311hVd6WOvhEWdV8n3VL/22mvnzJo168pnn332qpdeeukCMrNRdEx8tWMvzH5u6scLFpzF9alUitWC3NxclJSUcJUNhZXW0tKCPXv2QAhhKytJyqN69c033562YMGiU+3GnbxInRzrkUNvvPHGmZdddtm8adOm/enuu+9+bubMmQ8+88wzD8yYMeOpqVOn/nnBggWjv/xgSxYt+s4Lv31xWjKZlKmQ6ZkIBEJID2egpa0Vu3btwv79+7F3796/v9cTsF1IxKOIxSJobW7D2pp1WXP/7/dX1NU1Bb987a/u9ypYNTU1fR966KH/XrJkyQRSQU48HncIITTyPRrFREY0GvWRv2ns6MT8+fNPf/LZp27ftm1bIYOi43C5XLZvovNAYQEaGhpsSHV1dVi/fi2B2oPW1ma0t7XATMYhwwLMFOp3bh+3du2Scehk61Ww5s2bd/GmTZvKydTseIifW1VV298QPITD4fWVlZVryJTcZJrXzpo168efffrZKQQVFhmnoqlwedxImElbSeS4QZCxdetW7Ny+Dfsb99qlcV8DoqQ6BqXAhGxR+4Y9rpXLl51K91ZxiK3XwCJIYXK03+eRjB4Yzc3NIEXZo1pjYyPYF2maliJzvJrM9LX77rvvV5s3bz6dHLVEG1hZsizb7VhNXOgY9u3bR+rag1g8AlkmogRSWClItB+PtSMabab6BKLtTdi8sWb8utXLqw/BCr0G1tKlS08ksylramoiXxKzITEAVg2D4/3ly5f3u+uuu369ePHi0QRCpXgK7ZEYEsmUDYnh7iU4+xobbdNjf8UmxzD5C0hEY1BkCQYpUJZS0FVBwakD1VWlGD50AAJePXPLlo2n9XpYH3744QkEQEiSZI9W7HO4g1QHBsiKS0tLA8VFkmmatupIaXZbqrP7x+e2t7fjy4UBKooEK5kg15QEXR5RUpSDgA0fPghnnzUBEyacgNOojBw5BIYuhtN9ZfuCX3mRvvK5Rz6S83XU1tYOZlNjSDx6MSTuNJsRR+Jcz3UcTFJnwM6c27OvihOIpGlBSArBkOxiUU88FE9JRIfVye98HTOVQNDnxZDB1Thp7BiKxUrgdAv6EtogrBiQihUDLX46/Z/+egUsMrOyLVu25KvkzBkCA3E4HLZCZFkmn3LAF7HvYoDJZNIe9RiWaZr2AKDp5KppdOMRTiCFWDRqA5VVxVahTEoiEkglY6joX4pTvzsaBblh6KpM8PwIBoNgqG2trXmIJBz/RIoqJCo9/rd+/fpi6rSPwdC77azZfBgGF7fbbQNjRfHDsvkxVEiCRkFy2qSeZDwGQc5bFwIikYAEAUVSEYmZ0JweROIJxM04crLTcOLIQcgKyNCtdhiaDiulQpEdyM4qQNAfboajuQEH2aSD1H3jVRQKBAiEKoQAK4qhMSw2G34Y9lltNNfTNA3UzlYc1/PxDvM6sA+ClOJDkCzY0J26YQ8WppmAQpUjhlcjnOaHTg4epDKkLEiKDklo0FQClpv/mBCFUfsiX3npFbAGDhy4htSzizvOkIQQNhSGxkEmF4bI72yqXJxOp21ejIcBCiGQpJAgTp23BHVLVkhbQDIRg0R+inwRiguyUVFWCo1MlmZFkGSVDFZACBnk8qAaejScFX71K4y++EhX/WK/x3ZGjBjx4dixY+exCVKEbkMgeGAlDR48GBMnTsT48eNBASnSaETUKUfFwCwzBUVI4E6kYCFF3j6RMqnjpBZJghACiVgULkOGS7UwYuggOA2VBBWz27KihKTSmZINzenyzNfcmTWHAiEd6sA3XX/hhRc+VlFR8YlEnWRnyz4pSY6cJsSv+v3+2YZhvEugIvn5+WBVsS+jejhpIIAl0WhGdkc+DKSoFAEkkQEE06VKEMkoivLCKOmTAUUyqYmApBA0UwCShpQkQ3M44U9Le0QIkcIhNukQ9d94dVlZ2dpbbrnlhry8vGUMiQtB233DDTdcd/nll9963HHHvSrL8gIKH9rd5PC50GdkpGdCliR75KPYlDqvEDsZlgAE6UURFlQkMGJIBQzZhKakQM3BsExBRyxCIBR4A6E1Tm/O2+hko5adHP2GDw0dOvSje+6551IyvXkFBQVN11xzzS/pfXNxcXHtRRddNOPBBx+cRJnQi8aNG/dEOBze7PP5kgOrqv6WFgyBlcZmbBGkA49tQaZ5H9kc+hXl28pSRBISzQMVSWaMkMihCzJDxXAhEEz/NakqfuDcg7/2Klj8iARsyb333nve9OnTz5kyZcoTXNdRyOwaTzrppFdoXvjjRx55ZDyp7rKh1dVzc3NyawzdCSFku6llmQAVQbA08lVDBg6ASEXh0A4cd7o9ELRwYZGDV3QXDKdrpeFMn2Wf3MlLr4PFz0qmGJkwYcKbvH+oUl5evu7MM898/tSJp84YWF31AfsxNl1Wl0S9YnNLpSIo69sHAb+D4inNvhS3i5O9SopBpipBoXAkHM55mFSVwmE2uuxhWvTyw5RTb8nLzVvppakNhxCqTCEDqSoWbYPXraOoIAdejwGHToGnokElSLKiwxTUdVmnqY53o9MZfL4r3ZS60qi3tyFQ7aQM8lECgkCxRxKkqry8dGSGA1BpSiNLKlTZCVlzQ1YcsCDDwSOgP8CqSnSlj0cNqys3+Ve32V2/I4vmdDAo/jJ52pOKw+93orQoB7ohERgTkqJDc3ghCJglGZDIX7k8rqVud/o/+MXOnvWYh7Vp96bw4iWfnRKLxcCjnEohaory6wW56Qhn+KBqgooGw+WFanhgCQOmpdC+I+X1+7usKoYo8cuxXD6dv/CsJUuWnmiHDjRZ1snkXLpGU5scuF0KgZJIUTpk1QAkB02JFBoJdXi9/oUuV+YcdGM7pmFxKvrPr/9xyq763eSrAIsmfJJlobhPLqkqBFURNGWS7IjfkjU7thKyAcPpafL4Aw+JTqL1gzGUDlbZnTpKr+SuWrVq0IoVKyo3bNiQ0Z1zj7btwk8XnrV0ycoRGo1qMkXqDpWAJdpRVJgLJ8VUsiwTGIqjaAlfKBoELbxqOn3W3Z84nRlzu3v/I4a1cdWq/CkXTv7f8ad+t+aMM85YOmnSpMU/+tGPPrzyyitf5rW/7j5Id9vTl6R/9NEnZzc1xikqNyipl4CVbEVhfgCFeUFSmgmX0wvDESAfpUHRPUhChiVLO0NpgQe7ez9uf8Swrv/5z158+eWXz2lqanbzchOt3WmUR+87d+7cSXfeeeeztIJ8Cd/gX1VaW1urVn9eM8yMm7QUHyM4SRiGQGlxLjhqdzkNKKQmRXVBppKSFCiGgWAo9LrhDnU6BzzUMx8RrGXLFo81YVUNpDx2ad++6NOnj10oQ2An5rZu3RqkxdKnH3jggTvWrl2bdqibH009rQSVbNteG1DI9BQ5BVkxEQ6nIb8wH5IqQScwGkXnKgOTdbqVBJoSLXF6026nD0f0d0SwKHOSOH3ixPd9AT8URQFF0XDRSjBnAhgcPwnly8Xs2bNvffjhh1/kJSyu+zoLLbp6hbAQT9BCgxQnWEAB+SpNV+xn0p0uOJxuaJoToDmjqhnNTrfvEafTuQ1HuHUb1ua6zSfUrK259Z33/nrG3oZGioJd8Pv9oLkaaE5HQ7IX/NMehsffLC2cnvLEE0/cTwui/iN8xoOeRlMbJZVKQhJJ6GR+2TnpKOlbDEmRCJwGw+GifQOcVbAkFT53YFFmTsGLB71YFyulLrazm9FC6GlPPv7E7DlzZo+rrd2GrJxcG0xVVRUKCwtBqRP069fP/mapM3bum4F9/PHHE19//fWf2Bf5ml4CgUC9x+siGCY59xgyMzMO/O7KcEDlEY+cuyQbFISqBM693hMI3CqESBzN7aWunkymdPLjj8986oMPPsxvaWlDbn4B0tPCyMnJAT0E+YswZStN23exsjhIlCTJThHTUhdeffXVH9fU1FR29X6Ha0cq/sMp48Z9lh5Kg07THJfLQ6s3KUiKEy53AKrqofjKz6UpmJbxiC8tb9Hhrnm4412CVVe3oeSdt9/65bvvvpPd2tyC3Jx8GIYTDsoL6boDlISzV40bGhrARaX1P16DY3XJFOvwZzLD3FmzZt2wZcuWwsM9VFeODxgwIH7OpP+cNmbM2Lrq6iHIyy2giD0InUIEB8GKJWUIxbXb5U97PiOn/LGuXPNwbboGa0vdqZs3rBvpdTqQnZ1J35oKNi+GwHMyDh0IAiiixoYNG0AjlX1fXhBlhXGeieFRaHEBOf3r6+vrPXaDo3wZOvS4j6664r/OGHviuDejEbMxFrPg9qYjkVL3OtyhRZm5RTfllQy65iC3OaKqw8JqaNhRtmzJ4imrViwVwYAfhiIjHosAtBjQ3tJqK2n79u1gWKQe8I8xeI2PTdBBiwkMixNyPGqy6j7//PNJTz755B2kOtHxxKtXry69+eabn7rqqquev/HGGx+bMWPGte+8885YaqN2tDnUe7+KiuWXTr16/KWXXj18UPWIq4MZWff0G1D9syGjB5+ckV/23KHOO5L6w8Ja9ulnk1cuWzokGWsnUAICJhTZssu2bbUEaRPq6urs30HxbxRYafwgDItNkGFRp8GFlVZbW5s+f/78K5577rkruR0XWkTNIZ92/vvvv38RDQRXPv300w9Syvgv559//ttz5sy5iNscruSVlGwYNurkx0aMGn9LfnHVc0Jkth3unO4e7xTWnh21o5Oxtu9VVZZh1PEjkB702D/8SkTasHXLBjTt32f/XpMdOKuHzdKgYJAdLiuJH4aBcWFYPBAwTILmIFh3Epjvcxuv11tP51j0bg8IbLa0FOZYtGjRCRTYznrhhRcu53Y9XTqFFYm2hHOyw4V52RkYR0yABgAACI5JREFUffwQXHjBOeiTG0ZrUwOa9+/F/sZ6WiKP26phJXHp6BCDYXjs2zrAcR2D/buP8991113Pzps3bxKBNgOBQBObKbdnsGzK3J7aCppr/qDjuj353iksOZV07ty+1SmLpG12GSEPJp4+DiqtvTXt2w3LpJUjSolwp1g9HbC4sx11rDQ+xnX8TqoCzesIctL+ZyFXX331S2Ryf6aJcRabLCuPl/BZZfyZIm5QyFFBA0deT4Lie3cKS9OVPYqC5kh7M1oa92Ld2tUApWyLaf7l87mQNKOkKhMdYFgVXBgKg+P6DnXxPtdz0XWdJr8RO9oncxMEin9FY8dpDDUSiXwBlE2SfGHmunXrKviBe7J0CktRxTa/P7CQO8gdaNnfiJ3ba3HCyOPg9zrI4QOqLEGSJBsYd4ShSIoMPocLf2Z1MUTuOJskK4ePESg+xfZTfJwVx3UMmA/wudyOzpPWrFlTxnU9WaTObh4Il6/3hjLf0J1+CAo0uW0iGkE82oLxY78D1YpB2KZIIyRJkHwPJFmFTvMyl9tr7zMEnZQk0aRXkQUYBJsXhAwLEinTsmM2BsrH+BoE5wv43JbryHf1blhCiJhqOFf7gyFaapIhFCqSRZYYQVZ6EEUFueAfkSWTcbS1NoN/yXJAZbLd1u3zUqRv2IWhsYkxCG6jUOpEpujeovV2BsU+yul04sAxhb8Xe58BcjvyWQV2ZQ++dKosfi6f27HZE/D/3vH3jnCHTSsFv9+HQYMGQtAV2KzYfNg5MwxBKuJOMgQhBBgAw+JO8z4f431WjRDCngBzmsfj8di/WRBCgDdWZEdbum6Igl6D63uqUFc7v7UvQ2xXhbyKhnYoqg7qOdjvMLQB5f2RlhaEmYiTKSn2b6HiiSgYBMMhEX7RtgOSSuZ8AIJM52ikOg3BYBD5+fkoKCiwwTFk0MYw2QT5ehS4esin+ai6x/6kw91ZiNKY4nQ2qobDcjpd1BkfUoIGRVpJCYfDKO9XRimShO2LhBC2r6GUEjRZsaFxxxks30cIYfso3mcAPB1KS0ujzIDThup2u+m7kOxruSiZ6CQ1cx2/E7QktbfQg9thYfGz+Tz+2hRE1CDHzdlRAZk6pNnKqKjsD6eh2apS2IHLBy7JqmAgHebJamRwXLjzPp8PbHpZWVlgINzW7/fbgMnkbHgSjbJ8HdA2fvz4v5SUlOyh3R77O9Czw9xecjjWUSJttwkBXXNQdtRhn5GykigtKkRBQT6NkBFaNEgdUAapihtwR7nDbJIMiIEwCCEEmZ9hQzIMI0LOfQWZ4eyhQ4feRnn8FJsqn8PtGfLw4cPnnX322ffyNXuySF25uc+3p9bhcn0eiydhWhZcHi8i8ZjtjNPSQ+hbWgRZmGRijDNFIDQotGjAYDg+s+gcp8ONUCjE/waw/uSTT/7TlB/+8PZrf3rthdOnTx9z2223jb7uuusupu3O/v37v8yAhBA2+GHDhs296aabrqH81T708NYlWEIMTQTTMl9KmEAkRv5JM+ByeuzO6KqCyor+0HQVVioJTVNtiEIIxONxisotsP8Zefzxv7vlptt+QAsYVffff/9ZU6dedsfEiRNeqKysXBwKhZo7OBDI35Oi6sk8a84999xf3HHHHVOKioq2dhzvyfcuweIH9HsCC0hR22LxlO2vFILCioFIobS4ANmZYXDIEItHbDNlVXFhYBUVlZ9OPPN7t40cM/IVytXvEoJO4osepJSUlPyR5ou30nbetddeezelqFsP0qxHqroOK7NgczCUvr41EiVTFNApnZyiEdFKJpAVzkB5WV8Iir84XBD0wjEXgyJ/hIEDB80lM9rQlR6WlpbGJk+e/OTgwYOXd6X9N9lG6s7NQhnZs1Omhba2CDTVID9Fp1umbXYDB1bavkonc0zE4hROmGSCJoUanmhubv7i7tynt7al3nb90bICOa+5vb71zbS6Q6YEXdftoT5Baebyfn1JYZnkt2jSQwoTFMWnzAQDS3m9zmjX79J7W3YLliczc09mZvYyNq8ImaMkKeSnQMWyR7ry/v0o9dJmO35ZkpCkpWuKvJ179uzNwbdg6xYs7m9Wbu4zqqpHm5paWDUAhQUKBaP0h4GVVXY0zo6f4ysa1UCwsHjxZ6P43GO9dBtWgRL8wOF0b2qPxJCyDnSf4bCzLyoqQGZ6BiwyP5nocbTOwGgl+4StW/cHDrQ+dl+7DUsUFkZz+uT9LW5K2LFnLyAkW2E8gU4LBFFc1IdSODEYmkqDgEwmKtBQv69i+fKFJ+EY37oNi/sbTs95Gqoai0STYIVBEvRRhURqKi4sosBUga5qtkkqkgzKuytr1tWM5nOP5XJEsPJKPYu8Hv/q1vYI9jXth5m0yHVZtBJsol95GTidw2apqioBM8hck9i6tbaCzFXgGN6OCBanbXL69PkNZSJINVHEzSTiCRM8StLUBdl5uXZe3aBsBAelHGLEY7HQ7t27nccwK3wZVrf6UZJf8AefP7gxSnPFGE2wWUmCLsfvnMQzyckzJAct4WuaQktpQtAI+e+nLNDmzijc1aeweHY0kSRTbCYTtKDqGpIp0/7NFqXW7eUsk9I4mqaRafp3Uf6qnU49Zv+OWFnc49Ly8sezc3KXsbrayH/x/9whUaDq9frtVDE5dgpSI7Tvx6BBA98V4tATaL5eby9HBcvjyaofNHj4VMp17eRRsam1DZaQYJDp5eTnwTB0xGIxUlr6ylGjRn2tv2jpCbBHBYsfOC2r32cVVYMv1h2ejVZKoilOikZGyrWnhJ0Jrays2HjBBZOnZmdnN3D7Y7kcNSzufJ+i6rcrq6vPTEvPeHFv4/41NOptzMvLX3/ahInXT5v2k9GDB4/4hNsd6+VrgcUQQqE+q8oGDLtg2IhhY0edMG7MRRdfWvn9/5j0QHp6wU4+/m0o/w8AAP//puydggAAAAZJREFUAwCiZjgS+XzAwQAAAABJRU5ErkJggg==">
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 16px; margin-bottom: 8px;">Wireless Bluetooth Earbuds</h4>
+                                    <div class="price">₹999</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">Add to Cart</button>
+                        </div>
+
+                        <div class="mockup-step">
+                            <div class="step-header">Order Summary</div>
+                            <div class="price-breakdown">
+                                <div class="price-item">
+                                    <span>Subtotal</span>
+                                    <span>₹999</span>
+                                </div>
+                                <div class="price-item highlighted">
+                                    <span>Delivery Fee</span>
+                                    <span>₹80</span>
+                                </div>
+                                <div class="price-item highlighted">
+                                    <span>Protection Fee</span>
+                                    <span>₹19</span>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="price-item" style="font-weight: 700; font-size: 16px;">
+                                    <span>Total</span>
+                                    <span>₹1,098</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="caption">
+                        <strong>Before:</strong> Extra charges appear only at checkout, surprising users and creating distrust. Price increases by 10% from initial expectation.
+                    </div>
+                </div>
+
+                <!-- AFTER -->
+                <div class="design-card after">
+                    <span class="tag after">After</span>
+
+                    <div class="mockup">
+                        <div class="product-card">
+                            <div class="product-header">
+                                <div class="product-img-large">
+                                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAAQAElEQVR4AeScCXxV1bXGv33mO09JbmYyQgJJIIxWBkUrgmK1vvJUnIoDtlWfFa1WrVqcnrUOzwHUOiFY+/RhLR2ctYqKoJRJIMxDwpxAyHjHc89b69D4sxZCAtYEe37Z9567zz7D/t9vrb322hckfMu3xsbN/pd/97vJDz3w61/OnPnYba+88srkNWvWFB5Jt7/VsNatWFF0ww13/uaee+95+lf33Xf7z66/fvoll1zy2/POO2/Jz39x8/07d+5M7w60byWsLVu2FM58bOaNt0y/c95f3/1g0qqVNY5INA6X2wtFUbBixQr//zzw8HXX/PSns3bs2OHsKrBvHaxly5aNvfnmm+fOmTP73rq62gpd19G3b18MGDAAWVlZyM7ORnV1NUKhEN5+5+3T3nvvvXP/LWEtXLhw7O233/4s+aTBDIlV5CY15eTkobCwGEOGDENZ+QD4/EEb4JgxY1BfX1/1bwdr7dq1ZY8++ujDZIIFhmGgra0NiUQCRUVFGDlyJPr374+MjAykp6fD4/GAYWqqAdM0dQLm6QowqSuNensby7K0GY88etfqlasqdVWDmUhCVXVUVFRhyLChCISC9FmF2+1GBsHyeb2IRCKsKsyf/9Glb7311hVd6WOvhEWdV8n3VL/22mvnzJo168pnn332qpdeeukCMrNRdEx8tWMvzH5u6scLFpzF9alUitWC3NxclJSUcJUNhZXW0tKCPXv2QAhhKytJyqN69c033562YMGiU+3GnbxInRzrkUNvvPHGmZdddtm8adOm/enuu+9+bubMmQ8+88wzD8yYMeOpqVOn/nnBggWjv/xgSxYt+s4Lv31xWjKZlKmQ6ZkIBEJID2egpa0Vu3btwv79+7F3796/v9cTsF1IxKOIxSJobW7D2pp1WXP/7/dX1NU1Bb987a/u9ypYNTU1fR966KH/XrJkyQRSQU48HncIITTyPRrFREY0GvWRv2ns6MT8+fNPf/LZp27ftm1bIYOi43C5XLZvovNAYQEaGhpsSHV1dVi/fi2B2oPW1ma0t7XATMYhwwLMFOp3bh+3du2Scehk61Ww5s2bd/GmTZvKydTseIifW1VV298QPITD4fWVlZVryJTcZJrXzpo168efffrZKQQVFhmnoqlwedxImElb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">
+                                </div>
+                                <div style="flex: 1;">
+                                    <h4 style="font-size: 16px; margin-bottom: 8px;">Wireless Bluetooth Earbuds</h4>
+                                    <div class="price">₹999</div>
+                                </div>
+                            </div>
+
+                            <div class="price-breakdown">
+                                <div class="section-mini-title">PRICE BREAKDOWN</div>
+                                <div class="price-item">
+                                    <span>Product Price</span>
+                                    <span>₹999</span>
+                                </div>
+                                <div class="price-item">
+                                    <span>Delivery</span>
+                                    <span>₹80</span>
+                                </div>
+                                <div class="price-item">
+                                    <span>Protection <span class="optional-badge">OPTIONAL</span></span>
+                                    <span>₹0</span>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="price-item" style="font-weight: 700; font-size: 15px; color: #2874f0;">
+                                    <span>Estimated Total</span>
+                                    <span>₹1,079</span>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" style="margin-top: 12px;">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="caption">
+                        <strong>After:</strong> Transparent pricing visible upfront builds trust and reduces cart abandonment. Users know exact cost before adding to cart.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: TRUST SIGNALS DURING PAYMENT -->
+        <div class="section">
+            <h2 class="section-title">3. Trust Signals During Payment</h2>
+            <p class="section-description">
+                Problem: Lack of security and trust indicators during payment causes hesitation and abandoned transactions
+            </p>
+
+            <div class="comparison">
+                <!-- BEFORE -->
+                <div class="design-card before">
+                    <span class="tag before">Before</span>
+
+                    <div class="mockup">
+                        <div class="mockup-step">
+                            <div class="step-header">Select Payment Method</div>
+
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-trust-before" id="upi-trust-before">
+                                    <label for="upi-trust-before">UPI</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-trust-before" id="card-trust-before">
+                                    <label for="card-trust-before">Credit Card</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-trust-before" id="wallet-trust-before">
+                                    <label for="wallet-trust-before">Wallet</label>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary btn-large">Pay Now</button>
+                        </div>
+                    </div>
+
+                    <div class="caption">
+                        <strong>Before:</strong> No security indicators or trust signals make users hesitant. Missing information about payment security and return policy.
+                    </div>
+                </div>
+
+                <!-- AFTER -->
+                <div class="design-card after">
+                    <span class="tag after">After</span>
+
+                    <div class="mockup">
+                        <div class="trust-banner">
+                            <div class="trust-item">
+                                <span>🔒</span>
+                                <span>100% Secure Payments</span>
+                            </div>
+                            <div class="trust-item">
+                                <span>↩</span>
+                                <span>Easy 7 Day Returns</span>
+                            </div>
+                            <div class="trust-item">
+                                <span>✓</span>
+                                <span>Flipkart Assured</span>
+                            </div>
+                        </div>
+
+                        <div class="mockup-step">
+                            <div class="step-header">Select Payment Method</div>
+
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-trust-after" id="upi-trust-after">
+                                    <label for="upi-trust-after">UPI</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-trust-after" id="card-trust-after">
+                                    <label for="card-trust-after">Credit / Debit Card</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="payment-trust-after" id="wallet-trust-after">
+                                    <label for="wallet-trust-after">Wallet</label>
+                                </div>
+                            </div>
+
+                            <div class="price-row total" style="margin-top: 16px;">
+                                <span>Total</span>
+                                <span>₹24,999</span>
+                            </div>
+
+                            <button class="btn btn-primary btn-large" style="margin-top: 16px;">
+                                🔒 Place Order Securely
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="caption">
+                        <strong>After:</strong> Clear trust signals increase confidence. Security badges, return policy, and assured delivery information reduce payment anxiety.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

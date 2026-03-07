@@ -22,6 +22,7 @@ const menuData = [
     links: [
   { label: "Computer Science Quiz", url: "Course/CS Quiz/index.html", desc: "Internship Chapter 1 Quiz" },
   { label: "UX Quiz", url: "Course/UX Quiz/index.html", desc: "Internship Chapter 2 Quiz" },
+  { label: "UX Mockup", url: "Course/UX/index.html", desc: "Assest for UX Assignment 1" },
   { label: "Project Review", url: "Course/Proj Review/index.html", desc: "Proj Review Details of Phase 2" },
   { label: "SDLC v1", url: "Course/SDLC/SDLC v1/index.html", desc: "SDLC Project version 1." },
   { label: "SDLC v2", url: "Course/SDLC/SDLC v2/index.html", desc: "SDLC Project version 2." },
