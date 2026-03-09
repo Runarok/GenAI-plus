@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+  <title>Component System - UI Design</title>
+  <link rel="stylesheet" href="src/styles/main.css">
+  <link rel="stylesheet" href="src/styles/theme.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header animate-fade-in">
+      <div class="header-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3l9 7-9 7-9-7 9-7z"/>
+          <path d="M12 17l-9-7 9 7 9-7-9 7z"/>
+        </svg>
+      </div>
+      <h1 class="header-title">Component System</h1>
+      <p class="header-subtitle">Reusable UI components with variants, states & micro-interactions</p>
+    </header>
+
+    <!-- Buttons Section -->
+    <section class="card animate-slide-up" style="animation-delay: 0.1s">
+      <h2 class="section-title">Buttons</h2>
+      <p class="section-description">Interactive buttons with hover, active, and disabled states</p>
+
+      <!-- Primary Buttons -->
+      <div class="variant-group">
+        <h3 class="variant-title">Primary Variant</h3>
+        <div class="button-row">
+          <button class="btn btn-primary btn-sm">Small Button</button>
+          <button class="btn btn-primary btn-md">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            Medium Button
+          </button>
+          <button class="btn btn-primary btn-lg">Large Button</button>
+          <button class="btn btn-primary btn-md" disabled>Disabled</button>
+          <button class="btn btn-primary btn-md" id="btn-loading-primary">
+            <span class="btn-text">Loading Demo</span>
+            <span class="btn-spinner"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Secondary Buttons -->
+      <div class="variant-group">
+        <h3 class="variant-title">Secondary Variant</h3>
+        <div class="button-row">
+          <button class="btn btn-secondary btn-sm">Small Button</button>
+          <button class="btn btn-secondary btn-md">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            Medium Button
+          </button>
+          <button class="btn btn-secondary btn-lg">Large Button</button>
+          <button class="btn btn-secondary btn-md" disabled>Disabled</button>
+          <button class="btn btn-secondary btn-md" id="btn-loading-secondary">
+            <span class="btn-text">Loading Demo</span>
+            <span class="btn-spinner"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Outline Buttons -->
+      <div class="variant-group">
+        <h3 class="variant-title">Outline Variant</h3>
+        <div class="button-row">
+          <button class="btn btn-outline btn-sm">Small Button</button>
+          <button class="btn btn-outline btn-md">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M12 1v6m0 6v6m5.657-13.657l-4.243 4.243m-2.828 2.828l-4.243 4.243m16.97-1.414l-6-6m-6 6l-6-6"></path>
+            </svg>
+            Medium Button
+          </button>
+          <button class="btn btn-outline btn-lg">Large Button</button>
+          <button class="btn btn-outline btn-md" disabled>Disabled</button>
+          <button class="btn btn-outline btn-md" id="btn-loading-outline">
+            <span class="btn-text">Loading Demo</span>
+            <span class="btn-spinner"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Ghost Buttons -->
+      <div class="variant-group">
+        <h3 class="variant-title">Ghost Variant</h3>
+        <div class="button-row">
+          <button class="btn btn-ghost btn-sm">Small Button</button>
+          <button class="btn btn-ghost btn-md">Medium Button</button>
+          <button class="btn btn-ghost btn-lg">Large Button</button>
+          <button class="btn btn-ghost btn-md" disabled>Disabled</button>
+          <button class="btn btn-ghost btn-md" id="btn-loading-ghost">
+            <span class="btn-text">Loading Demo</span>
+            <span class="btn-spinner"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Inputs Section -->
+    <section class="card animate-slide-up" style="animation-delay: 0.2s">
+      <h2 class="section-title">Input Fields</h2>
+      <p class="section-description">Form inputs with different states and validation feedback</p>
+
+      <div class="input-grid">
+        <!-- Input Sizes -->
+        <div class="input-group">
+          <h3 class="variant-title">Sizes</h3>
+          <div class="input-wrapper">
+            <label class="input-label">Small Input</label>
+            <input type="text" class="input input-sm" placeholder="Small size input...">
+          </div>
+          <div class="input-wrapper">
+            <label class="input-label">Medium Input (Default)</label>
+            <input type="text" class="input input-md" placeholder="Medium size input...">
+          </div>
+          <div class="input-wrapper">
+            <label class="input-label">Large Input</label>
+            <input type="text" class="input input-lg" placeholder="Large size input...">
+          </div>
+        </div>
+
+        <!-- Input States -->
+        <div class="input-group">
+          <h3 class="variant-title">States</h3>
+          <div class="input-wrapper">
+            <label class="input-label">Default State</label>
+            <input type="text" class="input input-md" placeholder="Enter text...">
+            <p class="input-helper">This is a helper text</p>
+          </div>
+          <div class="input-wrapper">
+            <label class="input-label input-label-success">Success State</label>
+            <div class="input-container">
+              <input type="text" class="input input-md input-success" placeholder="john@example.com" value="john@example.com">
+              <span class="input-icon input-icon-success">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+            </div>
+            <p class="input-helper input-helper-success">Email is valid!</p>
+          </div>
+          <div class="input-wrapper">
+            <label class="input-label input-label-error">Error State</label>
+            <div class="input-container">
+              <input type="text" class="input input-md input-error" placeholder="Enter password..." value="pass">
+              <span class="input-icon input-icon-error">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+              </span>
+            </div>
+            <p class="input-helper input-helper-error">Password must be at least 8 characters</p>
+          </div>
+        </div>
+
+        <!-- Special Types -->
+        <div class="input-group">
+          <h3 class="variant-title">Special Types</h3>
+          <div class="input-wrapper">
+            <label class="input-label">Password Input</label>
+            <div class="input-container">
+              <input type="password" class="input input-md password-input" placeholder="Enter password...">
+              <button class="input-icon password-toggle" type="button">
+                <svg class="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <svg class="eye-off-icon hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+            <p class="input-helper">Toggle visibility with the eye icon</p>
+          </div>
+          <div class="input-wrapper">
+            <label class="input-label">Disabled Input</label>
+            <input type="text" class="input input-md" placeholder="Disabled..." value="Cannot edit this" disabled>
+          </div>
+          <div class="input-wrapper">
+            <label class="input-label input-label-success">Email Input</label>
+            <input type="email" class="input input-md input-success" placeholder="your@email.com" value="user@example.com">
+          </div>
+        </div>
+
+        <!-- Form Example -->
+        <div class="input-group">
+          <h3 class="variant-title">Form Example</h3>
+          <div class="input-wrapper">
+            <label class="input-label input-label-success">Full Name</label>
+            <input type="text" class="input input-md input-success" placeholder="John Doe" value="John Doe">
+          </div>
+          <div class="input-wrapper">
+            <label class="input-label input-label-error">Username</label>
+            <input type="text" class="input input-md input-error" placeholder="Enter username..." value="john123">
+            <p class="input-helper input-helper-error">Username already taken</p>
+          </div>
+          <button class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem;">Submit Form</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Micro-interactions Section -->
+    <section class="card card-gradient animate-slide-up" style="animation-delay: 0.3s">
+      <h2 class="section-title" style="color: white;">Micro-Interactions</h2>
+      <p class="section-description" style="color: rgba(219, 234, 254, 0.9);">
+        All components feature smooth transitions, hover effects, and responsive feedback
+      </p>
+
+      <div class="interaction-grid">
+        <div class="interaction-card">
+          <h3 class="interaction-title">Scale Transform</h3>
+          <p class="interaction-description">Buttons scale on hover and tap for tactile feedback</p>
+          <button class="btn btn-primary btn-md">Hover Me</button>
+        </div>
+
+        <div class="interaction-card">
+          <h3 class="interaction-title interaction-title-dark">State Transitions</h3>
+          <p class="interaction-description">Inputs smoothly transition between focus states</p>
+          <input type="text" class="input input-md" placeholder="Focus me..." style="background: rgba(255, 255, 255, 0.95);">
+        </div>
+
+        <div class="interaction-card">
+          <h3 class="interaction-title">Loading States</h3>
+          <p class="interaction-description">Animated spinners for asynchronous actions</p>
+          <button class="btn btn-secondary btn-md" id="btn-loading-demo">
+            <span class="btn-text">Click Me</span>
+            <span class="btn-spinner"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer animate-fade-in" style="animation-delay: 0.5s">
+      <p>Built with HTML, CSS, and JavaScript • Fully customizable and reusable</p>
+    </footer>
+  </div>
+
+  <script src="src/scripts/main.js"></script>
+</body>
+</html>
