@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkout Optimization</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f9f9f9;
+  color: #212121;
+}
+
+/* HEADER */
+.header {
+  background: #2874f0;
+  color: white;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+.secure {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+  font-size: 16px;
+  background: #fafafa;
+}
+.card-body {
+  padding: 20px;
+}
+
+/* INPUTS */
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+/* GUEST / ACCOUNT PROMPT */
+.guest-checkout {
+  background: #fffbeb;
+  border: 1px solid #ffe58f;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* SHIPPING OPTIONS */
+.shipping {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+.shipping:hover {
+  border-color: #2874f0;
+  background: #f0f6ff;
+}
+.shipping.selected {
+  border-color: #2874f0;
+  background: #d0e4ff;
+}
+
+/* PAYMENT OPTIONS */
+.payment {
+  border: 1px solid #ddd;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s;
+}
+.payment:hover {
+  border-color: #2874f0;
+  background: #f0f6ff;
+}
+.payment.selected {
+  border-color: #2874f0;
+  background: #d0e4ff;
+}
+
+/* SUMMARY */
+.summary {
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 20px;
+  position: sticky;
+  top: 20px;
+}
+.summary h3 {
+  margin-top: 0;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  font-size: 14px;
+}
+.total {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+button {
+  width: 100%;
+  background: #fb641b;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+button:hover {
+  background: #e55a16;
+}
+.delivery {
+  font-size: 13px;
+  color: #388e3c;
+  margin-top: 5px;
+}
+.trust {
+  font-size: 12px;
+  color: #777;
+  margin-top: 10px;
+}
+
+/* TOOLTIP */
+.tooltip {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 180px;
+  background-color: #555;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 105%;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 12px;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.info-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 50%;
+  background: #2874f0;
+  color: white;
+  font-size: 12px;
+  margin-left: 5px;
+  cursor: pointer;
+  position: relative;
+}
+.info-icon .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #555;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 105%;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 12px;
+}
+.info-icon:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  Checkout Optimization
+  <div class="secure">🔒 Secure Payment</div>
+</div>
+
+<div class="container">
+
+  <!-- LEFT SIDE -->
+  <div>
+
+    <!-- ACCOUNT PROMPT -->
+    <div class="card">
+      <div class="card-header">Account Benefits</div>
+      <div class="card-body">
+        <div class="guest-checkout">
+          Create an account to save your addresses and enjoy faster checkouts in the future.
+        </div>
+      </div>
+    </div>
+
+    <!-- SHIPPING ADDRESS -->
+    <div class="card">
+      <div class="card-header">1. Shipping Address</div>
+      <div class="card-body">
+        <input placeholder="Full Name">
+        <div class="row">
+          <input placeholder="Phone Number">
+          <input placeholder="Pincode">
+        </div>
+        <input placeholder="Address">
+        <div class="row">
+          <input placeholder="City">
+          <input placeholder="State">
+        </div>
+      </div>
+    </div>
+
+    <!-- DELIVERY OPTIONS -->
+    <div class="card">
+      <div class="card-header">2. Delivery Options</div>
+      <div class="card-body">
+        <div class="shipping selected" onclick="selectShipping(this)">
+          <strong>Standard Delivery — FREE</strong>
+          <div class="delivery">Delivery by 5–6 days</div>
+        </div>
+        <div class="shipping" onclick="selectShipping(this)">
+          <strong>Express Delivery — ₹99</strong>
+          <div class="delivery">Delivery in 1–2 days</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT OPTIONS -->
+    <div class="card">
+      <div class="card-header">3. Payment Method</div>
+      <div class="card-body">
+        <div class="payment selected" onclick="selectPayment(this)">💳 Credit / Debit Card</div>
+        <div class="payment" onclick="selectPayment(this)">📱 UPI</div>
+        <div class="payment" onclick="selectPayment(this)">👛 Wallet</div>
+        <div class="payment" onclick="selectPayment(this)">💵 Cash on Delivery</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE: ORDER SUMMARY -->
+  <div class="summary">
+    <h3>PRICE DETAILS</h3>
+    <div class="summary-row">
+      <span>Item 1: Wireless Mouse</span>
+      <span>₹999</span>
+    </div>
+    <div class="summary-row">
+      <span>Item 2: Keyboard</span>
+      <span>₹1,499</span>
+    </div>
+    <div class="summary-row">
+      <span>Delivery Charges</span>
+      <span>FREE</span>
+    </div>
+<div class="summary-row tooltip">
+  <span>
+    Tax 
+    <span class="info-icon">ⓘ
+      <span class="tooltiptext">
+        Tax breakdown:<br>
+        - CGST: ₹62.5<br>
+        - SGST: ₹62.5<br>
+        Total Tax: ₹125
+      </span>
+    </span>
+  </span>
+  <span>₹125</span>
+</div>
+    <hr>
+    <div class="total">
+      <span>Total Amount</span>
+      <span>₹2,623</span>
+    </div>
+    <button>PLACE ORDER</button>
+    <div class="trust">
+      Safe and Secure Payments. Easy returns available.
+    </div>
+  </div>
+
+</div>
+
+<script>
+function selectShipping(element) {
+  document.querySelectorAll('.shipping').forEach(el => el.classList.remove('selected'));
+  element.classList.add('selected');
+}
+
+function selectPayment(element) {
+  document.querySelectorAll('.payment').forEach(el => el.classList.remove('selected'));
+  element.classList.add('selected');
+}
+</script>
+
+</body>
+</html>
