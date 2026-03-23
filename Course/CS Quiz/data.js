@@ -1,5 +1,5 @@
 // Quiz Data
-const quizzes = [{
+const quizData = [{
     name: "Computer Science Fundamentals 1",
     description: "Basic concepts of computer science and its importance.",
     questions: [{

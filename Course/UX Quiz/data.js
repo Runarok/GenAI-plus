@@ -1,4 +1,4 @@
-const quizzes = [
+const quizData = [
 {
   name: "UX Design Fundamentals 1",
   description: "Core principles of UX design and usability foundations.",
@@ -328,4 +328,116 @@ const quizzes = [
     options: ["Only new users benefit", "First-time visitors are guided smoothly toward purchase", "Checkout is skipped", "Features remain hidden"],
     answer: "First-time visitors are guided smoothly toward purchase"
   }]
-}];
+},
+{
+    "name": "E-commerce UX Fundamentals 1",
+    "description": "Core concepts of e-commerce app structure, onboarding, and design tools.",
+    "questions": [
+      {
+        "question": "Understanding an e-commerce app structure primarily involves identifying:",
+        "options": ["Only color themes", "Core modules like Home, Search, Product, Cart, Checkout, and Profile", "Animation styles only", "Logo placement"],
+        "answer": "Core modules like Home, Search, Product, Cart, Checkout, and Profile"
+      },
+      {
+        "question": "When setting up a Figma project for a mobile app, the first step should be:",
+        "options": ["Adding animations", "Creating appropriate device frames and organizing pages", "Exporting assets", "Publishing prototype"],
+        "answer": "Creating appropriate device frames and organizing pages"
+      },
+      {
+        "question": "The main goal of onboarding screens in an e-commerce app is to:",
+        "options": ["Display all features at once", "Introduce core value and guide first-time users", "Increase screen count", "Increase screen count"],
+        "answer": "Introduce core value and guide first-time users"
+      },
+      {
+        "question": "Figma plugins are primarily used to:",
+        "options": ["Replace design skills", "Enhance workflow efficiency (icons, content, accessibility checks, etc.)", "Delete components", "Reduce prototype quality"],
+        "answer": "Enhance workflow efficiency (icons, content, accessibility checks, etc.)"
+      },
+      {
+        "question": "Basic animation principles in UI design should prioritize:",
+        "options": ["Decorative complexity", "Smooth transitions that support usability", "Random movement", "Long loading animations"],
+        "answer": "Smooth transitions that support usability"
+      },
+      {
+        "question": "Layout consistency improves UX because it:",
+        "options": ["Forces users to relearn navigation on each screen", "Builds familiarity and predictability", "Reduces branding", "Increases friction"],
+        "answer": "Builds familiarity and predictability"
+      },
+      {
+        "question": "Auto-layout in Figma helps designers to:",
+        "options": ["Fix elements permanently", "Automatically manage spacing and alignment dynamically", "Remove responsiveness", "Prevent grouping"],
+        "answer": "Automatically manage spacing and alignment dynamically"
+      },
+      {
+        "question": "Smart Animate transitions are useful for:",
+        "options": ["Creating unrelated screen jumps", "Simulating smooth transitions between similar elements", "Increasing confusion", "Removing interactions"],
+        "answer": "Simulating smooth transitions between similar elements"
+      },
+      {
+        "question": "Micro-interactions are important because they:",
+        "options": ["Distract users", "Provide subtle feedback for user actions", "Replace navigation", "Increase friction"],
+        "answer": "Provide subtle feedback for user actions"
+      },
+      {
+        "question": "Conditional logic in form design refers to:",
+        "options": ["Static forms only", "Showing or hiding fields based on user input", "Removing validation", "Adding unnecessary steps"],
+        "answer": "Showing or hiding fields based on user input"
+      }
+    ]
+  },
+  {
+    "name": "E-commerce UX Fundamentals 2",
+    "description": "Form design, authentication UX, navigation, and user journey optimization.",
+    "questions": [
+      {
+        "question": "Proper form validation helps to:",
+        "options": ["Allow incorrect inputs", "Prevent errors before submission", "Increase form length", "Reduce clarity"],
+        "answer": "Prevent errors before submission"
+      },
+      {
+        "question": "An effective error state design should:",
+        "options": ["Blame the user", "Clearly explain the issue and guide correction", "Hide the error", "Reset the entire form"],
+        "answer": "Clearly explain the issue and guide correction"
+      },
+      {
+        "question": "Success state feedback (e.g., “Order Placed Successfully”) ensures:",
+        "options": ["Confusion", "Confirmation and reassurance", "Delayed navigation", "Hidden status"],
+        "answer": "Confirmation and reassurance"
+      },
+      {
+        "question": "A password visibility toggle improves UX by:",
+        "options": ["Increasing security risks automatically", "Allowing users to verify typed passwords", "Removing encryption", "Eliminating login forms"],
+        "answer": "Allowing users to verify typed passwords"
+      },
+      {
+        "question": "A well-designed “Forgot Password” flow should:",
+        "options": ["Require multiple complex steps", "Be simple, secure, and clearly guided", "Remove email verification", "Hide reset instructions"],
+        "answer": "Be simple, secure, and clearly guided"
+      },
+      {
+        "question": "Reducing UX friction in authentication primarily means:",
+        "options": ["Adding CAPTCHA repeatedly", "Minimizing unnecessary steps and confusion", "Removing feedback messages", "Increasing data entry"],
+        "answer": "Minimizing unnecessary steps and confusion"
+      },
+      {
+        "question": "Highlighting active navigation states helps users to:",
+        "options": ["Get lost", "Understand their current location in the app", "Ignore menus", "Navigate randomly"],
+        "answer": "Understand their current location in the app"
+      },
+      {
+        "question": "The “Add-to-Cart” interaction should:",
+        "options": ["Redirect without feedback", "Provide instant visual confirmation (animation or badge update)", "Hide cart icon", "Delay response"],
+        "answer": "Provide instant visual confirmation (animation or badge update)"
+      },
+      {
+        "question": "A cart overview page should clearly display:",
+        "options": ["Only product images", "Items, quantity, price breakdown, and edit options", "Decorative banners", "Hidden totals"],
+        "answer": "Items, quantity, price breakdown, and edit options"
+      },
+      {
+        "question": "Testing the complete user journey ensures that:",
+        "options": ["Only individual screens look good", "The entire flow works logically from onboarding to payment confirmation", "Animations are complex", "Errors are ignored"],
+        "answer": "The entire flow works logically from onboarding to payment confirmation"
+      }
+    ]
+  }];
