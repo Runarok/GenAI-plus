@@ -17,11 +17,9 @@ const quotes = [
   "Blow out the candles and make a wish. Happy Birthday!"
 ];
 const images = [
-  "https://unsplash.com/photos/a-birthday-cake-with-lit-candles-sitting-on-a-table-GZ44SmEfMps",
   "https://cdn.pixabay.com/photo/2025/06/19/05/56/birthday-text-9668246_640.png",
   "https://cdn.pixabay.com/photo/2025/06/18/13/53/ai-generated-9667270_640.png",
   "https://cdn.pixabay.com/photo/2018/02/24/09/46/birthday-cake-3177675_640.png",
-  "https://pixabay.com/illustrations/date-of-birth-happy-birthday-cake-7165195/",
   "https://cdn.pixabay.com/photo/2015/06/17/23/23/happy-birthday-813182_640.jpg",
   "https://cdn.pixabay.com/photo/2023/03/06/10/17/ai-generated-7833194_640.jpg",
   "https://cdn.pixabay.com/photo/2023/04/18/10/52/birthday-7934855_640.png",
