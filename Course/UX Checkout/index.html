@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Checkout Optimization</title>
+                <link rel="stylesheet" href="styles.css">
+            </head>
+            <body>
+                <div class="header">
+                    Checkout Optimization
+                    <div class="secure">🔒 Secure Payment</div>
+                    </div>
+                    <div class="container">
+                        <!-- LEFT SIDE -->
+                            <div>
+                                <!-- ACCOUNT PROMPT -->
+                                    <div class="card">
+                                        <div class="card-header">Account Benefits</div>
+                                            <div class="card-body">
+                                                <div class="guest-checkout">
+                                                    Create an account to save your addresses and enjoy faster checkouts in the future.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- SHIPPING ADDRESS -->
+                                            <div class="card">
+                                                <div class="card-header">1. Shipping Address</div>
+                                                    <div class="card-body">
+                                                        <input placeholder="Full Name">
+                                                        <div class="row">
+                                                            <input placeholder="Phone Number">
+                                                            <input placeholder="Pincode">
+                                                        </div>
+                                                        <input placeholder="Address">
+                                                        <div class="row">
+                                                            <input placeholder="City">
+                                                            <input placeholder="State">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- DELIVERY OPTIONS -->
+                                                    <div class="card">
+                                                        <div class="card-header">2. Delivery Options</div>
+                                                            <div class="card-body">
+                                                                <div class="shipping selected" onclick="selectShipping(this)">
+                                                                    <strong>Standard Delivery — FREE</strong>
+                                                                        <div class="delivery">Delivery by 5–6 days</div>
+                                                                        </div>
+                                                                        <div class="shipping" onclick="selectShipping(this)">
+                                                                            <strong>Express Delivery — ₹99</strong>
+                                                                                <div class="delivery">Delivery in 1–2 days</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- PAYMENT OPTIONS -->
+                                                                            <div class="card">
+                                                                                <div class="card-header">3. Payment Method</div>
+                                                                                    <div class="card-body">
+                                                                                        <div class="payment selected" onclick="selectPayment(this)">💳 Credit / Debit Card</div>
+                                                                                            <div class="payment" onclick="selectPayment(this)">📱 UPI</div>
+                                                                                                <div class="payment" onclick="selectPayment(this)">👛 Wallet</div>
+                                                                                                    <div class="payment" onclick="selectPayment(this)">💵 Cash on Delivery</div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- RIGHT SIDE: ORDER SUMMARY -->
+                                                                                                <div class="summary">
+                                                                                                    <h3>PRICE DETAILS</h3>
+                                                                                                        <div class="summary-row">
+                                                                                                            <span>Item 1: Wireless Mouse</span>
+                                                                                                                <span>₹999</span>
+                                                                                                                </div>
+                                                                                                                <div class="summary-row">
+                                                                                                                    <span>Item 2: Keyboard</span>
+                                                                                                                        <span>₹1,499</span>
+                                                                                                                        </div>
+                                                                                                                        <div class="summary-row">
+                                                                                                                            <span>Delivery Charges</span>
+                                                                                                                                <span>FREE</span>
+                                                                                                                                </div>
+                                                                                                                                <div class="summary-row tooltip">
+                                                                                                                                    <span>
+                                                                                                                                        Tax
+                                                                                                                                        <span class="info-icon">ⓘ
+                                                                                                                                            <span class="tooltiptext">
+                                                                                                                                                Tax breakdown:<br>
+                                                                                                                                                - CGST: ₹62.5<br>
+                                                                                                                                                - SGST: ₹62.5<br>
+                                                                                                                                                Total Tax: ₹125
+                                                                                                                                            </span>
+                                                                                                                                        </span>
+                                                                                                                                    </span>
+                                                                                                                                    <span>₹125</span>
+                                                                                                                                    </div>
+                                                                                                                                    <hr>
+                                                                                                                                    <div class="total">
+                                                                                                                                        <span>Total Amount</span>
+                                                                                                                                            <span>₹2,623</span>
+                                                                                                                                            </div>
+                                                                                                                                            <button>PLACE ORDER</button>
+                                                                                                                                                <div class="trust">
+                                                                                                                                                    Safe and Secure Payments. Easy returns available.
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                        <script src="script.js"></script>
+                                                                                                                                        </body>
+                                                                                                                                    </html>
