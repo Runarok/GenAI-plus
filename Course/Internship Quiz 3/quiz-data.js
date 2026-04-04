@@ -1,6 +1,6 @@
-// Quiz Data
-const quizData = [{
-    name: "Computer Science Fundamentals 1",
+const quizzes = {
+  cs: {
+	name: "Computer Science Fundamentals 1",
     description: "Basic concepts of computer science and its importance.",
     questions: [{
         question: "Computer Science is best defined as the study of:",
@@ -383,5 +383,6 @@ const quizData = [{
         answer: "Incorrect program output"
       }
     ]
-  }
-];
+  },
+  ux: {},
+  game: {};

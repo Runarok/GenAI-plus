@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Platform</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+</head>
+<body>
+  <div class="settings-btn">
+    <button onclick="openSettings()" class="btn btn-settings">⚙️</button>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button onclick="closeSettings()" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-item">
+          <label for="theme-toggle" class="setting-label">
+            <span>Theme</span>
+            <select id="theme-toggle" class="theme-select" onchange="changeTheme(this.value)">
+              <option value="dark">Dark Ocean (Default)</option>
+              <option value="light">Light Ocean</option>
+            </select>
+          </label>
+        </div>
+        <div class="setting-item">
+          <label for="auto-advance-toggle" class="setting-label">
+            <input type="checkbox" id="auto-advance-toggle" onchange="toggleAutoAdvance()" />
+            <span>Auto-advance to next question after selecting answer</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Quiz Selection Screen -->
+    <section id="quiz-selection" class="screen active">
+      <div class="selection-content">
+        <h1>Quiz Platform</h1>
+        <p class="subtitle">Choose a quiz to get started</p>
+        <div class="quiz-cards">
+          <div class="quiz-card" data-quiz="cs">
+            <div class="quiz-icon">💻</div>
+            <h2>CS Quiz</h2>
+            <p id="cs-desc">Computer Science Fundamentals</p>
+            <button class="btn btn-primary" onclick="selectQuiz('cs')">Start Quiz</button>
+          </div>
+          <div class="quiz-card" data-quiz="ux">
+            <div class="quiz-icon">🎨</div>
+            <h2>UX Quiz</h2>
+            <p id="ux-desc">User Experience Design</p>
+            <button class="btn btn-primary" onclick="selectQuiz('ux')">Start Quiz</button>
+          </div>
+          <div class="quiz-card" data-quiz="game">
+            <div class="quiz-icon">🎮</div>
+            <h2>Game Quiz</h2>
+            <p id="game-desc">Game Design Fundamentals</p>
+            <button class="btn btn-primary" onclick="selectQuiz('game')">Start Quiz</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mode Selection Screen -->
+    <section id="mode-selection" class="screen">
+      <div class="mode-content">
+        <h1 id="mode-title">Select a Mode</h1>
+        <p class="subtitle" id="mode-subtitle">Choose how you want to engage with this quiz</p>
+        <div class="mode-cards">
+          <div class="mode-card">
+            <div class="mode-icon">✏️</div>
+            <h2>Take Quiz</h2>
+            <p>Answer questions and test your knowledge</p>
+            <button class="btn btn-primary" onclick="startQuiz()">Start</button>
+          </div>
+          <div class="mode-card">
+            <div class="mode-icon">📚</div>
+            <h2>Learn Mode</h2>
+            <p>View all questions with correct answers</p>
+            <button class="btn btn-primary" onclick="startLearnMode()">View</button>
+          </div>
+        </div>
+        <button class="btn btn-secondary" onclick="backToSelection()">← Back</button>
+      </div>
+    </section>
+
+    <!-- Quiz Taking Screen -->
+    <section id="quiz-screen" class="screen">
+      <div class="quiz-content">
+        <div class="quiz-header">
+          <h1 id="quiz-name"></h1>
+          <div class="progress-bar">
+            <div id="progress-fill"></div>
+          </div>
+          <p id="progress-text" class="progress-text"></p>
+        </div>
+
+        <div class="question-container">
+          <h2 id="question-text"></h2>
+          <div id="options-container" class="options-container"></div>
+        </div>
+
+        <div class="quiz-controls">
+          <button class="btn btn-secondary" onclick="previousQuestion()">← Previous</button>
+          <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()">Next →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Screen -->
+    <section id="results-screen" class="screen">
+      <div class="results-content">
+        <h1>Quiz Complete!</h1>
+        <div class="score-display">
+          <div class="score-circle">
+            <p id="final-score"></p>
+            <p>out of <span id="total-score"></span></p>
+          </div>
+        </div>
+        <div id="results-feedback" class="results-feedback"></div>
+        <div class="results-breakdown">
+          <h3>Answer Summary</h3>
+          <div id="results-summary"></div>
+        </div>
+        <div class="results-controls">
+          <button class="btn btn-primary" onclick="backToSelection()">← Back to Quizzes</button>
+          <button class="btn btn-secondary" onclick="retakeQuiz()">Retake Quiz</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Learn Mode Screen -->
+    <section id="learn-screen" class="screen">
+      <div class="learn-content">
+        <div class="learn-header">
+          <h1 id="learn-title"></h1>
+          <button class="btn btn-secondary" onclick="backToSelection()">← Back</button>
+        </div>
+
+        <div id="learn-questions-container" class="learn-questions-container"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="quiz-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
