@@ -1,38 +1,192 @@
 // State Management
 let state = {
+  currentChapter: null,
   currentQuiz: null,
-  currentMode: null, // 'take' or 'learn'
+  currentMode: null,
   currentQuestion: 0,
-  answers: {}, // { questionIndex: selectedAnswer }
-  quizStarted: false
+  answers: {},
+  quizStarted: false,
+  autoAdvance: false,
+  theme: 'dark',
+  currentStreak: 0,
+  bestStreak: 0,
+  lastQuizDate: null
 };
 
-// Initialize Quiz Descriptions
-function initializeQuizDescriptions() {
-  document.getElementById('cs-desc').textContent = quizzes.cs.description;
-  document.getElementById('ux-desc').textContent = quizzes.ux.description;
-  document.getElementById('game-desc').textContent = quizzes.game.description;
+// Progress tracking structure
+let progress = {
+  // chapter1: { completed: 0, total: 8, quizzes: { 'ch1-q1': { score: 8, attempts: 2, completed: true } } }
+};
+
+// Load settings and progress from localStorage
+function loadSettings() {
+  const savedTheme = localStorage.getItem('quizTheme') || 'dark';
+  const savedAutoAdvance = localStorage.getItem('autoAdvance') === 'true';
+  const savedStreak = JSON.parse(localStorage.getItem('streak')) || { current: 0, best: 0, lastDate: null };
+  
+  state.theme = savedTheme;
+  state.autoAdvance = savedAutoAdvance;
+  state.currentStreak = savedStreak.current || 0;
+  state.bestStreak = savedStreak.best || 0;
+  state.lastQuizDate = savedStreak.lastDate;
+  
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+    document.getElementById('theme-toggle').value = 'light';
+  }
+  
+  if (savedAutoAdvance) {
+    document.getElementById('auto-advance-toggle').checked = true;
+  }
+
+  loadProgress();
+  updateStreakDisplay();
 }
 
+// Load progress from localStorage
+function loadProgress() {
+  const savedProgress = localStorage.getItem('quizProgress');
+  if (savedProgress) {
+    progress = JSON.parse(savedProgress);
+  } else {
+    initializeProgress();
+  }
+}
+
+// Initialize progress structure
+function initializeProgress() {
+  chapters.internship.chapters.forEach(chapter => {
+    progress[chapter.id] = {
+      completed: 0,
+      total: chapter.quizzes.length,
+      quizzes: {}
+    };
+    chapter.quizzes.forEach(quiz => {
+      progress[chapter.id].quizzes[quiz.id] = {
+        score: null,
+        attempts: 0,
+        completed: false,
+        lastAttempt: null
+      };
+    });
+  });
+  saveProgress();
+}
+
+// Save progress to localStorage
+function saveProgress() {
+  localStorage.setItem('quizProgress', JSON.stringify(progress));
+}
+
+// Save streak to localStorage
+function saveStreak() {
+  localStorage.setItem('streak', JSON.stringify({
+    current: state.currentStreak,
+    best: state.bestStreak,
+    lastDate: state.lastQuizDate
+  }));
+}
+
+// Update streak on quiz completion
+function updateStreak(passed) {
+  const today = new Date().toDateString();
+  
+  if (passed) {
+    if (state.lastQuizDate !== today) {
+      state.currentStreak++;
+      state.lastQuizDate = today;
+      
+      if (state.currentStreak > state.bestStreak) {
+        state.bestStreak = state.currentStreak;
+      }
+    }
+  } else {
+    if (state.lastQuizDate !== today) {
+      state.currentStreak = 0;
+      state.lastQuizDate = today;
+    }
+  }
+  saveStreak();
+  updateStreakDisplay();
+}
+
+// Update streak display
+function updateStreakDisplay() {
+  document.getElementById('current-streak').textContent = state.currentStreak;
+  document.getElementById('best-streak').textContent = state.bestStreak;
+}
+
+// Settings functions
+function openSettings() {
+  document.getElementById('settings-modal').classList.add('active');
+}
+
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('active');
+}
+
+function changeTheme(theme) {
+  state.theme = theme;
+  localStorage.setItem('quizTheme', theme);
+  
+  if (theme === 'light') {
+    document.body.classList.add('light-theme');
+  } else {
+    document.body.classList.remove('light-theme');
+  }
+}
+
+function toggleAutoAdvance() {
+  state.autoAdvance = !state.autoAdvance;
+  localStorage.setItem('autoAdvance', state.autoAdvance);
+}
+
+// Close modal when clicking outside
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('settings-modal');
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeSettings();
+    }
+  });
+});
+
 // Navigation Functions
+function showChapters() {
+  state.currentChapter = null;
+  state.currentQuiz = null;
+  state.currentMode = null;
+  showScreen('chapter-selection');
+  renderChapters();
+}
+
+function selectChapter(chapterId) {
+  state.currentChapter = chapterId;
+  state.currentQuestion = 0;
+  state.answers = {};
+  showScreen('quiz-selection');
+  renderQuizzes();
+}
+
+function backToChapters() {
+  showChapters();
+}
+
 function selectQuiz(quizId) {
   state.currentQuiz = quizId;
   state.currentQuestion = 0;
   state.answers = {};
   showScreen('mode-selection');
   
-  const quizName = quizzes[quizId].name;
-  document.getElementById('mode-title').textContent = `${quizName}`;
-  document.getElementById('mode-subtitle').textContent = `Choose how you want to engage with this quiz`;
+  const chapter = chapters.internship.chapters.find(ch => ch.id === state.currentChapter);
+  const quiz = chapter.quizzes.find(q => q.id === quizId);
+  
+  document.getElementById('mode-title').textContent = quiz.name;
+  document.getElementById('mode-subtitle').textContent = 'Choose how you want to engage with this quiz';
 }
 
 function backToSelection() {
-  state.currentQuiz = null;
-  state.currentMode = null;
-  state.currentQuestion = 0;
-  state.answers = {};
-  state.quizStarted = false;
-  showScreen('quiz-selection');
+  showChapters();
 }
 
 function startQuiz() {
@@ -52,42 +206,111 @@ function startLearnMode() {
 
 // Screen Management
 function showScreen(screenId) {
-  // Hide all screens
   document.querySelectorAll('.screen').forEach(screen => {
     screen.classList.remove('active');
   });
-  
-  // Show selected screen
   document.getElementById(screenId).classList.add('active');
+}
+
+// Render Chapters
+function renderChapters() {
+  const container = document.getElementById('chapter-cards-container');
+  container.innerHTML = '';
+  
+  chapters.internship.chapters.forEach(chapter => {
+    const chapterProgress = progress[chapter.id];
+    const percentage = Math.round((chapterProgress.completed / chapterProgress.total) * 100);
+    const completionBadge = chapterProgress.completed === chapterProgress.total ? '✓ Completed' : `${percentage}%`;
+    
+    const card = document.createElement('div');
+    card.className = 'chapter-card';
+    card.onclick = () => selectChapter(chapter.id);
+    
+    card.innerHTML = `
+      <div class="chapter-icon">${chapter.icon}</div>
+      <h2>${chapter.name}</h2>
+      <p>${chapter.description}</p>
+      <div class="chapter-completion">
+        <span class="completion-badge">${chapterProgress.completed === chapterProgress.total ? '✓' : '◐'}</span>
+        <span class="completion-text"><span class="completion-percentage">${percentage}%</span> Complete</span>
+      </div>
+      <button class="btn btn-primary">Start Chapter</button>
+    `;
+    
+    container.appendChild(card);
+  });
+}
+
+// Render Quizzes for Chapter
+function renderQuizzes() {
+  const chapter = chapters.internship.chapters.find(ch => ch.id === state.currentChapter);
+  const chapterProgress = progress[state.currentChapter];
+  const percentage = Math.round((chapterProgress.completed / chapterProgress.total) * 100);
+  
+  // Update chapter header
+  document.getElementById('current-chapter-name').textContent = chapter.name;
+  document.getElementById('chapter-title').textContent = chapter.name;
+  document.getElementById('chapter-description').textContent = chapter.description;
+  document.getElementById('chapter-percentage').textContent = `${percentage}%`;
+  
+  // Update progress ring
+  const circle = document.getElementById('progress-ring-fill');
+  const offset = 282.7 * (1 - percentage / 100);
+  circle.style.strokeDashoffset = offset;
+  
+  // Render quiz cards
+  const container = document.getElementById('quiz-cards-container');
+  container.innerHTML = '';
+  
+  chapter.quizzes.forEach((quiz, index) => {
+    const quizProgress = chapterProgress.quizzes[quiz.id];
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.innerHTML = `
+      <div class="quiz-icon" style="margin-bottom: 10px;">📋</div>
+      <h3 style="color: var(--text-primary); margin-bottom: 8px;">${quiz.name}</h3>
+    `;
+    
+    if (quizProgress.completed) {
+      const scoreElement = document.createElement('div');
+      scoreElement.className = 'quiz-card-score';
+      scoreElement.textContent = `${quizProgress.score}/10`;
+      card.appendChild(scoreElement);
+    }
+    
+    const button = document.createElement('button');
+    button.className = 'btn btn-primary';
+    button.textContent = quizProgress.completed ? 'Retake' : 'Start';
+    button.onclick = () => selectQuiz(quiz.id);
+    card.appendChild(button);
+    
+    container.appendChild(card);
+  });
 }
 
 // Quiz Taking Logic
 function renderQuestion() {
-  const quiz = quizzes[state.currentQuiz];
+  const chapter = chapters.internship.chapters.find(ch => ch.id === state.currentChapter);
+  const quiz = chapter.quizzes.find(q => q.id === state.currentQuiz);
   const question = quiz.questions[state.currentQuestion];
   
-  // Update header
   document.getElementById('quiz-name').textContent = quiz.name;
   document.getElementById('progress-text').textContent = 
     `Question ${state.currentQuestion + 1} of ${quiz.questions.length}`;
   
-  // Update progress bar
   const progress = ((state.currentQuestion + 1) / quiz.questions.length) * 100;
   document.getElementById('progress-fill').style.width = progress + '%';
   
-  // Update question
   document.getElementById('question-text').textContent = question.question;
   
-  // Render options
   const optionsContainer = document.getElementById('options-container');
   optionsContainer.innerHTML = '';
   
-  question.options.forEach((option, index) => {
+  question.options.forEach((option) => {
     const optionEl = document.createElement('div');
     optionEl.className = 'option';
     optionEl.textContent = option;
     
-    // Check if this option was previously selected
     if (state.answers[state.currentQuestion] === option) {
       optionEl.classList.add('selected');
     }
@@ -96,30 +319,36 @@ function renderQuestion() {
     optionsContainer.appendChild(optionEl);
   });
   
-  // Update button states
   updateNavigationButtons();
 }
 
 function selectOption(option, element) {
-  // Remove previous selection
   document.querySelectorAll('.option').forEach(opt => {
     opt.classList.remove('selected');
   });
   
-  // Add selection to clicked option
   element.classList.add('selected');
   state.answers[state.currentQuestion] = option;
+  
+  if (state.autoAdvance) {
+    const chapter = chapters.internship.chapters.find(ch => ch.id === state.currentChapter);
+    const quiz = chapter.quizzes.find(q => q.id === state.currentQuiz);
+    if (state.currentQuestion < quiz.questions.length - 1) {
+      setTimeout(() => {
+        nextQuestion();
+      }, 500);
+    }
+  }
 }
 
 function updateNavigationButtons() {
-  const quiz = quizzes[state.currentQuiz];
-  const prevBtn = document.querySelector('.btn-secondary');
+  const chapter = chapters.internship.chapters.find(ch => ch.id === state.currentChapter);
+  const quiz = chapter.quizzes.find(q => q.id === state.currentQuiz);
+  const prevBtn = document.querySelector('.quiz-controls .btn-secondary');
   const nextBtn = document.getElementById('next-btn');
   
-  // Disable previous button on first question
   prevBtn.disabled = state.currentQuestion === 0;
   
-  // Update next button text
   if (state.currentQuestion === quiz.questions.length - 1) {
     nextBtn.textContent = 'Submit →';
   } else {
@@ -135,11 +364,10 @@ function previousQuestion() {
 }
 
 function nextQuestion() {
-  const quiz = quizzes[state.currentQuiz];
+  const chapter = chapters.internship.chapters.find(ch => ch.id === state.currentChapter);
+  const quiz = chapter.quizzes.find(q => q.id === state.currentQuiz);
   
-  // Check if last question
   if (state.currentQuestion === quiz.questions.length - 1) {
-    // Submit quiz
     showResults();
   } else {
     state.currentQuestion++;
@@ -157,24 +385,37 @@ function retakeQuiz() {
 
 // Results Logic
 function showResults() {
-  const quiz = quizzes[state.currentQuiz];
+  const chapter = chapters.internship.chapters.find(ch => ch.id === state.currentChapter);
+  const quiz = chapter.quizzes.find(q => q.id === state.currentQuiz);
   let correctCount = 0;
   
-  // Calculate score
   quiz.questions.forEach((question, index) => {
     if (state.answers[index] === question.answer) {
       correctCount++;
     }
   });
   
-  // Display score
+  const percentage = (correctCount / quiz.questions.length) * 100;
+  const passed = percentage >= 60;
+  
+  // Update progress
+  const quizProgress = progress[state.currentChapter].quizzes[state.currentQuiz];
+  if (!quizProgress.completed) {
+    progress[state.currentChapter].completed++;
+  }
+  quizProgress.completed = true;
+  quizProgress.score = correctCount;
+  quizProgress.attempts++;
+  quizProgress.lastAttempt = new Date().toISOString();
+  saveProgress();
+  
+  // Update streak
+  updateStreak(passed);
+  
   document.getElementById('final-score').textContent = correctCount;
   document.getElementById('total-score').textContent = quiz.questions.length;
   
-  // Display feedback
-  const percentage = (correctCount / quiz.questions.length) * 100;
   let feedback = '';
-  
   if (percentage === 100) {
     feedback = '🎉 Perfect score! You\'re a master!';
   } else if (percentage >= 80) {
@@ -189,7 +430,6 @@ function showResults() {
   
   document.getElementById('results-feedback').textContent = feedback;
   
-  // Display answer summary
   const summaryContainer = document.getElementById('results-summary');
   summaryContainer.innerHTML = '';
   
@@ -223,7 +463,8 @@ function showResults() {
 
 // Learn Mode Logic
 function renderLearnMode() {
-  const quiz = quizzes[state.currentQuiz];
+  const chapter = chapters.internship.chapters.find(ch => ch.id === state.currentChapter);
+  const quiz = chapter.quizzes.find(q => q.id === state.currentQuiz);
   document.getElementById('learn-title').textContent = `${quiz.name} - Learn Mode`;
   
   const container = document.getElementById('learn-questions-container');
@@ -266,6 +507,6 @@ function renderLearnMode() {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-  initializeQuizDescriptions();
-  showScreen('quiz-selection');
+  loadSettings();
+  showChapters();
 });
