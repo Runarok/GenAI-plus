@@ -25,6 +25,7 @@ const menuData = [
   { label: "E-Comm App Prototype", url: "Course/UX 08/index.html", desc: "Assest for UX A08" },
   { label: "Checkout Redesign", url: "Course/UX Checkout/index.html", desc: "Assest for UX A07" },
   { label: "UI Components", url: "Course/Reusable UI/index.html", desc: "Assest for UX A06" },
+  { label: "Data Analytics Quiz", url: "Course/Data Analytics/index.html", desc: "Data Analysis Quiz Questions" },
   { label: "Graphic Design Quiz", url: "Course/Graphic Design/index.html", desc: "Graphic Design Quiz Questions" },
   { label: "Project Review", url: "Course/Proj Review/index.html", desc: "Proj Review Details of Phase 2" },
   { label: "SDLC v1", url: "Course/SDLC/SDLC v1/index.html", desc: "SDLC Project version 1." },
