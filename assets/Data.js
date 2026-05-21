@@ -20,7 +20,7 @@ const menuData = [
     id: "course",
     title: "Coursework",
     links: [
-  { label: "Internship Quiz", url: "Course/Internship Quiz/index.html", desc: "Internship Quiz Questions" },
+  { label: "Internship Quiz", url: "Course/Internship Quiz/index.html", desc: "UX-Game Quiz Questions" },
   { label: "UX Mockup", url: "Course/UX Mockup/index.html", desc: "Assest for UX A05" },
   { label: "E-Comm App Prototype", url: "Course/UX 08/index.html", desc: "Assest for UX A08" },
   { label: "Checkout Redesign", url: "Course/UX Checkout/index.html", desc: "Assest for UX A07" },
