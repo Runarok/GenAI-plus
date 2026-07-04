@@ -60,6 +60,7 @@ const menuData = [
       { label: "HTML Split v2", url: "Tools/HTML Splitter v2/index.html", desc: "Better Working and Minimalistic." },
       { label: "Markdown Editor", url: "Tools/MarkDown/index.html", desc: "Live Github markdown." },
       { label: "SVG Editor", url: "Tools/Svg Edit/index.html", desc: "Live SVG Editor." },
+      { label: "Leetcode Target", url: "Tools/Leetcode/index.html",  desc: "LeetCoin Target Calculator." },
       { label: "Morse Code", url: "Tools/MorseCode/index.html",  desc: "Live MorseCode." },
       { label: "LocalStorage  Viewer", url: "Tools/LocalStorage/index.html",  desc: "View LocalStorage." },
       { label: "Matrix Generator", url: "Tools/Matrix_Gen/index.html",  desc: "Random Matrix Generator." },

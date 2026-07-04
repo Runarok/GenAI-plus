@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeetCoin Target Calculator</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png" />
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🪙 LeetCoin Target Calculator</h1>
+
+    <div class="card">
+        <div class="grid">
+
+            <div>
+                <label>Start Counting From</label>
+                <input type="date" id="startDate">
+            </div>
+
+            <div>
+                <label>Current LeetCoins</label>
+                <input type="number" id="currentCoins" value="0">
+            </div>
+
+            <div>
+                <label>Target LeetCoins</label>
+                <input type="number" id="targetCoins" value="9400">
+            </div>
+
+        </div>
+
+        <div class="checkbox">
+            <label><input type="checkbox" id="weekly"> Weekly Contest</label>
+            <label><input type="checkbox" id="biweekly"> Biweekly Contest</label>
+        </div>
+
+        <button onclick="calculate()">Calculate</button>
+        <button onclick="resetAll()">Reset</button>
+    </div>
+
+    <div class="card">
+        <h2>Progress</h2>
+
+        <div class="progressOuter">
+            <div class="progressInner" id="progressBar"></div>
+        </div>
+
+        <div class="results">
+            <div class="resultBox"><h3>Current</h3><div id="rCurrent">0</div></div>
+            <div class="resultBox"><h3>Target</h3><div id="rTarget">0</div></div>
+            <div class="resultBox"><h3>Coins Needed</h3><div id="rNeed">0</div></div>
+            <div class="resultBox"><h3>Estimated Date</h3><div id="rDate">-</div></div>
+            <div class="resultBox"><h3>Days Remaining</h3><div id="rDays">0</div></div>
+            <div class="resultBox"><h3>Weeks Remaining</h3><div id="rWeeks">0</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🚀 Optional Speed-ups</h2>
+        <p class="note">
+            These are NOT automatically counted.
+        </p>
+        <div class="speedGrid" id="speedGrid"></div>
+    </div>
+
+    <div class="card">
+        <h2>Reward Timeline</h2>
+        <div class="timeline" id="timeline"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
