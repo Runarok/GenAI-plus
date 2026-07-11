@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <link rel="icon" href="https://raw.githubusercontent.com/Runarok/GenAI-plus/main/GenAI-plus.png" type="image/png">
+    <title>
+        TwistGraph - Rubik's Cube Knowledge Explorer
+    </title>
+
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div id="app">
+
+
+    <!-- ==========================
+         LEFT SIDEBAR
+    =========================== -->
+
+
+    <aside id="sidebar">
+
+
+        <div class="logo">
+
+            <span class="logo-icon">
+                🧊
+            </span>
+
+            <h1>
+                TwistGraph
+            </h1>
+
+        </div>
+
+
+
+        <div class="search-container">
+
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Search cubes..."
+            >
+
+        </div>
+
+
+
+
+
+        <!-- CATEGORY FILTER -->
+
+
+        <section class="filter-section">
+
+
+            <h3>
+                Categories
+            </h3>
+
+
+            <div
+                id="categoryFilters"
+                class="filter-container">
+            </div>
+
+
+        </section>
+
+
+
+
+
+        <!-- TAG FILTER -->
+
+
+        <section class="filter-section">
+
+
+            <h3>
+                Tags
+            </h3>
+
+
+            <div
+                id="tagFilters"
+                class="filter-container">
+            </div>
+
+
+        </section>
+
+
+
+    </aside>
+
+
+
+
+
+
+
+
+
+    <!-- ==========================
+         MAIN GRAPH AREA
+    =========================== -->
+
+
+    <main id="workspace">
+
+
+
+        <canvas id="graphCanvas"></canvas>
+
+
+
+
+        <!-- TOOLBAR -->
+
+
+        <div id="toolbar">
+
+
+            <button id="fitButton">
+                Fit
+            </button>
+
+
+
+            <button id="resetButton">
+                Reset
+            </button>
+
+
+
+            <button id="sidebarButton">
+                ☰
+            </button>
+
+
+        </div>
+
+
+
+
+
+
+
+        <!-- MINIMAP -->
+
+
+        <div id="minimap">
+
+
+            <canvas id="miniCanvas"></canvas>
+
+
+        </div>
+
+
+
+    </main>
+
+
+
+
+
+
+
+
+
+    <!-- ==========================
+         DETAILS PANEL
+    =========================== -->
+
+
+    <aside id="detailsPanel">
+
+
+
+        <button
+            id="closeDetails"
+            class="close-button">
+
+            ×
+
+        </button>
+
+
+
+
+
+        <div id="detailsContent">
+
+
+            <div class="empty-state">
+
+
+                <h2>
+                    Select a Cube
+                </h2>
+
+
+                <p>
+                    Click any node to view details
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+    </aside>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- DATA -->
+
+<script src="data.js"></script>
+
+
+<!-- APPLICATION -->
+
+<script src="app.js"></script>
+
+
+</body>
+
+
+</html>

@@ -8,6 +8,8 @@ const PAGE_CONFIG = {
     { label: "Habit Tracker", path: "/Habit Tracker/" },
     { label: "markdown2webpdf", path: "/markdown2webpdf/" },
     { label: "Menu History", path: "/Menu History/" },
+    { label: "TwistGraph version 1", path: "/TwistGraph v1/" },
+    { label: "TwistGraph version 2", path: "/TwistGraph v2/" },
     { label: "Pdf to Base64", path: "/Pdf2Base64/" },
     { label: "ProtoPad", path: "/ProtoPad/" }
   ].sort((a, b) => a.label.localeCompare(b.label))
