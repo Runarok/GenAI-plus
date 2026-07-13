@@ -57,6 +57,7 @@ const menuData = [
       { label: "Image Base64", url: "Tools/Base64CropImage/index.html", desc: "Base64 & Image conversion." },
       { label: "HTML Merger", url: "Tools/HTML Merger/index.html", desc: "Inline HTML, CSS, JS with preview." },
       { label: "HTML Splitter", url: "Tools/HTML Splitter/index.html", desc: "Splits code into HTML, CSS, and JS." },
+      { label: "YT Transcript Formatter", url: "Tools/Yt/index.html", desc: "Remove YouTube timestamps." },
       { label: "HTML Split v2", url: "Tools/HTML Splitter v2/index.html", desc: "Better Working and Minimalistic." },
       { label: "Markdown Editor", url: "Tools/MarkDown/index.html", desc: "Live Github markdown." },
       { label: "SVG Editor", url: "Tools/Svg Edit/index.html", desc: "Live SVG Editor." },

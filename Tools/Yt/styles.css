@@ -1,0 +1,130 @@
+:root{
+     --bg:#0f172a;
+     --surface:#1e293b;
+     --surface2:#273549;
+     --border:#334155;
+     --text:#f8fafc;
+     --muted:#94a3b8;
+     --primary:#3b82f6;
+     --primaryHover:#2563eb;
+}
+ *{
+     margin:0;
+     padding:0;
+     box-sizing:border-box;
+}
+ body{
+     background: linear-gradient(135deg,#0f172a,#111827);
+     color:var(--text);
+     font-family: Inter, Segoe UI, Arial, sans-serif;
+     min-height:100vh;
+     padding:40px;
+}
+ .container{
+     width:min(1100px,95%);
+     margin:auto;
+}
+ .header{
+     display:flex;
+     align-items:center;
+     gap:18px;
+     margin-bottom:25px;
+}
+ .logo{
+     width:72px;
+     height:72px;
+     display:grid;
+     place-items:center;
+     color:#ff3131;
+     flex-shrink:0;
+}
+ .logo svg{
+     width:100%;
+     height:100%;
+     display:block;
+     filter: drop-shadow(0 0 10px rgba(255,49,49,.45));
+}
+ h1{
+     font-size:34px;
+}
+ .header p{
+     color:var(--muted);
+     margin-top:6px;
+}
+ .card{
+     background:rgba(30,41,59,.95);
+     backdrop-filter:blur(15px);
+     border:1px solid var(--border);
+     border-radius:18px;
+     padding:25px;
+     margin-bottom:25px;
+     box-shadow: 0 12px 35px rgba(0,0,0,.35);
+}
+ label{
+     display:block;
+     margin-bottom:12px;
+     font-weight:600;
+}
+ textarea{
+     width:100%;
+     min-height:280px;
+     resize:vertical;
+     border-radius:12px;
+     border:1px solid var(--border);
+     background:var(--surface2);
+     color:var(--text);
+     padding:16px;
+     font-size:15px;
+     transition:.25s;
+}
+ textarea:focus{
+     outline:none;
+     border-color:var(--primary);
+     box-shadow: 0 0 0 4px rgba(59,130,246,.20);
+}
+ .buttons{
+     display:flex;
+     flex-wrap:wrap;
+     gap:12px;
+     margin-top:18px;
+}
+ button{
+     border:none;
+     padding:13px 22px;
+     border-radius:10px;
+     cursor:pointer;
+     font-size:15px;
+     font-weight:600;
+     background:var(--primary);
+     color:white;
+     transition:.2s;
+}
+ button:hover{
+     background:var(--primaryHover);
+     transform:translateY(-2px);
+}
+ .secondary{
+     background:#334155;
+}
+ .secondary:hover{
+     background:#475569;
+}
+ .footer{
+     text-align:center;
+     color:var(--muted);
+     margin-top:15px;
+     font-size:14px;
+}
+ @media(max-width:700px){
+     .header{
+         flex-direction:column;
+         text-align:center;
+    }
+     .logo{
+         width:60px;
+         height:60px;
+    }
+     h1{
+         font-size:28px;
+    }
+}
